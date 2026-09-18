@@ -11,8 +11,13 @@ _Owner: pilot rota (Phase 9 names names). Dashboards: `ops/dashboard.json`; aler
   fix KB row or scorer, re-run eval gate before redeploy. Any trip pages — treat as P1.
 - **refusal-swing**: >10 pts/hour. Cause is usually a KB refresh or threshold change:
   diff last KB snapshot (`ingest.review list`), check `config.yaml` history.
-- **kb-refresh**: staleness >14 days. Run crawl fixtures → `pending_diffs` review →
-  2-person `POST /kb/publish`. Never publish unreviewed.
+- **kb-refresh**: staleness >14 days. Weekly breadth: `scripts/breadth_crawl.py
+  --queue` (DG dashboard 17 depts + CRS, ~5 min, polite 2 s delay) → sample
+  `pending_diffs` → batch-publish `ingest.review approve-all --publisher A
+  --approver B` (distinct humans) → `scripts/breadth_crawl.py --report`
+  (published / queued / live-total 22,471). Never publish unreviewed.
+  Cutover to breadth KB: `BIS_RETRIEVAL_KB_BACKEND=sqlite
+  BIS_KB_PATH=kb/bis.db` (empty-DB falls back to JSON, fresh clones safe).
 - **latency**: p95 >2 s/5 min. Check load, restart uvicorn workers, scale reference env
   (2 vCPU/4 GB). Roll back last deploy if correlated.
 - **errors**: 5xx on /chat. Request ID → logs → fix → contract tests → redeploy.

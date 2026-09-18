@@ -26,7 +26,9 @@ CREATE TABLE IF NOT EXISTS standards(
   keywords_json TEXT DEFAULT '[]', clarify_json TEXT DEFAULT '[]',
   captured_at TEXT NOT NULL, last_checked TEXT NOT NULL,
   supersedes TEXT DEFAULT '', version INTEGER NOT NULL DEFAULT 1,
-  snapshot_id INTEGER REFERENCES snapshots(id));
+  snapshot_id INTEGER REFERENCES snapshots(id),
+  department TEXT DEFAULT '', dept_code TEXT DEFAULT '', aspect TEXT DEFAULT '',
+  equivalence TEXT DEFAULT '', pub_date TEXT DEFAULT '', detail_url TEXT DEFAULT '');
 CREATE TABLE IF NOT EXISTS schemes(
   key TEXT PRIMARY KEY, name_en TEXT, name_hi TEXT, process_en_json TEXT,
   process_hi_json TEXT, apply_url TEXT, source_url TEXT, suitable_for TEXT,
@@ -45,7 +47,12 @@ CREATE TABLE IF NOT EXISTS pending_diffs(
   status TEXT DEFAULT 'pending', decided_at TEXT);
 """
 
-KB_VERSION = "v1"
+KB_VERSION = "v2"
+
+# Breadth columns added for DG-dashboard list metadata (v2). Existing v1
+# databases are migrated on connect() via ALTER TABLE (additive, no rewrite).
+BREADTH_COLUMNS = ("department", "dept_code", "aspect",
+                   "equivalence", "pub_date", "detail_url")
 
 
 def now() -> str:
@@ -56,6 +63,13 @@ def connect(path: str | Path) -> sqlite3.Connection:
     conn = sqlite3.connect(str(path))
     conn.row_factory = sqlite3.Row
     conn.executescript(SCHEMA)
+    # Migrate v1 databases: add breadth columns if missing (additive).
+    existing = {r["name"] for r in
+                conn.execute("PRAGMA table_info(standards)").fetchall()}
+    for col in BREADTH_COLUMNS:
+        if col not in existing:
+            conn.execute(f"ALTER TABLE standards ADD COLUMN {col} TEXT DEFAULT ''")
+    conn.commit()
     return conn
 
 
@@ -67,16 +81,20 @@ def new_snapshot(conn: sqlite3.Connection, source: str, note: str = "") -> int:
 
 
 def upsert_standard(conn: sqlite3.Connection, row: dict, snapshot_id: int) -> None:
+    full = {"department": "", "dept_code": "", "aspect": "", "equivalence": "",
+            "pub_date": "", "detail_url": "", **row, "snapshot_id": snapshot_id}
     conn.execute(
         """INSERT INTO standards(is_number, year, title_en, title_hi, scope_en, scope_hi,
            status, scheme_key, scheme_text, source_url, esale_url, section_ref,
            source_snippet, qco_status, qco_checked_at, keywords_json, clarify_json,
-           captured_at, last_checked, supersedes, version, snapshot_id)
+           captured_at, last_checked, supersedes, version, snapshot_id,
+           department, dept_code, aspect, equivalence, pub_date, detail_url)
            VALUES (:is_number, :year, :title_en, :title_hi, :scope_en, :scope_hi,
            :status, :scheme_key, :scheme_text, :source_url, :esale_url, :section_ref,
            :source_snippet, :qco_status, :qco_checked_at, :keywords_json, :clarify_json,
-           :captured_at, :last_checked, :supersedes, :version, :snapshot_id)""",
-        {**row, "snapshot_id": snapshot_id})
+           :captured_at, :last_checked, :supersedes, :version, :snapshot_id,
+           :department, :dept_code, :aspect, :equivalence, :pub_date, :detail_url)""",
+        full)
     conn.commit()
 
 

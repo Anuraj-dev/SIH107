@@ -36,7 +36,11 @@ def cmd_approve(conn, diff_id: int, by: str):
         if cur is None:
             raise SystemExit("no base row for change")
         row = dict(cur)
-        row.update({k: det[k] for k in ("year", "title_en", "status") if k in det})
+        row.update({k: det[k] for k in ("year", "title_en", "status", "aspect",
+                                        "equivalence", "pub_date", "detail_url",
+                                        "department", "dept_code", "source_url",
+                                        "source_snippet")
+                    if k in det})
         row.pop("id", None)
         row["version"] = cur["version"] + 1
         row["last_checked"] = datetime.now(timezone.utc).date().isoformat()
@@ -44,15 +48,24 @@ def cmd_approve(conn, diff_id: int, by: str):
     elif d["change_type"] == "added":
         kb_store.upsert_standard(conn, {
             "is_number": d["is_number"], "year": det.get("year", ""),
-            "title_en": det.get("title_en", ""), "title_hi": "",
-            "scope_en": "Pending reviewer scope summary.", "scope_hi": "",
+            "title_en": det.get("title_en", ""), "title_hi": det.get("title_hi", ""),
+            "scope_en": det.get("title_en", "") or "Pending reviewer scope summary.",
+            "scope_hi": "",
             "status": det.get("status", "Active"), "scheme_key": "",
-            "scheme_text": "Pending reviewer.", "source_url": det.get("source_url", ""),
-            "esale_url": "", "section_ref": "", "source_snippet": "",
+            "scheme_text": det.get("scheme_text", "Pending reviewer."),
+            "source_url": det.get("source_url", det.get("detail_url", "")),
+            "esale_url": det.get("esale_url", ""), "section_ref": "",
+            "source_snippet": det.get("source_snippet", ""),
             "qco_status": "unknown", "qco_checked_at": None,
             "keywords_json": "[]", "clarify_json": "[]",
             "captured_at": kb_store.now(), "last_checked": kb_store.now()[:10],
-            "supersedes": "", "version": 1}, d["snapshot_id"])
+            "supersedes": det.get("supersedes", ""), "version": 1,
+            "department": det.get("department", det.get("dept", "")),
+            "dept_code": det.get("dept_code", ""),
+            "aspect": det.get("aspect", ""),
+            "equivalence": det.get("equivalence", ""),
+            "pub_date": det.get("pub_date", ""),
+            "detail_url": det.get("detail_url", "")}, d["snapshot_id"])
     # missing-upstream: reviewer confirms withdrawal via BIS notice separately
     conn.execute("UPDATE pending_diffs SET status='approved', decided_at=? WHERE id=?",
                  (kb_store.now(), diff_id))
@@ -67,12 +80,38 @@ def cmd_reject(conn, diff_id: int):
     print(f"rejected #{diff_id}")
 
 
+def cmd_approve_all(conn, publisher: str, approver: str,
+                    change_type: str | None = None, out=print) -> int:
+    """Batch-publish queued diffs (breadth imports). 2-person rule enforced.
+
+    Publisher and approver must be distinct non-empty actors; recorded per
+    diff in pending_diffs.decided_at log line. Server-side /kb/publish keeps
+    its own kb_reviews constraint for interactive publishes.
+    """
+    if not publisher or not approver or publisher == approver:
+        raise SystemExit("approve-all needs distinct --publisher and --approver")
+    q = "SELECT id FROM pending_diffs WHERE status='pending'"
+    args: tuple = ()
+    if change_type:
+        q += " AND change_type=?"
+        args = (change_type,)
+    ids = [r["id"] for r in conn.execute(q + " ORDER BY id", args).fetchall()]
+    for did in ids:
+        # reuse single-approve path (prints per-diff line); re-fetch conn state
+        cmd_approve(conn, did, by=f"{publisher}+{approver}")
+    out(f"approved {len(ids)} diffs ({publisher}+{approver})")
+    return len(ids)
+
+
 def main():
     import argparse
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", choices=["list", "approve", "reject"])
+    ap.add_argument("cmd", choices=["list", "approve", "reject", "approve-all"])
     ap.add_argument("diff_id", nargs="?", type=int)
     ap.add_argument("--by", default="reviewer")
+    ap.add_argument("--publisher", default="")
+    ap.add_argument("--approver", default="")
+    ap.add_argument("--change-type", default="")
     ap.add_argument("--db", default="kb/bis.db")
     args = ap.parse_args()
     conn = kb_store.connect(args.db)
@@ -80,6 +119,9 @@ def main():
         cmd_list(conn)
     elif args.cmd == "approve":
         cmd_approve(conn, args.diff_id, args.by)
+    elif args.cmd == "approve-all":
+        cmd_approve_all(conn, args.publisher, args.approver,
+                        args.change_type or None)
     else:
         cmd_reject(conn, args.diff_id)
 

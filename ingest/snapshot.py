@@ -69,3 +69,52 @@ def diff_against_kb(conn: sqlite3.Connection, snapshot_id: int,
                      (snapshot_id, ch["change_type"], ch["is_number"], json.dumps(ch)))
     conn.commit()
     return changes
+
+
+def queue_breadth_records(conn: sqlite3.Connection, snapshot_id: int,
+                          records: list[dict]) -> dict:
+    """Queue DG-dashboard breadth records WITHOUT missing-upstream noise.
+
+    Breadth feeds list only Active published standards, so a curated row
+    absent from the feed is NOT evidence of withdrawal (different coverage
+    tier) — unlike same-source fixture diffs, which do flag removals.
+
+    Identity is part-aware (`is_key`): "IS 302-1" and "IS 302 (Part 1)" are
+    the same standard. Rows that duplicate curated depth (category keywords)
+    are skipped — curated scope/slots stay authoritative.
+    Returns {"added": n, "changed": n, "skipped_curated": n}.
+    """
+    from bis_assistant import kb_store
+    from .breadth import is_key
+    by_key = {is_key(s["is_number"]): s for s in kb_store.load_standards(conn)}
+    seen: set[tuple[str, str]] = set()
+    added = changed = skipped = 0
+    for rec in records:
+        key = is_key(rec["is_number"])
+        if key in seen:
+            continue  # same IS/part twice in feed(s): keep first
+        seen.add(key)
+        cur = by_key.get(key)
+        if cur is not None and cur.get("category_keywords"):
+            skipped += 1  # curated depth wins; no diff noise
+            continue
+        if cur is None:
+            conn.execute("INSERT INTO pending_diffs(snapshot_id, change_type,"
+                         " is_number, details_json) VALUES (?,?,?,?)",
+                         (snapshot_id, "added", rec["is_number"], json.dumps(rec)))
+            added += 1
+            by_key[key] = {"year": rec.get("year"), "title_en": rec.get("title_en"),
+                           "status": rec.get("status", "Active"),
+                           "category_keywords": []}
+        elif (cur.get("year") != rec.get("year")
+              or cur.get("title_en") != rec.get("title_en")):
+            conn.execute("INSERT INTO pending_diffs(snapshot_id, change_type,"
+                         " is_number, details_json) VALUES (?,?,?,?)",
+                         (snapshot_id, "changed", rec["is_number"],
+                          json.dumps({**rec, "was": {
+                              "year": cur.get("year"),
+                              "title_en": cur.get("title_en"),
+                              "status": cur.get("status")}})))
+            changed += 1
+    conn.commit()
+    return {"added": added, "changed": changed, "skipped_curated": skipped}

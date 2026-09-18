@@ -19,3 +19,6 @@ build/
 
 # KB databases
 *.db
+
+# Breadth crawl checkpoints (regenerable via scripts/breadth_crawl.py)
+kb/breadth_raw/

@@ -3,9 +3,12 @@ _Date: 2026-09-18 | Method: ECC blueprint (research → design → draft → rev
 _Source docs: `docs/product-brief.md`, `docs/decisions.md` (decisions #1–#11)_
 _Status: APPROVED + IMPLEMENTED (Phases 0–9, 2026-09-18; go-no-go conditional GO, human sign-off pending §10.7)_
 
-> Current state: working MVP (stdlib Python API + React/TS Vite UI, 16 standards rows —
-> 15 real + 1 withdrawn demo — + 4 schemes + 5 lab samples + 6 glossary terms in curated
-> JSON, slot-driven multi-turn grounding, 17 unit tests, 52-item gold eval at 100%).
+> Current state: working MVP (stdlib Python API + React/TS Vite UI, 16 curated
+> standards rows — 15 real + 1 withdrawn demo — + 4 schemes + 5 lab samples +
+> 6 glossary terms in curated JSON, slot-driven multi-turn grounding, 17 unit
+> tests, 52-item gold eval at 100%). Breadth tier (this fix): ~22,471
+> list-level metadata rows via `scripts/breadth_crawl.py` into SQLite
+> (`docs/data-sources-research.md`); curated rows stay authoritative.
 > This plan takes the MVP to a production-oriented pilot without violating any grilled decision.
 
 ## 0. Non-negotiable invariants (verify after EVERY phase)

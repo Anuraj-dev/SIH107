@@ -1,7 +1,12 @@
 # BIS Standards & Services Assistant (MVP)
 
 Conversational assistant per `docs/product-brief.md`. Retrieval **only** from allowlisted BIS metadata
-(`bis.gov.in/know-your-standard`, CRS, LIMS, manakonline). No scraped full-text PDFs.
+(`bis.gov.in/know-your-standard`, DG dashboard, CRS, LIMS, manakonline). No scraped full-text PDFs.
+
+Coverage: 16 curated rows (15 real + 1 withdrawn demo) in `data/*.json` +
+breadth tier (~22,471 list-level metadata rows) via `scripts/breadth_crawl.py`
+into SQLite — see `docs/data-sources-research.md`. Curated scope/keywords/slots
+stay authoritative; breadth rows carry `qco_status=unknown`, no clause refs.
 
 ## Run backend (stdlib only, Python ≥3.10)
 ```

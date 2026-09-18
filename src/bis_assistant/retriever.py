@@ -65,12 +65,18 @@ def _tokens(s: str) -> set[str]:
 def load_kb():
     if _backend() == "sqlite":
         from . import kb_store
-        conn = kb_store.connect(_kb_path())
         try:
-            return (kb_store.load_standards(conn), kb_store.load_schemes(conn),
-                    kb_store.load_labs(conn), kb_store.load_glossary(conn))
-        finally:
-            conn.close()
+            conn = kb_store.connect(_kb_path())
+            try:
+                stds = kb_store.load_standards(conn)
+                if stds:  # populated SQLite KB (breadth v2)
+                    return (stds, kb_store.load_schemes(conn),
+                            kb_store.load_labs(conn), kb_store.load_glossary(conn))
+            finally:
+                conn.close()
+        except Exception:
+            pass
+        # empty/missing SQLite KB (fresh clone) -> JSON fallback, never refuse-all
     stds = json.loads((DATA_DIR / "standards.json").read_text())["standards"]
     schemes = json.loads((DATA_DIR / "schemes.json").read_text())["schemes"]
     labs = json.loads((DATA_DIR / "labs.json").read_text())
