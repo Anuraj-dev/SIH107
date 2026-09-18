@@ -14,6 +14,8 @@ jobs:
           python-version: "3.12"
       - name: Install deps
         run: pip install -r requirements-dev.txt
+      - name: Build local KB (test_journeys needs kb/bis.db; *.db is gitignored)
+        run: PYTHONPATH=src python scripts/import_json_kb.py --db kb/bis.db
       - name: Unit tests
         run: python -m pytest tests/ -q
       - name: Eval gate (v1, >=90%)
