@@ -73,6 +73,29 @@ def _base(lang: str, **kw) -> dict:
             "known": [], "assumptions": [], "context": {"history": [], "rounds": 0}, **kw}
 
 
+# Reply-formatting helpers: every outbound text uses the same section shapes so
+# the CLI, API and React console render identically —
+#   - "- " bullets (never en-dashes), "1. " numbered questions,
+#     "  - " indented sub-bullets (e.g. Scheme under a candidate)
+#   - one blank line between sections, "---" before the footer
+#   - footer is always [disclaimer?, BIS help line]; refusals/clarifications
+#     carry the help line but no ruling disclaimer (nothing claimed yet).
+_DIVIDER = "---"
+_PORTAL = "https://www.bis.gov.in/know-your-standard"
+
+
+def _disclaimer(hi: bool) -> str:
+    return DISCLAIMER_HI if hi else DISCLAIMER_EN
+
+
+def _footer(hi: bool, with_disclaimer: bool = True) -> list[str]:
+    lines = ["", _DIVIDER]
+    if with_disclaimer:
+        lines.append(_disclaimer(hi))
+    lines.append(BIS_CARE)
+    return lines
+
+
 def answer(query: str, lang: str | None = None, context: dict | None = None) -> dict:
     lang = lang or detect_lang(query)
     hi = lang == "hi"
@@ -88,7 +111,8 @@ def answer(query: str, lang: str | None = None, context: dict | None = None) -> 
     kind = check_never_infer(query)
     if kind:
         r = _base(lang, refused=True, kind=kind, pii=find_pii(query))
-        r["text"] = ((REFUSAL_HI if hi else REFUSAL_EN)[kind] + "\n\n" + BIS_CARE)
+        r["text"] = ((REFUSAL_HI if hi else REFUSAL_EN)[kind]
+                     + "\n\n" + _DIVIDER + "\n" + BIS_CARE)
         return r
 
     # 2. topic change: current query alone strongly names a different IS -> fresh thread
@@ -146,23 +170,27 @@ def answer(query: str, lang: str | None = None, context: dict | None = None) -> 
               "kripya in sawalon ke jawab den:" if hi else
               "I need a bit more detail before I can narrow down the standard — please answer:")]
     if not strong:
+        lines.append("")
         lines.append("Note: my coverage here is thin — if these questions don't fit your product, "
                      "tell me and I'll point you to the right BIS search instead." if not hi else
-                     "Note: is kshetra me mera coverage seemit hai." )
+                     "Note: is kshetra me mera coverage seemit hai.")
     for i, q in enumerate(questions, 1):
+        lines.append("")
         lines.append(f"{i}. {q['text']}")
         for o in q["options"]:
-            lines.append(f"   – {o['label']}")
+            lines.append(f"   - {o['label']}")
     if known:
         lines.append("")
         lines.append("Ab tak maloom:" if hi else "Known so far:")
-        lines.append(", ".join(f"{k['slot']} = {k['value']}" for k in known))
+        for k in known:
+            lines.append(f"- {k['slot']} = {k['value']}")
     lines.append("")
     area = top["std"]
-    lines.append(("Sambhavit kshetra (pushti ke baad hi IS naam diya jayega): " if hi else
-                  "Possible area (IS number only after you confirm): ")
-                 + f"{area['title_en']} — Source: {area['source_url']}")
-    lines.append(BIS_CARE)
+    lines.append("Sambhavit kshetra (pushti ke baad hi IS naam diya jayega):" if hi else
+                 "Possible area (IS number only after you confirm):")
+    lines.append(f"- {area['title_en']}")
+    lines.append(f"- Source: {area['source_url']}")
+    lines.extend(_footer(hi, with_disclaimer=False))
     r = _base(lang, kind="needs_info", pii=find_pii(query), needs_info=True,
               questions=questions, known=known,
               citations=[format_citation(area)],
@@ -173,18 +201,27 @@ def answer(query: str, lang: str | None = None, context: dict | None = None) -> 
 
 
 def _coverage_gap(std: dict, material: str, query: str, lang: str, hi: bool) -> dict:
-    portal = "https://www.bis.gov.in/know-your-standard"
     if hi:
-        text = (f"{std['is_number']}:{std['year']} — {std['title_en']} — yah {material} utpadon "
-                f"ke liye nahin hai. Mere vartaman KB me {material} utpadon ke liye koi BIS srot "
-                f"nahin hai, isliye andaza nahin lagaunga. Know-Your-Standard par khojen: {portal}")
+        head = f"**{std['is_number']}:{std['year']}** — {std['title_en']}"
+        body = [
+            head,
+            f"- Yah {material} utpadon ke liye nahin hai.",
+            f"- Mere vartaman KB me {material} utpadon ke liye koi BIS srot nahin hai, "
+            "isliye andaza nahin lagaunga.",
+            f"- Know-Your-Standard par khojen: {_PORTAL}",
+        ]
     else:
-        text = (f"{std['is_number']}:{std['year']} — {std['title_en']} — covers {std['title_en'].lower()}, "
-                f"not {material} products. My current KB has no BIS source for {material} products, "
-                f"so I won't guess. Search Know-Your-Standard: {portal}")
+        head = f"**{std['is_number']}:{std['year']}** — {std['title_en']}"
+        body = [
+            head,
+            f"- Covers {std['title_en'].lower()} — not {material} products.",
+            f"- My current KB has no BIS source for {material} products, so I won't guess.",
+            f"- Search Know-Your-Standard: {_PORTAL}",
+        ]
+    body.extend(_footer(hi, with_disclaimer=False))
     r = _base(lang, refused=True, kind="coverage_gap", pii=find_pii(query),
               citations=[format_citation(std)], context={"history": [], "rounds": 0})
-    r["text"] = text + "\n\n" + BIS_CARE
+    r["text"] = "\n".join(body)
     return r
 
 
@@ -200,7 +237,8 @@ def _checked(resp: dict, res: dict) -> dict:
         safe = _base(resp.get("lang", "en"), refused=True, kind="verifier_fail",
                      pii=resp.get("pii", {}), context={"history": [], "rounds": 0})
         safe["text"] = ("I can't stand behind that answer — a citation check failed. "
-                        "Please rephrase or check Know-Your-Standard directly.\n\n" + BIS_CARE)
+                        "Please rephrase or check Know-Your-Standard directly."
+                        "\n\n" + _DIVIDER + "\n" + BIS_CARE)
         return safe
     return resp
 
@@ -219,23 +257,32 @@ def _final(query: str, combined: str, res: dict, lang: str, hi: bool,
         lines.append("**Hallmarking (HUID)**")
         lines.append("- Jeweller registration → AHC testing → 6-digit HUID → verify on BIS Care app."
                      if not hi else "- Jeweller panjikaran → AHC jaanch → 6-ank HUID → BIS Care app par satyapan.")
-        lines.append("Source: https://www.bis.gov.in/hallmarking-overview/ (last-checked 2026-09-18)")
+        lines.append("- Source: https://www.bis.gov.in/hallmarking-overview/ (last-checked 2026-09-18)")
+        lines.append("")
         citations.append("BIS Hallmarking overview — https://www.bis.gov.in/hallmarking-overview/")
     if lab_hit:
-        lines.append("Confirm IS-wise scope on LIMS before sending samples: https://lims.bis.gov.in/home/search_is_number/"
-                     if not hi else "Namuna bhejne se pehle LIMS par scope pusht karen: https://lims.bis.gov.in/home/search_is_number/")
+        lines.append("**BIS labs (LIMS)**" if not hi else "**BIS prayogshala (LIMS)**")
+        lines.append("- Confirm IS-wise scope on LIMS before sending samples: https://lims.bis.gov.in/home/search_is_number/"
+                     if not hi else "- Namuna bhejne se pehle LIMS par scope pusht karen: https://lims.bis.gov.in/home/search_is_number/")
+        lines.append("")
         citations.append("BIS LIMS IS-wise facility — https://lims.bis.gov.in/home/search_is_number/")
     if any(h in ql_c for h in CLUB_HINTS):
-        lines.append("Standards Clubs/training: see BIS training calendar https://www.bis.gov.in/training-2/training-programmes/ — ask your school nodal officer."
-                     if not hi else "Standards Club/prashikshan: BIS training calendar dekhen, school nodal adhikari se sampark karen.")
+        lines.append("**Standards Clubs / training**")
+        lines.append("- Standards Clubs/training: see BIS training calendar https://www.bis.gov.in/training-2/training-programmes/ — ask your school nodal officer."
+                     if not hi else "- Standards Club/prashikshan: BIS training calendar dekhen, school nodal adhikari se sampark karen.")
+        lines.append("")
         citations.append("BIS training — https://www.bis.gov.in/training-2/training-programmes/")
     if any(h in ql_c for h in SCHEME_HINTS) and res["schemes"]:
+        if lines and lines[-1] != "":
+            lines.append("")
+        lines.append("**Scheme**" if not hi else "**Yojana**")
         for s in res["schemes"][:2]:
             name = s["name_hi"] if hi else s["name_en"]
             lines.append(f"- **{s['key']}: {name}** — {s['source_url']}")
             steps = s["process_hi"] if hi else s["process_en"]
-            lines.append("  Steps: " + " → ".join(steps[:4]) + " …")
+            lines.append("  - Steps: " + " → ".join(steps[:4]) + " …")
             citations.append(f"{s['key']} — {s['source_url']}")
+        lines.append("")
 
     grounded = [c for c in cands if c["hits"] or c["score"] >= 10]
     forced = bool(ctx.get("force") or ctx.get("rounds", 0) >= t["max_rounds"])
@@ -246,6 +293,8 @@ def _final(query: str, combined: str, res: dict, lang: str, hi: bool,
                     if (c["hits"] or c["score"] >= t["weak_floor"])
                     and not material_mismatch(c["std"]["is_number"], combined)]
     if grounded and (not lines or top):
+        if lines and lines[-1] != "":
+            lines.append("")
         if top and (ctx["force"] or ctx["rounds"] >= t["max_rounds"]):
             unf = unfilled_slots(top["std"]["is_number"], combined)
             if unf:
@@ -253,6 +302,7 @@ def _final(query: str, combined: str, res: dict, lang: str, hi: bool,
                 lines.append("Answering with assumptions — you didn't specify these, still confirm with BIS:"
                              if not hi else "Anuman par uttar — yah vivaran aapne nahin diya, BIS se pusht karen:")
                 lines.extend(f"- {a}" for a in assumptions)
+                lines.append("")
         lines.append(STRINGS["candidates_hi"] if hi else STRINGS["candidates_en"])
         for c in cands[:3]:
             s = c["std"]
@@ -261,12 +311,12 @@ def _final(query: str, combined: str, res: dict, lang: str, hi: bool,
             if material_mismatch(s["is_number"], combined):
                 continue  # never present a materially contradicted standard
             if s["status"] == "Withdrawn":
-                lines.append(f'- ⚠️ {s["is_number"]}:{s["year"]} is **Withdrawn** — do NOT use for manufacture.')
+                lines.append(f'- Warning: {s["is_number"]}:{s["year"]} is **Withdrawn** — do NOT use for manufacture.')
                 citations.append(format_citation(s))
                 continue
             scope = s["scope_hi"] if hi else s["scope_en"]
             lines.append(f'- **{s["is_number"]}:{s["year"]}** ({c["confidence"]} confidence) — {s["title_en"]}. {scope}')
-            lines.append(f'  Scheme: {s["scheme"]}')
+            lines.append(f'  - Scheme: {s["scheme"]}')
             citations.append(format_citation(s))
         if top and top["std"]["status"] != "Withdrawn":
             unf = unfilled_slots(top["std"]["is_number"], combined)
@@ -277,25 +327,31 @@ def _final(query: str, combined: str, res: dict, lang: str, hi: bool,
     if not lines and not citations:
         gl = res["glossary"][:2]
         if gl:  # explainable from KB glossary -> answer, don't refuse
-            out = [f'Meaning of **{g["term"]}**: {g["hi"] if hi else g["en"]}' for g in gl]
-            out += ["", DISCLAIMER_HI if hi else DISCLAIMER_EN, BIS_CARE]
+            out = [f'- Meaning of **{g["term"]}**: {g["hi"] if hi else g["en"]}' for g in gl]
+            out.extend(_footer(hi, with_disclaimer=True))
             r = _base(lang, kind="glossary", pii=find_pii(query),
                       context={"history": [], "rounds": 0})
             r["text"] = "\n".join(out)
             return r
         r = _base(lang, refused=True, kind="no_source", pii=find_pii(query),
                   context={"history": [], "rounds": 0})
-        r["text"] = STRINGS["no_source_hi"] if hi else STRINGS["no_source_en"]
+        r["text"] = ((STRINGS["no_source_hi"] if hi else STRINGS["no_source_en"])
+                     + f"\n\nSearch Know-Your-Standard: {_PORTAL}"
+                     + "\n\n" + _DIVIDER + "\n" + BIS_CARE)
         return r
 
-    for g in res["glossary"][:2]:
-        if g["term"].lower() not in combined.lower() and g["term"].lower() not in ql:
-            continue
-        lines.append(f'\nMeaning of **{g["term"]}**: {g["hi"] if hi else g["en"]}')
+    matched_gloss = [g for g in res["glossary"][:2]
+                     if g["term"].lower() in combined.lower() or g["term"].lower() in ql]
+    if matched_gloss:
+        if lines and lines[-1] != "":
+            lines.append("")
+        lines.append("Terms:" if not hi else "Shabdarth:")
+        for g in matched_gloss:
+            lines.append(f'- Meaning of **{g["term"]}**: {g["hi"] if hi else g["en"]}')
 
-    lines.append("")
-    lines.append(DISCLAIMER_HI if hi else DISCLAIMER_EN)
-    lines.append(BIS_CARE)
+    while lines and lines[-1] == "":
+        lines.pop()
+    lines.extend(_footer(hi, with_disclaimer=True))
     r = _base(lang, kind="answered", pii=find_pii(query), citations=citations,
               assumptions=assumptions, context={"history": [], "rounds": 0})
     r["text"] = "\n".join(lines)

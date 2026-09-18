@@ -6,8 +6,8 @@ from datetime import datetime, timedelta
 STRINGS = {
     "ask_clarify_en": "To ground this I need 1–2 details:",
     "ask_clarify_hi": "Sahi manak ke liye 1–2 vivaran chahiye:",
-    "candidates_en": "Candidate standards (verify before action):",
-    "candidates_hi": "Sambhavit manak (karya se pehle satyapit karen):",
+    "candidates_en": "Candidate standards:",
+    "candidates_hi": "Sambhavit manak:",
     "no_source_en": "I don't have an authorised BIS source for that — I won't guess. Try Know-Your-Standard or ask with product material/use.",
     "no_source_hi": "Iske liye mere paas adhikrit BIS srot nahin hai — andaza nahin lagaunga. Know-Your-Standard dekhen ya samagri/upayog sahit poochhen.",
     "consent_en": "Storing business contact details only with your explicit 'I consent'. Say 'delete my data' anytime to erase. Test reports are session-only.",
