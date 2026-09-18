@@ -1,15 +1,18 @@
 {
   "name": "feedback",
-  "description": "Fixture for planned POST /feedback {thread_id, rating, note?} -> {ok:true}. Backend does not implement it yet; UI falls back to fixture-ok.",
+  "description": "Fixture for POST /feedback {thread_id, rating, note} -> {ok:true, status:'pending'}. Owned threads require the X-Owner-Token header; the UI sends it when known and falls back to fixture-ok otherwise.",
   "request_examples": [
-    { "thread_id": "thread-fixture-answered", "rating": 1 },
+    { "thread_id": "thread-fixture-answered", "rating": 1, "note": "" },
     { "thread_id": "thread-fixture-answered", "rating": -1, "note": "cited the wrong IS year" }
   ],
-  "response": { "ok": true },
+  "response": { "ok": true, "status": "pending" },
   "contract": {
     "method": "POST",
     "path": "/feedback",
     "rating_enum": [1, -1],
-    "note_max_length": 500
+    "backend_rating_range": "integer -1..1 (UI only ever sends 1|-1)",
+    "note_max_length": 1000,
+    "ui_note_cap": 500,
+    "auth": "X-Owner-Token required for owned threads"
   }
 }

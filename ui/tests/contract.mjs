@@ -93,10 +93,12 @@ describe("ui contract fixtures", () => {
     assert.match(dev, /[\u0900-\u097F]/, "chat-hindi fixture must contain Devanagari");
   });
 
-  it("feedback fixture matches planned POST /feedback contract", () => {
+  it("feedback fixture matches POST /feedback contract", () => {
     const j = load("feedback.json");
     assert.equal(j.response.ok, true);
+    assert.equal(j.response.status, "pending");
     assert.deepEqual(j.contract.rating_enum, [1, -1]);
+    assert.equal(j.contract.note_max_length, 1000);
     for (const ex of j.request_examples) {
       assert.equal(typeof ex.thread_id, "string");
       assert.ok([1, -1].includes(ex.rating), "rating must be 1|-1");
@@ -121,6 +123,14 @@ describe("ui contract fixtures", () => {
 
   it("kb-diff fixture matches the admin diff/publish shapes", () => {
     const j = load("kb-diff.json");
+    // Live backend shapes the UI normalises (documented in-fixture, asserted here).
+    assert.deepEqual(j.live_shapes.get_diff.change_type_enum, ["added", "changed", "missing-upstream"]);
+    assert.equal(j.live_shapes.get_diff.auth_header, "x-admin-key");
+    const pub = j.live_shapes.publish.body_example;
+    assert.equal(typeof pub.diff_id, "number");
+    assert.equal(typeof pub.approve, "boolean");
+    assert.ok(pub.publisher_key && pub.approver_key, "2-person publish needs both keys");
+    // Normalised/fixture diff shape the UI table consumes.
     const d = j.diff;
     assert.equal(typeof d.diff_id, "string");
     assert.equal(typeof d.generated_at, "string");
@@ -128,10 +138,8 @@ describe("ui contract fixtures", () => {
     for (const c of d.changes) {
       assert.equal(typeof c.id, "string");
       assert.equal(typeof c.is_number, "string");
-      assert.ok(["added", "changed", "withdrawn"].includes(c.change), `bad change kind ${c.change}`);
-      assert.equal(typeof c.new_status, "string");
-      assert.equal(typeof c.source_url, "string");
-      assert.equal(typeof c.last_checked, "string");
+      // Superset: live change_type values plus "withdrawn", which the UI renders as a warning row.
+      assert.ok(["added", "changed", "missing-upstream", "withdrawn"].includes(c.change), `bad change kind ${c.change}`);
     }
     assert.ok(["approve", "reject"].includes(j.publish_request_example.decision));
     assert.equal(j.publish_response.ok, true);

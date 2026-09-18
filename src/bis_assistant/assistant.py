@@ -15,9 +15,15 @@ from .i18n_privacy import detect_lang, find_pii, STRINGS
 from .slots import fills_for, unfilled_slots
 
 HALLMARK_HINTS = ("hallmark", "huid", "gold", "silver", "jewell", "sona", "chandi")
-LAB_HINTS = ("lab", "testing", "test house", "prayogshala", "parikshan")
+LAB_HINTS = ("testing", "test house", "prayogshala", "parikshan")  # "lab" matched separately
 SCHEME_HINTS = ("isi", "crs", "fmcs", "licence", "license", "certification", "registration", "qco", "scheme")
 CLUB_HINTS = ("club", "student", "training", "school", "college", "vidyarthi")
+
+_LAB_WORD = re.compile(r"\blaborator(?:y|ies)\b|\blab\b", re.IGNORECASE)  # not "matlab"
+
+
+def _has_lab_hint(text: str) -> bool:
+    return bool(_LAB_WORD.search(text)) or any(h in text for h in LAB_HINTS)
 
 RESET_WORDS = ("new question", "reset", "change topic", "naya sawal", "naya prashn", "नया सवाल")
 FORCE_WORDS = ("answer anyway", "assume", "just answer", "best guess")
@@ -155,6 +161,7 @@ def _final(query: str, combined: str, res: dict, lang: str, hi: bool,
            ctx: dict, top: dict | None, t: dict) -> dict:
     ql = query.lower()
     ql_c = combined.lower()
+    lab_hit = _has_lab_hint(ql_c)
     cands = res["candidates"]
     lines: list[str] = []
     citations: list[str] = []
@@ -166,7 +173,7 @@ def _final(query: str, combined: str, res: dict, lang: str, hi: bool,
                      if not hi else "- Jeweller panjikaran → AHC jaanch → 6-ank HUID → BIS Care app par satyapan.")
         lines.append("Source: https://www.bis.gov.in/hallmarking-overview/ (last-checked 2026-09-18)")
         citations.append("BIS Hallmarking overview — https://www.bis.gov.in/hallmarking-overview/")
-    if any(h in ql_c for h in LAB_HINTS):
+    if lab_hit:
         lines.append("Confirm IS-wise scope on LIMS before sending samples: https://lims.bis.gov.in/home/search_is_number/"
                      if not hi else "Namuna bhejne se pehle LIMS par scope pusht karen: https://lims.bis.gov.in/home/search_is_number/")
         citations.append("BIS LIMS IS-wise facility — https://lims.bis.gov.in/home/search_is_number/")

@@ -7,7 +7,8 @@ import type { KbDiff } from "./types";
  * fixture-driven table with approve/reject per diff hitting fixture endpoints.
  */
 export default function AdminPanel() {
-  const [token, setToken] = useState("");
+  const [publisherKey, setPublisherKey] = useState("");
+  const [approverKey, setApproverKey] = useState("");
   const [unlocked, setUnlocked] = useState(false);
   const [diff, setDiff] = useState<KbDiff | null>(null);
   const [fixture, setFixture] = useState(false);
@@ -16,14 +17,14 @@ export default function AdminPanel() {
   const [status, setStatus] = useState("");
 
   const load = async () => {
-    if (!token.trim()) {
-      setStatus("Enter the admin/review token first.");
+    if (!publisherKey.trim()) {
+      setStatus("Enter the publisher/admin key first.");
       return;
     }
     setLoading(true);
     setStatus("");
     try {
-      const { diff: d, fixture: f } = await fetchKbDiff(token.trim());
+      const { diff: d, fixture: f } = await fetchKbDiff(publisherKey.trim());
       setDiff(d);
       setFixture(f);
       setUnlocked(true);
@@ -38,7 +39,7 @@ export default function AdminPanel() {
   const decide = async (changeId: string, decision: "approve" | "reject") => {
     if (!diff) return;
     setStatus("");
-    const res = await publishKbDiff(diff.diff_id, decision, token.trim());
+    const res = await publishKbDiff(diff.diff_id, decision, publisherKey, approverKey);
     setDecisions((d) => ({ ...d, [changeId]: decision }));
     setStatus(
       `Recorded ${decision} for ${changeId} (${res.fixture ? "fixture endpoint" : "live POST /kb/publish"}).`,
@@ -50,9 +51,9 @@ export default function AdminPanel() {
       <section className="admin" aria-labelledby="admin-h">
         <h2 id="admin-h">Admin — KB diff review</h2>
         <p className="hint">
-          Reviewer-gated. Publishing needs two distinct approvers (plan §6); this screen records
-          per-change decisions against a fixture until <code>GET /kb/diff</code> +{" "}
-          <code>POST /kb/publish</code> ship on the backend.
+          Reviewer-gated. Publishing needs two distinct approvers (plan §6): enter both keys for a
+          live <code>POST /kb/publish</code>, or just the publisher key for a fixture review until
+          the admin backend is reachable. Diff list loads via <code>GET /kb/diff</code> (x-admin-key).
         </p>
         <form
           onSubmit={(e) => {
@@ -61,16 +62,25 @@ export default function AdminPanel() {
           }}
           className="admin-gate"
         >
-          <label htmlFor="admin-token">Review token</label>
+          <label htmlFor="admin-token">Publisher key</label>
           <input
             id="admin-token"
             type="password"
             autoComplete="off"
-            value={token}
-            onChange={(e) => setToken(e.target.value)}
-            placeholder="paste reviewer token"
+            value={publisherKey}
+            onChange={(e) => setPublisherKey(e.target.value)}
+            placeholder="paste publisher key"
           />
-          <button type="submit" className="primary" disabled={loading || !token.trim()}>
+          <label htmlFor="admin-approver">Approver key <span className="hint">(distinct 2nd key for live publish)</span></label>
+          <input
+            id="admin-approver"
+            type="password"
+            autoComplete="off"
+            value={approverKey}
+            onChange={(e) => setApproverKey(e.target.value)}
+            placeholder="paste distinct approver key (optional)"
+          />
+          <button type="submit" className="primary" disabled={loading || !publisherKey.trim()}>
             {loading ? "…" : "Unlock diff"}
           </button>
         </form>
@@ -101,15 +111,23 @@ export default function AdminPanel() {
           </thead>
           <tbody>
             {diff.changes.map((c) => (
-              <tr key={c.id} className={c.change === "withdrawn" ? "row-warn" : ""}>
-                <td>{c.is_number}</td>
+              <tr key={c.id} className={c.change === "withdrawn" || c.change === "missing-upstream" ? "row-warn" : ""}>
+                <td>{c.is_number}{c.snapshot_id != null && <div className="hint">snapshot #{c.snapshot_id}</div>}</td>
                 <td>
-                  <span className={`badge ${c.change === "withdrawn" ? "refuse" : "lang"}`}>{c.change}</span>
+                  <span className={`badge ${c.change === "withdrawn" || c.change === "missing-upstream" ? "refuse" : "lang"}`}>{c.change}</span>
                 </td>
-                <td>{c.old_status ?? "—"} → {c.new_status}</td>
                 <td>
-                  <a href={c.source_url} target="_blank" rel="noreferrer">{c.source_url}</a>
-                  <div className="hint">checked {c.last_checked}</div>
+                  {c.old_status != null || c.new_status != null
+                    ? `${c.old_status ?? "—"} → ${c.new_status ?? "—"}`
+                    : (c.details ?? "—")}
+                </td>
+                <td>
+                  {c.source_url ? (
+                    <a href={c.source_url} target="_blank" rel="noreferrer">{c.source_url}</a>
+                  ) : (
+                    <span className="hint">{c.details ?? "no source link"}</span>
+                  )}
+                  {c.last_checked && <div className="hint">checked {c.last_checked}</div>}
                 </td>
                 <td>
                   {decisions[c.id] ? (

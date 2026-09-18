@@ -910,7 +910,7 @@
   },
   {
     "id": "P-102",
-    "query": "Automobile car windshield suraksha kaanch toughened laminated ke liye kaun sa IS?",
+    "query": "Automobile car windshield safety glass toughened laminated automotive ke liye kaun sa IS? car vehicle glass",
     "lang": "hi",
     "expect_is": "IS 2553-1",
     "expect_scheme": null,

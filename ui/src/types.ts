@@ -61,22 +61,27 @@ export interface ThreadExport {
   messages: ThreadMessage[];
 }
 
-export type KbChangeKind = "added" | "changed" | "withdrawn";
+export type KbChangeKind = "added" | "changed" | "missing-upstream" | "withdrawn";
 
 export interface KbChange {
   id: string;
   is_number: string;
   change: KbChangeKind;
   old_status?: string;
-  new_status: string;
-  source_url: string;
-  last_checked: string;
+  new_status?: string;
+  source_url?: string;
+  last_checked?: string;
+  /** live rows only: originating snapshot + raw details_json payload */
+  snapshot_id?: number;
+  details?: string;
 }
 
 export interface KbDiff {
   diff_id: string;
   generated_at: string;
   changes: KbChange[];
+  /** live GET /kb/diff only: which admin key reviewed */
+  reviewed_by?: string;
 }
 
 export interface KbPublishResult {

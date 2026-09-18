@@ -35,6 +35,13 @@ def verify(resp: dict, section_refs: dict[str, str] | None = None) -> list[str]:
         return violations
     mentioned = set(IS_RE.findall(text)) - {"0000"}  # demo row handled by status path
     cited = _cited_numbers(cits)
+    if resp.get("kind") == "glossary":
+        # Glossary answers use real IS numbers as illustrative examples, not claims.
+        # They must still be REAL (present in KB) — just not necessarily cited.
+        unknown = mentioned - set(section_refs)
+        if unknown:
+            violations.append(f"glossary mentions unknown IS numbers: {sorted(unknown)}")
+        return violations
     missing = mentioned - cited
     if missing:
         violations.append(f"uncited IS numbers: {sorted(missing)}")
