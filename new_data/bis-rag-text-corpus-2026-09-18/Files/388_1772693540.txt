@@ -1,0 +1,149 @@
+xxxGIDHxxx
+                                                         CG-DL-E-28022026-270547
+                                                                xxxGIDExxx
+
+                                                            EXTRAORDINARY
+                                                            PART III—Section 4
+                                                    PUBLISHED BY AUTHORITY
+
+       No. 125]                  NEW DELHI, TUESDAY, FEBRUARY 24, 2026/PHALGUNA 5, 1947
+
+(1)                                     (2)                            (3)                           (4)                            (5)
+
+      1329 GI/2026                                                    (1)
+
+    2                                   THE GAZETTE OF INDIA : EXTRAORDINARY                           [PART III—SEC.4]
+
+ 4                               THE GAZETTE OF INDIA : EXTRAORDINARY                                   [PART III—SEC.4]
+
+                                      BUREAU OF INDIAN STANDARDS
+                                        (Department of Consumer Affairs)
+                                                  NOTIFICATION
+                                        New Delhi, the 20th February, 2026
+          Ref: HQ-PUB013/1/2020-PUB-BIS (1438).—In pursuance of Sub-rule (1) of Rule (15) of the Bureau of
+ Indian Standards Rules, 2018, the Bureau of Indian Standards hereby notifies that Indian standards, particulars of which
+ are given in the second column of the schedule hereto annexed have been established on the date indicated against it in
+ third column. The particulars of the standards, if any which are given in the fourth column shall also remain in force
+ concurrently till they are withdrawn on the date indicated against them in the fifth column.
+
+                                                      SCHEDULE
+
+Sl.     No., Year & Title of the Indian            Date of             No. , Year & Title of the             Date of
+No.                                             Establishment                                               Withdrawal
+            Standards Established                                       Indian Standards to be
+                                                                          Withdrawn, if any
+(1)                    (2)                            (3)                         (4)                           (5)
+
+ 1          IS/ISO/IEC 5140 : 2024             18 February 2026                     NA                          NA
+       Information Technology — Cloud
+       Computing — Concepts for Multi
+      Cloud and the Use of Multiple Cloud
+                    Services
+
+                                                                                                           18 August 2026
+ 2               IS 5155 : 2026                18 February 2026               IS 5155 – 1969
+        Medical Laboratory Glassware —                                   Specification for Pipettes,
+         Ostwald-Folin Type Pipettes —                                     Ostwald-Folin Type
+                  Specification
+                (First Revision)
+
+                                                                                                           18 August 2026
+ 3               IS 6944 : 2026                18 February 2026              IS 6944 – 1973
+        Medical Laboratory Glassware —                               Specification for Bottle, Bijou,
+         Bijou Bacteriological Bottle —                                      Bacteriological
+                  Specification
+                (First Revision)
+
+                                                                                                           18 August 2026
+ 4             IS 10467 : 2026                 18 February 2026             IS 10467 – 1983
+           IEC TR 60268-13 : 1998                                   Listening Test on Loudspeakers
+       Sound System Equipment Listening
+            Tests on Loudspeakers
+               (First Revision)
+
+                                                                                                                NA
+ 5           IS 16502 (Part 5) : 2026          18 February 2026                     NA
+              IEC TS 61496-5 : 2023
+         Safety of Machinery — Electro-
+         Sensitive Protective Equipment
+        Part 5 Particular Requirements for
+        Radar- Based Protective Devices
+
+                                                                                                   18 August 2026
+6          IS 16504 (Part 32) : 2026         18 February 2026      IS 16504 (Part 32) : 2017
+             IEC 60204-32 : 2023                                     IEC 60204-32 : 2008
+      Safety of Machinery — Electrical                              Safety of Machinery —
+            Equipment of Machines                                          Electrical
+      Part 32 Requirements for Hoisting                             Equipment of Machines
+                   Machines                                        Part 32 Requirements for
+                (First Revision)                                       Hoisting Machines
+                                                                                                   18 August 2026
+7              IS 16784 : 2026               18 February 2026           IS 16784 : 2018
+              IEC 61109 : 2025                                         IEC 61109 : 2008
+      Insulators for Overhead Lines —                            Insulators for Overhead Lines
+     Composite Suspension and Tension                            — Composite Suspension and
+     Insulators with a.c. Voltage Greater                          Tension Insulators for a.c.
+        than 1 000 V and d.c. Voltage                               Systems with a Nominal
+     Greater than 1 500 V — Definitions                              Voltage Greater Than
+        Test Methods and Acceptance                               1 000 V — Definitions, Test
+                   Criteria                                         Methods and Acceptance
+               (First Revision)                                              Criteria
+
+                                                                                                   18 August 2026
+8              IS 17521 : 2026               18 February 2026           IS 17521 : 2021
+            IEC TS 63074 : 2023                                      IEC TR 63074 : 2019
+       Safety of Machinery — Security                           Safety of Machinery — Security
+     Aspects Related to Functional Safety                        Aspects Related to functional
+      of Safety Related Control Systems                         Safety of Safety Related Control
+                (First Revision)                                            Systems
+
+                                                                                                        NA
+9       IS 18875 (Part 20701) : 2026         18 February 2026                 NA
+       ISO/IEEE 11073-20701 : 2020
+        Health Informatics — Device
+               Interoperability
+     Part 20701 Point-of-Care Medical
+     Device Communication — Service
+     Oriented Medical Device Exchange
+     Architecture and Protocol Binding
+
+                                                                                                        NA
+10      IS 18875 (Part 40101) : 2026         18 February 2026                 NA
+       ISO/IEEE 11073-40101 : 2022
+        Health Informatics — Device
+               Interoperability
+         Part 40101 Foundational —
+       Cybersecurity — Processes for
+          Vulnerability Assessment
+
+                                                                                                        NA
+11      IS 18875 (Part 40102) : 2026         18 February 2026                 NA
+       ISO/IEEE 11073-40102 : 2022
+        Health Informatics — Device
+               Interoperability
+         Part 40102 Foundational —
+      Cybersecurity — Capabilities for
+                  Mitigation
+
+6                              THE GAZETTE OF INDIA : EXTRAORDINARY                                      [PART III—SEC.4]
+
+                                                                                                                         NA
+12           IS 19598 : 2026                  18 February 2026                      NA
+      E-Commerce — Principles and
+      Guidelines for Self-Governance
+
+                                                                                                                         NA
+13             IS 19621 : 2026                18 February 2026                      NA
+              ISO 21531 : 2009
+     Dentistry — Graphical Symbols for
+             Dental Instruments
+
+                                                   CHITRA GUPTA, Scientist G & DDG (Hallmarking and Training)
+
+                                                                                        [ADVT.-III/4/Exty./700/2025-26]
+
+           Uploaded by Dte. of Printing at Government of India Press, Ring Road, Mayapuri, New Delhi-110064
+                             and Published by the Controller of Publications, Delhi-110054. GORAKHA NATH YADAVA
+                                                                                                              Digitally signed by GORAKHA NATH
+                                                                                                              YADAVA
+                                                                                                              Date: 2026.02.28 09:29:57 +05'30'

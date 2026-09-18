@@ -1,0 +1,121 @@
+xxxGIDHxxx
+                                                         CG-DL-E-08072026-274256
+                                                                xxxGIDExxx
+
+                                                          EXTRAORDINARY
+                                                          PART III—Section 4
+                                                     PUBLISHED BY AUTHORITY
+
+No. 429]                         NEW DELHI, THURSDAY, JULY 2, 2026/ASHADHA 11, 1948
+
+(1)                              (2)                              (3)                         (4)                           (5)
+                             2025
+4972 GI/2026                                                       (1)
+
+2                                 THE GAZETTE OF INDIA : EXTRAORDINARY                                [PART III—SEC.4]
+
+                                                                                 2022
+
+                                                                                                             2026
+                       2025                                                19896-1 : 2018
+
+                                                                                                             2026
+                       2025                                                19896-3 : 2018
+
+                              2025                                                   27018 : 2019               2026
+
+                         2025
+
+                                         BUREAU OF INDIAN STANDARDS
+                                           (Department of Consumer Affairs)
+                                                        NOTIFICATION
+                                                New Delhi, the 24th June, 2026
+          F. No. HQ-PUB013/1/2020-PUB-BIS (1561).—In pursuance of Sub-rule (1) of Rule (15) of the Bureau of
+ Indian Standards Rules, 2018, the Bureau of Indian Standards hereby notifies that Indian standards, particulars of
+ which are given in the second column of the schedule hereto annexed have been established on the date indicated
+ against it in third column. The particulars of the standards, if any which are given in the fourth column shall also
+ remain in force concurrently till they are withdrawn on the date indicated against them in the fifth column.
+
+                                                           SCHEDULE
+
+Sl.       No., Year & Title of the Indian               Date of        No., Year & Title of the Indian        Date of
+No.                                                  Establishment                                           Withdrawal
+              Standards Established                                    Standards to be Withdrawn, if
+                                                                                    any
+(1)                      (2)                              (3)                       (4)                          (5)
+ 1            IS/ISO/IEC 8663 : 2025                  23 June 2026                   NA                          NA
+         Information Technology — Brain-
+         Computer Interfaces — Vocabulary
+
+               IS 14990 (Part 5) : 2026               23 June 2026         IS 14990 (Part 5) : 2024          23 December
+ 2             ISO/IEC 15408-5 : 2026                                      ISO/IEC 15408-5 : 2022                2026
+                 Information Security,                                       Information Security,
+              Cybersecurity and Privacy                                   Cybersecurity and Privacy
+         Protection — Evaluation Criteria for                              Protection — Evaluation
+                      IT Security                                           Criteria for IT Security
+           Part 5 Pre-Defined Packages of                               Part 5 Pre-Defined Packages of
+                Security Requirements                                       Security Requirements
+                    (First Revision)
+
+4                              THE GAZETTE OF INDIA : EXTRAORDINARY                                  [PART III—SEC.4]
+
+            IS 16500 : 2026                   23 June 2026              IS 16500 : 2012                   23 December
+3      Devanagari Script and Hindi                                  Devnagari Script and Hindi                2026
+               Spellings                                                   Spellings
+            (First Revision)
+
+4            IS 19834 : 2026                  23 June 2026                       NA                               NA
+       Enterprise Architecture (EA)
+       Security — Code of Practice
+
+             IS 19835 : 2026                  23 June 2026                       NA                               NA
+5    Zero Trust Architecture (ZTA) —
+        Implementation Framework
+
+6       IS/ISO/IEC 19896-1 : 2025             23 June 2026          IS/ISO/IEC 19896-1 : 2018             23 December
+    Information Security, Cybersecurity                              IT Security Techniques —                 2026
+         and Privacy Protection —                                 Competence Requirements for
+    Requirements for the Competence of                           Information Security Testers and
+         IT Security Conformance                                             Evaluators
+        Assessment Body Personnel                                Part 1 Introduction, Concepts and
+       Part 1 Overview and Concepts                                    General Requirements
+              (First Revision)
+
+7       IS/ISO/IEC 19896-3 : 2025             23 June 2026          IS/ISO/IEC 19896-3 : 2018             23 December
+    Information Security, Cybersecurity                              IT Security Techniques —                 2026
+         and Privacy Protection —                                 Competence Requirements for
+    Requirements for the Competence of                           Information Security Testers and
+         IT Security Conformance                                            Evaluators
+        Assessment Body Personnel                                  Part 3 knowledge, Skills and
+        Part 3 Knowledge and Skills                               Effectiveness Requirements for
+      Requirements for Evaluators and                               ISO/IEC 15408 Evaluators
+        Reviewers According to the
+    ISO/IEC 15408 Series and ISO/IEC
+                    18045
+              (First Revision )
+
+8         IS/ISO/IEC 27018 : 2025             23 June 2026           IS/ISO/IEC 27018 : 2019              23 December
+    Information Security, Cybersecurity                             Information Technology —                  2026
+         and Privacy Protection —                                 Security Techniques — Code of
+        Guidelines for Protection of                                  Practice for Protection of
+     Personally Identifiable Information                               Personally Identifiable
+    (PII) in Public Clouds Acting as PII                            Information ( PII ) in Public
+                  Processors                                      Clouds Acting as PII Processors
+              (Second Revision)                                           (First Revision)
+
+9       IS/ISO/IEC 27031 : 2025               23 June 2026                       NA                               NA
+     Cybersecurity — Information and
+       Communication Technology
+     Readiness for Business Continuity
+
+                                                  CHITRA GUPTA, Scientist G & DDG (Hallmarking and Training)
+
+                                                                                 [ADVT.-III/4/Exty./198/2026-27]
+
+           Uploaded by Dte. of Printing at Government of India Press, Ring Road, Mayapuri, New Delhi-110064
+                             and Published by the Controller of Publications, Delhi-110054.
+                                                                                          VINOD               Digitally signed
+                                                                                                              by VINOD KUMAR
+
+                                                                                          KUMAR               Date: 2026.07.08
+                                                                                                              17:32:44 +05'30'

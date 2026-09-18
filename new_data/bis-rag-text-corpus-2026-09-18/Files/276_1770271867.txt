@@ -1,0 +1,151 @@
+xxxGIDHxxx
+                                                   CG-DL-E-11122025-268433
+                                                          xxxGIDExxx
+
+                                                      EXTRAORDINARY
+                                                      PART III—Section 4
+                                              PUBLISHED BY AUTHORITY
+
+ No. 806]            NEW DELHI, THURSDAY, DECEMBER 11, 2025/AGRAHAYANA 20, 1947
+
+8352 GI/2025                                                    (1)
+
+2                               THE GAZETTE OF INDIA : EXTRAORDINARY                                 [PART III—SEC.4]
+
+(1)                  (2)                         (3)                           (4)                          (5)
+
+ 2
+
+ 3
+
+ 4
+
+5
+
+6
+
+7
+                   2023
+
+4                            THE GAZETTE OF INDIA : EXTRAORDINARY                                [PART III—SEC.4]
+
+8
+
+9                                                                     62896 : 2015
+                 2024
+
+                                       BUREAU OF INDIAN STANDARDS
+                                         (Department of Consumer Affairs)
+                                                  NOTIFICATION
+                                         New Delhi, the 10th December, 2025
+            Ref: HQ-PUB013/1/2020-PUB-BIS (1385).—In pursuance of Sub-rule (1) of Rule (15) of the Bureau of
+Indian Standards Rules, 2018, the Bureau of Indian Standards hereby notifies that Indian standards, particulars of which
+are given in the second column of the schedule hereto annexed have been established on the date indicated against it in
+third column. The particulars of the standards, if any which are given in the fourth column shall also remain in force
+concurrently till they are withdrawn on the date indicated against them in the fifth column.
+                                                     SCHEDULE
+
+ Sl.     No., Year & Title of the Indian           Date of              No. , Year & Title of the        Date of
+ No.         Standards Established              Establishment           Indian Standards to be          Withdrawal
+                                                                          Withdrawn, if any
+  (1)                    (2)                           (3)                         (4)                        (5)
+
+   1          IS 13925 (Part 1) : 2025        09 December 2025         IS 13925 (Part 1) : 2012         09 June 2026
+                IEC 60871-1 : 2014                                       IEC 60871-1 : 2005
+          Shunt Capacitors for a.c. Power                            Shunt Capacitors for ac Power
+          systems Having a Rated Voltage                               Systems Having a Rated
+                   Above 1 000 V                                        Voltage Above 1 000 V
+                   Part 1 General                                            Part 1 General
+                 (Second Revision)                                          (First Revision)
+
+   2         IS 13925 (Part 2) : 2025         09 December 2025          IS 13925 (Part 2) : 2002        09 June 2026
+             IEC TS 60871-2 : 2014+                                       IEC 60871-2 (1999)
+               AMD 1 : 2022 CSV                                      Shunt Capacitors for a.c. Power
+          Shunt Capacitors for a.c. Power                               Systems Having a Rated
+         Systems Having a Rated Voltage                                 Voltage Above 1 000 V
+                  Above 1 000 V                                        Part 2 Endurance Testing
+            Part 2 Endurance Testing                                        (First Revision)
+                (Second Revision)
+
+   3         IS 13925 (Part 3) : 2025         09 December 2025          IS 13925 (Part 3) : 2002        09 June 2026
+             IEC TS 60871-3 : 2015+                                       IEC 60871-3 (1996)
+               AMD 1 : 2023 CSV                                      Shunt Capacitors for a.c. Power
+          Shunt Capacitors for a.c. Power                               Systems Having a Rated
+         Systems Having a Rated Voltage                                 Voltage Above 1 000 V
+                  Above 1 000 V                                        Part 3 Protection of Shunt
+            Part 3 Protection of Shunt                               Capacitors and Shunt Capacitor
+         Capacitors and Shunt Capacitor                                          Banks
+                      Banks
+                 (First Revision)
+
+   4         IS 13925 (Part 4) : 2025         09 December 2025          IS 13925 (Part 4) : 2013        09 June 2026
+               IEC 60871-4 : 2014                                         IEC 60871-4 : 1996
+         Shunt Capacitors for a.c. Power                             Shunt Capacitors for a.c. Power
+         Systems Having a Rated Voltage                                 Systems Having a Rated
+                 Above 1 000 V                                          Voltage Above 1 000 V
+               Part 4 Internal Fuses                                      Part 4 Internal Fuses
+                 (First Revision)
+
+6                               THE GAZETTE OF INDIA : EXTRAORDINARY                                         [PART III—SEC.4]
+
+    5        IS 15086 (Part 8) : 2025         09 December 2025           IS 15086 (Part 8) : 2017                             09 June 2026
+               IEC 60099-8 : 2017                                          IEC 60099-8 : 2011
+                  Surge Arresters                                            Surge Arresters
+            Part 8 Metal Oxide Surge                                     Part 8 Metal Oxide Surge
+        Arresters with External Series Gap                            Arresters with External Series
+              (EGLA) for Overhead                                      Gap (EGLA) for Overhead
+          Transmission and Distribution                               Transmission and Distribution
+        Lines of a.c. Systems above 1 kV                                  Lines of a.c. Systems
+                  (First Revision)                                              Above 1 kv
+
+    6            IS 16784 : 2025              09 December 2025               IS 16784 : 2018                                  09 June 2026
+                IEC 61109 : 2025                                            IEC 61109 : 2008
+        Insulators for Overhead Lines —                               Insulators for Overhead Lines
+            Composite Suspension and                                                —
+           Tension Insulators with a.c.                                Composite Suspension and
+        Voltage Greater than 1 000 V and                                Tension Insulators for a.c.
+        d.c. Voltage Greater than 1 500 V                                Systems with a Nominal
+                        —                                             Voltage Greater Than 1 000 V
+          Definitions, Test Methods and                               — Definitions, Test Methods
+               Acceptance Criteria                                       and Acceptance Criteria
+                 (First Revision)
+
+    7        IS 17520 (Part 3) : 2025         09 December 2025                      NA                                                 NA
+             IEC TS 62998-3 : 2023
+         Safety of Machinery — Safety-
+          Related Sensors Used for the
+              Protection of Persons
+         Part 3 Sensor Technologies and
+                   Algorithms
+
+    8         IS/IEC 60154-3 : 1982           09 December 2025        IS 10738 (Part 3/Sec 1) : 1991                          09 June 2026
+             Flanges for Waveguides                                    Specification for Flanges for
+        Part 3 Relevant Specifications for                                     Waveguides
+          Flanges for Flat Rectangular                                    Part 3 Flanges for Flat
+                    Waveguides                                           Rectangular Waveguides
+                  (First Revision)                                          Section 1 General
+
+                                                                      IS 10738 (Part 3/Sec 2) : 1991
+                                                                       Flanges for Waveguides —
+                                                                               Specification
+                                                                          Part 3 Flanges for Flat
+                                                                         Rectangular Waveguides
+                                                                         Section 2 Flange Type G
+
+    9         IS/IEC 62896 : 2024             09 December 2025          IS/IEC TS 62896 : 2015                                09 June 2026
+        Hybrid Insulators for a.c. and d.c.                           Hybrid Insulators for a.c. and
+         for High-Voltage Applications                                    d.c. for High-Voltage
+        Greater Than 1 000 V a.c. and 1                                Applications — Definitions,
+          500 V d.c. Definitions, Test                                Test Methods and Acceptance
+        Methods and Acceptance Criteria                                           Criteria
+                (First Revision)
+
+                                                   CHITRA GUPTA, Scientist G & DDG (Hallmarking and Training)
+                                                                                      [ADVT.-III/4/Exty./542/2025-26]
+
+            Uploaded by Dte. of Printing at Government of India Press, Ring Road, Mayapuri, New Delhi-110064
+                              and Published by the Controller of Publications, Delhi-110054. SARVESH KUMAR
+                                                                                                   Digitally signed by SARVESH
+                                                                                                   KUMAR SRIVASTAVA
+                                                                                             SRIVASTAVA
+                                                                                                   Date: 2025.12.11 22:10:55 +05'30'

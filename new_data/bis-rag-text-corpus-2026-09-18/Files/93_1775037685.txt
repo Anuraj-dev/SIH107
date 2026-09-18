@@ -1,0 +1,190 @@
+xxxGIDHxxx
+                                                   CG-DL-E-28032026-271376
+                                                          xxxGIDExxx
+
+                                                      EXTRAORDINARY
+                                                      PART III—Section 4
+                                              PUBLISHED BY AUTHORITY
+
+No. 220]                         NEW DELHI, FRIDAY, MARCH 27, 2026/CHAITRA 6, 1948
+
+2255 GI/2026                                                    (1)
+
+     2                                 THE GAZETTE OF INDIA : EXTRAORDINARY                            [PART III—SEC.4]
+
+(1)                           (2)                             (3)                        (4)                     (5)
+
+                              2024
+
+(1)                           (2)                             (3)                        (4)                    (5)
+
+                                 2024
+
+                              2024
+
+12
+
+   4                                 THE GAZETTE OF INDIA : EXTRAORDINARY                                   [PART III—SEC.4]
+
+(1)                         (2)                              (3)                          (4)                            (5)
+
+                                            BUREAU OF INDIAN STANDARDS
+                                             (Department of Consumer Affairs)
+                                                       NOTIFICATION
+                                               New Delhi, the 24th March, 2026
+            Ref: HQ-PUB013/1/2020-PUB-BIS (1503).— In pursuance of Sub-rule (1) of Rule (15) of the Bureau of
+   Indian Standards Rules, 2018, the Bureau of Indian Standards hereby notifies that Indian standards, particulars of
+   which are given in the second column of the schedule hereto annexed have been established on the date indicated
+   against it in third column. The particulars of the standards, if any which are given in the fourth column shall also
+   remain in force concurrently till they are withdrawn on the date indicated against them in the fifth column
+
+                                                       SCHEDULE
+
+Sl     No., Year & Title of the Indian         Date of        No. , Year & Title of the Indian    Date of
+No.        Standards Established            Establishment     Standards to be Withdrawn, if      Withdrawal
+                                                                           any
+(1)                  (2)                         (3)                        (4)                      (5)
+
+ 1              IS 5145 : 2026              23 March 2026             IS 5145 – 1969             23 September
+        Walking Sticks — Specification                        Specification for Walking Sticks       2026
+               (First Revision)
+
+                                                                                                 23 September
+ 2              IS 6112 : 2026              23 March 2026             IS 6112 – 1971                 2026
+        Sim’s Pattern Double-Ended                                   Specification for
+      Vaginal Speculum — Specification                          Speculum, Vaginal, Double
+               (First Revision)                                   Ended (Sim’s Pattern)
+
+ 3             IS 6464 : 2026               23 March 2026              IS 6464 : 2000            23 September
+        ENT Diagnostic Instruments —                          ENT Diagnostic Instruments —           2026
+        Tuning Forks — Specification                          Tuning Forks (Gardiner Brown’s
+             (Second Revision)                                   Pattern) — Specification
+                                                                      (First Revision)
+                                                                                                 23 September
+ 4           IS 7080 (Part 2) : 2026        23 March 2026          IS 7080 (Part 2) : 1992           2026
+          MTP Suction Apparatus —                               MTP Suction Apparatus —
+                  Specification                                         Specification
+        Part 2 Electrical-Cum-Manually                        Part 2 Electrical-Cum-Manually
+                    Operated                                              Operated
+               (Second Revision)                                       (First Revision)
+
+                                                                                                 23 September
+ 5         IS 11646 (Part 2) : 2026         23 March 2026        IS 11646 (Part 2) – 1986            2026
+         Cane for Persons with Visual                            Specification for Cane for
+         Impairment — Specification                               Visually Handicapped
+             Part 2 Folding Type                                   Part 2 Folding Type
+               (First Revision)
+
+                                                                                                     NA
+ 6          IS 18867 (Part 5) : 2026        23 March 2026                   NA
+             ISO/TS 22077-5 : 2021
+        Health Informatics — Medical
+               Waveform Format
+       Part 5 Neurophysiological Signals
+
+ 6                              THE GAZETTE OF INDIA : EXTRAORDINARY                           [PART III—SEC.4]
+
+Sl     No., Year & Title of the Indian         Date of      No. , Year & Title of the Indian        Date of
+No.        Standards Established            Establishment   Standards to be Withdrawn, if          Withdrawal
+                                                                         any
+(1)                   (2)                        (3)                      (4)                          (5)
+                                                                                                       NA
+ 7        IS 18875 (Part 10206) : 2026      23 March 2026                 NA
+         ISO/IEEE 11073-10206 : 2024
+          Health Informatics — Device
+                 Interoperability
+       Part 10206 Personal Health Device
+      Communication — Abstract Content
+               Information Model
+                                                                                                   23 September
+ 8       IS 18875 (Part 10421) : 2026       23 March 2026   IS/ISO/IEEE 11073-10421 : 2012             2026
+        ISO/IEEE 11073-10421 : 2024                          Health Information — Personal
+         Health Informatics — Device                         Health Device Communication
+                Interoperability                            Part 10421 Device Specialization
+      Part 10421 Personal Health Device                     — Peak Expiratory Flow Monitor
+          Communication — Device                                      (Peak Flow)
+      Specialization — Peak Expiratory
+                 Flow Monitor
+                  (Peak Flow)
+
+                                                                                                       NA
+ 9       IS 18875 (Part 10700) : 2026       23 March 2026                 NA
+        ISO/IEEE 11073-10700 : 2024
+         Health Informatics — Device
+                Interoperability
+       Part 10700 Point-of-Care Medical
+      Device Communication — Standard
+           for Base Requirements for
+       Participants in a Service-Oriented
+      Device Connectivity (SDC) System
+
+                                                                                                       NA
+ 10       IS 18875 (Part 10701) : 2026      23 March 2026                 NA
+         ISO/IEEE 11073-10701 : 2024
+          Health Informatics — Device
+                 Interoperability
+       Part 10701 Point-of-Care Medical
+       Device Communication — Metric
+        Provisioning by Participants in a
+            Service-Oriented Device
+           Connectivity (SDC) System
+                                                                                                       NA
+ 11            IS 19433 : 2026              23 March 2026                 NA
+            ISO/TR 21548 : 2010
+        Health Informatics — Security
+        Requirements for Archiving of
+        Electronic Health Records —
+                  Guidelines
+
+Sl      No., Year & Title of the Indian           Date of          No. , Year & Title of the Indian                                Date of
+No.         Standards Established              Establishment       Standards to be Withdrawn, if                                  Withdrawal
+                                                                                any
+(1)                   (2)                            (3)                           (4)                                               (5)
+                                                                                                                                     NA
+ 12         IS 19477 (Part 0) : 2026           23 March 2026                       NA
+               ISO 13078 : 2013
+          Dentistry — Dental Furnace
+      Part 0 Test Method for Temperature
+          Measurement with Separate
+                 Thermocouple
+
+                                                                                                                                     NA
+ 13          IS 19477 (Part 2) : 2026          23 March 2026                       NA
+          Dentistry — Dental Furnace
+      Part 2 Test Method for Evaluation of
+      Furnace Programme via Firing Glaze
+          (ISO 13078-2 : 2016, MOD)
+
+                                                                                                                                     NA
+ 14         IS 19638 (Part 1) : 2026           23 March 2026                       NA
+               ISO 8548-1 : 1989
+       Prosthetics and Orthotics — Limb
+                  Deficiencies
+       Part 1 Method of Describing Limb
+          Deficiencies Present at Birth
+
+                                                                                                                                     NA
+ 15         IS 19638 (Part 2) : 2026           23 March 2026                       NA
+               ISO 8548-2 : 2020
+       Prosthetics and Orthotics — Limb
+                  Deficiencies
+      Part 2 Method of Describing Lower
+           Limb Amputation Stumps
+
+                                                                                                                                     NA
+ 16            IS 19697 : 2026                 23 March 2026                       NA
+            ISO/TS 23148 : 2024
+        Compatibility of Lubricants with
+          Synthetic Male Condoms
+
+                                                    CHITRA GUPTA, Scientist G & DDG (Hallmarking and Training)
+                                                                                         [ADVT.-III/4/Exty./796/2025-26]
+
+             Uploaded by Dte. of Printing at Government of India Press, Ring Road, Mayapuri, New Delhi-110064
+                               and Published by the Controller of Publications, Delhi-110054. SARVESH
+                                                                                                    Digitally signed by SARVESH
+                                                                                                      KUMAR
+                                                                                                    KUMAR SRIVASTAVA
+                                                                                              SRIVASTAVA
+                                                                                                    Date: 2026.03.28 15:55:06
+                                                                                                    +05'30'

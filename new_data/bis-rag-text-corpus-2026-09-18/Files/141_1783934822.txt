@@ -1,0 +1,152 @@
+xxxGIDHxxx
+                                                   CG-DL-E-11072026-274407
+                                                          xxxGIDExxx
+
+                                                      EXTRAORDINARY
+                                                      PART III—Section 4
+                                              PUBLISHED BY AUTHORITY
+
+ No. 444]                        NEW DELHI, THURSDAY, JULY 9, 2026/ASHADHA 18, 1948
+
+5181 GI/2026                                                    (1)
+
+2                                        THE GAZETTE OF INDIA : EXTRAORDINARY                                               [PART III—SEC.4]
+
+    (1)                           (2)                                   (3)                          (4)                           (5)
+
+ 10
+
+ 11
+
+4                               THE GAZETTE OF INDIA : EXTRAORDINARY                                   [PART III—SEC.4]
+
+                                       BUREAU OF INDIAN STANDARDS
+                                          (Department of Consumer Affairs)
+                                                  NOTIFICATION
+                                             New Delhi, the 6th July, 2026
+         Ref: HQ-PUB013/1/2020-PUB-BIS (1569) .— In pursuance of Sub-rule (1) of Rule (15) of the Bureau of
+Indian Standards Rules, 2018, the Bureau of Indian Standards hereby notifies that Indian standards, particulars of which
+are given in the second column of the schedule hereto annexed have been established on the date indicated against it in
+third column. The particulars of the standards, if any which are given in the fourth column shall also remain in force
+concurrently till they are withdrawn on the date indicated against them in the fifth column
+                                                     SCHEDULE
+
+ Sl       No., Year & Title of the Indian         Date of          No. , Year & Title of the             Date of
+ No.          Standards Established            Establishment        Indian Standards to be              Withdrawal
+                                                                      Withdrawn, if any
+    (1)                     (2)                      (3)                       (4)                           (5)
+                IS/ISO/IEC 5218 : 2022                              IS/ISO/IEC 5218 : 2004
+    1     Information Technology — Codes        03 July 2026      Information Technology —             03 January 2027
+           for the Representation of Human                       Codes for the Representation of
+                          Sexes                                          Human Sexes
+                     (First Revision)
+                IS 10680 (Part 1) : 2026                             IS 10680 (Part 1) : 2016
+    2            ISO/IEC 1539-1 : 2023          03 July 2026          ISO/IEC 1539-1 : 2010            03 January 2027
+             Programming Languages —                              Information Technology —
+                         Fortran                                  Programming Languages —
+                  Part 1 Base Language                                        Fortran
+                   (Second Revision)                                   Part 1 Base Language
+                                                                          (First Revision)
+                  IS 13940 : 2026                                         IS 13940 : 1994
+    3          Cardiovascular Surgery           03 July 2026         Cardiovascular Surgery            03 January 2027
+           Instruments — Bulldog Clamp,                              Instruments — Clamps,
+          Debakey Pattern — Specification                        Bulldog, Debakey, Ring Handle
+                  (First Revision)                                 — Shape and Dimensions
+
+                   IS 14943 : 2026                                     IS 14943 (Part 1) : 2014
+    4             ISO 8583 : 2023               03 July 2026              ISO 8583-1 : 2003            03 January 2027
+             Financial Transaction Card                               Financial Transaction Card
+              Originated Messages —                                    Originated Messages —
+                                                                 Interchange Message Specifications
+                Interchange Message                                Part 1 Messages, Data Elements
+                    Specifications                                         and Code Values
+
+                                                                       IS 14943 (Part 2) : 2001
+                                                                          ISO 8583-2 : 1998
+                                                                      Financial Transaction Card
+                                                                        Originated Messages —
+                                                                 Interchange Message Specifications
+                                                                 Part 2 Application and Registration
+                                                                       Procedures for Institution
+                                                                      Identification Codes (IIC)
+
+                                                                       IS 14943 (Part 3) : 2007
+                                                                          ISO 8583-3 : 2003
+                                                                      Financial Transaction Card
+                                                                       Originated Messages —
+                                                                 Interchange Message Specifications
+                                                                  Part 3 Maintenance Procedures for
+                                                                 Messages, Data Elements and Code
+                                                                                Values
+                                                                           (First Revision)
+
+  5            IS 19811 : 2026              03 July 2026                  NA                      NA
+            Surgical Instruments —
+              Disposable Scalpel
+
+  6            IS 19814 : 2026              03 July 2026           IS 3318 – 1965            03 January 2027
+        Surgical Instruments — Scalpel                        General Requirements for
+                    Handle                                   Surgical Scalpels and Knives
+
+                                                                     IS 3319 : 1995
+                                                              Blades, Surgical, Detachable
+                                                               ( Bard Parker Type ) and
+                                                               Handles — Specification
+                                                                   (Fourth Revision)
+
+                                                                   IS 3320 – 1973
+                                                               Specification for Surgical
+                                                                       Scalpels
+                                                                   (First Revision)
+
+  7            IS 19815 : 2026              03 July 2026           IS 3318 – 1965            03 January 2027
+        Surgical Instruments — Scalpel                        General Requirements for
+                     Blade                                   Surgical Scalpels and Knives
+
+                                                                     IS 3319 : 1995
+                                                              Blades, Surgical, Detachable
+                                                               ( Bard Parker Type ) and
+                                                               Handles — Specification
+                                                                   (Fourth Revision)
+
+                                                                   IS 3320 – 1973
+                                                               Specification for Surgical
+                                                                       Scalpels
+                                                                   (First Revision)
+
+  8         IS 19863 (Part 1) : 2026        03 July 2026                  NA                      NA
+               ISO 3531-1 : 2022
+         Financial Services — Financial
+         Information Exchange Session
+                     Layer
+         Part 1 Fix Tagvalue Encoding
+
+  9         IS 19863 (Part 2) : 2026        03 July 2026                  NA                      NA
+               ISO 3531-2 : 2022
+         Financial Services — Financial
+         Information Exchange Session
+                      Layer
+            Part 2 Fix Session Layer
+
+  10        IS 19863 (Part 3) : 2026        03 July 2026                  NA                      NA
+                ISO 3531-3 : 2022
+         Financial Services — Financial
+         Information Exchange Session
+                      Layer
+          Part 3 Fix Session Layer Test
+                      Cases
+
+6                              THE GAZETTE OF INDIA : EXTRAORDINARY                                              [PART III—SEC.4]
+
+    11        IS/ISO 56001 : 2024              03 July 2026                    NA                                                    NA
+         Innovation Management System
+                — Requirements
+
+                                                                           S. K. VERMA, Scientist F & DDG (HMD)
+                                                                                     [ADVT.-III/4/Exty./213/2026-27]
+
+           Uploaded by Dte. of Printing at Government of India Press, Ring Road, Mayapuri, New Delhi-110064
+                             and Published by the Controller of Publications, Delhi-110054. BHABAJIT
+                                                                                                 Digitally signed by BHABAJIT
+                                                                                                 DEKA
+                                                                                          DEKA   Date: 2026.07.11 16:48:03 +05'30'

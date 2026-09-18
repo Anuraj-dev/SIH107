@@ -1,0 +1,509 @@
+PM/ IS/IEC 60947-4-1/ 3
+                                                                                                                  June 2026
+
+                                    PRODUCT MANUAL
+        Low-Voltage Switchgear and Control Gear Part 4 Contactors and Motor Starters
+                 Section 1 Electromechanical Contactors and Motor-Starters
+                             according to IS/IEC 60947-4-1: 2023
+
+This Product Manual shall be used as reference material by all Regional/Branch Offices & licensees to ensure
+uniformity of practice and transparency in operation of certification under Scheme-X of Bureau of Indian
+Standards (Conformity Assessment) Regulations,2018 for various products. The document may also be used by
+prospective applicants desirous of obtaining BIS certification.
+
+                                                                      Part 4 Contactors and Motor Starters
+                                                                      Section 1 Electromechanical Contactors and
+                                                                      Motor-Starters
+        No. of amendments
+        for GoL / CSoL
+
+      Grouping Guidelines
+      Technical File
+        Labelling    and Marking Requirements
+
+                           BUREAU OF INDIAN STANDARDS
+            MANAK BHAVAN, 9, BAHADUR SHAH ZAFAR MARG, NEW DELHI-110002
+                                  www.bis.gov.in
+
+                                                                                                                Page 1 of 11
+
+                                                                              PM/ IS/IEC 60947-4-1/ 3
+                                                                                          June 2026
+
+Licence is granted to use Standard Mark as per IS/IEC 60947-4-1: 2023 with the following scope:
+ Name of the product:                Electromechanical Contactors and Motor-Starters
+ Equipment Types: (Cl. 5.2.1)          - Contactor
+                                       - direct-on-line starter
+                                       - star-delta starter
+                                       - two-step auto-transformer starter
+                                       - rheostatic rotor starter
+                                       - combination starter
+                                       - protected starter
+                                       - reversing starter
+                                       - motor management starter
+                                       - motor protective switching device (MPSD)
+                                       - instantaneous only motor protective switching device
+                                          (IMPSD)
+ Number of poles: (Cl. 5.2.2)          - One Pole;                 - Three Pole;
+                                       - Two Pole;                 - Four Pole
+Kind of current (Cl. 5.2.3)           -    ac
+                                      -    dc
+Interrupting medium (Cl. 5.2.4)       -    air                        - vacuum
+                                      -    oil                        - any other (to be declared)
+                                      -    gas
+ Method of operation                  -    manual                     - electro-pneumatic
+ (Cl. 5.2.5.1)                        -    electromagnetic            - electronic
+                                      -    motor-operated             - any other (to be declared)
+                                      -    pneumatic
+                                       -   automatic (by pilot switch or sequence control);
+ Method of control
+                                       -   non-automatic (such as by hand operation or by
+ (Cl. 5.2.5.2)
+                                           push- buttons);
+                                       -   semi-automatic (i.e. partly automatic, partly non-
+                                           automatic)
+                                       -   any other (to be declared)
+ Utilization Categories (Table 1)      -   AC 1 (General Use)         - AC 3e
+                                       -   AC 2                       - AC 4
+                                       -   AC 3
+                                       -   AC 5a (Ballast)          -   AC 5b (Incandescent)
+                                       -   AC 6a                    -    AC 7b
+                                       -   AC 6b                     - AC 7d
+                                       -   AC 7c                     - AC 8a
+                                       -   AC 7a                     - AC 8b
+                                       -   DC 1                      - DC 5
+                                      -    DC 3                      - DC 6(Incandescent)
+Rated voltages (Cl. 5.3.1)            -    Rated operational voltage (Ue)
+                                      -    Rated insulation voltage (Ui)
+                                      -    Rated impulse withstand voltage (Uimp)
+
+Rated Current (Cl. 5.3.2)             -    Rated operational currents (Ie)
+                                      -    Rated uninterrupted current (Iu)
+                                      -    Conventional free air thermal current (Ith)
+                                      -    Conventional enclosed thermal current (Ithe)
+                                                                                     Page 2 of 11
+
+                                                                                       PM/ IS/IEC 60947-4-1/ 3
+                                                                                                   June 2026
+
+Rated Frequency                            -    50 Hz
+Rated duties                               -    Eight-hour duty (continuous duty)
+(Cl. 5.3.4)                                -    Uninterrupted duty
+                                           -    Intermittent periodic duty or intermittent duty
+                                           -    Temporary duty
+                                           -    Periodic duty
+Type of coordination with short-           -    Type 1
+circuit protective devices
+                                           -    Type 2
+(Cl. 8.2.5)
+Degree of Protection                       -    To be declared
+Control circuits (if applicable)
+(Cl. 5.5)
+Auxiliary circuits (if applicable)
+(Cl. 5.6)
+Types of relay or release, if              -    To be declared as per Cl. 5.7.2 and Cl. 5.7.3 of IS
+applicable (For relay and release of            60947-4-1: 2023
+overload   relays     and     motor
+protective    switching      device
+(MPSD)) (Cl. 5.7.2)
+Electromagnetic Compatibility          -       Tested for Environment A / Tested for Environment B /
+(EMC) (Cl. 8.4)                                Not tested
+Additional Features *
+Auxiliary contact linked with power contact                  Suitable / not suitable
+(mirror contact)
+(Annex – F)
+Contactors for use with semiconductor controlled             Suitable / not suitable
+motor load (Annex – I)
+Uses in Functional safety applications (Annex – K)           Suitable / not suitable
+Safety applications and especially in explosive              Suitable / not suitable
+atmospheres (Annex – L)
+Use in Photovoltaic (PV) DC applications                     Suitable for Use in (PV) DC applications /
+(Annex – M)                                                  Not suitable for Use in (PV) DC
+                                                             applications
+Equipment with Protective Separation (Annex – N)             Tested / not tested (for torch current
+                                                             measurement)
+Intended for connection of Aluminium Conductors              Suitable for connection of Aluminium
+(Annex – E)                                                  conductors / Not suitable for connection of
+                                                             Aluminium conductors
+      * The additional features shall be mentioned in the scope of licence document as per the
+      declaration submitted by the manufacturer.
+
+                                                                                              Page 3 of 11
+
+                                                                              PM/ IS/IEC 60947-4-1/ 3
+                                                                                          June 2026
+
+                                      ANNEX - A
+                             Additional Guidelines for GoL / CSoL
+1.   To ensure uniform operation of certification process, the following guidelines in addition
+     to CMD Guidelines on GoL / CSoL as per the conformity assessment Scheme – X of
+     Schedule – II of the BIS (Conformity Assessment) Regulations, 2018 placed below shall
+     be followed:
+
+For GoL:
+   i. The scope of the licence shall be restricted to the applicable test (with / without EMC
+        test as per Cl. 9.4 (or) Special test as per Cl. 9.1.5, etc) that were carried out on the
+        representative samples of the Electromechanical Contactors and Motor-Starters as
+        per the grouping guidelines given at Annex - B. However, it shall be ensured that all
+        the requirements of the standard and all applicable tests as declared by the
+        manufacturer have been reported in the test report.
+        for eg(s):
+             a) In case the Electromechanical Contactors and Motor-Starters are not tested
+                 for the requirements of Cl. 9.4 i.e. Electromagnetic compatibility (EMC), the
+                 scope granted to the manufacturer shall clearly mention – ‘Not tested for
+                 EMC requirement’.
+             b) In case if special tests are carried out based on the declaration of the
+                 manufacturer, the same has to be incorporated in the applicable models.
+     ii. The licence document shall contain the following technical data for each of the
+          model as enclosed at Annex – AA.
+
+For CSoL:
+    The manufacturer shall submit the technical file for the model(s) for which the
+    manufacturer intends to get the CSoL as specified in Annex C, covering all aspects,
+    including compliance report of product having complete test report issued by third party
+    laboratory(ies). The manufacturer shall also submit a declaration whether the product
+    category applied for inclusion falls under the same group for which the manufacturer is
+    already having licence or the product category is a new group as per the grouping guidelines
+    (Annex – B). The technical file and documents submitted by the manufacturer shall be
+    reviewed by the BOs and the following process has to be followed:
+        a) If the model / variety applied for CSoL falls under the existing group and does not
+           require any additional manufacturing and testing infrastructure, CSoL may be
+           done based on desk audit for which the manufacturer has applied for CSoL.
+        b) If the model / variety applied for CSoL falls under different group, visit shall be
+           carried out to verify the manufacturing process and necessary processes required
+           for manufacturing such products. After satisfactory verification of manufacturing
+           process and necessary processes required for manufacturing, CSoL may be
+           processed.
+
+     For eg: In case the manufacturer is having a licence for Electromechanical Contactors up
+     to 32 A and applies for inclusion of Motor-Starters and / or DoL starters, an inspection
+     visit shall be carried out at the manufacturer premise to verify the manufacturing process
+     and necessary processes required for manufacturing such products.
+
+                                                                                     Page 4 of 11
+
+                                                                            PM/ IS/IEC 60947-4-1/ 3
+                                                                                        June 2026
+                                      ANNEX – B
+                                  Grouping Guidelines
+
+1. For considering Grant of licence / Change in scope of licence the manufacturer shall
+   submit the technical file including the test reports(s) / certificates(s) etc. for each of the
+   variety of particular type designation(s) or model(s) as specified in the Scope of Licence (as
+   given in Sl. 6 above) based on product grouping as per Gazette Notification F. No.
+   8(1)/2018-HEI-Part (1) dated 10 March 2025 given below:
+
+2. Product Grouping
+2.1 Product Series of Electromechanical Contactor(s) and Motor Starter(s) - A group of
+    Contactor(s) and/or Motor Starter(s) having a common frame size or enclosure 1 used for
+    a range of current ratings with a unique combination of feature(s) under classification
+    mention in Table A at Annexure-I.
+3. Sampling and Testing
+3.1   Sampling and testing - The type test for each product series shall be as below:
+3.1.1 For each product series type test report: Contactor(s)and/or Motor Starter(s) equipment
+      with Maximum rated operational current (or rated power), at corresponding rated
+      operational voltage and equipment with maximum rated operational voltage, at
+      corresponding rated operational current (or rated power) with maximum functions
+      satisfying all operational performance criteria shall be tested. The test and number of
+      sample(s) must be in accordance with the clause 9.1.2 and 9.3 of IS/IEC 60947-4-
+      1:2023.
+
+3.1.2 Type tests are grouped together in a number of sequences, the test shall be done as
+      per sequence and applicability defined in clause 9.1.2 and 9.3.1 of IS/IEC 60947-4-
+      1:2023.
+
+      Note- Spares, accessories and sub-assemblies are integral part of product series. They
+      shall be tested as far as possible with the equipment. (Spares and sub-assemblies being
+      the integral part of the device, separate testing is not envisaged; Accessories may
+      please be used while testing.
+      In case, the accessories are complying to the requirement of any other standard (IS/IEC
+      60947 series) then accessories shall meet the requirements of the respective Indian
+      Standards.
+3.1.3 Each product rating(s) /varieties may not be subjected to testing. Product sample as
+      mentioned in para 3.1.1 will cover all the Product rating (s) / varieties having ratings
+      equal or below under the Scope of Licence is by virtue of this grouping guidelines.
+
+  1
+    Frame size or Enclosure - a term designating a group of contactors and/or motor-starters, the
+  external physical dimensions of which are same to a range of current ratings.
+
+                                                                                        Page 5 of 11
+
+                                                                                PM/ IS/IEC 60947-4-1/ 3
+                                                                                            June 2026
+
+3.1.4 The selection of samples to be tested for a series of devices with same enclosure /
+      frame size and without significant difference in construction shall be based on
+      engineering judgement including but not limited to as defined below:
+
+  i.        Case I - Contactor(s) having multiple utilization category – As per Clause 5.4.2 of
+            IS/IEC 60947-4- 1:2023.
+  ii.       Case II - Contactor(s) having multiple operational currents at corresponding
+            operational voltages for same utilization category – rating with max. operational
+            currents (or rated powers), at the rated operational voltages of the equipment declared
+            to be considered for test purpose.
+ iii.       Case III – For a given range of motor combination starter(s), if any Starter combination
+            is tested with the Main/Line Contactor of a highest rating (rated operational current) with
+            suitable overload relay then all other possible combination(s) with lower complexities of
+            the same Contactor with different relays ratings are covered by this combination.
+
+ Example:
+                            Rated         Rated          Rated
+   Sr.        Starter     Operational   Operational    Operational                     Overload
+   No.       Enclosure     Voltage        Power         Current        Contactor      Relay Range
+               Size        (Starter)     (Starter)      (Starter)
+                                           (kW)            (A)
+        1                3ɸ -415V ac       0.55           1.7        Type – X (12A)     1 – 1.6 A
+        2                3ɸ -415V ac       0.75            2.2       Type – X (12A)    1.6 – 2.5 A
+        3                3ɸ -415V ac        1.1           2.9        Type – X (12A)    2.0 – 3.2 A
+        4                3ɸ -415V ac        1.5           3.8        Type – X (12A)    3.2 – 5.0 A
+        5       Size 1   3ɸ -415V ac        2.2           5.1        Type – X (12A)    4.0 – 6.3 A
+        6                3ɸ -415V ac        3.7           8.1        Type – X (12A)   6.3 – 10.0 A
+        7                3ɸ -415V ac        5.5           11.4       Type – X (12A)   8.0 – 12.5 A
+        8                3ɸ -415V ac        7.5           15.4       Type – Y (20A)   12.5 – 20 A
+        9                3ɸ -415V ac        9.3           19.5       Type – Y (20A)     16 – 25 A
+
+ All applicable tests will be conducted on 2x ratings mentioned at sr. no 7 and 9 i.e.
+ 5.5 kW & 9.3 kW
+
+3.1.5 However, for ease of Product Series formation or in case of same fundamental design
+      spread in more than one phases under phase -wise plan as mentioned Electrical
+      Equipment (Quality Control) Order, 2020 and subsequent amendments made from time
+      to time, higher product rating(s) tested will cover the lower product ratings(s) of other
+      phase of phase -wise plan.
+
+3.1.6 However, for cases as mentioned in Annexure-II separate type test report is not
+      required for inclusion of the same under scope of license.
+
+3.1.7 Contactors/starters having both AC & DC voltage ratings shall be tested separately for
+      both AC & DC utilization categories.
+
+                                                                                           Page 6 of 11
+
+                                                                               PM/ IS/IEC 60947-4-1/ 3
+                                                                                           June 2026
+
+                                           Annexure-I
+    Table A. Classification of Electromechanical Contactor and Starters combinations
+                              (physical and operational parameter)
+Sl. No. Classification based on          Type of physical and operational parameter
+Classification as per Clause 5.2 of IS/IEC 60947-4-1:2023
+  1. Type of equipment         a) Contactor
+                               b) direct-on-line starter
+                               c) star-delta starter
+                               d) two-step auto-transformer starter
+                               e) rheostatic rotor starter
+                               f) combination starter
+                               g) protected starter
+                               h) reversing starter
+                               i) motor management starter
+                               j) motor protective switching device (MPSD)
+                               k) instantaneous only motor protective switching device (IMPSD)
+  2. No. of poles               a) 1P    b) 2P       c) 3P     d) 4P
+  3.   Kind of current         a) ac                     b) dc
+  4.   Interrupting medium     a) air    b) oil c) gas d) vacuum etc.
+  5.   Method of operation     a) manual, b) electromagnetic, c) motor-operated, d)
+                               pneumatic, e) electro-pneumatic etc.
+  6.   Method of control       a) automatic,    b) non-automatic,    c) semi-automatic
+ Operational Characteristic:
+  7. Utilization category      AC1, AC2, AC3, AC4, AC5a, AC5b, AC6a, AC6b, AC7a, AC7b,
+                               AC8a, AC8b etc. DC1, DC3, DC5, DC6 etc.
+  8.   Control circuits        type of current – ac, dc or ac/dc; rated frequency (for ac) or
+                               direct current; rated control circuit voltage (Uc) , rated control
+                               circuit supply voltage Us where applicable power consumption
+  9.   Rated duties            Eight-hour duty (continuous duty)/ Uninterrupted duty/
+                               Intermittent periodic duty or intermittent duty/ Temporary duty/
+                               Periodic duty
+ Additional features:
+  10. Suitability for isolation            a) Suitable b) Not suitable
+  11. Type of coordination with short-     a) Type 1     b) Type 2
+       circuit protective devices
+  12. Degree of protection                 With maximum Ingress Protection code/rating
+  13. Auxiliary circuits (if             To be specified as per Clause 5.6 of IS/IEC 60947-4-
+      applicable)                        1:2023 number and kind of contacts (to be described,
+                                         e.g. 2 NO & 2NC contacts)
+ 14. Types and characteristics of        To be specified as per clause 5.7.2 Types of relay or
+     relays and releases (if applicable, release and 5.7.3 Characteristic values of IS/IEC
+     only for starters)                  60947- 4-1:2023
+                                         For Example: Shunt Trip, Undervoltage Relay, Thermal
+                                         overload relay or Electronic overload relay etc. with trip
+                                         class 2 / 3 / 5 / 10 / 10A etc.
+ 15. Types and characteristics of        To be described, as per clause 5.10, 5.11 or 5.12 of
+     special starters (if applicable)    IS/IEC 60947-4-1:2023 as & when applicable
+
+                                                                                         Page 7 of 11
+
+                                                                           PM/ IS/IEC 60947-4-1/ 3
+                                                                                       June 2026
+
+For Example-
+Product Series 1- Four Pole, Air-Break, Contactor, Non-automatic, Electromagnetic
+Operation, Utilization Categories – AC1, AC2, AC3 & AC4; Uninterrupted duty, Not suitable
+for isolation, IP20, Rated control circuit voltages: 24V till 440V ac, 50/60Hz, Maximum 4
+NO + 4 NC auxiliary contacts, Type 2 Coordination with SCPD; having a common frame
+size for a range of current.
+
+Product Series 2- Three Pole, Air-Break, Direct-On-Line AC Starter, Non-automatic,
+Electromagnetic Operation, Utilization Categories – AC1, AC2, AC3 & AC4;
+Uninterrupted duty, Not suitable for isolation, IP43, Rated control circuit voltages: 24V
+till 440V ac, 50/60Hz, Maximum 2 NO + 2 NC auxiliary contacts, Type 2 Coordination
+with SCPD; having a common Enclosure size for a range of current.
+
+Note- the classification is indicative, and the possible classification may be increase on
+the basis of any specific requirements.
+
+                                       Annexure-II
+   Table B. Contactor and Starter(s) combination(s) can be added under the scope
+   of license without additional type testing. (vice versa condition is not applicable)
+ Case Contactor     and Starter(s)                        Condition
+         combination(s)
+   A    Product with Multiple Coil         If product series is tested with representative coil
+        types and voltages (ac, dc,        with maximum VA, then all other variants will be
+        electronics, ac/dc etc.)           covered.
+   B    Product      not-suitable for      if product series is tested for product suitable for
+        isolation                          isolation.
+  C     One, two, three and four         If the higher Pole Combination device is tested, then
+        poles                            lower Pole Combination will be covered subject to
+                                         identical pole designs.
+                                         e.g. 4 Pole device testing covered 3 Pole & 2 Pole
+                                         devices, 1 Pole device will be tested separately.
+   D    Multiple Short Circuit           Highest breaking capacity with corresponding
+        Breaking capacities (For         operational voltage and Highest operational voltage
+        MPSD)                            with corresponding breaking capacity needs to be
+                                         tested.
+   E    Multiple types of Short- Circuit SCPD having equal or higher let through
+        Protective Devices (SCPD) for energy (I2t) capacity cover the other SCPDs.
+        equipment
+   F    Product with different types of    If a product series is tested with a representative
+        releases      (Shunt,     Under-   release(s), it will cover the other variants. However,
+        voltage,          under-current,   declaration to be provided for all such releases by
+        Overload time- delay, Stall        Manufacturer.
+        relay etc.) having different
+        features/settings
+  G     Product tested for Type 2          Deemed to cover Type 1 co-ordination also.
+        co- ordination
+
+                                                                                     Page 8 of 11
+
+                                                                                 PM/ IS/IEC 60947-4-1/ 3
+                                                                                             June 2026
+
+                                       ANNEX – C
+                                      Technical File
+
+1. TECHNICAL FILE - Manufacturer shall maintain a Technical File for each model(s)
+   manufactured by them as per BIS circular Ref: CMD-I/2:17:1 dated 02 June 2023 with
+   subject ‘Guidelines for Grant of Licence (GoL) as per the conformity assessment
+   Scheme – X of Schedule – II of BIS (Conformity Assessment) Regulations, 2018’.
+
+2. In addition to the documents indicated in above circular, following documents are also
+   to be submitted in the Technical File:
+          a) Declaration for variety(ies) applied for BIS licence. The declaration shall be
+              in line with scope of licence specified in this Product Manual;
+          b) Technical data for model(s) to be tested as per format specified in Annex
+              C.1 (for guidance only);
+          c) Test Report / Certificate of Compliance for Constructional and Performance
+              requirements (Cl. 8 of IS 60947-4-1: 2023, wherever applicable);
+          d) Declaration with respect to special test and its compliance as per Cl. 9.1.5 of
+              the IS 60947-4-1: 2023.
+
+3. The technical File shall be maintained by the manufacturer till the End of Life of the
+   variety(ies).
+
+                                          Annex C.1
+                                    Format for Technical Data
+   Name of the product: Electromechanical Contactors and Motor-Starters
+   Equipment Type:
+                             Technical Description of the product:
+  Test item particulars:
+  Rated Voltages
+  - rated operational Voltage: Ue (V) :
+  - rated insulation voltage: Ui (V) :
+  - rated impulse withstand voltage: Uimp (kV) :
+  - rated control circuit voltage, kind of current and frequency:
+  - rated control circuit voltage, kind of current and frequency:
+  - control circuit supply voltage, kind of current and frequency, if
+  different from those of the control coil;
+
+  Rated Currents
+  - rated operational current: Ie (A) :
+  - Rated uninterrupted current: Iu (A):
+  - conventional free air thermal current: Ith (A) :
+  - conventional enclosed thermal current: Ithe (A) :
+  - Rated conditional short-circuit current (Iq (or) Icc):
+  - Type of Supply (ac/dc)
+  - Rated Frequency (Hz):
+  - Short-circuit protection device:
+  - rated duty, with the indication of the class of intermittent duty, if any:
+  - Utilization Category
+  - Method of operation of manually operated equipment:
+  - Method of locking:
+  - Suitability for Isolation:
+                                                                                          Page 9 of 11
+
+                                                                    PM/ IS/IEC 60947-4-1/ 3
+                                                                                June 2026
+
+- Degree of protection:
+- Pollution degree/ Material Group:
+- Number of Poles:
+- Number of positions of mains contact:
+- No. of break per pole:
+- Material of terminal:
+- Breaking arrangement for fused devices:
+- Control circuit
+- Auxiliary circuit
+- Co-ordination with short-circuit protective devices (SCPD):
+- Kind of protective device:
+
+Relays and releases
+-type of relay or release:
+-current setting or current setting range:
+-time/current characteristics:
+-influence of ambient air temperature:
+-extended functions as given in Annex T:
+-rated supply pressure of the air-pressure and limits of pressure
+ variations (for air-pressure controlled equipment):
+-pole impedance of the switching device (Z):
+-material declaration as per Annex W:
+-length of insulation to be removed before insertion of the conductor
+into the terminal:
+
+For non-universal screwless terminals (if applicable)
+-“s” or "sol" for terminals declared for solid conductors:
+-"r" for terminals declared for solid and stranded conductors:
+-"f" for terminals declared for flexible conductors:
+
+In the case of equipment co-ordinated with short-circuit protective devices (SCPDs)
+-rated conditional short-circuit current
+-other types of co-ordination, specified solely in the relevant product
+standard
+
+                                                                            Page 10 of 11
+
+                                                                         PM/ IS/IEC 60947-4-1/ 3
+                                                                                     June 2026
+
+                                    ANNEX – D
+                         Labelling and Marking Requirements
+
+1. Labelling and Marking Requirements- Labelling and Marking of Electromechanical
+   Contactors and Motor-Starters shall be as per Cl. 6.2 of IS/IEC 60947-4-1: 2023.
+
+    a) Each Electromechanical Contactors and Motor-Starters and its packaging shall be
+       marked with the Standard Mark, as specified in Scheme –X in Schedule –II of the
+       BIS (Conformity Assessment) Regulations, 2018. The Standard Mark shall carry the
+       licence number in a visible manner and shall be as specified in the licence document.
+
+    b) In addition, details of BIS website shall be marked on the package as follows: ‘For
+       details of BIS certification please visit www.bis.gov.in.’
+
+2. In case the Electromechanical Contactors and Motor-Starters are not tested for the
+   requirements of Cl. 9.4 i.e. Electromagnetic compatibility (EMC), the product / its
+   packaging shall either be marked with the following on the Electromechanical
+   Contactors and Motor-Starters – ‘Not tested for EMC requirement’.
+
+3. Electromechanical Contactors and Motor-Starters shall be clearly marked with the rated
+   current up to which the product has been tested:
+
+                                                                                 Page 11 of 11

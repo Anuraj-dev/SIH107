@@ -1,0 +1,528 @@
+PM/ IS 6909/5/June 2026
+
+                                                        PRODUCT MANUAL
+                                                     SUPERSULPHATED CEMENT
+                                                     ACCORDING TO IS 6909: 2026
+
+This Product Manual shall be used as reference material by all Regional/Branch Offices & licensees to ensure uniformity
+of practice and transparency in operation of certification under Scheme-I of Bureau of Indian Standards (Conformity
+Assessment) Regulations,2018 for various products. The document may also be used by prospective applicants desirous of
+obtaining BIS certification.
+
+         No. of amendments
+           Raw material
+                                                                              Note: This section indicates the requirements for
+                                                                              raw material (if specified in the IS) for which
+                                                                              compliance is to be established during Grant of
+                                                                              Licence/Change in Scope of Licence/Factory
+                                                                              Surveillance.
+          Grouping Guidelines
+          Sample Quantity                                                     - 8 kg for physical test
+                                                                              - 1 kg for chemical test
+
+                                                                                Note: This section indicates the quantity of the
+                                                                                sample of the product and/or the raw material (if
+                                                                                applicable), required to be sent to the laboratory for
+                                                                                testing, for the purpose of Grant of Licence/Change
+                                                                                in Scope of Licence/ Factory Surveillance (incase of
+                                                                                market surveillance, effort may be made to procure
+                                                                                therequired quantity of product sample, as far as
+                                                                                possible since raw material sample may not be
+                                                                                                                                                      Page 1 of 15
+
+                                                                                            PM/ IS 6909/5/June 2026
+
+                                                             available in market)
+
+      Parameters to be Declared in Test
+      Request                                              Note: Apart from the above, any other
+                                                           requirements/ parameters may also be declared as
+                                                           per the standard, as applicable.
+       List of Test Equipment
+       Scheme of Inspection and Testing
+       day                                                                     Table 1)
+                                                                      (ii)     Fineness (Clause 6, Table 2)
+                                                                      (iii)    Setting time (Clause 6, Table 2)
+
+                                                             Note: This section is for the guidance of BIS Certification
+                                                             Officers/ Technical Auditors of BIS Authorized Outside
+                                                             Surveillance Agencies (OSAs) during factory inspection to
+                                                             provide ready reference regarding the tests which can be
+                                                             witnessed during the inspection in the factory by the officer/
+                                                             auditor.
+“License is granted to use Standard Mark on Supersulphated Cement as per IS 6909: 2026.
+
+Name of the product                                      SUPERSULPHATED CEMENT
+
+                                      BUREAU OF INDIAN STANDARDS
+                                    Manak Bhawan, 9, Bahadur Shah Zafar Marg
+                                               New Delhi – 110002
+
+                                                                                                                 Page 2 of 15
+
+                                                                                PM/ IS 6909/5/June 2026
+
+                                            ANNEX- A
+                                     List of Test Equipments
+                                   (Indicative List, For Guidance Only)
+
+Sl
+      Tests used in with Clause Reference                             Test equipment
+No.
+ 1    Fineness Clause 6, Table 2                  Blaine’s apparatus variable flow type
+                                                  Stop watch
+                                                  Mercury
+                                                  Balance, Standard weights
+                                                  Standard Cement
+                                                  Manometer liquid (di-butyl phthalate or light
+                                                  mineral oil.)
+                                                  Mercury of reagent grade or better, Pyknometer
+                                                  Circular discs of filter paper of medium porosity
+                                                  (mean pore diameter 7 µ).
+                                                  Le-Chatelier’s flask
+                                                  Constant temperature water bath to maintain
+                                                  temperature within ± 0.1 ° C
+ 2    Soundness by Le-chatelier Method            Le-Chatelier’s water bath preferably with
+      Clause 6, Table 2                           thermostatic control to maintain temperature
+                                                  from 27 ± 2 oC
+                                                  Le-Chatelier’s moulds with weights and cover
+                                                  glasses minimum 8 nos.
+                                                  Humidity chamber with temperature & RH
+                                                  control 27 ± 2 0 C, RH 90 to 100 %
+                                                  Steel scale
+ 3    Setting time                                Vicat apparatus
+      Clause 6,
+      Table 2                                     Needles
+                                                  Moulds
+                                                  Stop Watch
+                                                  Balance - 1000g ± 0.1g and Standard Weights
+                                                  1mg to 500 gm
+                                                  Gauging trowel of weight 210 ± 10 g
+ 4    Compressive Strength                        Vibration machine with timer & cube mould
+      Clause 6, Table 2                           fitting assembly 12000 ± 400 vibration per min.
+                                                 Compressive Strength machine
+                                                 Poking Rod , Petroleum Jelly
+                                                 Proving ring with all accessories suitable for calibration
+                                                 of CST machine
+
+                                                                                                   Page 3 of 15
+
+                                                                      PM/ IS 6909/5/June 2026
+
+                                           Tachometer
+                                           Cube Moulds 70.6 × 70.6 mm, Poking rod
+                                           Gauging trowel (210 ± 10 g)
+                                           gauging plate, stainless steel(non-perforated)
+                                           Standard sand grade 1, 2 and 3 (as per IS 650)
+                                           Curing tank of appropriate size with water
+                                           circulation arrangement
+                                           Graduated glass cylinders 150 to 200 ml
+                                           Humidity chamber with temperature & RH
+                                           Control 27 ± 2° C, RH 90 to 100 %
+ 5   Transverse Strength Test              Moulds
+     Clause 6, Table 2
+                                           Planetary Mixer, Standard Sand
+                                         Jolting Apparatus, Scraper, Demolding device as
+                                         per IS 4031 (Part 8)
+6    General equipment for Cement testing
+a)   To control humidity & temperature     1. Humidity chamber with temperature & RH
+     in lab                                control 27 ± 2°C, RH 90 to 100 %
+                                           2. Suitable arrangement to demonstrate
+                                           maintenance of temperature of 27 ± 2 ° C &
+                                           minimum RH 65 %
+b)   For cement Sampling                   Mixing trays –adequate size including trays of 24
+                                           partitions for keeping hourly samples
+c)   To control the residue of cement      Sieves of size (300, 212, 150, 90, 75 & 45µ)
+
+d)   To measure temperature                Thermometers
+
+e)   To measure humidity                   Hygrometer
+
+f)   Lab ball mill (motorized)            To grind the clinker, slag & gypsum sample in lab
+                                          ball mill for testing
+g)   To weigh the material                1. Platform type balance
+                                          2. Electrical balance
+                                          3 Weight box with weights (1 mg - 500 g)
+ 7   General test equipment for chemical testing Clause 5 , Table 1 of IS 6909 : 2026
+
+                                           Muffle Furnace with thermostatic control,
+                                           Range 0 – 1200° C
+
+                                           Oven with thermostatic control 0-300° C
+
+                                                                                       Page 4 of 15
+
+                                                    PM/ IS 6909/5/June 2026
+
+                        Heater and hot plate
+                        Distillation Assembly
+                        Crucible: Platinum or Porcelain / silica
+                        Filter paper (No- 1, 40, 41, 42)
+                        Desiccators with cover & Desiccant
+                        Water bath
+                        pH meter/paper
+                        Glassware - volumetric flask -0-250 ml, beaker
+                        0-250 ml, measuring cylinder 0-50,100,500, 1000
+                        ml, burette 0-25/50 ml, conical flasks-
+                        0-250 ml, pipette 0-5,10, 25, 50 ml
+                        All chemicals required for complete chemical
+                        analysis of cement
+                        Tongs including platinum tipped tong
+                        Wire gauge with asbestos sheet at the middle
+                        Washing bottle
+                        Mortar mixer- 4.75 l
+                        Glass thermometer
+                        All required chemicals as per IS 4032 for
+                        Supersulphated cement, Ordinary portland cement
+                        and Portland clinker testing.
+8   Granulated Slag     a) Glass Content
+    Clause 4.3 and IS   - Optical microscope min 100 X
+    12089               - Bromoform
+                        b) Chemical requirement
+                        - As per IS 4032
+
+                                                                   Page 5 of 15
+
+                                                                              PM/ IS 6909/5/June 2026
+
+                                          ANNEX B
+                              SCHEME OF INSPECTION AND TESTING
+
+1. LABORATORY - A laboratory shall be maintained which shall be suitably equipped (as per the
+requirement given in column 2 of Table 1) and staffed, where different tests given in the specification
+shall be carried out in accordance with the methods given in the specification.
+
+1.1 The manufacturer shall prepare a calibration plan for the test equipments. The following
+    equipments shall be calibrated at a frequency shown against each and records kept.
+
+  Sl No.      TEST              FREQUENCY OF CALIBRATION
+            EQUIPMENT
+   1.         Blaine’s          Daily with licensee’s own Standard cement sample and
+               apparatus        monthly with standard cement samples supplied by
+                                NCCBM.
+   2.          Compressive      Once in a month with Licensee’s own Proving Ring and
+             strength Testing   the Proving Ring shall be Calibrated once in two years
+                 machine        from a NPL/NABL Accredited Calibrating body or NPL
+                                or NPL accredited Proving Ring manufacturer.
+   3.          Autoclave        Once in a month by licensee’s own dead weight pressure
+                 pressure       gauge tester OR once in six months from accredited
+                   gauge        calibrating body or NPL/NABL accredited manufacturer
+                                of such gauges.
+   4.           Vibration       Once in a month by licensee’s own Tachometer. The
+                  machine       tachometer shall be calibrated once in a year from
+                                NPL/NABL accredited outside agency.
+   5.         Dead weight       Once in four years from NABL accredited Tester (if
+             pressure gauge     available) Lab or OEM (original Equipment
+                Tester (if      manufacturer) having NPL/NABL accredited calibrator.
+               available)
+
+2. TEST RECORDS – The manufacturer shall maintain test records in various formats, Form 1 to
+Form 16 for the tests carried out to establish conformity.
+
+3. LABELLING AND MARKING – Labeling and marking shall be as given below:
+3.1 STANDARD MARK - The Standard Mark, as specified by BIS, shall be printed or stenciled on
+each bag or drum of Supersulphated Cement or on the label applied to it, provided the material in
+each bag or package to which the mark thus applied conforms to the specification. The size of
+Standard Mark shall be either 160 x 120 mm or 80 x 60 mm for packing in quantity of 50 kg and
+above. For other packings of lower quantity, a photographic reduction is permitted.
+
+3.2 MARKING - As per the requirements of IS 6909:2026.
+
+3.2.1 In addition to above, following marking shall also be marked:
+    a) Name of original manufacturer of cement with BIS licence number in case of
+    repacking unit.
+    b) Any other marking required under provisions of Legal Metrology Act, 2009 and Legal
+    Metrology (Packaged Commodities) Rules, 2011 framed thereunder.
+                                                                                              Page 6 of 15
+
+                                                                              PM/ IS 6909/5/June 2026
+
+3.2.2 All the information including BIS Standard Mark except Manufacturers Registered Trade
+Mark shall be applied on each bag in BLACK COLOUR.
+
+Note :
+    1. For each calendar year the first week shall be counted as 7 days from 1st of January and
+       subsequent weeks numbered serially accordingly. The bags shall be marked as W
+       0l/MM/YY…… W 51/MM/YY……. etc.
+    2. Label mentioned at 3.1 and 3.2 above shall be attached to the seal of the container. The seal
+       shall be of such a design that it shall automatically get destroyed on opening.
+    3. The colour of the bag and background colours should be in contrast to the colour of the
+       Standard Mark and the details so that the markings are conspicuous.
+
+4. CONTROL UNIT –
+4.1 For manufacturing units of Supersulphated Cement: The tests, as indicated in Table 1
+attached and at the levels of control specified therein, shall be carried out on the whole production of
+the factory which is covered by this scheme and appropriate records maintained in accordance with
+clause 2 above.
+
+4.2 For packing of Supersulphated Cement at bulk cement terminal : The tests, as indicated in
+Table 2 attached and at the levels of control specified therein, shall be carried out on the whole
+packing of Supersulphated Cement and appropriate records maintained in accordance with clause 2
+above.
+
+4.2.1 For bulk packing units as per clause 4.2, all cement of one consignment received shall constitute
+one batch.
+
+4.2.2 Batch mixing may be permitted for packing units, which are extended packing terminals of the
+same cement manufacturer (licensee) subject to packing units obtaining test certificates from the
+manufacturer and keeping proper records. If the cement is received from different units of the same
+manufacturer (different licensees) batch mixing of cement is not permitted. The Batch integrity shall
+be ensured at all stages of packing and the packer shall maintain appropriate controls and checks to
+ensure that there is no chance of mix up of different batches. Adequate care shall be taken to avoid
+spoilage during handling, packing and storage
+4.2.3 If bulk packing unit is instructed by BIS for suspension of licence due to the failure of the
+samples, such instruction will automatically apply to the original manufacturer of the cement, as per
+relevant suspension of licence guidelines. An undertaking to this effect shall be obtained from the
+bulk packers and the original cement manufacturer
+
+4.2.4 Test Certificate of each original batch of cement shall be obtained from the supplier and test
+results recorded. On the basis of tests and inspection, the decision regarding conformity or otherwise
+of the consignment/batch to a given requirement shall be taken.
+
+4.3 WEIGHMENT – One filled bag from each nozzle shall be taken at random twice in each shift of
+operation and weight checked in case of electronic packers with recorders. In all other cases one filled
+bag from each nozzle shall be checked once in two hours. The records shall be maintained in Form 1.
+The bag shall be so chosen for weighment such that bags from each nozzle are taken for weighment.
+The weighing and packing machines shall be adjusted as and when necessary in such a way that net
+quantity of each bag shall be in accordance with the tolerances given in Annex B and clause 9.2 of IS
+6909 : 2026. Such adjustments for each nozzle shall be recorded in Form 1 under remarks column.
+                                                                                               Page 7 of 15
+
+                                                                              PM/ IS 6909/5/June 2026
+
+4.3.1 For packing of Supersulphated Cement in bulk cement terminal weighment of hourly check of
+mass of drums also shall be done in addition to weighment of bags mentioned in para 4.3 above. The
+records of weighments shall be maintained in Forms 8 and 10
+
+4.4 RAW MATERIALS
+
+4.4.1 Routine analysis of various raw materials used in the manufacture of Supersulphated Cement
+shall be made at intervals of a month or whenever there is a change in the source/mine area
+stratification whichever is earlier and appropriate records of the analysis and of the Physical
+composition of the mixtures shall be maintained in Form 2. This analysis is not applicable for Packing
+Units of Supersulphated Cement at bulk cement terminal.
+
+4.5. PACKING - The Cement shall be packed in bags as specified in clause 9.1 of IS 6909 : 2026. A
+test certificate either from the manufacturer or from any recognized testing laboratory shall be
+received along with each consignment of bags. Alternatively the samples of bags from each
+consignment shall be tested by the cement manufacturer either in his own laboratory or any other BIS
+recognized laboratory before they are used for packing cement. No testing would be necessary if the
+bags carry BIS Certification Mark. The bag shall be in good condition at the time of packing.
+
+5. LEVELS OF CONTROL - The tests as indicated in column 1 of Table 1 and the levels of control
+in column 3 of Table 1, shall be carried out on the whole production of the factory which is covered
+by this plan and appropriate records maintained in accordance with clause 2 above.
+
+5.1. PRODUCTION DATA - The licensee shall send to BIS a statement of quantity produced, marked
+and exported by him and the value thereof at the end of each quarter of the operative period as per the
+enclosed proforma and shall also submit these details to BIS at the end of the operative year duly
+authenticated by a Chartered Accountant
+
+6. REJECTIONS – Disposal of non-conforming product shall be done in such a way so as to ensure that
+there is no violation of provisions of BIS Act, 2016.
+
+                                                                                              Page 8 of 15
+
+                                                                                                                                       PM/ IS 6909/5/June 2026
+                                                        Table 1 – Levels of Control (Grinding/Packing Unit)
+
+                                 (1)                                          (2)                                            (3)
+                      TEST DETAILS                                    Test                              RECOMMENDED LEVELS OF CONTROL
+Clause             Requirement                   Test Methods         equipment             Number                     Frequency              Remark
+                                                Clause Reference      requirement           of sample          Cement          Cement Packing
+                                                                      R: required (or)                    Grinding/Blending
+                                                                      S: Sub-contracting
+                                                                      permitted
+   4.3       Granulated Slag                  4.3        IS 6909               R               One      One sample shall be tested from each supplier once in a
+                                                                                                        month.
+                                                         IS 12089
+   4.1       Clinker                          4.1                              R               One      Daily composite sample shall be tested for complete
+                                                          IS 6909
+                                                                                                        requirement as per IS 16353. No further testing required if
+                                                         IS 16353
+                                                                                                        accompanied with test certificate or ISI marked.
+   4.1       Ordinary           Portland      4.1                              -                -       OPC shall be ISI marked and shall be accompanied with
+                                                         IS 6909
+             Cement                                                                                     manufacturer certificate. If OPC is produced in the same
+                                                          IS 269
+                                                                                                        factory, records as per relevant SIT shall be maintained.
+5, table 1   Chemical Requirement
+     (i)     Insoluble residue    5, Table 1             IS 6909               R               One       Daily Composite       Weekly composite             -
+                                                         IS 4032                                              sample               sample
+     (ii)    Magnesium oxide               5, Table 1     IS 6909              R               One       Daily Composite       Weekly composite             -
+                                                          IS 4032                                             sample               sample
+     (iii)   Sulphuric anhydride           5, Table 1     IS 6909              R               One        Daily Composite      Weekly composite             -
+             (SO3)                                        IS 4032                                              sample              sample
+     (iv)    Sulphide Sulphur              5, Table 1     IS 6909              R               One        Daily Composite      Weekly composite             -
+                                                          IS 4032                                              sample              sample
+     (v)     Chloride Content              5, Table 1     IS 6909              R               One              Daily          Weekly composite     This test shall
+                                                         IS 12423                                            Composite             sample           also be carried
+                                                          IS 4032                                              sample                               out    whenever
+                                                                                                                                                    there is any
+                                                                                                                                                    change in source
+                                                                                                                                                    of   any    raw
+                                                                                                                                                    material.
+
+                                                                                                                                                         Page 9 of 15
+
+                                                                                                                                                    PM/ IS 6909/5/June 2026
+
+6, Table 2     Physical requirement
+   (i)         Fineness                       6, Table 2 IS 6909                          R                   One        1. Every alternate     Daily Composite         -
+                                                         IS 4031 (Part 2)                                                hourly from each           sample
+                                                                                                                         mill separately.
+                                                                                                                         2. Daily
+                                                                                                                         Composite sample
+   (ii)        Setting Time                   6, Table 2 IS 6909                          R                   One        One sample per shift    Daily Composite        -
+                                                         IS 4031 (Part 5)                                                (Composite sample).         sample
+
+   (iii)       Soundness                      6, Table 2 IS 6909                          R                   One          Daily Composite          Daily               -
+               (Cold expansion)                          IS 4031(Part 3)                                                        sample          Composite sample
+
+   (iv)        Compressive strength           6, Table 2 IS 6909                          R                   One          Daily Composite          Daily               -
+                                                         IS 4031 (Part 6)                                                       sample          Composite sample
+
+ Note 4        Transverse       strength      6, Table 2 IS 6909                           S                  One         Weekly composite      Weekly composite        -
+               (Optional)                                IS 4031(Part 8)                                                      sample                sample
+
+NOTES –
+    1.     Composite sample shall be made out of hourly samples for the required period (Pl see IS 3535 Methods of sampling hydraulic cements).
+       If cement is manufactured using same proportion of raw materials from more than one cement mill, sample from each mill shall be tested for fineness as per the
+       above table. For all other parameters composite samples from all the mills shall be tested.
+       If cement is manufactured using different proportion of raw materials from more than one cement mill, sample from each mill shall be tested for all requirements
+       as per the above table.
+    2. For manufacturing units where there is no packing silo and cement is packed directly from cement grinding, frequency of tests specified for cement grinding stage
+       would apply for various tests to be carried out on samples taken from cement mill spouts along with weekly chloride content test
+    3.     Sub-contracting is permitted to a laboratory recognized by the Bureau or Government laboratories empanelled by the Bureau.
+    4.     The control unit and levels of control as decided by the Bureau are obligatory to which the licensee shall comply with.
+
+                                                                                                                                                                   Page 10 of 15
+
+                                                                                                                                              PM/ IS 6909/5/June 2026
+
+                                                           Table 2 Level of Control (Bulk Packing Unit)
+
+                             (1)                                              (2)                                      (3)
+                       TEST DETAILS                                   Test equipment                     RECOMMENDED LEVELS OF CONTROL
+   Clause        Requirement        Test Methods                      requirement               Number of    Frequency         Remarks
+                                  Clause Reference                    R: required (or) S:        samples
+                                                                      Sub-contracting
+                                                                      permitted
+                Insoluble                                  IS 6909
+  5, Table 1    residue           5, Table 1                                    S                   One          Each batch
+                                                           IS 4032                                                                To be tested in laboratory at bulk
+                Fineness                                   IS 6909                                                                terminal packing unit.
+ 6. Table 2                       6. Table 2                                    S                   One          Each batch
+                                                   IS 4031 (Part 2)
+ 6. Table 2     Soundness         6. Table 2               IS 6909                                                                                    -
+                (Cold                               IS 4031(Part 3)             S                   One          Each batch
+                expansion)
+ 6. Table 2     Setting Time      6. Table 2               IS 6909
+                                                                                S                   One          Each batch
+                                                   IS 4031 (Part 5)
+ 6. Table 2     Compressive       6. Table 2               IS 6909
+                                                                                S                   One          Each batch
+                strength                           IS 4031 (Part 6)
+
+Note-1: Sub-contracting is permitted to a laboratory recognized by the Bureau or Government laboratories empanelled by the Bureau.
+
+Note-2: The control unit and levels of control as decided by the Bureau are obligatory to which the licensee shall comply with.
+
+                                                                                                                                                                Page 11 of 15
+
+                                                                                                                               PM/ IS 6909/5/June 2026
+
+                                                        Form No. 1
+                       FORMAT FOR MAINTENANCE OF TEST RECORDS WEIGHMENT CONTROL AT PACKING STAGE
+
+ Date      Shift       Time (Hourly)              No. of Bags                  Net mass of bags from nozzles                           Remark.
+
+                                                                       Form No. 2
+                                                                RAW MATERIAL TESTING
+
+ Date of receipt of         Date of        Name of Material         Source of supply and consignment      Details of analysis for specified requirements
+     material               testing                                                No.
+
+                                                              Form No. 3
+                                                          PRODUCTION DATA
+                            (POST GRINDING DETAILS OF PRODUCTION ACCEPTED AND REJECTED FOR STANDARD MARK)
+           Shift                       Quantity             Passed for Standard mark           Rejected                          Remark
+
+                                                          Form No. 4
+                       SUPERSULPHATED CEMENT (GRINDING/ BLENDING) (DAILY/ WEEKLY COMPOSITE SAMPLE)
+
+Date of     IR        MgO      Sulphuric Sulphide Chloride Fineness     Soundness Setting Time Compressive Transverse Sample Action taken if
+grinding                       anhydride sulphur Content                 (Cold - Initial & Final strength   Strength Pass/Fail sample fails
+                                                                        Expansion)
+
+                                                                                                                                                 Page 12 of 15
+
+                                                                                                                                      PM/ IS 6909/5/June 2026
+
+                                                             Form No. 5
+                                   SUPERSULPHATED CEMENT GRINDING (FOR ALTERNATE HOUR SAMPLE)
+
+   Date of         Time                    Fineness            Setting Time           Sample Pass/Fail        Mode of disposal or action taken if sample fails
+  grinding                                                    Initial & Final
+
+                                                             Form No. 6
+                                    SUPERSULPHATED CEMENT PACKING STAGE (Daily/Weekly Composite Sample)
+Date of      IR   MgO      Sulphuric    Sulphide      Chloride Fineness     Soundness        Setting      Compressive    Transverse        Sample      Action
+Packing                    anhydride     sulphur      Content                (Cold -          Time          strength      Strength        Pass/Fail   taken if
+                                                                            Expansion)      Initial &                                                 sample
+                                                                                              Final                                                     fails
+
+                                                                            Form No 7
+                                                                          CALIBRATION
+
+ Sl.        Date of       Result of Calibration (Test records indicating details of standard values and         Name of equipment                 Sl. No.
+ No       calibration       observed values for each equipment to be kept in proforma for which               Action taken if equipment         (If any) &
+                                           various columns be devised; as required)                                found defective               Remarks
+
+Note : The above records are to be kept separately for each equipment.
+
+                                                                                                                                                      Page 13 of 15
+
+                                                                                                                            PM/ IS 6909/5/June 2026
+                           RECORDS TO BE MAINTAINED AS PER TABLE-2 OF SIT (BY BULK PACKING UNIT)
+
+                                                              Form No. 8
+                       FORMAT FOR MAINTENANCE OF TEST RECORDS WEIGHMENT CONTROL AT PACKING STAGE
+                                                 HOURLY CHECK OF MASS OF DRUMS
+  Date           Time (Hourly) Condition of Drums  Net quantity of cement Record of calibration of weighing scale and Date of calibration.
+
+                                                           Form No. 9
+                  FORMAT FOR MAINTENANCE OF RECORDS FOR THE CONDITIONS OF THE EMPTY DRUMS/BULKERS
+                                                    FOR PACKING CEMENT
+Date         No. of empty drums/Bulkers checked No. of empty drums/Bulkers rejected Reasons/Remarks Sign of firms inspector
+
+                                                        Form No.10
+                       FORMAT FOR MAINTENANCE OF TEST RECORDS WEIGHMENT CONTROL AT PACKING STAGE
+                                             HOURLY CHECK OF MASS OF BAGS
+
+Date     Shift   Time(Hourly)    No of Bags       Net quantity of Bags from Nozzles         Records of calibration/date of calibration of nozzles
+
+                                                                 Form No. 11
+                                                            RECEIPT OF CEMENTS
+
+         Date of receipt                   Batch No.                 Supply received from                        Test Certificate No
+
+                                                                                                                                            Page 14 of 15
+
+                                                                                                                  PM/ IS 6909/5/June 2026
+
+                                                       Form No. 12
+                                           CEMENT DISPATCH DATA FROM PACKING
+
+Date   Quantity     Passed for Standard Mark        Rejected (if any)                Reasons for not marking/Method of disposal
+
+                                                      Form No 13 & 14
+                                TEST DONE AT FACTORY (At receipt stage and at bulk packing terminal)
+Date    Batch No.        LOI                   IR                Fineness          Setting Time                    Remarks
+
+                                                           Form No 15 & 16
+             SUPERSULPHATED CEMENT (PHYSICAL TEST REPORT) (At receipt stage and at bulk packing terminal)
+Date     Batch No. Test Report   Soundness                Compressive Strength                           Remarks
+                                                     3 days        7 days       28 days
+
+                                                                                                                                  Page 15 of 15

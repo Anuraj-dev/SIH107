@@ -1,0 +1,225 @@
+xxxGIDHxxx
+                                                   CG-DL-E-18032026-271047
+                                                          xxxGIDExxx
+
+                                                       EXTRAORDINARY
+                                                       PART III—Section 4
+                                              PUBLISHED BY AUTHORITY
+
+No. 185]                     NEW DELHI, TUESDAY, MARCH 17, 2026/PHALGUNA 26, 1947
+
+(1)                              (2)                          (3)                              (4)                              (5)
+
+1919 GI/2026                                                    (1)
+
+2                                THE GAZETTE OF INDIA : EXTRAORDINARY                                 [PART III—SEC.4]
+
+4                               THE GAZETTE OF INDIA : EXTRAORDINARY                               [PART III—SEC.4]
+
+                                       BUREAU OF INDIAN STANDARDS
+                                         (Department of Consumer Affairs)
+                                                    NOTIFICATION
+                                              New Delhi, the 11th March, 2026
+         Ref: HQ-PUB013/1/2020-PUB-BIS (1479).— In pursuance of Sub-rule (1) of Rule (15) of the Bureau of
+Indian Standards Rules, 2018, the Bureau of Indian Standards hereby notifies that Indian standards, particulars of
+which are given in the second column of the schedule hereto annexed have been established on the date indicated
+against it in third column. The particulars of the standards, if any which are given in the fourth column shall also
+remain in force concurrently till they are withdrawn on the date indicated against them in the fifth column .
+                                                       SCHEDULE
+
+Sl     No., Year & Title of the Indian          Date of              No. , Year & Title of the        Date of
+No                                              Establishment                                        Withdrawal
+           Standards Established                                      Indian Standards to be
+ .                                                                      Withdrawn, if any
+(1)                   (2)                              (3)                      (4)                       (5)
+
+1           IS/ISO 14533-3 : 2025               10 March 2026          IS/ISO 14533-3 : 2017       10 September 2026
+        Processes, Data Elements and                                Processes Data Elements and
+      Documents in Commerce, Industry                                 Documents in Commerce
+      and Administration — Long-Term                               Industry and Administration —
+                   Signature                                                 Long Term
+      Part 3 Profiles for PDF Advanced                                    Signature Profiles
+        Electronic Signatures (PAdES)                                Part 3 Long Term Signature
+                (First Revision)                                     Profiles for PDF Advanced
+                                                                    Electronic Signatures PAdES
+
+2               IS 16194 : 2026                 10 March 2026             IS 16194 : 2014         10 September 2026
+               ISO 10957 : 2021                                          ISO 10957 : 2009
+      Information and Documentation —                              Information and Documentation
+         International Standard Music                              — International Standard Music
+                Number (ISMN)                                             Number (ISMN)
+                (First Revision)
+
+3               IS 16789 : 2026                 10 March 2026              IS 16789 : 2018       10 September 2026
+               ISO 13008 : 2022                                           ISO 13008 : 2012
+      Information and Documentation —                              Information and Documentation
+        Digital Records Conversion and                              — Digital Records Conversion
+               Migration Process                                        and Migration Process
+                (First Revision)
+
+4              IS 19676 : 2026                  10 March 2026                   NA                        NA
+              ISO 22378 : 2022
+          Security and Resilience —
+      Authenticity, Integrity and Trust for
+         Products and Documents —
+      Guidelines for Interoperable Object
+          Identification and Related
+       Authentication Systems to Deter
+       Counterfeiting and Illicit Trade
+
+6                               THE GAZETTE OF INDIA : EXTRAORDINARY                          [PART III—SEC.4]
+
+Sl     No., Year & Title of the Indian        Date of           No. , Year & Title of the         Date of
+No                                            Establishment                                      Withdrawal
+           Standards Established                                 Indian Standards to be
+ .                                                                 Withdrawn, if any
+(1)                   (2)                          (3)                     (4)                       (5)
+
+1           IS/ISO 14533-3 : 2025             10 March 2026       IS/ISO 14533-3 : 2017       10 September 2026
+        Processes, Data Elements and                           Processes Data Elements and
+      Documents in Commerce, Industry                            Documents in Commerce
+      and Administration — Long-Term                          Industry and Administration —
+                   Signature                                            Long Term
+      Part 3 Profiles for PDF Advanced                               Signature Profiles
+        Electronic Signatures (PAdES)                           Part 3 Long Term Signature
+                (First Revision)                                Profiles for PDF Advanced
+                                                               Electronic Signatures PAdES
+
+5               IS 19677 : 2026               10 March 2026               NA                         NA
+             ISO/TS 22375 : 2018
+           Security and Resilience —
+           Guidelines for Complexity
+              Assessment Process
+
+6              IS 19678 : 2026                10 March 2026               NA                         NA
+              ISO 22387 : 2022
+          Security and Resilience —
+      Authenticity, Integrity and Trust for
+         Products and Documents —
+        Validation Procedures for the
+       Application of Artefact Metrics
+
+7               IS 19679 : 2026               10 March 2026               NA                         NA
+               ISO 22382 : 2018
+           Security and Resilience —
+      Authenticity, Integrity and Trust for
+          Products and Documents —
+      Guidelines for the Content, Security,
+      Issuance and Examination of Excise
+                  Tax Stamps
+
+8               IS 19680 : 2026               10 March 2026               NA                         NA
+               ISO 22380 : 2018
+          Security and Resilience —
+      Authenticity, Integrity and Trust for
+      Products and Documents — General
+       Principles for Product Fraud Risk
+             and Countermeasures
+
+9              IS 19714 : 2026                10 March 2026               NA                         NA
+               ISO 9706 : 2025
+      Information and Documentation —
+           Paper for Documents —
+         Requirements for Permanence
+
+10             IS 19715 : 2026                10 March 2026               NA                         NA
+              ISO 16687 : 2025
+       Impact Assessment for Museums
+
+Sl     No., Year & Title of the Indian       Date of              No. , Year & Title of the        Date of
+No                                           Establishment                                        Withdrawal
+           Standards Established                                   Indian Standards to be
+ .                                                                   Withdrawn, if any
+(1)                   (2)                           (3)                      (4)                       (5)
+
+1           IS/ISO 14533-3 : 2025            10 March 2026          IS/ISO 14533-3 : 2017       10 September 2026
+        Processes, Data Elements and                             Processes Data Elements and
+      Documents in Commerce, Industry                              Documents in Commerce
+      and Administration — Long-Term                            Industry and Administration —
+                   Signature                                              Long Term
+      Part 3 Profiles for PDF Advanced                                 Signature Profiles
+        Electronic Signatures (PAdES)                             Part 3 Long Term Signature
+                (First Revision)                                  Profiles for PDF Advanced
+                                                                 Electronic Signatures PAdES
+
+11              IS 19716 : 2026              10 March 2026                  NA                         NA
+               ISO 11108 : 2025
+      Information and Documentation —
+      Archival Paper — Requirements for
+          Permanence and Durability
+
+12              IS 19717 : 2026              10 March 2026                  NA                         NA
+               ISO 24574 : 2025
+            Document Management
+       Applications — Specification for a
+                  Digital Safe
+
+13             IS 19718 : 2026               10 March 2026                  NA                         NA
+             ISO/TS 22943 : 2022
+      Information and Documentation —
+          Principles of Identification
+
+14             IS 19719 : 2026               10 March 2026                  NA                         NA
+              ISO 20415 : 2019
+         Trusted Mobile e-Document
+        Framework — Requirements,
+        Functionality and Criteria for
+      Ensuring Reliable and Safe Mobile
+                  e-Business
+
+15               IS 19721 : 2026             10 March 2026                  NA                         NA
+             ISO/TR 16340 : 2023
+       Application of Blockchain-Based
+      Traceability Platform for Cold Chain
+                      Food
+
+16             IS 19722 : 2026               10 March 2026                  NA                         NA
+              ISO 23404 : 2020
+      Information and Documentation —
+          Papers and Boards Used for
+       Conservation — Measurement of
+      Impact of Volatiles on Cellulose in
+                    Paper
+
+8                               THE GAZETTE OF INDIA : EXTRAORDINARY                                      [PART III—SEC.4]
+
+Sl     No., Year & Title of the Indian         Date of                 No. , Year & Title of the               Date of
+No                                             Establishment                                                  Withdrawal
+           Standards Established                                        Indian Standards to be
+ .                                                                        Withdrawn, if any
+(1)                   (2)                             (3)                         (4)                                    (5)
+
+1           IS/ISO 14533-3 : 2025              10 March 2026             IS/ISO 14533-3 : 2017            10 September 2026
+        Processes, Data Elements and                                  Processes Data Elements and
+      Documents in Commerce, Industry                                   Documents in Commerce
+      and Administration — Long-Term                                 Industry and Administration —
+                   Signature                                                   Long Term
+      Part 3 Profiles for PDF Advanced                                      Signature Profiles
+        Electronic Signatures (PAdES)                                  Part 3 Long Term Signature
+                (First Revision)                                       Profiles for PDF Advanced
+                                                                      Electronic Signatures PAdES
+
+17         IS 19724 (Part 1) : 2026            10 March 2026                        NA                                   NA
+              ISO 4669-1 : 2023
+          Document Management —
+      Information Classification, Marking
+                 and Handling
+             Part 1 Requirements
+
+18          IS 19724 (Part 2) : 2026           10 March 2026                        NA                                   NA
+               ISO 4669-2 : 2025
+          Document Management —
+      Information Classification, Marking
+                 and Handling
+        Part 2 Functional and Technical
+       Requirements for ICMH Solutions
+
+                                                      CHITRA GUPTA, Scientist G & DDG (Hallmarking and Training)
+
+                                                                                          [ADVT.-III/4/Exty./761/2025-26]
+
+            Uploaded by Dte. of Printing at Government of India Press, Ring Road, Mayapuri, New Delhi-110064
+                              and Published by the Controller of Publications, Delhi-110054. GORAKHA NATH YADAVA
+                                                                                                              Digitally signed by GORAKHA NATH
+                                                                                                              YADAVA
+                                                                                                              Date: 2026.03.18 16:21:46 +05'30'

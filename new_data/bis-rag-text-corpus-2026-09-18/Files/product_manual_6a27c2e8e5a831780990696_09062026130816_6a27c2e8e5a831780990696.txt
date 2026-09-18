@@ -1,0 +1,214 @@
+PM/ IS 4003 (Part 1)/3
+                                                                                                          June 2026
+
+                                           PRODUCT MANUAL
+                               PIPE WRENCHES (GENERAL PURPOSE)
+                                 According to IS 4003 (Part 1):2026
+
+This Product Manual shall be used as reference material by all Regional/Branch Offices & licensees to ensure
+uniformity of practice and transparency in operation of certification under Scheme-I of Bureau of Indian
+Standards (Conformity Assessment) Regulations,2018 for various products. The document may also be used
+by prospective applicants desirous of obtaining BIS certification.
+
+       No. of amendments
+     Raw material                                           Note: This section indicates the requirements for raw material
+                                                            (if specified in the IS) for which compliance is to be
+                                                            established during Grant of Licence/Change in Scope of
+                                                            Licence/Factory Surveillance.
+     Grouping Guidelines
+       Sample Quantity
+                                                            Note: Apart from the above, any other requirements/
+       Parameters to be Declared in Test
+                                                            parameters may also be declared as per the standard, as
+       Request                                              applicable.
+     List of Test Equipment
+     Scheme of Inspection and Testing
+     Possible tests in a day                                Note: This section is for the guidance of BIS Certification
+                                                            Officers/ Technical Auditors of BIS Authorized Outside
+                                                            Surveillance Agencies (OSAs) during factory inspection to
+                                                            provide ready reference regarding the tests which can be
+                                                            witnessed during the inspection in the factory by the officer/
+                                                            auditor.
+
+                                                                                                            Page 1 of 7
+
+                                                                         PM/ IS 4003 (Part 1)/3
+                                                                                   June 2026
+
+“License is granted to use Standard Mark as per IS 4003 (Part 1):2026 with the following
+scope:
+Name of the product              Pipe Wrenches (General Purpose)
+Nominal Size                      200 mm / 250 mm / 300 mm / 350 mm / 450 mm / 600 mm /
+                                  900 mm / 1200 mm
+
+                     BUREAU OF INDIAN STANDARDS
+      MANAK BHAVAN, 9, BAHADUR SHAH ZAFAR MARG, NEW DELHI-110002
+                            www.bis.gov.in
+
+                                                                                   Page 2 of 7
+
+                                                                           PM/ IS 4003 (Part 1)/3
+                                                                                     June 2026
+
+                                    ANNEX -A
+                                Grouping Guidelines
+
+1. “Pipe Wrenches (General Purpose)” covered in IS 4003 (Part 1):2026 are classified
+   based on the following Nominal Sizes:
+
+        200 mm / 250 mm / 300 mm / 350 mm / 450 mm / 600 mm / 900 mm / 1200 mm
+
+2. Considering the above, the grouping guidelines given below shall be followed for GoL/CSoL:
+
+        Sample of lowest and highest nominal size shall be tested for all requirements to cover
+         all nominal sizes in that size range.
+
+3. The Firm shall declare the varieties of Pipe Wrenches intended to be covered in the Licence.
+
+4. The Scope of Licence may be restricted based on the Manufacturing and testing capabilities
+   of the manufacturer.
+
+5. During the operation of Licence, it shall be ensured that all the varieties covered in the
+   Licence are tested in rotation, to the extent possible.
+
+                                                                                     Page 3 of 7
+
+                                                                                    PM/ IS 4003 (Part 1)/3
+                                                                                              June 2026
+
+                                          ANNEX- B
+                                  List of Test Equipments
+                                (Indicative List, For Guidance Only)
+
+Major test equipment required to test as per the Indian Standard
+
+ Sl.      Cl. Ref.      Tests used in with Clause        Test Equipment
+ No.                    Reference
+  1.        4           Dimensions                        Measuring Tape
+          Table 1                                         Micro Meter
+                                                          Scale
+                                                          Vernier Calliper
+                                                          Angle Protractor
+
+  2.          6         Hardness                          Hardness Testing Machine
+                                                          Suitable Polisher
+
+  3.       11.1         Static Load Test                  Test Rig (as per Fig 2)
+          Table 4                                         Torque Tester
+  4.        11.2        Static Shock Load Test
+
+The above list is indicative only and may not be treated as exhaustive.
+
+                                                                                              Page 4 of 7
+
+                                                                                    PM/ IS 4003 (Part 1)/3
+                                                                                              June 2026
+
+                                        ANNEX C
+                             Scheme of Inspection and Testing
+
+1. QUALITY ASSURANCE PLAN
+
+1.1 It is expected that during operation of BIS licence manufacturers will implement a Quality
+    Assurance Plan (QAP) i.e. a plan of regular testing and in-process controls, designed to ensure
+    that the product bearing the Standard Mark conforms to all requirements of the Indian Standard.
+
+1.2 The manufacturers shall define a Quality Assurance Plan (QAP) defining the control unit (i.e.
+    lot/batch etc.), the levels of control (i.e. the frequency and number of samples for conducting the
+    different tests as per the Indian Standard) and declare the arrangement for testing i.e. whether in-
+    house or sub-contracting/ sharing for each applicable test and submit the same to BIS Branch
+    Office for information. The manufacturer shall comply with the QAP and maintain test records in
+    accordance with para 2.1.
+
+1.3 Recommended Levels of Control/ Control Unit:
+    1.3.1 For the guidance of manufacturers, the recommended definition of control unit is: entire
+          quantity of Pipe Wrenches (General Purpose) of same nominal size, made from same
+          grade of material and heat treated under identical conditions in a day constitute a control
+          unit.
+    1.3.2 For the guidance of manufacturers in preparing the Quality Assurance Plan, recommended
+          levels of control are given in Table 1. Manufacturer has the discretion of declaring their
+          own levels of control or accept the levels of control given in this document.
+    1.3.3 The manufacturer shall ensure inspection and testing as per the Quality Assurance Plan
+          submitted by them on the whole production of the factory which is covered by this plan.
+
+1.4 However, all manufacturers shall ensure compliance of their products to all the requirements of
+    the Indian Standard.
+
+2. ENSURING COMPLIANCE THROUGH TESTING
+  The manufacturers shall ensure compliance of their products to all the requirements of the Indian
+  Standard for which they may have in-house test facilities. However, there is no obligation to
+  maintain in-house laboratory. Licensee may use alternative arrangements for tests of the
+  production as per the declared QAP. Various alternatives are available for operation of BIS
+  certification as given below and the relevant guidelines for availing such relaxations by the
+  manufacturers, as amended from time to time, are to be referred:
+           i) Shared testing resources like common facility,
+           ii) Cluster based testing facility,
+           iii) Sub-contracting to outside laboratories which may either be:
+                             a) BIS recognised/ empanelled laboratories, or
+                             b) Any accredited laboratory as per ISO/IEC 17025
+
+2.1 Test Records- The manufacturers shall maintain test records for the tests carried out (either in-
+    house or at a sub-contracted or at shared test facility) to establish conformity of the product to the
+    Standard for operation of licence. For the tests being subcontracted or conducted at a shared test
+    facility, test results issued by the laboratories or test facilities, shall be made available for
+    inspection by BIS.
+
+                                                                                              Page 5 of 7
+
+                                                                                  PM/ IS 4003 (Part 1)/3
+                                                                                            June 2026
+
+3. PACKING AND MARKING
+  The Standard Mark as given in the Schedule of the licence shall be incorporated legibly and indelibly
+  on on the packaging of the Pipe Wrenches (General Purpose) provided always that the Pipe Wrenches
+  (General Purpose) so marked conforms to each requirement of the specification.
+
+3.1 Marking and Packing of Pipe Wrenches (General Purpose) shall be done as per Cl. 13 and Cl. 14
+    of IS 4003 (Part 1):2026.
+
+3.2 Additional Marking requirements: The Pipe Wrenches (General Purpose) shall also be marked
+    with the following additional requirement on its packaging:
+                          a) “For BIS certification details please visit www.bis.gov.in”
+
+4. REJECTION
+   The production which conforms to the Indian Standard and covered under the scope of this licence
+   shall be marked with the Standard Mark. Disposal of non-conforming product shall be done in such
+   a way so as to ensure that there is no violation of provisions of BIS Act, 2016.
+
+                                                                                            Page 6 of 7
+
+                                                                                                                                    PM/ IS 4003 (Part 1)/3
+                                                                                                                                              June 2026
+                                                                       TABLE-1
+                                                (Recommended Levels of Control by BIS- for Guidance Only)
+
+                                (1)                                                                          (2)
+
+                          Test Details                                                                Levels of Control
+
+                                              Test Methods
+                                                                           No. of
+Cl.          Requirement                                                                     Frequency                          Remarks
+                                      Clause          Reference           Sample
+
+                                                                                                                   No further testing is required if
+ 5     Material                          5          IS 4003 (Part 1)             Each Consignment                  accompanied with the Test
+                                                                                                                   Certificate or ISI marked.
+                                        4                                                                          Firm to have adequate in-process
+ 4     Dimensions                                   IS 4003 (Part 1)        01           Each Control Unit         controls to check compliance of this
+                                      Table 1
+                                                                                                                   parameter as per the tolerances
+ 7     Manufacture                       7          IS 4003 (Part 1)        01           Each Control Unit         given in the Indian Standard.
+ 8     Workmanship and Finish            8          IS 4003 (Part 1)                Every wrench                   However, appropriate records shall
+                                                                                                                   be maintained by the manufacturer
+ 9     Operation                         9          IS 4003 (Part 1)                Every wrench                   for evidence of conformity
+                                                                           One            One lot of each
+ 6     Hardness                          6          IS 4003 (Part 1)    component     component of each size
+                                                                          each         heat- treated at a time
+                                       11.1
+11.1   Static Load Test                             IS 4003 (Part 1)        01           Each Control Unit
+                                      Table 4
+11.2   Static Shock Load test          11.2         IS 4003 (Part 1)        01           Each Control Unit
+14     Packing                           14         IS 4003 (Part 1)                 Every piece
+
+                                                                                                                                               Page 7 of 7

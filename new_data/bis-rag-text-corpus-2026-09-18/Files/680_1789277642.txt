@@ -1,0 +1,360 @@
+PRODUCT MANUAL FOR
+      RIM LOCKS AND LATCHES (MECHANICALLY OPERATED)
+                  ACCORDING to IS 9131:2026
+
+                        Document No.-PM/IS 9131/2/ August 2026
+
+This Product Manual shall be used as reference material by all Regional/Branch Offices &
+licensees to ensure coherence of practice and transparency in operation of certification under
+Scheme-I of Bureau of Indian Standards (Conformity Assessment) Regulations, 2018 for
+various products. The document may also be used by prospective applicants desirous of
+obtaining BIS certification licence/certificate.
+
+                         BUREAU OF INDIAN STANDARDS
+                       Manak Bhawan, 9, Bahadur Shah Zafar Marg
+                                New Delhi – 110002
+
+                                                                                            1
+
+                                                            PM/ IS 9131/2/August 2026
+
+                   PRODUCT MANUAL FOR
+      RIM LOCKS AND LATCHES (MECHANICALLY OPERATED)
+                  ACCORDING TO IS 9131: 2026
+This Product Manual shall be used as reference material by all Regional/Branch Offices &
+licensees to ensure coherence of practice and transparency in operation of certification under
+Scheme-I of Bureau of Indian Standards (Conformity Assessment) Regulations, 2018 for
+various products. The document may also be used by prospective applicants desirous of
+obtaining BIS certification licence/certificate.
+
+ 1.   Product                   : IS 9131: 2026
+      Title                     : Rim Locks And Latches (Mechanically Operated)
+      No. of Amendments         : Nil
+
+ 2.   Sampling Guidelines:
+                                  -
+ a)   Raw material              :
+ b)   Grouping guidelines       : Please refer ANNEX –A
+ c)   Sample Size               : 10 Nos.
+
+ 3.   List of Test Equipment : Please refer ANNEX –B
+
+      Scheme of Inspection
+ 4.   and Testing               : Please refer ANNEX –C
+
+ 5.   Possible tests in a day   : All tests except : Durability (Cl. 8.6), Corrosion resistance
+                                  and Operation at extremes of temperature (Cl. 8.9)
+
+ 6.   Scope of the Licence:     : Please refer ANNEX –D
+
+                                                                                                  2
+
+                                                                     PM/ IS 9131/2/August 2026
+                                               ANNEX A
+
+                                       Grouping Guidelines
+1. Rim Locks and Latches covered under IS 9131: 2026 may be classified into different varieties based
+on following parameters:
+
+    a) Type of door construction for which intended:
+       i)      Left hand side inside opening single leaf hinged door
+       ii)     Right hand side inside opening single leaf hinged door
+       iii)    Left hand side outside opening single leaf hinged door
+       iv)     Right hand side outside opening single leaf hinged door
+       v)      Sliding doors
+       vi)     Inside opening hinged double leaf doors
+       vii)    Outside opening hinged double leaf doors
+    b) Based on type of Bolts: Rim latch/Night latch/Vertical bolt lock/Dead bolt lock/Claw bolt
+       lock/Multibolt lock
+       Above are indicative, Manufacturers may make rim locks and latches of any shape and design as
+       per Cl. 6.1 of IS 9131: 2026
+
+    c) Sizes:
+       As per mutual agreement between the manufacturer and the purchaser Cl. 6.1 of IS 9131
+    d) Type of Key Operation and Locking: Dead Locking/ Manual Locking
+    e) Classification code:
+
+                 Digit 1   Digit 2   Digit 3    Digit 4    Digit 5    Digit 6   Digit 7   Digit 8
+
+2. Considering the above, the following grouping guidelines for Grant of Licence/Change in Scope of
+    Licence shall be followed:
+
+    a) Rim Locks and Latches of each door type, each bolt type, and each type of key operation, as
+    above, shall be tested separately.
+
+    b) Rim locks and Latches of any size may be tested to cover all sizes intended to be covered.
+
+   c) Following are the guidelines for coverage of the Grades specified under each Digits within the
+      Eight-Digit Classification Code:
+
+           •   Digit 1 (Category of Use): Each grade to be tested.
+
+           •   Digit 2 (Durability) : Highest Grades of Durability for each grade of Digit 1 (category
+               of use), shall be tested to cover all lower Grades of Durability including the tested grade,
+               for that grade of Digit 1. Locks with deadbolt only shall be tested separately.
+                                                                                                       3
+
+                                                                 PM/ IS 9131/2/August 2026
+           •   Digit 3 (Test door mass) : Each grade of test door mass for each grade of Digit 1 to be
+               tested
+
+           •   Digit 4 (Fire resistance): Highest Grade of Fire Resistance for each grade of Digit 1
+               (category of use), shall be tested to cover all lower Grades of Fire Resistance including
+               the tested grade, for that grade of Digit 1.
+
+           •   Digit 5 (Safety): Not applicable
+
+           •   Digit 6 (Corrosion Resistance) : Highest Grades of Corrosion Resistance for each grade
+               of Digit 1 (category of use), shall be tested to cover all lower Grades of Corrosion
+               Resistance including the tested grade, for that grade of Digit 1
+
+           •   Digit 7 (Strength and Security) : Highest Grades of Strength and Security for each grade
+               of Digit 1 (category of use), shall be tested to cover all lower Grades of Strength and
+               Security including the tested grade, for that grade of Digit 1.
+
+           •   Digit 8 (Key combination related safety) : Highest Grades of Key combination related
+               safety for each grade of Digit 1 (category of use), shall be tested to cover all lower
+               Grades of Key combination related safety including the tested grade, for that grade of
+               Digit 1.
+
+3. Manufacturer shall declare varieties of the locks and latches along with the technical parameters as
+    per Para 1 above, which are intended to be covered under the scope of licence. Scope of licence
+    may be restricted based on manufacturing and testing capabilities.
+
+4. During the operation of the Licence, BO shall ensure that all the varieties covered in the Licence are
+tested in rotation, to the extent possible.
+
+                                                                                                     4
+
+                                                                                          PM/ IS 9131/2/August 2026
+                                                         Annex B
+
+                                               List of Test Equipment
+          Indicative list of major test equipment required to test as per the Indian Standard
+Sl.                Tests Used In With Clause Reference            Test Equipment/Chemical
+No.
+
+          1       Return Force of Latch Bolt. Cl 8.1              Suitable Force guage, vernier calipers
+
+          2       Resistance to side load on latch bolt, Cl 8.2   Fixture for mounting the lock or latch, Suitable
+                                                                  force guage for applying the force, vernier calipers
+
+          3       Torque to operate Dead bolt, Cl 8.4             Fixture for mounting the lock or latch, Torque tester
+
+      4           Torque resistance of Rim Lock with              Fixture for mounting the lock or latch to a
+                  Lockable Handle/Knob, Cl 8.5                    handle/knob, Torque wrench
+          5       Durability of latch action, Cl.8.6.1            Test set up for Durability test ( Test door of 100kg
+                                                                  door mass and frame with a gap of 3mm+-1mm)
+                                                                  with provision of automatic door closing and opening
+                                                                  equipped with suitable force guage, provision to
+                                                                  rotate key/knob with torque measurement along with
+                                                                  automatic cycle counter with timer.
+                                                                  The equipment shall be capable of operating
+                                                                  number of 10 cycles per minute maximum
+          6       Durability of Dead Bolt Mechanism, Cl.          Test set up for Durability test with provision of key
+                  8.6.2 and 8.6.3                                 rotation, inserting and with drawing the key from
+                                                                  the lock along with automatic cycle counter with
+                                                                  timer.
+          7       Fire resistance, Cl. 8.8                        Test set up as per IS 3614 or as appropriate
+                                                                  otherwise
+          7       Corrosion resistance ,Cl.8.9.1                  Salt spray test set up, Torque wrench.
+          8       Operation at extremes of temperature,           Humidity chamber, oven and Deep freezer, Torque
+                  Cl.8.9.2                                        wrench
+          9       Resistance to side load on Dead Bolt, Cl.       Force guage, Timer/Stop watch, vernier calipers.
+                  8.10.1
+      10          Dead bolt Projection, Cl 8.10.2                 Test apparatus as shown in Fig7, Vernier Calipers.
+
+      11          Requirement for end load on Dead Bolt, Cl       Test apparatus as shown in Fig7, Force guage, Stop
+                  8.10.3                                          watch
+      12          Resistance to end load, Cl. 8.10.4              Force guage, Vernier calipers.
+
+      13          Resistance to side load on locking plate, Cl.   Fixture for mounting the lock plate,force guage,Stop
+                  8.10.5                                          watch.
+
+                                                                                                                   5
+
+14    Manual Locking with intermediate locking        Force guage.
+      position, Cl. 8.11.2 and 8.11.3
+15    Torque to withdraw the latch bolt with key,     Suitable torque guage and adapter.
+      Cl. 8.11.4
+16    Effective differs, Non interchangeability,      As per manufacturers coding system and
+      Non inter passing of key with just one          documentation.
+      interval differ, coding protection, Differing
+      step heights on key
+
+     The above list is indicative only and may not be treated as exhaustive
+
+                                                                                               6
+
+                                                                           PM/ IS 9131/2/August 2026
+
+                                               ANNEX C
+                                    Scheme of Inspection and Testing
+    1. QUALITY ASSURANCE PLAN
+    1.1 It is expected that during operation of BIS licence, manufacturers will implement a
+      Quality Assurance Plan (QAP) i.e. a plan of regular testing and in-process controls,
+      designed to ensure that the product bearing the Standard Mark conforms to all
+      requirements of the Indian Standard.
+   1.2     The manufacturers shall define a Quality Assurance Plan (QAP) defining the control
+    unit (i.e. lot/batch etc.), the levels of control (i.e. the frequency and number of samples for
+    conducting the differenttests as per the Indian Standard) and declare the arrangement for
+    testing i.e. whether in-house or subcontracting/sharing for each applicable test and submit
+    the same to BIS Branch Office for information. The manufacturer shall comply with the
+    QAP and maintain test records in accordance with para 2.1.
+
+   1.3 RECOMMENDED LEVELS OF CONTROL/CONTROL UNIT:
+
+   1.3.1   Control Unit: For the guidance of manufacturers in preparing the Quality Assurance
+    Plan, the recommended definition of control unit is the Quantity of Rim Locks and Latches
+    used for same type of door construction, of same type of bolt, size, shape and design, type
+    of key operation and locking and bearing same classification code manufactured under
+    similar conditions from same consignment of raw material in a day.
+    1.3.2 For the guidance of manufacturers in preparing the Quality Assurance Plan,
+      recommended levels of control are given in Table 1.
+    1.3.3 The manufacturer shall ensure inspection and testing as per the Quality Assurance
+      Plan submitted by them on the whole production of the factory which is covered by this
+      plan. Alternatively, the manufacturer has the option of adherence to the quality plan as
+      per levels of control recommended in column 3 of Table 1.
+    1.3.4 However, all manufacturers shall ensure compliance of their products to all the
+      requirements of the Indian Standard.
+
+    2. ENSURING COMPLIANCE THROUGH TESTING- Manufacturers shall ensure
+       compliance of their products to all the requirements of the Indian Standard for which
+       they may have in-house test facilities. However, there is no obligation to maintain in-
+       house laboratory. Licensee may use alternative arrangements for tests of the
+       production as per the declared QAP. Various alternatives are available for operation
+       of BIS certification as given below and the relevant guidelines for availing such
+       relaxations by the manufacturers, as amended from time to time, are to be referred:
+       i) Shared testing resources like common facility,
+       ii) Cluster based testing facility,
+       iii) Sub-contracting to outside laboratories which may either be:
+           a) BIS recognised/empanelled laboratories, or
+           b) Any accredited laboratory as per ISO/IEC 17025
+2.1 TEST RECORDS- The manufacturers shall maintain test records for the tests carried
+    out (either in-house or at a sub-contracted or at shared test facility) to establish conformity
+    of the product to the Standard for operation of licence. For the tests being subcontracted            7
+    or conducted at a shared test facility, test results issued by the laboratories or test facilities,
+    shall be made available for inspection by BIS.
+
+  3. PACKING, LABELLING AND MARKING – As per the requirement of 9131:2026. The
+     Standard Mark, as given in the Schedule of the licence, shall be marked on each product,
+     provided always that the product thus marked conforms to all the requirement of the
+     specification.
+    In addition, the licence no. CM/L-__________ and details of BIS website shall be marked at
+    an appropriate place on product or package as follows: “For details of BIS certification please
+    visit www.bis.gov.in”.
+4. REJECTION - The production which conforms to the Indian Standard and covered under
+   the scope of this licence shall be marked with the Standard Mark. Disposal of non-
+   conforming product shall be done in such a way so as to ensure that there is no violation of
+   provisions of BIS Act,2016.
+
+                                                                                                      8
+
+                                                                                                                            PM/ IS 9131/2/August 2026
+
+                                                                             TABLE 1 (Recommended levels of control- For guidance only)
+
+                         (1)                                                                              (2)
+
+                     Test Details                                                                 Levels of Control
+
+Cl.       Requirement                 Test Method          No. of           Frequency                                   Remarks
+                                                           Sample
+                                Clause         Reference
+
+6.2     Materials               6.2            IS 9131     Materials specified for the components shall be declared by the manufacturer and records shall be
+                                                           maintained for conformity during routine production
+6.1     Sizes                   6.1            IS 9131         One         Each Control Unit
+
+6.2     Workmanship and        9.1, 9.2, 9.3   IS 9131     Manufacturer shall exercise adequate levels of control so that entire production conforms to the
+        Finish                                             Standard. Record shall be maintained
+8.1     Return force     of         8.1         IS 9131         One       Each Control unit                                         —---
+        latch Bolt
+8.2     Resistance to side          8.2         IS 9131        One        Each Control unit                                         —---
+        load on latch bolt
+8.3     Latch bolt                  8.3         IS 9131        One        Each Control unit
+        projection
+8.4     Torque to operate           8.4         IS 9131        One        Each Control unit
+        dead bolt
+
+8.5     Torque resistance           8.5         IS 9131        One        Each Control unit
+        of Rim Lock with
+        lockable
+        handle/knob
+8.6.1   Durability of latch       8.6,          IS 9131        One        Every 12 month
+        action                   Table 3
+                                                                                                                                                               9
+
+                                                                                     PM/ IS 9131/2/August 2026
+8.6.2,   Durability of dead     8.6.2,    IS 9131         One    Every 12 month
+8.6.3    bolt mechanism         8.6.3
+
+8.6.4    Durability        of    8.6.4    IS 9131         One    Every 12 month
+         locking         snib
+         mechanism
+ 8.8     Fire resistance test     8.8     IS 9131         One    Every 12 month
+
+8.9.1    Corrosion               8.9.1,   IS 9131         One    Every 12 month
+         resistance             Table 6
+
+8.9.2    Operation        at     8.9.2    IS 9131   One         Every 12 month
+         extremes         of
+         temperature
+8.10.1   Resistance to slide    8.10.1    IS 9131         One    Every 12 month
+         load on deadbolt
+
+8.10.2   Deadbolt               8.10.2    IS 9131         One    Each Control Unit
+         projection
+8.10.3   Requirement for        8.10.3    IS 9131         One    Every 12 month
+         end     load   on
+         deadbolt
+8.10.4   Resistance to end      8.10.4    IS 9131         One    Every 12 month
+         load
+
+8.10.5   Resistance to side     8.10.5    IS 9131         One    Every 12 month
+         load on locking
+         plate
+8.11.2   Manual locking         8.11.2    IS 9131         One    Each Control Unit
+
+                                                                                                                 10
+
+                                                                             PM/ IS 9131/2/August 2026
+8.11.3   Manual      locking   8.11.3    IS 9131   One   Each Control Unit
+         with intermediate
+         locking position
+8.11.4   Torque           to   8.11.4    IS 9131   One   Each Control Unit
+         withdraw the latch
+         bolt with key
+8.12     Key identification    8.12.1,   IS 9131   One   Each Control Unit
+         requirements          8.12.2,
+                               8.12.3,
+                               8.12.4,
+                               8.12.5,
+                               8.12.6
+
+                                                                                                         11
+
+                                                             PM/ IS 9131/2/August 2026
+
+                                   ANNEX – D
+
+                               Scope of the Licence
+
+ Licence is granted to use Standard Mark as per IS 9131:2026 with the following scope:
+
+ Name      of   the    Rim Locks and Latches (Mechanically Operated)
+ product
+ Type of door
+ construction for
+ which intended
+ Type of Bolts
+ Size
+Type     of    Key
+Operation      and
+Locking      (Dead
+Locking/    Manual
+Locking)
+
+Classification code
+                       Digit    Digit    Digit    Digit   Digit    Digit    Digit    Digit
+                       1        2        3        4       5        6        7        8

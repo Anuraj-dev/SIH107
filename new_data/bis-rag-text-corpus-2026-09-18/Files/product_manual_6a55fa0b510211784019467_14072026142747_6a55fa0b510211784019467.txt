@@ -1,0 +1,353 @@
+PM/ IS/IEC 61537/ 2
+                                                                                                                     July 2026
+
+                              PRODUCT MANUAL
+         Cable Management — Cable Tray Systems and Cable Ladder Systems
+                          according to IS/IEC 61537: 2023
+This Product Manual shall be used as reference material by all Regional/Branch Offices & licensees to ensure
+uniformity of practice and transparency in operation of certification under Scheme-I of Bureau of Indian Standards
+(Conformity Assessment) Regulations,2018 for various products. The document may also be used by prospective
+applicants desirous of obtaining BIS certification.
+
+                                                            Cable Ladder Systems
+        No. of amendments
+        Raw material                                        Note: This section indicates the requirements for raw material (if
+                                                            specified in the IS) for which compliance is to be established
+                                                            during Grant of Licence/Change in Scope of Licence/Factory
+                                                            Surveillance.
+        Grouping Guidelines
+                                                            system along with applicable system components
+                                                            and fittings
+                                                             Note: Apart from the above, any other requirements/
+                                                             parameters may also be declared as per the standard, as
+      in Test Request                                        applicable.
+      List of Test Equipment
+      Scheme of Inspection and Testing
+
+                            BUREAU OF INDIAN STANDARDS
+             MANAK BHAVAN, 9, BAHADUR SHAH ZAFAR MARG, NEW DELHI-110002
+                                   www.bis.gov.in
+
+                                                                                                                    Page 1 of 7
+
+                                                                                               PM/ IS/IEC 61537/ 2
+                                                                                                        July 2026
+
+      Possible tests in a day                          Dimensions
+                                                       Constructions
+                                                       Electrical continuity
+                                                       Spread of fire
+                                                 Note: This section is for the guidance of BIS Certification
+                                                 Officers/ Technical Auditors of BIS Authorized Outside
+                                                 Surveillance Agencies(OSAs) during factory inspection to
+                                                 provide ready reference regarding the tests which can be
+                                                 witnessed during the inspection in the factory by the officer/
+                                                 auditor.
+“Licence is granted to use Standard Mark as per IS/IEC 61537: 2023 with the following scope:
+ Name of the Product                 Cable Tray System (and) / (or) Cable Ladder System
+ Dimension(s)                          To be declared by the manufacturer as per Cl. 8 of IS /
+                                       IEC 61537: 2023
+ SWL                                   To be declared by the manufacturer
+ (Safe Working Load)
+ Material                               Metallic system component / Non-metallic system component
+                                        / Composite system component
+ Resistance to flame propagation        Flame propagating system component / Non-flame
+                                        propagating system component
+ Electrical continuity characteristics With / without electrical continuity characteristics/ with
+                                       electrical continuity characteristics and with Protective Earthing
+                                       (PE) function
+ Electrical conductivity                Electrically conductive system component / Electrically
+                                        non-conductive system component
+ Resistance against corrosion           To be declared by the manufacturer as per cl.6.5
+ Impact resistance                     System component offering impact resistance
+                                       upto 2 J / upto 5 J/ upto 10 J/ upto 20 J/ upto 50 J
+ Temperature for use                   Min. temp for use (+5 / -5 / -15 / -20 / -25/ -40 / -50/ -70) °C
+                                       Max. temp for use (+40 / +60 / +90 / +105 / +120 / + 150)°C
+ Perforation in the base area          A/B/C/D
+                                       (See Table 5 of IS / IEC 61537: 2023)
+ Free base area                        X/Y/Z
+                                       (See Table 6 of IS / IEC 61537: 2023)
+
+                                                                                                     Page 2 of 7
+
+                                                                                        PM/ IS/IEC 61537/ 2
+                                                                                                 July 2026
+
+                                          ANNEX -A
+                                      Grouping Guidelines
+
+1. Cable Management — Cable Tray Systems and Cable Ladder Systems as per of IS / IEC
+   61537 are classified based on the following:
+
+          i. Product – Cable Tray System (or) Cable Ladder System
+          ii. SWL (in N/m): To be declared by the manufacturer
+          iii. Dimension: To be declared by the manufacturer as per Cl. 8 of IS / IEC 61537:
+                2023
+          iv. Material: Metallic system component / Non-metallic system component /
+                Composite system component
+          v. Resistance to flame propagation: Flame propagating system component / Non-
+                flame propagating system component
+          vi. Electrical continuity characteristics: With / without electrical continuity
+                characteristics/ with electrical continuity characteristics and with Protective Earthing
+                (PE) function
+          vii. Electrical conductivity: Electrically conductive system component / Electrically
+                non-conductive system component
+          viii. Resistance against corrosion: To be declared by the manufacturer as per cl.6.5
+          ix. Impact resistance: System component offering impact resistance - Upto 2 J / Upto
+                5 J/ Upto 10 J/ Upto 20 J/ Upto 50 J
+          x. Temperature for use: Min. temp for use (+5 / -5 / -15 / -20 / -25/ -40 / -50/ -70) °C
+                Max. temp for use: (+40 / +60 / +90 / +105 / +120 / + 150) °C
+          xi. Perforation in the base area: A / B / C / D (See Table 5 of IS / IEC 61537: 2023)
+          xii. Free base area: X / Y / Z (See Table 6 of IS / IEC 61537: 2023)
+
+2. For grant of licence/ change in scope of licence, samples of widest and narrowest width shall
+   be tested to cover a range of dimensions, provided all other parameters given at 1 above
+   remains the same.
+
+3. The following relaxation may be given when a variety is tested for all the requirements:
+              a. If product with particular SWL is tested, product with lower SWL may also be
+                  covered without further testing &
+              b. If product with particular Impact resistance is tested, product with lower Impact
+                  resistance may also be covered without further testing,
+   provided all other parameters given at 1 above remains the same.
+
+4. The Firm shall declare the Varieties and Sizes of various Cables they intend to cover in the
+   Licence. The Scope of Licence may be restricted based on the Manufacturing and Testing
+   capabilities of the Manufacturer.
+
+5. During the operation of the Licence, BO shall ensure that all the Varieties covered in the
+   Licence are tested in rotation to the extent possible.
+
+    Note 1: Firm shall declare the system components and fittings supplied along with the Cable Tray
+    System (or) Cable Ladder System.
+    Note 2: Firm shall declare the intermediate widths of Cable Tray System (or) Cable Ladder System
+    for which it intends to get a licence.
+    Note 3: Firm shall declare the material of Metallic system component / Non-metallic system
+    component / Composite system component intended for manufacturing Cable Tray System (or) Cable
+    Ladder System.
+
+                                                                                             Page 3 of 7
+
+                                                                                          PM/ IS/IEC 61537/ 2
+                                                                                                   July 2026
+
+                                               ANNEX- B
+                                       List of Test Equipments
+                                    (Indicative List, For Guidance Only)
+
+Sl. No.       Test Equipment            Tests used in with Clause Reference
+                                         Cl. Ref.                  Tests
+
+ 1.       Marking                         Cl. 7     n-Hexane, Cotton, Water, Test Piston as per
+                                                    figure 2 of ISS
+ 2.       Dimensions                      Cl. 8     Vernier, Micrometer, Steel Scale, Measuring
+                                                    Tape
+ 3.       Construction                    Cl. 9     Screw Gauge, Thread Gauge, Torque Gauge
+ 4.       Mechanical Properties           Cl. 10    Loads      (weights),  UTM      (if  applicable),
+                                                    Conditioning chamber, Pendulum Hammer for
+                                                    Impact Test
+ 5.                                       Cl. 11    Electrical Continuity Tester, Humidity Chamber
+          Electrical Properties                     (Sodium Sulphate/Potassium Nitrate to be mixed
+                                                    in water), Surface Resistivity Meter, Voltmeter,
+                                                    DC Voltage source
+ 6.                                       Cl. 14    Salt Spray Tester, Coating Thickness meter
+          External Influences
+
+  7.      Fire Hazards                    Cl. 13    Glow Wire Test setup, Flame ignitor, Burner,
+                                                    Rectangular Metal Enclosure as per Figure 57etc.
+
+                The above list is indicative only and may not be treated as exhaustive.
+
+                                                                                              Page 4 of 7
+
+                                                                                        PM/ IS/IEC 61537/ 2
+                                                                                                 July 2026
+
+                                        ANNEX C
+                             Scheme of Inspection and Testing
+
+1. QUALITY ASSURANCE PLAN
+
+1.1 It is expected that during operation of BIS licence manufacturers will implement a Quality
+    Assurance Plan (QAP) i.e. a plan of regular testing and in-process controls, designed to ensure
+    that the product bearing the Standard Mark conforms to all requirements of the Indian Standard.
+
+1.2 The manufacturers shall define a Quality Assurance Plan (QAP) defining the control unit (i.e.
+    lot/batch etc.), the levels of control (i.e. the frequency and number of samples for conducting the
+    different tests as per the Indian Standard) and declare the arrangement for testing i.e. whether in-
+    house or sub-contracting/ sharing for each applicable test and submit the same to BIS Branch
+    Office for information. The manufacturer shall comply with the QAP and maintain test records in
+    accordance with para 2.1.
+
+1.3 Recommended Levels of Control/ Control Unit:
+    1.3.1 For the guidance of manufacturers, the recommended definition of control unit is: Cable
+          Tray (or) Cable ladder systems manufactured continuously in a day under similar condition
+          of production for each width shall constitute a control unit.
+    1.3.2 For the guidance of manufacturers in preparing the Quality Assurance Plan, recommended
+          levels of control are given in Table 1. Manufacturer has the discretion of declaring their
+          own levels of control or accept the levels of control given in this document.
+    1.3.3 The manufacturer shall ensure inspection and testing as per the Quality Assurance Plan
+          submitted by them on the whole production of the factory which is covered by this plan.
+
+1.4 However, all manufacturers shall ensure compliance of their product to all the requirements of the
+    Indian Standard.
+
+2. ENSURING COMPLIANCE THROUGH TESTING
+
+  The manufacturers shall ensure compliance of their products to all the requirements of the Indian
+  Standard for which they may have in-house test facilities. However, there is no obligation to
+  maintain in-house laboratory. Licensee may use alternative arrangements for tests of the
+  production as per the declared QAP. Various alternatives are available for operation of BIS
+  certification as given below and the relevant guidelines for availing such relaxations by the
+  manufacturers, as amended from time to time, are to be referred:
+           i) Shared testing resources like common facility,
+           ii) Cluster based testing facility,
+           iii) Sub-contracting to outside laboratories which may either be:
+                             a) BIS recognised/ empanelled laboratories, or
+                             b) Any accredited laboratory as per ISO/IEC 17025
+
+2.1 Test Records- The manufacturers shall maintain test records for the tests carried out (either in-
+    house or at a sub-contracted or at shared test facility) to establish conformity of the product to the
+    Standard for operation of licence. For the tests being subcontracted or conducted at a shared test
+    facility, test results issued by the laboratories or test facilities, shall be made available for
+
+                                                                                              Page 5 of 7
+
+                                                                                               PM/ IS/IEC 61537/ 2
+                                                                                                        July 2026
+
+           inspection by BIS.
+
+      3. PACKING AND MARKING
+        The Standard Mark as given in the Schedule of the licence shall be incorporated legibly and indelibly
+        on each length of Cable Tray System (or) Cable Ladder System and also on the packaging of system
+        components and fittings supplied along with the Cable Tray System (or) Cable Ladder System
+        provided always that the material so marked conforms to each requirement of the specification.
+
+      3.1 Packing and Marking shall be done as per Cl.7 of IS/IEC 61537: 2023.
+
+      3.2 Additional Marking requirements: The product shall also be marked with the following
+          additional requirement on the packaging:
+                              a) “For BIS certification details please visit www.bis.gov.in”
+
+      4. REJECTION
+         The production which conforms to the Indian Standard and covered under the scope of this licence
+         shall be marked with the Standard Mark. Disposal of non-conforming product shall be done in such
+         a way so as to ensure that there is no violation of provisions of BIS Act, 2016.
+
+                                                      TABLE-1
+                            (Recommended Levels of Control by BIS- for Guidance Only)
+                                  -1                                                      -2
+                            Test Details                                          Levels of Control
+                                                Test                 No. of
+Cl.         Requirement                                                       Frequency        Remarks
+                                                Clause    Ref        Sample
+                                                                                               No further testing is
+            Metallic system component / Non-                                                   required if
+                                                          IS / IEC               Each
+6           metallic system component /         6.5                  One                       accompanied with
+                                                          61537               Consignment
+            Composite system component                                                         ISI mark or Test
+                                                                                               certificate
+7           Marking and documentation
+                                                7.1.1                         Firm to have adequate in-process
+7.1         Marking & Durability of Marking
+                                                7.1.2                         controls to check compliance of this
+                                                                              parameter as per the tolerances
+                                                          IS / IEC
+7.2         Documentation                       7.2                  Each     given in the Indian Standard.
+                                                          61537
+                                                                              However, appropriate records shall
+                                                                              be maintained by the manufacturer
+7.3         PE marking and documentation        7.3                           for evidence of conformity.
+                                                                              Firm to have adequate in-process
+                                                                              controls to check compliance of this
+                                                                              parameter as per the tolerances
+                                                          IS / IEC
+8           Dimensions                          8                    Each     given in the Indian Standard.
+                                                          61537
+                                                                              However, appropriate records shall
+                                                                              be maintained by the manufacturer
+                                                                              for evidence of conformity.
+                                                9.1 to    IS / IEC            Each Control unit
+9           Construction                                             One
+                                                9.7       61537
+10          Mechanical Properties
+10.1        Mechanical Strength
+
+                                                                                                      Page 6 of 7
+
+                                                                                             PM/ IS/IEC 61537/ 2
+                                                                                                      July 2026
+
+           Test for SWL of cable tray lengths
+           and cable ladder lengths mounted in               IS / IEC
+                                                   10.3
+           the horizontal plane running                      61537
+           horizontally on multiple spans
+           Test for SWL of cable tray lengths
+           and cable ladder lengths mounted in
+                                                             IS / IEC
+           the horizontal plane running            10.4
+                                                             61537
+           horizontally on a single span
+                                                                              Once in a month for each type of
+           installation
+                                                                              Cable Tray (or) Cable ladder systems
+           Test for SWL of cable tray system                            One
+                                                             IS / IEC         of any dimension manufactured
+           and cable ladder system mounted in 10.5
+                                                             61537            during that period
+           the vertical plane running horizontally
+           Test for SWL of cable tray system
+                                                             IS / IEC
+           and cable ladder system mounted in 10.6
+                                                             61537
+           the vertical plane running vertically
+           Test for SWL of cable tray fittings
+           and cable ladder fittings mounted in              IS / IEC
+                                                   10.7
+           the horizontal plane running                      61537
+           horizontally
+10.2         SWL Test
+10.2.1.1    Minimum temperature test              10.2.1.1
+                                                                              Once in a month for each type of
+            Maximum temperature test for                     IS / IEC         Cable Tray (or) Cable ladder systems
+10.2.1.2                                          10.2.1.2
+            temperatures ≤ 60°C (or)                         61537
+                                                                        One
+                                                                              of any dimension manufactured
+            Maximum temperature test for                                      during that period
+10.2.1.3                                          10.2.1.3
+            temperatures > 60°C
+                                                             IS / IEC         Once in a month for each type of
+10.8        Test for SWL of support devices       10.8                  One
+                                                             61537            Cable Tray (or) Cable ladder systems
+                                                             IS / IEC         of any dimension manufactured
+10.9        Test for impact resistance            10.9                  One
+                                                             61537            during that period
+11          Electrical properties
+                                                                              Once in a month for each type of
+11.1        Electrical continuity                 11.1       IS / IEC   One   Cable Tray (or) Cable ladder systems
+                                                             61537            of any dimension manufactured
+11.2        Electrical non-conductivity           11.2                  One   during that period
+13          Fire hazards
+                                                                              Once in a month for each type of
+                                                  13.1.1
+                                                             IS / IEC         Cable Tray (or) Cable ladder systems
+13.1        Reaction to fire                      13.1.2                One
+                                                             61537            of any dimension manufactured
+                                                  13.1.3
+                                                                              during that period
+14          External influences
+            Resistance against environmental
+14.1                                              14.1                        Once in a month for each type of
+            forces
+                                                             IS / IEC         Cable Tray (or) Cable ladder systems
+                                                  14.2.1                One
+                                                             61537            of any dimension manufactured
+14.2        Resistance against corrosion          14.2.2
+                                                                              during that period
+                                                  14.2.3
+
+                                                                                                   Page 7 of 7

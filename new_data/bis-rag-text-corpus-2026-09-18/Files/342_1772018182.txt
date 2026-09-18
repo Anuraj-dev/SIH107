@@ -1,0 +1,170 @@
+xxxGIDHxxx
+                                                   CG-DL-E-25022026-270453
+                                                          xxxGIDExxx
+
+                                                      EXTRAORDINARY
+                                                      PART III—Section 4
+                                              PUBLISHED BY AUTHORITY
+
+ No. 123]                  NEW DELHI, TUESDAY, FEBRUARY 24, 2026/PHALGUNA 5, 1947
+
+  (1)                            (2)                            (3)                          (4)                         (5)
+
+1327 GI/2026                                                    (1)
+
+2                                 THE GAZETTE OF INDIA : EXTRAORDINARY                       [PART III—SEC.4]
+
+                                                       2026
+                        2 : 2023
+
+                        7 : 2023
+
+    3                                                  2026                                      2026
+                          2024                                       55010 : 2019
+
+    4                                                  2026
+
+    5                                                  2026
+
+  6                                               2026                                           2026
+                        2023                                           1-44 : 2011
+
+  7                                               2026                                           2026
+                        2024                                           1-45 : 2017
+
+  8                                               2026                                           2026
+                        2024                                           1-46 : 2001
+
+  9                                               2026                                           2026
+                        2024                                           1-105 : 2005
+
+4                                THE GAZETTE OF INDIA : EXTRAORDINARY                                  [PART III—SEC.4]
+
+    13                                                    2026
+                          2023
+
+                                      BUREAU OF INDIAN STANDARDS
+                                         (Department of Consumer Affairs)
+                                                     NOTIFICATION
+                                         New Delhi, the 20th February 2026
+        Ref: HQ-PUB013/1/2020-PUB-BIS (1436).— In pursuance of Sub-rule (1) of Rule (15) of the
+Bureau of Indian Standards Rules, 2018, the Bureau of Indian Standards hereby notifies that Indian standards,
+particulars of which are given in the second column of the schedule hereto annexed have been established on
+the date indicated against it in third column. The particulars of the standards, if any which are given in the
+fourth column shall also remain in force concurrently till they are withdrawn on the date indicated against
+them in the fifth column.
+
+                                                 SCHEDULE
+
+ Sl.    No., Year & Title of the Indian         Date of         No. , Year & Title of the       Date of
+ No.                                         Establishment                                     Withdrawal
+            Standards Established                                Indian Standards to be
+                                                                   Withdrawn, if any
+ (1)                   (2)                         (3)                     (4)                     (5)
+          IS/ISO/IEC 22123-2 : 2023
+  1    Information Technology — Cloud         18 February                  NA                      NA
+                  Computing                      2026
+                Part 2 Concepts
+
+  2        IS/ISO/IEC 30134-7 : 2023          18 February                  NA                      NA
+        Information Technology — Data            2026
+            Centres key Performance
+                   Indicators
+         Part 7 Cooling Efficiency Ratio
+                     (CER)
+
+  3         IS/ISO/TS 55010 : 2024            18 February        IS/ISO/TS 55010 : 2019       18 August 2026
+        Asset Management — Guidance              2026             Asset Management —
+       on the Alignment of Financial and                       Guidelines on the Alignment
+       Non-Financial Functions in Asset                           of Financial and Non-
+                  Management                                   Financial Functions in Asset
+                (First Revision)                                       Management
+
+  4            IS/ISO 55011 : 2024            18 February                  NA                      NA
+         Asset Management — Guidance             2026
+        for Development of Public Policy
+          to Enable Asset Management
+
+  5           IS/ISO 55012 : 2024             18 February                  NA                      NA
+        Asset Management — Guidance              2026
+          on People Involvement and
+                  Competence
+
+  6         IS/IEC 60793-1-44 : 2023          18 February       IS/IEC 60793-1-44 : 2011      18 August 2026
+                  Optical Fibres                 2026                  Optical Fibres
+        Part 1 Measurement Methods and                         Part 1 Measurement Methods
+                 Test Procedures                                    and Test Procedures
+         Section 44 Cut-Off Wavelength                              Section 44 Cut-Off
+                 (First Revision)                                       Wavelength
+
+  7         IS/IEC 60793-1-45 : 2024          18 February       IS/IEC 60793-1-45 : 2017      18 August 2026
+                  Optical Fibres                 2026                  Optical Fibres
+        Part 1 Measurement Methods and                         Part 1 Measurement Methods
+                 Test Procedures                                    and Test Procedures
+        Section 45 Mode Field Diameter                            Section 45 Mode Field
+                (Second Revision)                                        Diameter
+                                                                      (First Revision)
+
+6                                 THE GAZETTE OF INDIA : EXTRAORDINARY                                      [PART III—SEC.4]
+
+Sl.       No., Year & Title of the Indian             Date of             No. , Year & Title of the            Date of
+No.                                                Establishment                                              Withdrawal
+              Standards Established                                        Indian Standards to be
+                                                                             Withdrawn, if any
+    (1)                   (2)                            (3)                         (4)                               (5)
+             IS/ISO/IEC 22123-2 : 2023
+    1                                               18 February                       NA                              NA
+          Information Technology — Cloud
+                     Computing                         2026
+                   Part 2 Concepts
+
+              IS/IEC 60793-1-46 : 2024                                   IS/IEC 60793-1-46 : 2001
+    8               Optical Fibres                  18 February                 Optical Fibres              18 August 2026
+          Part 1 Measurement Methods and               2026             Part 1 Measurement Methods
+                   Test Procedures                                           and Test Procedures
+          Section 46 Monitoring of Changes                                Section 46 Monitoring of
+               in Optical Transmittance                                       Changes in Optical
+                   (First Revision)                                             Transmittance
+
+            IS/IEC 61196-1-105 : 2024
+    9      Coaxial Communication Cables             18 February          IS/IEC 61196-1-105 : 2005          18 August 2026
+           Part 1 Electrical Test Methods              2026               Coaxial Communication
+           Section 105 Test for Withstand                                          Cables
+                  Voltage of Cable                                        Part 1-105 Electrical Test
+                      Dielectric                                             Methods — Test for
+                   (First Revision)                                      Withstand Voltage of Cable
+                                                                                  Dielectric
+              IS/IEC 62680-4-1 : 2022
+    10    Universal Serial Bus Interfaces for       18 February                       NA                              NA
+                   Data and Power                      2026
+           Part 4 Universal Serial Bus 4TM
+               Section 1 Specification
+
+               IS/IEC 63240-1 : 2024
+    11      Active Assisted Living (AAL)            18 February                       NA                              NA
+             Reference Architecture and                2026
+                 Architectures Model
+            Part 1 Reference Architecture
+
+               IS/IEC 63240-2 : 2020
+    12      Active Assisted Living (AAL)            18 February                       NA                              NA
+             Reference Architecture and                2026
+                 Architecture Model
+             Part 2 Architecture Model
+
+              IS/IEC SRD 63416 : 2023
+    13         Ethical Considerations of            18 February                       NA                              NA
+                       Artificial                      2026
+          Intelligence (AI) When Applied in
+          the Active Assisted Living (AAL)
+                        Context
+
+                                                      CHITRA GUPTA, Scientist G & DDG (Hallmarking and Training)
+
+                                                                                           [ADVT.-III/4/Exty./698/2025-26]
+
+              Uploaded by Dte. of Printing at Government of India Press, Ring Road, Mayapuri, New Delhi-110064
+                                and Published by the Controller of Publications, Delhi-110054. GORAKHA NATH YADAVA
+                                                                                                                 Digitally signed by GORAKHA NATH
+                                                                                                                 YADAVA
+                                                                                                                 Date: 2026.02.25 14:18:55 +05'30'

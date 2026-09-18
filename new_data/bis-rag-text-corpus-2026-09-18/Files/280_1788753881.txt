@@ -1,0 +1,213 @@
+PM/IS 19815/1
+                                                                                                              Aug 2026
+
+                                       PRODUCT MANUAL
+                              Surgical Instruments — Scalpel Blade
+                                   According to IS 19815:2026
+
+This Product Manual shall be used as reference material by all Regional/Branch Offices & licensees to ensure
+uniformity of practice and transparency in operation of certification under Scheme-I of Bureau of Indian
+Standards (Conformity Assessment) Regulations,2018 for various products. The document may also be used
+by prospective applicants desirous of obtaining BIS certification.
+
+       No. of amendments
+     Raw material                                                     Stainless Steel as per Cl. 4.3 of IS 19815
+       Grouping Guidelines
+     Sample Quantity
+                                                                  Note: Apart from the above, any other requirements/
+       Parameters to be Declared in Test
+                                                                  parameters may also be declared as per the standard,
+       Request                                                    as applicable.
+     List of Test Equipment
+     Scheme of Inspection and Testing
+     Possible tests in a day                                     Note: This section is for the guidance of BIS Certification
+                                                                 Officers/ Technical Auditors of BIS Authorized Outside
+                                                                 Surveillance Agencies (OSAs) during factory inspection
+                                                                 to provide ready reference regarding the tests which can
+                                                                 be witnessed during the inspection in the factory by the
+                                                                 officer/ auditor.
+
+                                                                                                              Page 1 of 7
+
+                                                                                PM/IS 19815/1
+                                                                                    Aug 2026
+
+“License is granted to use Standard Mark as per IS 19815:2026 with the following scope:
+Name of the product                              Surgical Instruments — Scalpel Blade
+Size                                             Small / Large
+Material                                         Mild Steel / Stainless Steel
+
+                      BUREAU OF INDIAN STANDARDS
+       MANAK BHAVAN, 9, BAHADUR SHAH ZAFAR MARG, NEW DELHI-110002
+                             www.bis.gov.in
+
+                                                                                   Page 2 of 7
+
+                                                                                  PM/IS 19815/1
+                                                                                      Aug 2026
+
+                                   ANNEX -A
+                               Grouping Guidelines
+
+1. “Scalpel Blades” covered in IS 19815:2026 are categorized as given below:
+        Size: Small / Large
+        Material: Mild Steel / Stainless Steel
+
+2. Considering the above, the guidelines given below shall be followed for GoL/CSoL:
+
+          Sample of Scalpel Blade of each Size (Small/Large) shall be tested for all
+           requirements to cover the tested Size.
+
+          Sample of Scalpel Blade made from each material shall be tested for all
+           requirements to cover the tested material.
+
+3. The Firm shall declare the varieties of Scalpel Blades they intend to cover in the Licence.
+
+4. The Scope of Licence may be restricted based on the manufacturing and testing capabilities
+   of the manufacturer.
+
+5. During the operation of the Licence, BO shall ensure that all the varieties covered in the
+   Licence are tested in rotation, to the extent possible.
+
+                                                                                     Page 3 of 7
+
+                                                                                     PM/IS 19815/1
+                                                                                         Aug 2026
+
+                                          ANNEX- B
+                                  List of Test Equipments
+                                (Indicative List, For Guidance Only)
+
+Major test equipment required to test as per the Indian Standard
+
+ Sl.    Cl.     Tests used in with Clause          Test Equipment
+ No.    Ref.    Reference
+  1.      4     Material Requirements              Spectrometer
+                                                   Certified Reference Material
+  2.      5     Dimensional Requirements           Micrometer
+                                                   Vernier Calliper (Digital)
+                                                   10X Profile Projector
+                                                   Bevel Protractor
+                                                   Master Scalpel Handle as per IS 19814
+  3.      6     Mechanical Requirements            Vickers Hardness tester
+  4.      7     General Requirements               Profile Projector
+  5.      8     Performance Requirements           100 mm Piece of Chamois leather
+                                                   Steel Scale
+  6.      9     Sterilization                      As per IS/ISO 11737-1 and IS/ISO 11737-2
+
+The above list is indicative only and may not be treated as exhaustive.
+
+                                                                                       Page 4 of 7
+
+                                                                                           PM/IS 19815/1
+                                                                                               Aug 2026
+
+                                        ANNEX C
+                             Scheme of Inspection and Testing
+
+1. QUALITY ASSURANCE PLAN
+
+1.1 It is expected that during operation of BIS licence manufacturers will implement a Quality
+    Assurance Plan (QAP) i.e. a plan of regular testing and in-process controls, designed to ensure
+    that the product bearing the Standard Mark conforms to all requirements of the Indian Standard.
+
+1.2 The manufacturers shall define a Quality Assurance Plan (QAP) defining the control unit (i.e.
+    lot/batch etc.), the levels of control (i.e. the frequency and number of samples for conducting the
+    different tests as per the Indian Standard) and declare the arrangement for testing i.e. whether in-
+    house or sub-contracting/ sharing for each applicable test and submit the same to BIS Branch
+    Office for information. The manufacturer shall comply with the QAP and maintain test records in
+    accordance with para 2.1.
+
+1.3 Recommended Levels of Control/ Control Unit:
+    1.3.1 For the guidance of manufacturers, the recommended definition of control unit is: entire
+          quantity of Scalpel Blades of same size manufactured from same grade of raw material in
+          a shift constitute a control unit.
+    1.3.2 For the guidance of manufacturers in preparing the Quality Assurance Plan, recommended
+          levels of control are given in Table 1. Manufacturer has the discretion of declaring their
+          own levels of control or accept the levels of control given in this document.
+    1.3.3 The manufacturer shall ensure inspection and testing as per the Quality Assurance Plan
+          submitted by them on the whole production of the factory which is covered by this plan.
+
+1.4 However, all manufacturers shall ensure compliance of their products to all the requirements of
+    the Indian Standard.
+
+2. ENSURING COMPLIANCE THROUGH TESTING
+  The manufacturers shall ensure compliance of their products to all the requirements of the Indian
+  Standard for which they may have in-house test facilities. However, there is no obligation to
+  maintain in-house laboratory. Licensee may use alternative arrangements for tests of the
+  production as per the declared QAP. Various alternatives are available for operation of BIS
+  certification as given below and the relevant guidelines for availing such relaxations by the
+  manufacturers, as amended from time to time, are to be referred:
+           i) Shared testing resources like common facility,
+           ii) Cluster based testing facility,
+           iii) Sub-contracting to outside laboratories which may either be:
+                             a) BIS recognized/ empanelled laboratories, or
+                             b) Any accredited laboratory as per ISO/IEC 17025
+
+2.1 Test Records- The manufacturers shall maintain test records for the tests carried out (either in-
+    house or at a sub-contracted or at shared test facility) to establish conformity of the product to the
+    Standard for operation of licence. For the tests being subcontracted or conducted at a shared test
+    facility, test results issued by the laboratories or test facilities, shall be made available for
+    inspection by BIS.
+
+                                                                                              Page 5 of 7
+
+                                                                                         PM/IS 19815/1
+                                                                                             Aug 2026
+
+3. PACKING AND MARKING
+  The Standard Mark as given in the Schedule of the licence shall be incorporated legibly and indelibly
+  on the packaging of the Scalpel Blades provided always that the Scalpel Blades so marked conforms
+  to each requirement of the specification.
+
+3.1 Marking and Labelling of Scalpel Blades shall be done as per Cl. 10 of IS 19815:2026.
+
+3.2 Packaging of Scalpel Blades shall be done as per Cl. 12 of IS 19815:2026
+
+3.3 Additional Marking requirements: The Scalpel Blades shall also be marked with the following
+    additional requirement on its packaging:
+                         a) “For BIS certification details please visit www.bis.gov.in”
+
+4. REJECTION
+   The production which conforms to the Indian Standard and covered under the scope of this licence
+   shall be marked with the Standard Mark. Disposal of non-conforming product shall be done in such
+   a way so as to ensure that there is no violation of provisions of BIS Act, 2016.
+
+                                                                                            Page 6 of 7
+
+                                                                                                                                           PM/IS 19815/1
+                                                                                                                                               Aug 2026
+                                                                      TABLE-1
+                                               (Recommended Levels of Control by BIS- for Guidance Only)
+
+                              (1)                                                                            (2)
+
+                        Test Details                                                                 Levels of Control
+
+                                             Test Methods
+                                                                          No. of
+Cl.          Requirement                                                                    Frequency                           Remarks
+                                    Clause           Reference           Sample
+
+4.2   Material Requirements            4.2             IS 19815                                                    No further testing is required if
+                                                        IS 6911                 Each Consignment                   accompanied with the Test
+4.3   Material Requirements                                                                                        Certificate or ISI marked.
+                                                    IS/ISO 7153-1
+                                    5, Fig 1                                                                       In case of failure, marking shall be
+5     Dimensional Requirements                         IS 19815            05           Each Control Unit          stopped. The marking shall be
+                                    Table 1
+                                                                                                                   resumed only after 10 samples
+                                                                                                                   produced consecutively have been
+7     General Requirements             7               IS 19815                     Each blade
+                                                                                                                   found confirming.
+6     Mechanical Requirements          6               IS 19815            05           Each Control Unit          If any sample fails, blades in that
+8     Performance Requirements         8               IS 19815            05           Each Control Unit          control unit shall not be marked
+
+                                                   IS/ISO 11737-1                       Each Sterilization
+9     Sterilization                                                        20
+                                                   IS/ISO 11737-2                            Batch
+
+10    Marking and Labelling            10              IS 19815            Each Blade & Each Package
+12    Packaging                        12              IS 19815            Each Blade & Each Package
+
+                                                                                                                                               Page 7 of 7

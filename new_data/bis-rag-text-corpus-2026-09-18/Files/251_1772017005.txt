@@ -1,0 +1,190 @@
+xxxGIDHxxx
+                                                      CG-DL-E-25022026-270454
+                                                             xxxGIDExxx
+
+                                                           EXTRAORDINARY
+                                                           PART III—Section 4
+                                                  PUBLISHED BY AUTHORITY
+
+ No. 121]                  NEW DELHI, TUESDAY, FEBRUARY 24, 2026/PHALGUNA 5, 1947
+
+  (1)                       (2)                                  (3)                          (4)                            (5)
+
+1325 GI/2026                                                           (1)
+
+2                                       THE GAZETTE OF INDIA : EXTRAORDINARY                                           [PART III—SEC.4]
+
+                           2024                                                             2019
+
+4                                        THE GAZETTE OF INDIA : EXTRAORDINARY                                  [PART III—SEC.4]
+
+                                               BUREAU OF INDIAN STANDARDS
+                                                 (Department of Consumer Affairs)
+                                                            NOTIFICATION
+                                                  New Delhi, the 19th February, 2026
+        Ref: HQ-PUB013/1/2020-PUB-BIS (1434).— In pursuance of Sub-rule (1) of Rule (15) of the
+Bureau of Indian Standards Rules, 2018, the Bureau of Indian Standards hereby notifies that Indian standards,
+particulars of which are given in the second column of the schedule hereto annexed have been established on
+
+the date indicated against it in third column. The particulars of the standards, if any which are given in the
+fourth column shall also remain in force concurrently till they are withdrawn on the date indicated against
+them in the fifth column.
+                                                SCHEDULE
+
+ Sl     No., Year & Title of the Indian        Date of         No. , Year & Title of the       Date of
+ No.        Standards Established           Establishment      Indian Standards to be         Withdrawal
+                                                                 Withdrawn, if any
+  (1)                 (2)                         (3)                     (4)                      (5)
+
+  1             IS 17798 : 2026         18 February 2026            IS 17798 : 2022         18 August 2026
+             ISO/TS 20428 : 2024                                 ISO/TS 20428 : 2017
+        Genomics Informatics — Data                           Health Informatics — Data
+        Elements and their Metadata for                       Elements and their Metadata
+         Describing Structured Clinical                        for Describing Structured
+        Genomic Sequence Information                          Clinical Genomic Sequence
+         in Electronic Health Records                          Information in Electronic
+                (First Revision)                                    Health Records
+
+  2        IS 18867 (Part 4) : 2026       18 February 2026                NA                      NA
+            ISO/TS 22077-4 : 2019
+         Health Informatics — Medical
+               Waveform Format
+               Part 4 Stress Test
+              Electrocardiography
+
+  3       IS 18875 (Part 10425) : 2026    18 February 2026 IS 18875 (Part 10425) : 2024     18 August 2026
+         ISO/IEEE 11073-10425 : 2024                         ISO/IEEE 11073-10425 :
+         Health Informatics — Devices                                  2019
+                 Interoperability                              Health Informatics —
+           Part 10425 Personal Health                         Personal Health Device
+           Device Communication —                                Communication
+            Device Specialization —                             Part 10425 Device
+          Continuous Glucose Monitor                             Specialization —
+                     (CGM)                                 Continuous Glucose Monitor
+                 (First Revision)                                     (CGM)
+
+  4       IS 18875 (Part 10472) : 2026    18 February 2026    IS/ISO/IEEE 11073-10472 :     18 August 2026
+         ISO/IEEE 11073-10472 : 2024                                     2012
+          Health Informatics — Device                            Health Informatics —
+                 Interoperability                               Personal Health Device
+           Part 10472 Personal Health                         Communication Part 10472
+           Device Communication —                               Device Specialization —
+            Device Specialization —                               Medication Monitor
+              Medication Monitor
+
+  5            IS 19435 : 2026          18 February 2026                  NA                      NA
+             ISO/TS 4424 : 2023
+        Genomics Informatics — Data
+        Elements and their Metadata for
+        Describing the Tumor Mutation
+         Burden (TMB) Information of
+        Clinical Massive Parallel DNA
+                  Sequencing
+
+6                             THE GAZETTE OF INDIA : EXTRAORDINARY   [PART III—SEC.4]
+
+    6           IS 19453 : 2026        18 February 2026        NA         NA
+               ISO 11381 : 2016
+         Ophthalmic Optics — Spectacle
+           Frames — Screw Threads
+
+    7            IS 19471 : 2026          18 February 2026     NA         NA
+               ISO/TS 6204 : 2024
+         Health Informatics — Categorial
+         Structures for Representation of
+         Ayurvedic Medicinal Water —
+         Decocting Process in Ayurveda
+
+    8        IS 19477 (Part 3) : 2026   18 February 2026       NA         NA
+               ISO 13078-3 : 2023
+            Dentistry Dental Furnace
+            Part 3 Test Method for the
+         Evaluation of High Temperature
+         Sintering Furnace Measurement
+          with a Separate Thermocouple
+
+    9          IS 19482 : 2026        18 February 2026         NA         NA
+              ISO 21393 : 2021
+         Genomics Informatics — Omics
+           Markup Language (OML)
+
+    10           IS 19491 : 2026          18 February 2026     NA         NA
+                ISO 16428 : 2005
+          Implants for Surgery — Test
+          Solutions and Environmental
+            Conditions for Static and
+          Dynamic Corrosion Tests on
+           Implantable Materials and
+                 Medical Devices
+
+    11       IS 19492 (Part 1) : 2026      18 February 2026    NA         NA
+                ISO 18192-1 : 2011
+         Implants for Surgery — Wear of
+          Total Intervertebral Spinal Disc
+                     Prostheses
+                Part 1 Loading and
+           Displacement Parameters for
+         Wear Testing and Corresponding
+           Environmental Conditions for
+                        Test
+
+    12           IS 19499 : 2026         18 February 2026      NA         NA
+                ISO 20160 : 2006
+         Implants for Surgery — Metallic
+          Materials — Classification of
+         Microstructures for Alpha+Beta
+              Titanium Alloy Bars
+
+  13           IS 19500 : 2026        18 February 2026                                      NA                                 NA
+              ISO 22622 : 2019
+       Implants for Surgery — Wear of
+       Total Ankle-Joint Prostheses —
+          Loading and Displacement
+         Parameters for Wear-Testing
+           Machines with Load or
+          Displacement Control and
+        Corresponding Environmental
+             Conditions for Test
+
+  14       IS 19501 (Part 1) : 2026              18 February 2026                           NA                                 NA
+              ISO 19233-1 : 2017
+           Implants for Surgery —
+         Orthopaedic Joint Prosthesis
+        Part 1 Procedure for Producing
+         Parametric 3D Bone Models
+          from CT Data of the Knee
+
+  15           IS 19502 : 2026         18 February 2026                                     NA                                 NA
+              ISO 16429 : 2004
+           Implants for Surgery —
+        Measurements of Open-circuit
+         Potential to Assess Corrosion
+            Behaviour of Metallic
+          Implantable Materials and
+        Medical Devices Over Extended
+                 Time Periods
+
+  16           IS 19503 : 2026         18 February 2026                                     NA                                 NA
+            Implants for Surgery —
+           Determination of Impact
+        Resistance of Ceramic Femoral
+        Heads for Hip Joint Prostheses
+          (ISO 11491 : 2017; MOD)
+
+  17           IS 19504 : 2026         18 February 2026                                     NA                                 NA
+              ISO 12189 : 2008
+            Implants for Surgery —
+             Mechanical Testing of
+        Implantable Spinal Devices —
+        Fatigue Test Method for Spinal
+         Implant Assemblies Using an
+               Anterior Support
+
+                                                        CHITRA GUPTA, Scientist G & DDG (Hallmarking and Training)
+
+                                                                                                 [ADVT.-III/4/Exty./696/2025-26]
+
+           Uploaded by Dte. of Printing at Government of India Press, Ring Road, Mayapuri, New Delhi-110064
+                             and Published by the Controller of Publications, Delhi-110054. GORAKHA NATH  Digitally signed by GORAKHA NATH
+                                                                                                          YADAVA
+                                                                                                       YADAVA            Date: 2026.02.25 14:44:38 +05'30'

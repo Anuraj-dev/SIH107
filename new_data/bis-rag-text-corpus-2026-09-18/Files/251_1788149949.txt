@@ -1,0 +1,314 @@
+PM / 6664 / 4
+                                                                                            Aug 2026
+
+                                    PRODUCT MANUAL
+                                          FOR
+                              MICROCELLULAR RUBBER SHEETS
+                                     FOR OUTSOLES
+                                ACCORDING to IS 6664: 2026
+
+This Product Manual shall be used as reference material by all Regional/Branch Offices &
+licensees to ensure uniformity of practice and transparency in operation of certification
+underScheme-I of Bureau of Indian Standards (Conformity Assessment) Regulations,2018
+for variousproducts. The document may also be used by prospective applicants desirous
+of obtaining BIS certification.
+
+ 1.                                     : IS 6664: 2026
+      IS No.
+                                        :
+      Title                                 Microcellular Rubber Sheets for Outsoles.
+                                        : Nil
+      No. of amendments
+ 2.
+      Sampling Guidelines
+                                            The rubber used shall be compounded from natural
+                                            or synthetic rubbers or their combination as per Cl
+                                            4.1.
+a)
+      Raw material                      : Note: This section indicates the requirements for raw
+                                          material (if specified in the IS) for which compliance is
+                                          to be established during Grant of Licence/Change in
+                                          Scope of Licence/Factory Surveillance.
+b)                                      : Not applicable.
+      Guidelines
+                                          Sheet or cut sheet equivalent to 4 outsoles. Test
+c)                                      : pieces for physical tests to be provided as per Cl 7.2.
+      Sample Quantity
+                                            Note: This section indicates the quantity of the sample
+
+                                                                                             Page 1 of 7
+
+                                                                                              PM / 6664 / 4
+                                                                                                  Aug 2026
+
+                                                of the product and/or the raw material (if applicable),
+                                                required to be sent to the laboratory for testing, for the
+                                                purpose of Grant of Licence/Change in Scope of
+                                                Licence/ Factory Surveillance (in case of market
+                                                surveillance, effort may be made to procure the
+                                                required quantity of product sample, as far as possible
+                                                since raw material sample may not be available in
+                                                market)
+
+                                                Note: Apart from the above, any other
+      Parameters to be Declared                 requirements/parameters may also be declared as per
+      in Test Request                           the standard, as applicable.
+
+ 3.                                         : Please refer to Annex-A.
+      List of Test Equipment
+ 4.   Scheme of Inspection and : Please refer to Annex-B.
+      Testing
+ 5.
+      Possible tests in a day
+
+      Relative Density, Thickness and Split Tear Strength, Heat Shrinkage, Abrasion
+      Resistance, Flexing Resistance (On pre-conditioned samples as applicable).
+      Note: This section is for the guidance of BIS Certification Officers/Technical Auditors of
+      BIS Authorized Outside Surveillance Agencies(OSAs) during factory inspection to provide
+      ready reference regarding the tests which can be witnessed during the inspection in the
+      factory by the officer/auditor.
+
+      “Licence is granted to use Standard Mark as per IS 6664: 2026 with the following scope:
+      Name of the product                         Microcellular Rubber Sheets for Outsoles
+      Grade / Type / Variety etc.                 -
+
+                               BUREAU OF INDIAN STANDARDS
+                            MANAK BHAVAN,9, BAHADUR SHAH ZAFAR
+                                  MARG,NEW DELHI-110002
+
+                                                                                                   Page 2 of 7
+
+                                                                                    PM / 6664 / 4
+                                                                                        Aug 2026
+
+                                         ANNEX - A
+                                  LIST OF TEST EQUIPMENT
+                            (INDICATIVE LIST, FOR GUIDANCE ONLY)
+Clause
+       Parameter                                        Test Facilities
+  no.
+                           Laboratory Balance
+                           Accessories
+                           Balance Pan Straddle
+                           Sinker
+ 4.1.3,                    Weight
+             Relative      Suitable Device to Suspend the Test Specimen
+Table 1,
+             Density       Distilled or Deionised Water
+Sl. No. i)
+                           Cutter
+                           Wetting Agent
+                           Arrangement for Environment of (23 ± 2) °C
+                           Vernier or Digital Calliper
+                           Standard Laboratory Dial Thickness Gauge for Rubber
+  4.1.3,
+Table 1, Thickness         Adequate instrument with 0.1 mm scale/graduation
+Sl. No. ii)                Cutter
+
+ 4.1.3,
+Table 1,                   Durometer, Type A with Presser foot and Indenter
+             Hardness
+ Sl. No.                   Arrangement for 27 ± 2°C and relative humidity of 65 ± 5 percent
+   iii)
+                           Dial Thickness Gauge as per D-1.3.1 of IS 10702
+                           Platen Press as per D-1.3.2 of IS 10702
+                           Rigid Spacer Plates
+                           Rotating Circular Cutter
+                           Arrangement for controlled environment of either (23 ± 2) °C or (20 ± 2)
+                            °C
+ 4.1.3,
+                           Timer
+Table 1, Compression
+                           Band Knife Splitter or a Surface Grinder
+ Sl. No.    Set
+                                                                 OR
+   iv)
+                           Compression Apparatus as per D-2.1.1 of IS 10702
+                           Cutter
+                           Timer
+                           Arrangement for 27 °C ± 2 °C and 65 percent ± 5 percent relative
+                            humidity
+                           Thickness gauge with part-Spherical contact
+    4.5,                   Tensile Testing Machine
+           Split Tear
+Table 1,                   Cutter / Knife
+           Strength
+Sl. No. v)                 Vernier Calliper
+                           Cutter
+  4.5,     Heat            Vernier Calliper
+Table 1, Shrinkage         Timer
+ Sl. No.   Test            Arrangement for an atmosphere of 65 percent ± 2 percent relative
+   vi)                      humidity at a temperature of 27 ℃ ± 2 ℃
+                           Heating Chamber
+
+                                                                                         Page 3 of 7
+
+                                                                              PM / 6664 / 4
+                                                                                  Aug 2026
+
+                       Arrangement for atmosphere of (23 ± 2) °C and (50 ± 5) % RH
+  4.5,                 Timer
+Table 1, Abrasion      Abrasion Machine
+ Sl. No. Resistance    Abrasive Sheet
+  vii)                 Hollow Drill
+                       Balance
+                       Standard Reference Compounds
+ 4.1.3,   Flexing      Ross Flexing Machine
+Table 1, resistance    Piercing Tool and Holder
+ Sl. No. Ross Flex     Rule
+  viii)   Method       Arrangement for Environment of (23 ± 2) °C
+                       Timer
+
+         The above list is indicative only and may not be treated as exhaustive.
+
+                                                                                      Page 4 of 7
+
+                                                                               PM / 6664 / 4
+                                                                                   Aug 2026
+
+                                    ANNEX - B
+                             SCHEME OF INSPECTION AND
+                                     TESTING
+
+1. QUALITY ASSURANCE PLAN
+
+1.1 It is expected that during operation of BIS licence, manufacturers will
+ implement a Quality Assurance Plan (QAP) i.e. a plan of regular testing and in-process
+ controls, designed to ensure that the product bearing theStandard Mark conforms to
+ all requirements of the Indian Standard.
+
+1.2 The manufacturers shall define a Quality Assurance Plan (QAP) defining the
+control unit (i.e. lot/batch etc.), the levels of control (i.e. the frequency and number of
+samples for conducting the different tests as per the Indian Standard) and declare the
+arrangement for testing i.e. whether in-house or subcontracting/sharing for each
+applicable test and submit the same to BIS Branch Office for information. The
+manufacturer shall comply with the QAP and maintain test records in accordance with
+para 2.1.
+
+1.3 RECOMMENDED LEVELS OF CONTROL/CONTROL UNIT:
+
+1.3.1 For the guidance of manufacturers, the recommended definition of control unit
+   is: All finished Microcellular Rubber Sheets for Outsoles produced in one day of the
+   same thickness and moulded from the same type of rubber.
+
+1.3.2 For the guidance of manufacturers in preparing the Quality Assurance Plan,
+   recommended levels of control are given in Table 1. Manufacturer has the
+   discretion of declaring their own levels of control or accept the levels of control
+   given in this document.
+
+1.3.3 The manufacturer shall ensure inspection and testing as per the Quality
+   Assurance Plan submitted by them on the whole production of the factory which is
+   covered by this plan.
+
+2. ENSURING COMPLIANCE THROUGH TESTING - manufacturers shall ensure
+  compliance of their products to all the requirements of the Indian Standard for
+  which they may have in-house test facilities. However, there is no obligation to
+  maintain in-house laboratory. Licensee may use alternative arrangements for tests
+  of the production as per the declared QAP. Various alternatives are available for
+  operation of BIS certification as given below and the relevant guidelines for
+  availing such relaxations by the manufacturers, as amended from time to time, are
+  to be referred:
+  i) Shared testing resources like common facility,
+  ii) Cluster based testing facility,
+  iii) Sub-contracting to outside laboratories which may either be:
+   a) BIS recognised/empanelled laboratories, or
+
+                                                                                    Page 5 of 7
+
+                                                                            PM / 6664 / 4
+                                                                                Aug 2026
+
+   b) Any accredited laboratory as per ISO/IEC 17025
+
+2.1 TEST RECORDS- The manufacturers shall maintain test records for the tests
+carried out (either in-house or at a sub-contracted or at shared test facility) to
+establish conformity of the product to the Standard for operation of licence. For the
+tests being subcontracted or conducted at a shared test facility, test results issued by
+the laboratories or test facilities, shall be made available for inspection by BIS.
+
+3. PACKING AND MARKING - The Standard Mark, as given in the Schedule of the
+  licence, shall be incorporated legibly and indelibly on each Microcellular Rubber
+  Sheet for Outsoles and its packing, provided always that the material so marked,
+  conform to every requirement of the specification.
+
+3.1 Packing and marking shall be done as per the provision of the Indian Standard.
+
+3.2 Additional Marking requirements: Additionally, the following shall also be
+    marked on each Microcellular Rubber Sheet for Outsoles or its packaging:
+    a) “For BIS certification details please visit www.bis.gov.in”
+
+4. REJECTION - The production which conforms to the Indian Standard and covered
+under the scope of this licence shall be marked with the Standard Mark. Disposal of
+non-conforming product shall be done in such a way so as to ensure that there is no
+violation of provisions of BIS Act,2016.
+
+5. Applicability of SIT for Small and Micro Enterprises (SMEs):
+
+5.1 Compliance to the Scheme of Inspection and Testing is OPTIONAL for Micro, and
+    Small Scale Units with respect to the requirements for Clause 1(Quality Assurance
+    Plan), Clause 2 (Ensuring Compliance through Testing). However, ALL units shall
+    ensure compliance of their products to the requirements of the Indian Standard.
+
+5.2 The requirements of SIT with respect to Clause 3 (Packing and Marking) and
+    Clause 4 (Rejection) shall be followed by all.
+
+                                                                                 Page 6 of 7
+
+                                                                                    PM / 6664 / 4
+                                                                                        Aug 2026
+
+                                               TABLE 1
+
+                (Recommended Levels of Control by BIS - For Guidance Only)
+
+                            (1)                                               (2)
+                        Test Details                                   Levels of Control
+                                          Test Methods
+  Clause            Requirement                          No. of Sample       Frequency
+                                       Clause Reference
+  4.1 and                              4.1 and          Manufacturer shall ensure adequate
+                      Material                  IS 6664
+   4.1.1                                4.1.2           inspection and in process control, to
+                                                        ensure product meets specified
+   4.1.2         Colour and Design      4.1.2   IS 6664 Dimensional requirements and
+                                                        maintain test records
+   4.1.3
+ Table 1          Relative Density        -     IS 10702         One          Each Control Unit
+ Sl. No. i)
+                                                            Manufacturer shall ensure adequate
+   4.1.3                                                    inspection and in process control, to
+                                                IS 15298
+  Table 1            Thickness            -                 ensure product meets specified
+                                                 (Part 1)
+ Sl. No. ii)                                                Dimensional requirements and
+                                                            maintain test records
+    4.1.3
+                                                IS 12240
+  Table 1            Hardness             -                      One            Once a Month
+                                                 (Part 2)
+ Sl. No. iii)
+    4.1.3
+  Table 1         Compression Set         -     IS 10702         One            Once a Month
+ Sl. No. iv)
+    4.1.3
+                                       Annex
+  Table 1        Split Tear Strength            IS 6664          One          Each Control Unit
+                                         B
+ Sl. No. v)
+    4.1.3
+                                       Annex
+  Table 1       Heat Shrinkage Test             IS 6664          One            Once a Month
+                                         C
+ Sl. No. vi)
+    4.1.3
+                                                IS 15298
+  Table 1       Abrasion Resistance       -                      One            Once a Month
+                                                 (Part 1)
+Sl. No. vii)
+    4.1.3
+                                                 IS 3400
+  Table 1        Flexing resistance       -                      One            Once a Month
+                                                (Part 16)
+Sl. No. viii)
+
+                                                                                           Page 7 of 7

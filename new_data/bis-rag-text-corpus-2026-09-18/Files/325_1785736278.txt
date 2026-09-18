@@ -1,0 +1,109 @@
+xxxGIDHxxx
+                                                   CG-DL-E-01082026-275082
+                                                          xxxGIDExxx
+
+                                                      EXTRAORDINARY
+                                                      PART III—Section 4
+                                              PUBLISHED BY AUTHORITY
+
+No. 475]                         NEW DELHI, WEDNESDAY, JULY 29, 2026/SHRAVAN 7, 1948
+
+5827 GI/2026                                                    (1)
+
+2                                   THE GAZETTE OF INDIA : EXTRAORDINARY                                    [PART III—SEC.4]
+
+(1)                          (2)                             (3)                       (4)                          (5)
+
+ 7
+
+ 8
+
+                                        BUREAU OF INDIAN STANDARDS
+                                          (Department of Consumer Affairs)
+                                                   NOTIFICATION
+                                              New Delhi, the 27th July, 2026
+         Ref: HQ-PUB013/1/2020-PUB-BIS (1579).— In pursuance of Sub-rule (1) of Rule (15) of the Bureau of
+Indian Standards Rules, 2018, the Bureau of Indian Standards hereby notifies that Indian standards, particulars of
+which are given in the second column of the schedule hereto annexed have been established on the date indicated
+against it in third column. The particulars of the standards, if any which are given in the fourth column shall also
+remain in force concurrently till they are withdrawn on the date indicated against them in the fifth column
+                                                      SCHEDULE
+
+Sl.     No., Year & Title of the Indian            Date of            No. , Year & Title of the            Date of
+No.         Standards Established               Establishment         Indian Standards to be              Withdrawal
+                                                                        Withdrawn, if any
+(1)                     (2)                           (3)                        (4)                           (5)
+
+ 1        IS 302 (Part 2/Sec 16) : 2026           24 July 2026                    NA                          NA
+             IEC 60335-2-16 : 2022
+        Household and Similar Electrical
+              Appliances — Safety
+         Part 2 Particular Requirements
+        Section 16 Food Waste Disposers
+
+ 2        IS 302 (Part 2/Sec 26) : 2026           24 July 2026            IS 302-2-26 : 2014             24 January 2027
+             IEC 60335-2-26 : 2024                                 Safety of Household and Similar
+        Household and Similar Electrical                                 Electrical Appliances
+              Appliances — Safety                                   Part 2 Particular Requirements
+         Part 2 Particular Requirements                                    Section 26 Clocks
+                Section 26 Clocks                                           (Frist Revision)
+               (Second Revision)
+
+ 3        IS 302 (Part 2/Sec 36) : 2026           24 July 2026                    NA                          NA
+             IEC 60335-2-36 : 2021
+        Household and Similar Electrical
+              Appliances — Safety
+         Part 2 Particular Requirements
+        Section 36 Commercial Electric
+       Cooking Ranges, Ovens, Hobs and
+                 Hob Elements
+
+4                                THE GAZETTE OF INDIA : EXTRAORDINARY                                                  [PART III—SEC.4]
+
+    4     IS 302 (Part 2/Sec 49) : 2026         24 July 2026                      NA                                                               NA
+             IEC 60335-2-49 : 2021
+        Household and Similar Electrical
+              Appliances — Safety
+         Part 2 Particular Requirements
+         Section 49 Commercial Electric
+        Appliances for Keeping Food and
+                 Crockery Warm
+
+    5      IS 302 (Part 2/Sec 54) : 2026        24 July 2026                      NA                                                               NA
+              IEC 60335-2-54 : 2022
+         Household and Similar Electrical
+               Appliances — Safety
+          Part 2 Particular Requirements
+           Section 54 Surface-Cleaning
+          Appliances for Household Use
+           Employing Liquids or Steam
+
+         IS/ISO/IEC/IEEE 8802-1X : 2021                              IS/ISO/IEC/IEEE 8802-1X :                                    24 January 2027
+    6   Telecommunications and Exchange         24 July 2026                    2013
+         Between Information Technology                               Information Technology —
+        Systems — Requirements for Local                               Telecommunications and
+          and Metropolitan Area Networks                           Information Exchange Between
+            Part 1X Port-Based Network                                   Systems — Local and
+                  Access Control                                    Metropolitan Area Networks
+                  (First Revision)                                  Part 1X: Port-Based Network
+                                                                            Access Control
+            IS/ISO/IEC 11179-6 : 2023
+    7       Information Technology —            24 July 2026         IS/ISO/IEC 11179-6 : 2015                                    24 January 2027
+           Metadata Registries (MDR)                                 Information Technology —
+                 Part 6 Registration                                 Metadata Registries (MDR)
+                  (First Revision)                                       Part 6 Registration
+             IS/ISO/IEC 14882 : 2024
+    8    Programming Languages — C++            24 July 2026          IS/ISO/IEC 14882 : 2020                                     24 January 2027
+                 (Second Revision)                                   Programming Languages —
+                                                                                 C++
+                                                                           (First Revision)
+
+                                                                      S. K. VERMA, Scientist F & DDG (Hallmarking)
+                                                                                       [ADVT.-III/4/Exty./244/2026-27]
+
+             Uploaded by Dte. of Printing at Government of India Press, Ring Road, Mayapuri, New Delhi-110064
+                               and Published by the Controller of Publications, Delhi-110054. SARVESH KUMAR
+                                                                                                    Digitally signed by SARVESH KUMAR SRIVASTAVA
+
+                                                                                              SRIVASTAVA
+                                                                                                    Date: 2026.08.01 19:52:48 +05'30'

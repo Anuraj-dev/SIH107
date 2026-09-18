@@ -1,0 +1,182 @@
+xxxGIDHxxx
+                                                          xxxGIDExxx
+                                                   CG-DL-E-25032026-271257
+
+                                                      EXTRAORDINARY
+                                                      PART III—Section 4
+                                              PUBLISHED BY AUTHORITY
+
+No. 198]                         NEW DELHI, MONDAY, MARCH 23, 2026/ CHAITRA 2, 1948
+
+(1)                        (2)                           (3)                             (4)                            (5)
+
+2093 GI/2026                                                    (1)
+
+2                              THE GAZETTE OF INDIA : EXTRAORDINARY                             [PART III—SEC.4]
+
+4                              THE GAZETTE OF INDIA : EXTRAORDINARY                               [PART III—SEC.4]
+
+                        2024                                                 : 2016                      2026
+
+                                      BUREAU OF INDIAN STANDARDS
+                                       (Department of Consumer Affairs)
+                                                  NOTIFICATION
+                                            New Delhi, the 18th March, 2026
+         Ref: HQ-PUB013/1/2020-PUB-BIS (1490).—In pursuance of Sub-rule (1) of Rule (15) of the Bureau of
+Indian Standards Rules, 2018, the Bureau of Indian Standards hereby notifies that Indian standards, particulars of
+which are given in the second column of the schedule hereto annexed have been established on the date indicated
+against it in third column. The particulars of the standards, if any which are given in the fourth column shall also
+remain in force concurrently till they are withdrawn on the date indicated against them in the fifth column.
+
+                                                   SCHEDULE
+
+ Sl.   No., Year & Title of the Indian          Date of          No. , Year & Title of the         Date of
+No.        Standards Established             Establishment        Indian Standards to be          Withdrawal
+                                                                    Withdrawn, if any
+(1)                   (2)                          (3)                      (4)                       (5)
+
+ 1              IS 6822 : 2026               12 March 2026            IS 6822 – 1972              12 September
+       Dental Distal Arch Wire Cutter —                        Specification for Cutter, Distal       2026
+                 Specification                                       Arch Wire, Dental
+               (First Revision)
+
+ 2               IS 10101 : 2026             12 March 2026           IS 10101 : 2019              12 September
+                 ISO 3297 : 2022                                     ISO 3297 : 2017                  2026
+       Information and Documentation —                        Information and Documentation
+          International Standard Serial                       — International Standard Serial
+                 Number (ISSN)                                        Number (ISSN)
+                (Fourth Revision)                                    (Third Revision)
+
+ 3         IS 16463 (Part 12) : 2026         12 March 2026        IS 16463 (Part 12) : 2017       12 September
+             ISO 61643-12 : 2020                                    ISO 61643-12 : 2008               2026
+        Low-Voltage Surge Protective                           Low-Voltage Surge Protective
+                    Devices                                                Devices
+       Part 12 Surge Protective Devices                       Part 12 Surge Protective Devices
+       Connected to Low-Voltage Power                            Connected to Low-Voltage
+           Systems — Selection and                                          Power
+             Application Principles                                Distribution Systems —
+                (First Revision)                                 Selection and Application
+                                                                          Principles
+
+ 4           IS 16602 (Part 1) : 2026        12 March 2026        IS 16602 (Part 1) : 2018        12 September
+               ISO 28560-1 : 2023                                   ISO 28560-1 : 2014                2026
+       Information and Documentation —                        Information and Documentation
+                RFID in Libraries                                   — RFID in Libraries
+        Part 1 Data Elements and General                         Part 1 Data Elements and
+         Guidelines for Implementation                             General Guidelines for
+                 (First Revision)                                     Implementation
+
+ 5          IS 16602 (Part 2) : 2026         12 March 2026        IS 16602 (Part 2) : 2021        12 September
+              ISO 28560-2 : 2023                                    ISO 28560-2 : 2018                2026
+       Information and Documentation —                        Information and Documentation
+                RFID in Libraries                                   — RFID in Libraries
+         Part 2 Encoding of RFID Data                          Part 2 Encoding of RFID Data
+         Elements Based on Rules from                          Elements Based on Rules from
+                 ISO/IEC 15962                                         ISO/IEC 15962
+               (Second Revision)                                       (First Revision)
+
+ 6              IS 17120 : 2026              12 March 2026            IS 17120 : 2019             12 September
+               IEC 62752 : 2024                                      IEC 62752 : 2016                 2026
+        In-Cable Control and Protection                        In-Cable Control and Protection
+        Device (IC — CPD) for Mode 2                                 Device for Mode 2
+       Charging of Electric Road Vehicles                         Charging of Electric Road
+                (First Revision)                                     Vehicles (IC-CPD)
+
+6                               THE GAZETTE OF INDIA : EXTRAORDINARY   [PART III—SEC.4]
+
+    7         IS 18292 (Part 8) : 2026        12 March 2026     NA            NA
+                ISO 10555-8 : 2024
+         Intravascular Catheters — Sterile
+             and Single-Use Catheters
+        Part 8 Catheters for Extracorporeal
+                  Blood Treatment
+
+    8        IS 19282 (Part 5) : 2026         12 March 2026     NA            NA
+               ISO 11608-5 : 2022
+         Needle-Based Injection Systems
+        for Medical Use — Requirements
+                and Test Methods
+           Part 5 Automated Functions
+
+    9        IS 19282 (Part 6) : 2026         12 March 2026     NA            NA
+               ISO 11608-6 : 2022
+         Needle-Based Injection Systems
+        for Medical Use — Requirements
+                and Test Methods
+        Part 6 On-Body Delivery Systems
+
+10               IS 19489 : 2026              12 March 2026     NA            NA
+         Non-Active Surgical Implants —
+          Implants for Osteosynthesis —
+             Particular Requirements
+            (ISO 14602 : 2010, MOD)
+
+11           IS 19490 (Part 3) : 2026         12 March 2026     NA            NA
+          Implants for Surgery — Metal
+         Intramedullary Nailing Systems
+          Part 3 Connection Devices and
+         Reamer Diameter Measurements
+           (ISO 15142-3 : 2003, MOD)
+
+12           IS 19492 (Part 2) : 2026         12 March 2026     NA            NA
+                ISO 18192-2 : 2010
+         Implants for Surgery — Wear of
+          Total Intervertebral Spinal Disc
+                     Prostheses
+           Part 2 Nucleus Replacements
+
+13           IS 19611 (Part 2) : 2026         12 March 2026     NA            NA
+                ISO 8871-2 : 2020
+         Elastomeric Parts for Parenterals
+        and for Devices for Pharmaceutical
+                       Use
+             Part 2 Identification and
+                 Characterization
+
+14              IS 19613 : 2026                12 March 2026                       NA                                NA
+               ISO 22441 : 2022
+          Sterilization of Health Care
+        Products — Low Temperature
+       Vaporized Hydrogen Peroxide —
+      Requirements for the Development,
+      validation and Routine Control of a
+       Sterilization Process for Medical
+                     Devices
+
+15             IS 19720 : 2026                 12 March 2026                       NA                                NA
+                 ISO 8 : 2019
+      Information and Documentation —
+       Presentation and Identification of
+                  Periodicals
+
+16          IS/ISO 30302 : 2022                12 March 2026            IS/ISO 30302 : 2015                 12 September
+      Information and Documentation —                              Information and Documentation                2026
+       Management Systems for Records                                — Management Systems for
+       — Guidelines for Implementation                                Records — Guidelines for
+               (First Revision)                                           Implementation
+
+17         IS/IEC 60947-5-1 : 2024             12 March 2026          IS/IEC 60947-5-1 : 2016               12 September
+        Low-Voltage Switchgear and                                  Low-Voltage Switchgear and                  2026
+                 Controlgear                                                 Controlgear
+      Part 5 Control Circuit Devices and                            Part 5 Control Circuit Devices
+             Switching Elements                                        and Switching Elements
+         Section 1 Electromechanical                                 Section 1 Electromechanical
+            Control Circuit Devices                                    Control Circuit Devices
+               (Third Revision)                                           (Second Revision)
+
+                                                                                                            12 September
+18          IS/IEC 61439-5 : 2023              12 March 2026            IS/IEC 61439-5 : 2014                   2026
+         Low-Voltage Switchgear and                                 Low-Voltage Switchgear and
+            Controlgear Assemblies                                     Controlgear Assemblies
+         Part 5 Assemblies for Power                                Part 5 Assemblies for Power
+        Distribution in Public Networks                            Distribution in Public Networks
+                (First Revision)
+
+                                                     CHITRA GUPTA, Scientist G & DDG (Hallmarking and Training
+                                                                                         [ADVT.-III/4/Exty./777/2025-26]
+
+           Uploaded by Dte. of Printing at Government of India Press, Ring Road, Mayapuri, New Delhi-110064
+                                                                                                              Digitally signed by GORAKHA NATH
+                             and Published by the Controller of Publications, Delhi-110054. GORAKHA NATH YADAVA
+                                                                                                              YADAVA
+                                                                                                              Date: 2026.03.25 12:10:46 +05'30'

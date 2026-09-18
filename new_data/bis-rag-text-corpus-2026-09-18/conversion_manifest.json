@@ -1,0 +1,2891 @@
+{
+  "generatedAt": "2026-09-18T11:17:03Z",
+  "sourceFolder": "Original BIS PDF corpus (PDFs intentionally excluded from this delivery folder)",
+  "outputFolder": "Files/",
+  "counts": {
+    "pdfs": 359,
+    "texts": 359,
+    "errors": 0
+  },
+  "records": [
+    {
+      "text": "Files/0_1776660253.txt",
+      "status": "ok",
+      "chars": 5173,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "0_1776660253.pdf"
+    },
+    {
+      "text": "Files/105_1776334550.txt",
+      "status": "ok",
+      "chars": 9545,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "105_1776334550.pdf"
+    },
+    {
+      "text": "Files/106_1773137981.txt",
+      "status": "ok",
+      "chars": 7463,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "106_1773137981.pdf"
+    },
+    {
+      "text": "Files/111_1776659356.txt",
+      "status": "ok",
+      "chars": 22326,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "111_1776659356.pdf"
+    },
+    {
+      "text": "Files/112_1781073909.txt",
+      "status": "ok",
+      "chars": 6750,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "112_1781073909.pdf"
+    },
+    {
+      "text": "Files/114_1770807804.txt",
+      "status": "ok",
+      "chars": 5022,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "114_1770807804.pdf"
+    },
+    {
+      "text": "Files/115_1776835337.txt",
+      "status": "ok",
+      "chars": 7173,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "115_1776835337.pdf"
+    },
+    {
+      "text": "Files/126_1775468694.txt",
+      "status": "ok",
+      "chars": 11744,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "126_1775468694.pdf"
+    },
+    {
+      "text": "Files/133_1770873522.txt",
+      "status": "ok",
+      "chars": 4369,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "133_1770873522.pdf"
+    },
+    {
+      "text": "Files/139_1770807910.txt",
+      "status": "ok",
+      "chars": 5022,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "139_1770807910.pdf"
+    },
+    {
+      "text": "Files/13_1773807655.txt",
+      "status": "ok",
+      "chars": 10204,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "13_1773807655.pdf"
+    },
+    {
+      "text": "Files/141_1783934822.txt",
+      "status": "ok",
+      "chars": 10458,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "141_1783934822.pdf"
+    },
+    {
+      "text": "Files/148_1775457503.txt",
+      "status": "ok",
+      "chars": 14874,
+      "method": "tesseract-page-language-routing",
+      "translation": "google-public-endpoint-for-hindi-pages",
+      "pages": 10,
+      "sourcePdfFilename": "148_1775457503.pdf"
+    },
+    {
+      "text": "Files/14_1773986029.txt",
+      "status": "ok",
+      "chars": 6296,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "14_1773986029.pdf"
+    },
+    {
+      "text": "Files/151_1763104699.txt",
+      "status": "ok",
+      "chars": 10695,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "151_1763104699.pdf"
+    },
+    {
+      "text": "Files/152_1776402940.txt",
+      "status": "ok",
+      "chars": 9185,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "152_1776402940.pdf"
+    },
+    {
+      "text": "Files/162_1772534282.txt",
+      "status": "ok",
+      "chars": 11163,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "162_1772534282.pdf"
+    },
+    {
+      "text": "Files/182_1776322883.txt",
+      "status": "ok",
+      "chars": 6458,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "182_1776322883.pdf"
+    },
+    {
+      "text": "Files/186_1776228254.txt",
+      "status": "ok",
+      "chars": 7710,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "186_1776228254.pdf"
+    },
+    {
+      "text": "Files/189_1769753079.txt",
+      "status": "ok",
+      "chars": 9201,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "189_1769753079.pdf"
+    },
+    {
+      "text": "Files/192_1763618467.txt",
+      "status": "ok",
+      "chars": 8268,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "192_1763618467.pdf"
+    },
+    {
+      "text": "Files/193_1776747039.txt",
+      "status": "ok",
+      "chars": 9739,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "193_1776747039.pdf"
+    },
+    {
+      "text": "Files/1_1768381551.txt",
+      "status": "ok",
+      "chars": 12101,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "1_1768381551.pdf"
+    },
+    {
+      "text": "Files/203_1776334330.txt",
+      "status": "ok",
+      "chars": 9545,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "203_1776334330.pdf"
+    },
+    {
+      "text": "Files/209_1768374225.txt",
+      "status": "ok",
+      "chars": 6890,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "209_1768374225.pdf"
+    },
+    {
+      "text": "Files/209_1775111941.txt",
+      "status": "ok",
+      "chars": 6154,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "209_1775111941.pdf"
+    },
+    {
+      "text": "Files/20_1773136369.txt",
+      "status": "ok",
+      "chars": 11539,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "20_1773136369.pdf"
+    },
+    {
+      "text": "Files/210_1765951796.txt",
+      "status": "ok",
+      "chars": 5585,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "210_1765951796.pdf"
+    },
+    {
+      "text": "Files/211_1768816149.txt",
+      "status": "ok",
+      "chars": 5583,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "211_1768816149.pdf"
+    },
+    {
+      "text": "Files/211_1782276795.txt",
+      "status": "ok",
+      "chars": 4939,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "211_1782276795.pdf"
+    },
+    {
+      "text": "Files/213_1773140575.txt",
+      "status": "ok",
+      "chars": 7520,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "213_1773140575.pdf"
+    },
+    {
+      "text": "Files/218_1775558643.txt",
+      "status": "ok",
+      "chars": 22326,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "218_1775558643.pdf"
+    },
+    {
+      "text": "Files/219_1776228108.txt",
+      "status": "ok",
+      "chars": 7710,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "219_1776228108.pdf"
+    },
+    {
+      "text": "Files/221_1771926602.txt",
+      "status": "ok",
+      "chars": 5585,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "221_1771926602.pdf"
+    },
+    {
+      "text": "Files/222_1776332017.txt",
+      "status": "ok",
+      "chars": 22080,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "222_1776332017.pdf"
+    },
+    {
+      "text": "Files/222_1785734576.txt",
+      "status": "ok",
+      "chars": 12138,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "222_1785734576.pdf"
+    },
+    {
+      "text": "Files/223_1775455796.txt",
+      "status": "ok",
+      "chars": 7619,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "223_1775455796.pdf"
+    },
+    {
+      "text": "Files/225_1773812139.txt",
+      "status": "ok",
+      "chars": 8255,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "225_1773812139.pdf"
+    },
+    {
+      "text": "Files/229_1789277320.txt",
+      "status": "ok",
+      "chars": 24136,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "229_1789277320.pdf"
+    },
+    {
+      "text": "Files/236_1768381317.txt",
+      "status": "ok",
+      "chars": 12101,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "236_1768381317.pdf"
+    },
+    {
+      "text": "Files/23_1772424788.txt",
+      "status": "ok",
+      "chars": 7858,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "23_1772424788.pdf"
+    },
+    {
+      "text": "Files/240_1774602533.txt",
+      "status": "ok",
+      "chars": 11628,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "240_1774602533.pdf"
+    },
+    {
+      "text": "Files/241_1771830251.txt",
+      "status": "ok",
+      "chars": 5994,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "241_1771830251.pdf"
+    },
+    {
+      "text": "Files/245_1775456694.txt",
+      "status": "ok",
+      "chars": 7308,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "245_1775456694.pdf"
+    },
+    {
+      "text": "Files/247_1775039212.txt",
+      "status": "ok",
+      "chars": 7295,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "247_1775039212.pdf"
+    },
+    {
+      "text": "Files/249_1765515931.txt",
+      "status": "ok",
+      "chars": 4228,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "249_1765515931.pdf"
+    },
+    {
+      "text": "Files/251_1772017005.txt",
+      "status": "ok",
+      "chars": 9894,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "251_1772017005.pdf"
+    },
+    {
+      "text": "Files/251_1788149949.txt",
+      "status": "ok",
+      "chars": 16676,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "251_1788149949.pdf"
+    },
+    {
+      "text": "Files/256_1764133263.txt",
+      "status": "ok",
+      "chars": 7373,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "256_1764133263.pdf"
+    },
+    {
+      "text": "Files/266_1784869706.txt",
+      "status": "ok",
+      "chars": 6773,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "266_1784869706.pdf"
+    },
+    {
+      "text": "Files/267_1766047931.txt",
+      "status": "ok",
+      "chars": 6451,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "267_1766047931.pdf"
+    },
+    {
+      "text": "Files/268_1773830944.txt",
+      "status": "ok",
+      "chars": 8465,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "268_1773830944.pdf"
+    },
+    {
+      "text": "Files/269_1773831406.txt",
+      "status": "ok",
+      "chars": 9903,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "269_1773831406.pdf"
+    },
+    {
+      "text": "Files/26_1776835594.txt",
+      "status": "ok",
+      "chars": 7173,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "26_1776835594.pdf"
+    },
+    {
+      "text": "Files/272_1765875330.txt",
+      "status": "ok",
+      "chars": 6451,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "272_1765875330.pdf"
+    },
+    {
+      "text": "Files/275_1770961707.txt",
+      "status": "ok",
+      "chars": 4191,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "275_1770961707.pdf"
+    },
+    {
+      "text": "Files/276_1770271867.txt",
+      "status": "ok",
+      "chars": 10458,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "276_1770271867.pdf"
+    },
+    {
+      "text": "Files/277_1775039280.txt",
+      "status": "ok",
+      "chars": 7295,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "277_1775039280.pdf"
+    },
+    {
+      "text": "Files/280_1788753881.txt",
+      "status": "ok",
+      "chars": 13976,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "280_1788753881.pdf"
+    },
+    {
+      "text": "Files/287_1772016930.txt",
+      "status": "ok",
+      "chars": 9894,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "287_1772016930.pdf"
+    },
+    {
+      "text": "Files/288_1774241339.txt",
+      "status": "ok",
+      "chars": 13774,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "288_1774241339.pdf"
+    },
+    {
+      "text": "Files/289_1767779630.txt",
+      "status": "ok",
+      "chars": 8268,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "289_1767779630.pdf"
+    },
+    {
+      "text": "Files/293_1772693353.txt",
+      "status": "ok",
+      "chars": 9666,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "293_1772693353.pdf"
+    },
+    {
+      "text": "Files/293_1773915673.txt",
+      "status": "ok",
+      "chars": 12748,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "293_1773915673.pdf"
+    },
+    {
+      "text": "Files/298_1789539158.txt",
+      "status": "ok",
+      "chars": 6338,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "298_1789539158.pdf"
+    },
+    {
+      "text": "Files/2_1772787653.txt",
+      "status": "ok",
+      "chars": 6993,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "2_1772787653.pdf"
+    },
+    {
+      "text": "Files/300_1772425307.txt",
+      "status": "ok",
+      "chars": 3805,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "300_1772425307.pdf"
+    },
+    {
+      "text": "Files/302_1763621816.txt",
+      "status": "ok",
+      "chars": 7386,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "302_1763621816.pdf"
+    },
+    {
+      "text": "Files/304_1783580565.txt",
+      "status": "ok",
+      "chars": 6564,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "304_1783580565.pdf"
+    },
+    {
+      "text": "Files/310_1772188266.txt",
+      "status": "ok",
+      "chars": 10707,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "310_1772188266.pdf"
+    },
+    {
+      "text": "Files/311_1776746982.txt",
+      "status": "ok",
+      "chars": 9739,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "311_1776746982.pdf"
+    },
+    {
+      "text": "Files/314_1767176086.txt",
+      "status": "ok",
+      "chars": 7326,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "314_1767176086.pdf"
+    },
+    {
+      "text": "Files/315_1773658885.txt",
+      "status": "ok",
+      "chars": 4764,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "315_1773658885.pdf"
+    },
+    {
+      "text": "Files/325_1785736278.txt",
+      "status": "ok",
+      "chars": 7050,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "325_1785736278.pdf"
+    },
+    {
+      "text": "Files/326_1763363347.txt",
+      "status": "ok",
+      "chars": 9201,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "326_1763363347.pdf"
+    },
+    {
+      "text": "Files/329_1765953163.txt",
+      "status": "ok",
+      "chars": 5907,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "329_1765953163.pdf"
+    },
+    {
+      "text": "Files/329_1787569706.txt",
+      "status": "ok",
+      "chars": 15422,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "329_1787569706.pdf"
+    },
+    {
+      "text": "Files/335_1773831048.txt",
+      "status": "ok",
+      "chars": 8465,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "335_1773831048.pdf"
+    },
+    {
+      "text": "Files/342_1772018182.txt",
+      "status": "ok",
+      "chars": 10767,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "342_1772018182.pdf"
+    },
+    {
+      "text": "Files/344_1772534213.txt",
+      "status": "ok",
+      "chars": 11163,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "344_1772534213.pdf"
+    },
+    {
+      "text": "Files/34_1768374144.txt",
+      "status": "ok",
+      "chars": 6890,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "34_1768374144.pdf"
+    },
+    {
+      "text": "Files/351_1776659569.txt",
+      "status": "ok",
+      "chars": 22326,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "351_1776659569.pdf"
+    },
+    {
+      "text": "Files/352_1773140639.txt",
+      "status": "ok",
+      "chars": 7520,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "352_1773140639.pdf"
+    },
+    {
+      "text": "Files/355_1773917760.txt",
+      "status": "ok",
+      "chars": 6339,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "355_1773917760.pdf"
+    },
+    {
+      "text": "Files/355_1774606937.txt",
+      "status": "ok",
+      "chars": 4326,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "355_1774606937.pdf"
+    },
+    {
+      "text": "Files/35_1775019930.txt",
+      "status": "ok",
+      "chars": 10193,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "35_1775019930.pdf"
+    },
+    {
+      "text": "Files/366_1773898042.txt",
+      "status": "ok",
+      "chars": 5923,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "366_1773898042.pdf"
+    },
+    {
+      "text": "Files/366_1783589774.txt",
+      "status": "ok",
+      "chars": 8503,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "366_1783589774.pdf"
+    },
+    {
+      "text": "Files/367_1771841623.txt",
+      "status": "ok",
+      "chars": 9282,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "367_1771841623.pdf"
+    },
+    {
+      "text": "Files/369_1775041941.txt",
+      "status": "ok",
+      "chars": 6778,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "369_1775041941.pdf"
+    },
+    {
+      "text": "Files/36_1762930676.txt",
+      "status": "ok",
+      "chars": 6914,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "36_1762930676.pdf"
+    },
+    {
+      "text": "Files/36_1773657666.txt",
+      "status": "ok",
+      "chars": 5568,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "36_1773657666.pdf"
+    },
+    {
+      "text": "Files/36_1782108479.txt",
+      "status": "ok",
+      "chars": 8651,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "36_1782108479.pdf"
+    },
+    {
+      "text": "Files/372_1772018275.txt",
+      "status": "ok",
+      "chars": 10767,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "372_1772018275.pdf"
+    },
+    {
+      "text": "Files/376_1770793258.txt",
+      "status": "ok",
+      "chars": 7390,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "376_1770793258.pdf"
+    },
+    {
+      "text": "Files/377_1765253615.txt",
+      "status": "ok",
+      "chars": 4756,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "377_1765253615.pdf"
+    },
+    {
+      "text": "Files/379_1776332404.txt",
+      "status": "ok",
+      "chars": 22080,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "379_1776332404.pdf"
+    },
+    {
+      "text": "Files/380_1776401219.txt",
+      "status": "ok",
+      "chars": 8206,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "380_1776401219.pdf"
+    },
+    {
+      "text": "Files/383_1773311027.txt",
+      "status": "ok",
+      "chars": 4929,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "383_1773311027.pdf"
+    },
+    {
+      "text": "Files/388_1772693540.txt",
+      "status": "ok",
+      "chars": 9666,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "388_1772693540.pdf"
+    },
+    {
+      "text": "Files/391_1776322983.txt",
+      "status": "ok",
+      "chars": 6458,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "391_1776322983.pdf"
+    },
+    {
+      "text": "Files/391_1788703230.txt",
+      "status": "ok",
+      "chars": 3791,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "391_1788703230.pdf"
+    },
+    {
+      "text": "Files/392_1769768989.txt",
+      "status": "ok",
+      "chars": 7386,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "392_1769768989.pdf"
+    },
+    {
+      "text": "Files/392_1776401107.txt",
+      "status": "ok",
+      "chars": 8206,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "392_1776401107.pdf"
+    },
+    {
+      "text": "Files/394_1788753860.txt",
+      "status": "ok",
+      "chars": 14888,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "394_1788753860.pdf"
+    },
+    {
+      "text": "Files/39_1773307467.txt",
+      "status": "ok",
+      "chars": 25536,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "39_1773307467.pdf"
+    },
+    {
+      "text": "Files/3_1775455872.txt",
+      "status": "ok",
+      "chars": 7619,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "3_1775455872.pdf"
+    },
+    {
+      "text": "Files/402_1775110237.txt",
+      "status": "ok",
+      "chars": 7774,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "402_1775110237.pdf"
+    },
+    {
+      "text": "Files/404_1789727035.txt",
+      "status": "ok",
+      "chars": 5709,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "404_1789727035.pdf"
+    },
+    {
+      "text": "Files/405_1775020644.txt",
+      "status": "ok",
+      "chars": 14343,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "405_1775020644.pdf"
+    },
+    {
+      "text": "Files/406_1789539418.txt",
+      "status": "ok",
+      "chars": 6338,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "406_1789539418.pdf"
+    },
+    {
+      "text": "Files/40_1771580490.txt",
+      "status": "ok",
+      "chars": 8640,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "40_1771580490.pdf"
+    },
+    {
+      "text": "Files/412_1776334477.txt",
+      "status": "ok",
+      "chars": 9545,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "412_1776334477.pdf"
+    },
+    {
+      "text": "Files/413_1786942481.txt",
+      "status": "ok",
+      "chars": 13758,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "413_1786942481.pdf"
+    },
+    {
+      "text": "Files/424_1771236102.txt",
+      "status": "ok",
+      "chars": 11731,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "424_1771236102.pdf"
+    },
+    {
+      "text": "Files/426_1777974591.txt",
+      "status": "ok",
+      "chars": 5442,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "426_1777974591.pdf"
+    },
+    {
+      "text": "Files/428_1774328653.txt",
+      "status": "ok",
+      "chars": 12748,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "428_1774328653.pdf"
+    },
+    {
+      "text": "Files/42_1772532146.txt",
+      "status": "ok",
+      "chars": 10058,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "42_1772532146.pdf"
+    },
+    {
+      "text": "Files/438_1776667387.txt",
+      "status": "ok",
+      "chars": 13784,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "438_1776667387.pdf"
+    },
+    {
+      "text": "Files/439_1763096591.txt",
+      "status": "ok",
+      "chars": 7848,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "439_1763096591.pdf"
+    },
+    {
+      "text": "Files/440_1765253538.txt",
+      "status": "ok",
+      "chars": 4756,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "440_1765253538.pdf"
+    },
+    {
+      "text": "Files/440_1771932179.txt",
+      "status": "ok",
+      "chars": 7386,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "440_1771932179.pdf"
+    },
+    {
+      "text": "Files/441_1775458051.txt",
+      "status": "ok",
+      "chars": 8313,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "441_1775458051.pdf"
+    },
+    {
+      "text": "Files/443_1777026812.txt",
+      "status": "ok",
+      "chars": 22080,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "443_1777026812.pdf"
+    },
+    {
+      "text": "Files/446_1770793352.txt",
+      "status": "ok",
+      "chars": 7390,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "446_1770793352.pdf"
+    },
+    {
+      "text": "Files/449_1775020527.txt",
+      "status": "ok",
+      "chars": 14343,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "449_1775020527.pdf"
+    },
+    {
+      "text": "Files/450_1773900252.txt",
+      "status": "ok",
+      "chars": 8496,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "450_1773900252.pdf"
+    },
+    {
+      "text": "Files/454_1774261133.txt",
+      "status": "ok",
+      "chars": 10093,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "454_1774261133.pdf"
+    },
+    {
+      "text": "Files/455_1767093730.txt",
+      "status": "ok",
+      "chars": 9491,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "455_1767093730.pdf"
+    },
+    {
+      "text": "Files/456_1773897765.txt",
+      "status": "ok",
+      "chars": 5923,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "456_1773897765.pdf"
+    },
+    {
+      "text": "Files/45_1770202688.txt",
+      "status": "ok",
+      "chars": 9524,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "45_1770202688.pdf"
+    },
+    {
+      "text": "Files/460_1775111222.txt",
+      "status": "ok",
+      "chars": 5679,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "460_1775111222.pdf"
+    },
+    {
+      "text": "Files/462_1776231342.txt",
+      "status": "ok",
+      "chars": 5858,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "462_1776231342.pdf"
+    },
+    {
+      "text": "Files/473_1773310765.txt",
+      "status": "ok",
+      "chars": 6430,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "473_1773310765.pdf"
+    },
+    {
+      "text": "Files/482_1789535200.txt",
+      "status": "ok",
+      "chars": 12374,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "482_1789535200.pdf"
+    },
+    {
+      "text": "Files/487_1783399947.txt",
+      "status": "ok",
+      "chars": 5317,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "487_1783399947.pdf"
+    },
+    {
+      "text": "Files/492_1769684341.txt",
+      "status": "ok",
+      "chars": 7386,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "492_1769684341.pdf"
+    },
+    {
+      "text": "Files/494_1779428000.txt",
+      "status": "ok",
+      "chars": 4578,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "494_1779428000.pdf"
+    },
+    {
+      "text": "Files/4_1772695008.txt",
+      "status": "ok",
+      "chars": 7645,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "4_1772695008.pdf"
+    },
+    {
+      "text": "Files/502_1776332570.txt",
+      "status": "ok",
+      "chars": 22080,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "502_1776332570.pdf"
+    },
+    {
+      "text": "Files/505_1789539079.txt",
+      "status": "ok",
+      "chars": 6338,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "505_1789539079.pdf"
+    },
+    {
+      "text": "Files/508_1765953213.txt",
+      "status": "ok",
+      "chars": 5907,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "508_1765953213.pdf"
+    },
+    {
+      "text": "Files/509_1773311087.txt",
+      "status": "ok",
+      "chars": 4929,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "509_1773311087.pdf"
+    },
+    {
+      "text": "Files/50_1768815985.txt",
+      "status": "ok",
+      "chars": 5583,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "50_1768815985.pdf"
+    },
+    {
+      "text": "Files/512_1772531986.txt",
+      "status": "ok",
+      "chars": 10058,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "512_1772531986.pdf"
+    },
+    {
+      "text": "Files/516_1768198654.txt",
+      "status": "ok",
+      "chars": 5294,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "516_1768198654.pdf"
+    },
+    {
+      "text": "Files/518_1776685453.txt",
+      "status": "ok",
+      "chars": 4134,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "518_1776685453.pdf"
+    },
+    {
+      "text": "Files/519_1771839622.txt",
+      "status": "ok",
+      "chars": 11137,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "519_1771839622.pdf"
+    },
+    {
+      "text": "Files/52_1773140421.txt",
+      "status": "ok",
+      "chars": 7520,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "52_1773140421.pdf"
+    },
+    {
+      "text": "Files/52_1773999790.txt",
+      "status": "ok",
+      "chars": 7311,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "52_1773999790.pdf"
+    },
+    {
+      "text": "Files/530_1764066661.txt",
+      "status": "ok",
+      "chars": 5569,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "530_1764066661.pdf"
+    },
+    {
+      "text": "Files/540_1775726998.txt",
+      "status": "ok",
+      "chars": 8450,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "540_1775726998.pdf"
+    },
+    {
+      "text": "Files/543_1765953254.txt",
+      "status": "ok",
+      "chars": 5907,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "543_1765953254.pdf"
+    },
+    {
+      "text": "Files/543_1786683463.txt",
+      "status": "ok",
+      "chars": 5959,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "543_1786683463.pdf"
+    },
+    {
+      "text": "Files/552_1773307040.txt",
+      "status": "ok",
+      "chars": 25536,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "552_1773307040.pdf"
+    },
+    {
+      "text": "Files/553_1769060542.txt",
+      "status": "ok",
+      "chars": 3857,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "553_1769060542.pdf"
+    },
+    {
+      "text": "Files/556_1776747017.txt",
+      "status": "ok",
+      "chars": 9739,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "556_1776747017.pdf"
+    },
+    {
+      "text": "Files/558_1765362706.txt",
+      "status": "ok",
+      "chars": 5585,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "558_1765362706.pdf"
+    },
+    {
+      "text": "Files/565_1773900434.txt",
+      "status": "ok",
+      "chars": 8496,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "565_1773900434.pdf"
+    },
+    {
+      "text": "Files/571_1765875029.txt",
+      "status": "ok",
+      "chars": 6451,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "571_1765875029.pdf"
+    },
+    {
+      "text": "Files/574_1783660743.txt",
+      "status": "ok",
+      "chars": 5740,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "574_1783660743.pdf"
+    },
+    {
+      "text": "Files/575_1774593481.txt",
+      "status": "ok",
+      "chars": 8450,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "575_1774593481.pdf"
+    },
+    {
+      "text": "Files/578_1765448090.txt",
+      "status": "ok",
+      "chars": 5485,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "578_1765448090.pdf"
+    },
+    {
+      "text": "Files/57_1789277234.txt",
+      "status": "ok",
+      "chars": 16622,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "57_1789277234.pdf"
+    },
+    {
+      "text": "Files/581_1767093845.txt",
+      "status": "ok",
+      "chars": 9491,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "581_1767093845.pdf"
+    },
+    {
+      "text": "Files/585_1774606857.txt",
+      "status": "ok",
+      "chars": 4326,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "585_1774606857.pdf"
+    },
+    {
+      "text": "Files/590_1772429620.txt",
+      "status": "ok",
+      "chars": 9917,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "590_1772429620.pdf"
+    },
+    {
+      "text": "Files/593_1766128673.txt",
+      "status": "ok",
+      "chars": 5569,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "593_1766128673.pdf"
+    },
+    {
+      "text": "Files/596_1774593624.txt",
+      "status": "ok",
+      "chars": 8450,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "596_1774593624.pdf"
+    },
+    {
+      "text": "Files/597_1772769774.txt",
+      "status": "ok",
+      "chars": 14842,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "597_1772769774.pdf"
+    },
+    {
+      "text": "Files/599_1765953037.txt",
+      "status": "ok",
+      "chars": 5907,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "599_1765953037.pdf"
+    },
+    {
+      "text": "Files/599_1781691670.txt",
+      "status": "ok",
+      "chars": 4357,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "599_1781691670.pdf"
+    },
+    {
+      "text": "Files/600_1763376768.txt",
+      "status": "ok",
+      "chars": 4657,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "600_1763376768.pdf"
+    },
+    {
+      "text": "Files/605_1768103611.txt",
+      "status": "ok",
+      "chars": 5294,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "605_1768103611.pdf"
+    },
+    {
+      "text": "Files/605_1775457221.txt",
+      "status": "ok",
+      "chars": 14874,
+      "method": "tesseract-page-language-routing",
+      "translation": "google-public-endpoint-for-hindi-pages",
+      "pages": 10,
+      "sourcePdfFilename": "605_1775457221.pdf"
+    },
+    {
+      "text": "Files/606_1773899935.txt",
+      "status": "ok",
+      "chars": 8496,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "606_1773899935.pdf"
+    },
+    {
+      "text": "Files/610_1764584919.txt",
+      "status": "ok",
+      "chars": 3647,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "610_1764584919.pdf"
+    },
+    {
+      "text": "Files/616_1765254881.txt",
+      "status": "ok",
+      "chars": 6287,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "616_1765254881.pdf"
+    },
+    {
+      "text": "Files/617_1764135290.txt",
+      "status": "ok",
+      "chars": 7386,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "617_1764135290.pdf"
+    },
+    {
+      "text": "Files/633_1775456827.txt",
+      "status": "ok",
+      "chars": 7308,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "633_1775456827.pdf"
+    },
+    {
+      "text": "Files/639_1775112064.txt",
+      "status": "ok",
+      "chars": 6154,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "639_1775112064.pdf"
+    },
+    {
+      "text": "Files/640_1770272605.txt",
+      "status": "ok",
+      "chars": 6287,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "640_1770272605.pdf"
+    },
+    {
+      "text": "Files/645_1780549103.txt",
+      "status": "ok",
+      "chars": 3530,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "645_1780549103.pdf"
+    },
+    {
+      "text": "Files/651_1764827770.txt",
+      "status": "ok",
+      "chars": 7386,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "651_1764827770.pdf"
+    },
+    {
+      "text": "Files/654_1775110678.txt",
+      "status": "ok",
+      "chars": 7774,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "654_1775110678.pdf"
+    },
+    {
+      "text": "Files/655_1763371727.txt",
+      "status": "ok",
+      "chars": 5569,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "655_1763371727.pdf"
+    },
+    {
+      "text": "Files/658_1776667742.txt",
+      "status": "ok",
+      "chars": 4719,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "658_1776667742.pdf"
+    },
+    {
+      "text": "Files/659_1773812324.txt",
+      "status": "ok",
+      "chars": 8255,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "659_1773812324.pdf"
+    },
+    {
+      "text": "Files/661_1773903685.txt",
+      "status": "ok",
+      "chars": 9854,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "661_1773903685.pdf"
+    },
+    {
+      "text": "Files/661_1775042029.txt",
+      "status": "ok",
+      "chars": 6778,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "661_1775042029.pdf"
+    },
+    {
+      "text": "Files/663_1766048734.txt",
+      "status": "ok",
+      "chars": 6287,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "663_1766048734.pdf"
+    },
+    {
+      "text": "Files/665_1771236174.txt",
+      "status": "ok",
+      "chars": 11731,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "665_1771236174.pdf"
+    },
+    {
+      "text": "Files/666_1765533052.txt",
+      "status": "ok",
+      "chars": 6287,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "666_1765533052.pdf"
+    },
+    {
+      "text": "Files/666_1767176198.txt",
+      "status": "ok",
+      "chars": 7326,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "666_1767176198.pdf"
+    },
+    {
+      "text": "Files/669_1770357269.txt",
+      "status": "ok",
+      "chars": 3943,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "669_1770357269.pdf"
+    },
+    {
+      "text": "Files/679_1764649760.txt",
+      "status": "ok",
+      "chars": 6451,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "679_1764649760.pdf"
+    },
+    {
+      "text": "Files/679_1771580370.txt",
+      "status": "ok",
+      "chars": 8640,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "679_1771580370.pdf"
+    },
+    {
+      "text": "Files/680_1789277642.txt",
+      "status": "ok",
+      "chars": 20777,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "680_1789277642.pdf"
+    },
+    {
+      "text": "Files/685_1771841771.txt",
+      "status": "ok",
+      "chars": 9282,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "685_1771841771.pdf"
+    },
+    {
+      "text": "Files/689_1768554465.txt",
+      "status": "ok",
+      "chars": 12638,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "689_1768554465.pdf"
+    },
+    {
+      "text": "Files/68_1765952431.txt",
+      "status": "ok",
+      "chars": 5907,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "68_1765952431.pdf"
+    },
+    {
+      "text": "Files/68_1775457879.txt",
+      "status": "ok",
+      "chars": 8313,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "68_1775457879.pdf"
+    },
+    {
+      "text": "Files/691_1775110608.txt",
+      "status": "ok",
+      "chars": 7774,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "691_1775110608.pdf"
+    },
+    {
+      "text": "Files/692_1775464857.txt",
+      "status": "ok",
+      "chars": 7507,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "692_1775464857.pdf"
+    },
+    {
+      "text": "Files/693_1765254218.txt",
+      "status": "ok",
+      "chars": 4446,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "693_1765254218.pdf"
+    },
+    {
+      "text": "Files/6_1772518951.txt",
+      "status": "ok",
+      "chars": 9178,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "6_1772518951.pdf"
+    },
+    {
+      "text": "Files/702_1776667687.txt",
+      "status": "ok",
+      "chars": 4719,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "702_1776667687.pdf"
+    },
+    {
+      "text": "Files/704_1765256743.txt",
+      "status": "ok",
+      "chars": 5855,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "704_1765256743.pdf"
+    },
+    {
+      "text": "Files/706_1765953131.txt",
+      "status": "ok",
+      "chars": 5907,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "706_1765953131.pdf"
+    },
+    {
+      "text": "Files/70_1773985951.txt",
+      "status": "ok",
+      "chars": 6296,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "70_1773985951.pdf"
+    },
+    {
+      "text": "Files/712_1770376426.txt",
+      "status": "ok",
+      "chars": 3943,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "712_1770376426.pdf"
+    },
+    {
+      "text": "Files/712_1774241431.txt",
+      "status": "ok",
+      "chars": 13774,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "712_1774241431.pdf"
+    },
+    {
+      "text": "Files/714_1784869742.txt",
+      "status": "ok",
+      "chars": 6773,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "714_1784869742.pdf"
+    },
+    {
+      "text": "Files/715_1771586997.txt",
+      "status": "ok",
+      "chars": 18384,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "715_1771586997.pdf"
+    },
+    {
+      "text": "Files/715_1773915432.txt",
+      "status": "ok",
+      "chars": 12748,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "715_1773915432.pdf"
+    },
+    {
+      "text": "Files/721_1773915278.txt",
+      "status": "ok",
+      "chars": 12748,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "721_1773915278.pdf"
+    },
+    {
+      "text": "Files/727_1772188103.txt",
+      "status": "ok",
+      "chars": 10707,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "727_1772188103.pdf"
+    },
+    {
+      "text": "Files/729_1765949780.txt",
+      "status": "ok",
+      "chars": 10458,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "729_1765949780.pdf"
+    },
+    {
+      "text": "Files/72_1772769651.txt",
+      "status": "ok",
+      "chars": 14842,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "72_1772769651.pdf"
+    },
+    {
+      "text": "Files/731_1763621519.txt",
+      "status": "ok",
+      "chars": 7373,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "731_1763621519.pdf"
+    },
+    {
+      "text": "Files/734_1773658835.txt",
+      "status": "ok",
+      "chars": 4764,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "734_1773658835.pdf"
+    },
+    {
+      "text": "Files/737_1764650958.txt",
+      "status": "ok",
+      "chars": 7386,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "737_1764650958.pdf"
+    },
+    {
+      "text": "Files/73_1776747976.txt",
+      "status": "ok",
+      "chars": 5750,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "73_1776747976.pdf"
+    },
+    {
+      "text": "Files/740_1774600591.txt",
+      "status": "ok",
+      "chars": 6993,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "740_1774600591.pdf"
+    },
+    {
+      "text": "Files/742_1776659489.txt",
+      "status": "ok",
+      "chars": 22326,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "742_1776659489.pdf"
+    },
+    {
+      "text": "Files/743_1785739395.txt",
+      "status": "ok",
+      "chars": 5660,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "743_1785739395.pdf"
+    },
+    {
+      "text": "Files/749_1777457185.txt",
+      "status": "ok",
+      "chars": 3650,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "749_1777457185.pdf"
+    },
+    {
+      "text": "Files/750_1765950385.txt",
+      "status": "ok",
+      "chars": 3617,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "750_1765950385.pdf"
+    },
+    {
+      "text": "Files/751_1765517835.txt",
+      "status": "ok",
+      "chars": 6451,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "751_1765517835.pdf"
+    },
+    {
+      "text": "Files/751_1776667024.txt",
+      "status": "ok",
+      "chars": 13784,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "751_1776667024.pdf"
+    },
+    {
+      "text": "Files/760_1781071060.txt",
+      "status": "ok",
+      "chars": 9181,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "760_1781071060.pdf"
+    },
+    {
+      "text": "Files/762_1765869649.txt",
+      "status": "ok",
+      "chars": 6287,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "762_1765869649.pdf"
+    },
+    {
+      "text": "Files/762_1775037519.txt",
+      "status": "ok",
+      "chars": 11860,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "762_1775037519.pdf"
+    },
+    {
+      "text": "Files/767_1774600506.txt",
+      "status": "ok",
+      "chars": 6993,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "767_1774600506.pdf"
+    },
+    {
+      "text": "Files/76_1776660198.txt",
+      "status": "ok",
+      "chars": 5173,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "76_1776660198.pdf"
+    },
+    {
+      "text": "Files/77_1773730978.txt",
+      "status": "ok",
+      "chars": 14777,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "77_1773730978.pdf"
+    },
+    {
+      "text": "Files/780_1784872523.txt",
+      "status": "ok",
+      "chars": 6339,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "780_1784872523.pdf"
+    },
+    {
+      "text": "Files/786_1765775828.txt",
+      "status": "ok",
+      "chars": 4228,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "786_1765775828.pdf"
+    },
+    {
+      "text": "Files/788_1789726945.txt",
+      "status": "ok",
+      "chars": 5709,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "788_1789726945.pdf"
+    },
+    {
+      "text": "Files/78_1781604097.txt",
+      "status": "ok",
+      "chars": 9740,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "78_1781604097.pdf"
+    },
+    {
+      "text": "Files/790_1772425370.txt",
+      "status": "ok",
+      "chars": 3805,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "790_1772425370.pdf"
+    },
+    {
+      "text": "Files/791_1773999717.txt",
+      "status": "ok",
+      "chars": 7311,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "791_1773999717.pdf"
+    },
+    {
+      "text": "Files/791_1780642489.txt",
+      "status": "ok",
+      "chars": 5315,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "791_1780642489.pdf"
+    },
+    {
+      "text": "Files/796_1763614821.txt",
+      "status": "ok",
+      "chars": 10695,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "796_1763614821.pdf"
+    },
+    {
+      "text": "Files/798_1762941737.txt",
+      "status": "ok",
+      "chars": 3617,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "798_1762941737.pdf"
+    },
+    {
+      "text": "Files/803_1776835693.txt",
+      "status": "ok",
+      "chars": 7173,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "803_1776835693.pdf"
+    },
+    {
+      "text": "Files/804_1776747445.txt",
+      "status": "ok",
+      "chars": 5173,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "804_1776747445.pdf"
+    },
+    {
+      "text": "Files/806_1775468799.txt",
+      "status": "ok",
+      "chars": 11744,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "806_1775468799.pdf"
+    },
+    {
+      "text": "Files/808_1776659169.txt",
+      "status": "ok",
+      "chars": 22326,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "808_1776659169.pdf"
+    },
+    {
+      "text": "Files/809_1768555974.txt",
+      "status": "ok",
+      "chars": 5330,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "809_1768555974.pdf"
+    },
+    {
+      "text": "Files/80_1773917869.txt",
+      "status": "ok",
+      "chars": 6339,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "80_1773917869.pdf"
+    },
+    {
+      "text": "Files/817_1774260975.txt",
+      "status": "ok",
+      "chars": 10093,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "817_1774260975.pdf"
+    },
+    {
+      "text": "Files/818_1772429491.txt",
+      "status": "ok",
+      "chars": 9917,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "818_1772429491.pdf"
+    },
+    {
+      "text": "Files/81_1765949911.txt",
+      "status": "ok",
+      "chars": 10458,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "81_1765949911.pdf"
+    },
+    {
+      "text": "Files/825_1771844981.txt",
+      "status": "ok",
+      "chars": 4562,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "825_1771844981.pdf"
+    },
+    {
+      "text": "Files/826_1773903763.txt",
+      "status": "ok",
+      "chars": 9854,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "826_1773903763.pdf"
+    },
+    {
+      "text": "Files/831_1771934647.txt",
+      "status": "ok",
+      "chars": 3550,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "831_1771934647.pdf"
+    },
+    {
+      "text": "Files/831_1773807448.txt",
+      "status": "ok",
+      "chars": 10204,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "831_1773807448.pdf"
+    },
+    {
+      "text": "Files/837_1763360486.txt",
+      "status": "ok",
+      "chars": 6954,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "837_1763360486.pdf"
+    },
+    {
+      "text": "Files/841_1776685484.txt",
+      "status": "ok",
+      "chars": 4134,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "841_1776685484.pdf"
+    },
+    {
+      "text": "Files/846_1769168188.txt",
+      "status": "ok",
+      "chars": 6863,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "846_1769168188.pdf"
+    },
+    {
+      "text": "Files/846_1774602689.txt",
+      "status": "ok",
+      "chars": 11628,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "846_1774602689.pdf"
+    },
+    {
+      "text": "Files/84_1765953086.txt",
+      "status": "ok",
+      "chars": 5907,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "84_1765953086.pdf"
+    },
+    {
+      "text": "Files/850_1784870525.txt",
+      "status": "ok",
+      "chars": 9886,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "850_1784870525.pdf"
+    },
+    {
+      "text": "Files/852_1770358594.txt",
+      "status": "ok",
+      "chars": 3527,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "852_1770358594.pdf"
+    },
+    {
+      "text": "Files/858_1771830174.txt",
+      "status": "ok",
+      "chars": 5994,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "858_1771830174.pdf"
+    },
+    {
+      "text": "Files/864_1770202539.txt",
+      "status": "ok",
+      "chars": 9524,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "864_1770202539.pdf"
+    },
+    {
+      "text": "Files/865_1773653973.txt",
+      "status": "ok",
+      "chars": 10968,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "865_1773653973.pdf"
+    },
+    {
+      "text": "Files/86_1768555887.txt",
+      "status": "ok",
+      "chars": 5330,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "86_1768555887.pdf"
+    },
+    {
+      "text": "Files/871_1772787578.txt",
+      "status": "ok",
+      "chars": 6993,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "871_1772787578.pdf"
+    },
+    {
+      "text": "Files/871_1773653892.txt",
+      "status": "ok",
+      "chars": 10968,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "871_1773653892.pdf"
+    },
+    {
+      "text": "Files/873_1764823939.txt",
+      "status": "ok",
+      "chars": 4657,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "873_1764823939.pdf"
+    },
+    {
+      "text": "Files/875_1776247973.txt",
+      "status": "ok",
+      "chars": 5858,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "875_1776247973.pdf"
+    },
+    {
+      "text": "Files/876_1789277279.txt",
+      "status": "ok",
+      "chars": 21481,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "876_1789277279.pdf"
+    },
+    {
+      "text": "Files/890_1771839305.txt",
+      "status": "ok",
+      "chars": 11137,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "890_1771839305.pdf"
+    },
+    {
+      "text": "Files/895_1765517590.txt",
+      "status": "ok",
+      "chars": 3957,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "895_1765517590.pdf"
+    },
+    {
+      "text": "Files/895_1772518837.txt",
+      "status": "ok",
+      "chars": 9178,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "895_1772518837.pdf"
+    },
+    {
+      "text": "Files/902_1773731076.txt",
+      "status": "ok",
+      "chars": 14777,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "902_1773731076.pdf"
+    },
+    {
+      "text": "Files/903_1766047995.txt",
+      "status": "ok",
+      "chars": 6451,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "903_1766047995.pdf"
+    },
+    {
+      "text": "Files/907_1786618571.txt",
+      "status": "ok",
+      "chars": 6746,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "907_1786618571.pdf"
+    },
+    {
+      "text": "Files/908_1773136509.txt",
+      "status": "ok",
+      "chars": 11539,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "908_1773136509.pdf"
+    },
+    {
+      "text": "Files/909_1771581814.txt",
+      "status": "ok",
+      "chars": 5981,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "909_1771581814.pdf"
+    },
+    {
+      "text": "Files/90_1776403067.txt",
+      "status": "ok",
+      "chars": 9185,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "90_1776403067.pdf"
+    },
+    {
+      "text": "Files/910_1771581911.txt",
+      "status": "ok",
+      "chars": 5981,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "910_1771581911.pdf"
+    },
+    {
+      "text": "Files/912_1771580560.txt",
+      "status": "ok",
+      "chars": 8640,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "912_1771580560.pdf"
+    },
+    {
+      "text": "Files/914_1775020264.txt",
+      "status": "ok",
+      "chars": 10193,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "914_1775020264.pdf"
+    },
+    {
+      "text": "Files/917_1774328899.txt",
+      "status": "ok",
+      "chars": 12748,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "917_1774328899.pdf"
+    },
+    {
+      "text": "Files/919_1783660857.txt",
+      "status": "ok",
+      "chars": 9015,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "919_1783660857.pdf"
+    },
+    {
+      "text": "Files/923_1776747930.txt",
+      "status": "ok",
+      "chars": 5750,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "923_1776747930.pdf"
+    },
+    {
+      "text": "Files/930_1768554327.txt",
+      "status": "ok",
+      "chars": 12638,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "930_1768554327.pdf"
+    },
+    {
+      "text": "Files/930_1779693284.txt",
+      "status": "ok",
+      "chars": 10454,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "930_1779693284.pdf"
+    },
+    {
+      "text": "Files/937_1773137831.txt",
+      "status": "ok",
+      "chars": 7463,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "937_1773137831.pdf"
+    },
+    {
+      "text": "Files/939_1771580428.txt",
+      "status": "ok",
+      "chars": 8640,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "939_1771580428.pdf"
+    },
+    {
+      "text": "Files/93_1775037685.txt",
+      "status": "ok",
+      "chars": 11860,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "93_1775037685.pdf"
+    },
+    {
+      "text": "Files/940_1772424630.txt",
+      "status": "ok",
+      "chars": 7858,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "940_1772424630.pdf"
+    },
+    {
+      "text": "Files/945_1773831550.txt",
+      "status": "ok",
+      "chars": 9903,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "945_1773831550.pdf"
+    },
+    {
+      "text": "Files/953_1773900156.txt",
+      "status": "ok",
+      "chars": 8496,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "953_1773900156.pdf"
+    },
+    {
+      "text": "Files/956_1767155185.txt",
+      "status": "ok",
+      "chars": 5790,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "956_1767155185.pdf"
+    },
+    {
+      "text": "Files/962_1776331898.txt",
+      "status": "ok",
+      "chars": 22080,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "962_1776331898.pdf"
+    },
+    {
+      "text": "Files/963_1785739211.txt",
+      "status": "ok",
+      "chars": 5660,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "963_1785739211.pdf"
+    },
+    {
+      "text": "Files/966_1771586068.txt",
+      "status": "ok",
+      "chars": 18384,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "966_1771586068.pdf"
+    },
+    {
+      "text": "Files/969_1780292549.txt",
+      "status": "ok",
+      "chars": 10454,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "969_1780292549.pdf"
+    },
+    {
+      "text": "Files/975_1779167440.txt",
+      "status": "ok",
+      "chars": 4838,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "975_1779167440.pdf"
+    },
+    {
+      "text": "Files/982_1781260243.txt",
+      "status": "ok",
+      "chars": 3118,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "982_1781260243.pdf"
+    },
+    {
+      "text": "Files/983_1768198570.txt",
+      "status": "ok",
+      "chars": 5294,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "983_1768198570.pdf"
+    },
+    {
+      "text": "Files/983_1779699898.txt",
+      "status": "ok",
+      "chars": 7880,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "983_1779699898.pdf"
+    },
+    {
+      "text": "Files/989_1778668348.txt",
+      "status": "ok",
+      "chars": 22326,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "989_1778668348.pdf"
+    },
+    {
+      "text": "Files/997_1765254151.txt",
+      "status": "ok",
+      "chars": 4446,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "997_1765254151.pdf"
+    },
+    {
+      "text": "Files/997_1789535001.txt",
+      "status": "ok",
+      "chars": 12374,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "997_1789535001.pdf"
+    },
+    {
+      "text": "Files/998_1769168085.txt",
+      "status": "ok",
+      "chars": 6863,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "998_1769168085.pdf"
+    },
+    {
+      "text": "Files/gf_124_29106_19367.txt",
+      "status": "ok",
+      "chars": 8678,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "gf_124_29106_19367.pdf"
+    },
+    {
+      "text": "Files/gf_139_29082_13450_2_67.txt",
+      "status": "ok",
+      "chars": 8059,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "gf_139_29082_13450_2_67.pdf"
+    },
+    {
+      "text": "Files/gf_139_29083_13450_2_74.txt",
+      "status": "ok",
+      "chars": 8059,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "gf_139_29083_13450_2_74.pdf"
+    },
+    {
+      "text": "Files/gf_139_29084_13450_2_72.txt",
+      "status": "ok",
+      "chars": 8059,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "gf_139_29084_13450_2_72.pdf"
+    },
+    {
+      "text": "Files/gf_139_29087_13450_2_55.txt",
+      "status": "ok",
+      "chars": 8059,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "gf_139_29087_13450_2_55.pdf"
+    },
+    {
+      "text": "Files/gf_139_29097_19227_1.txt",
+      "status": "ok",
+      "chars": 6715,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "gf_139_29097_19227_1.pdf"
+    },
+    {
+      "text": "Files/gf_170_16007_8813_2.txt",
+      "status": "ok",
+      "chars": 8678,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "gf_170_16007_8813_2.pdf"
+    },
+    {
+      "text": "Files/gf_170_16008_8814_1.txt",
+      "status": "ok",
+      "chars": 7730,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "gf_170_16008_8814_1.pdf"
+    },
+    {
+      "text": "Files/gf_181_479_2932_1_5.txt",
+      "status": "ok",
+      "chars": 16644,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "gf_181_479_2932_1_5.pdf"
+    },
+    {
+      "text": "Files/gf_20_29101_19282_1.txt",
+      "status": "ok",
+      "chars": 8678,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "gf_20_29101_19282_1.pdf"
+    },
+    {
+      "text": "Files/gf_20_29102_19282_2.txt",
+      "status": "ok",
+      "chars": 8678,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "gf_20_29102_19282_2.pdf"
+    },
+    {
+      "text": "Files/gf_20_29103_19329_4.txt",
+      "status": "ok",
+      "chars": 8678,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "gf_20_29103_19329_4.pdf"
+    },
+    {
+      "text": "Files/gf_20_29111_17964_7.txt",
+      "status": "ok",
+      "chars": 7730,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "gf_20_29111_17964_7.pdf"
+    },
+    {
+      "text": "Files/gf_23_29098_18875_10101.txt",
+      "status": "ok",
+      "chars": 6715,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "gf_23_29098_18875_10101.pdf"
+    },
+    {
+      "text": "Files/gf_271_29109_IE60269_4.txt",
+      "status": "ok",
+      "chars": 8678,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "gf_271_29109_IE60269_4.pdf"
+    },
+    {
+      "text": "Files/gf_27_21605_15961_1.txt",
+      "status": "ok",
+      "chars": 4974,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "gf_27_21605_15961_1.pdf"
+    },
+    {
+      "text": "Files/gf_294_14564_7587_8_1.txt",
+      "status": "ok",
+      "chars": 4974,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "gf_294_14564_7587_8_1.pdf"
+    },
+    {
+      "text": "Files/gf_325_24797_IE61400_12_1_1.txt",
+      "status": "ok",
+      "chars": 7730,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "gf_325_24797_IE61400_12_1_1.pdf"
+    },
+    {
+      "text": "Files/gf_325_29114_IE61400_12_2.txt",
+      "status": "ok",
+      "chars": 7730,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "gf_325_29114_IE61400_12_2.pdf"
+    },
+    {
+      "text": "Files/gf_325_29115_IE61400_50_1.txt",
+      "status": "ok",
+      "chars": 7730,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "gf_325_29115_IE61400_50_1.pdf"
+    },
+    {
+      "text": "Files/gf_325_29116_IE61400_12.txt",
+      "status": "ok",
+      "chars": 7730,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "gf_325_29116_IE61400_12.pdf"
+    },
+    {
+      "text": "Files/gf_351_29110_3025_85.txt",
+      "status": "ok",
+      "chars": 8678,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "gf_351_29110_3025_85.pdf"
+    },
+    {
+      "text": "Files/gf_351_9567_3025_32_2.txt",
+      "status": "ok",
+      "chars": 7730,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "gf_351_9567_3025_32_2.pdf"
+    },
+    {
+      "text": "Files/gf_351_9584_3025_48_2.txt",
+      "status": "ok",
+      "chars": 7730,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "gf_351_9584_3025_48_2.pdf"
+    },
+    {
+      "text": "Files/gf_395_29108_IOE19795_1.txt",
+      "status": "ok",
+      "chars": 8678,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "gf_395_29108_IOE19795_1.pdf"
+    },
+    {
+      "text": "Files/gf_445_29112_19340.txt",
+      "status": "ok",
+      "chars": 7730,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "gf_445_29112_19340.pdf"
+    },
+    {
+      "text": "Files/gf_445_29113_19341.txt",
+      "status": "ok",
+      "chars": 7730,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "gf_445_29113_19341.pdf"
+    },
+    {
+      "text": "Files/gf_447_29100_19047_4.txt",
+      "status": "ok",
+      "chars": 8678,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "gf_447_29100_19047_4.pdf"
+    },
+    {
+      "text": "Files/gf_449_29104_19351.txt",
+      "status": "ok",
+      "chars": 8678,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "gf_449_29104_19351.pdf"
+    },
+    {
+      "text": "Files/gf_449_29105_19343.txt",
+      "status": "ok",
+      "chars": 8678,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "gf_449_29105_19343.pdf"
+    },
+    {
+      "text": "Files/gf_470_29107_19372.txt",
+      "status": "ok",
+      "chars": 8678,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "gf_470_29107_19372.pdf"
+    },
+    {
+      "text": "Files/gf_53_13558_6693_1.txt",
+      "status": "ok",
+      "chars": 4974,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "gf_53_13558_6693_1.pdf"
+    },
+    {
+      "text": "Files/gf_60_1897_10921_1.txt",
+      "status": "ok",
+      "chars": 5481,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "gf_60_1897_10921_1.pdf"
+    },
+    {
+      "text": "Files/product_manual_6a1d01a042b6b1780285856_01062026092056_6a1d01a042b6b1780285856.txt",
+      "status": "ok",
+      "chars": 15603,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "product_manual_6a1d01a042b6b1780285856_01062026092056_6a1d01a042b6b1780285856.pdf"
+    },
+    {
+      "text": "Files/product_manual_6a1ffc9a1b9071780481178_03062026153618_6a1ffc9a1b9071780481178.txt",
+      "status": "ok",
+      "chars": 43047,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "product_manual_6a1ffc9a1b9071780481178_03062026153618_6a1ffc9a1b9071780481178.pdf"
+    },
+    {
+      "text": "Files/product_manual_6a22a892109d31780656274_05062026161434_6a22a892109d31780656274.txt",
+      "status": "ok",
+      "chars": 40525,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "product_manual_6a22a892109d31780656274_05062026161434_6a22a892109d31780656274.pdf"
+    },
+    {
+      "text": "Files/product_manual_6a2643586a2c11780892504_08062026095144_6a2643586a2c11780892504.txt",
+      "status": "ok",
+      "chars": 18469,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "product_manual_6a2643586a2c11780892504_08062026095144_6a2643586a2c11780892504.pdf"
+    },
+    {
+      "text": "Files/product_manual_6a27c2e8e5a831780990696_09062026130816_6a27c2e8e5a831780990696.txt",
+      "status": "ok",
+      "chars": 14230,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "product_manual_6a27c2e8e5a831780990696_09062026130816_6a27c2e8e5a831780990696.pdf"
+    },
+    {
+      "text": "Files/product_manual_6a29500ab714e1781092362_10062026172242_6a29500ab714e1781092362.txt",
+      "status": "ok",
+      "chars": 16134,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "product_manual_6a29500ab714e1781092362_10062026172242_6a29500ab714e1781092362.pdf"
+    },
+    {
+      "text": "Files/product_manual_6a29501f6b1351781092383_10062026172303_6a29501f6b1351781092383.txt",
+      "status": "ok",
+      "chars": 14709,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "product_manual_6a29501f6b1351781092383_10062026172303_6a29501f6b1351781092383.pdf"
+    },
+    {
+      "text": "Files/product_manual_6a41f1234fab71782706467_29062026094427_6a41f1234fab71782706467.txt",
+      "status": "ok",
+      "chars": 13631,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "product_manual_6a41f1234fab71782706467_29062026094427_6a41f1234fab71782706467.pdf"
+    },
+    {
+      "text": "Files/product_manual_6a44987356a401782880371_01072026100251_6a44987356a401782880371.txt",
+      "status": "ok",
+      "chars": 16015,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "product_manual_6a44987356a401782880371_01072026100251_6a44987356a401782880371.pdf"
+    },
+    {
+      "text": "Files/product_manual_6a45e4202f8371782965280_02072026093800_6a45e4202f8371782965280.txt",
+      "status": "ok",
+      "chars": 14585,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "product_manual_6a45e4202f8371782965280_02072026093800_6a45e4202f8371782965280.pdf"
+    },
+    {
+      "text": "Files/product_manual_6a45efdfe38801782968287_02072026102807_6a45efdfe38801782968287.txt",
+      "status": "ok",
+      "chars": 17683,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "product_manual_6a45efdfe38801782968287_02072026102807_6a45efdfe38801782968287.pdf"
+    },
+    {
+      "text": "Files/product_manual_6a4f6400493e71783587840_09072026143400_6a4f6400493e71783587840.txt",
+      "status": "ok",
+      "chars": 15555,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "product_manual_6a4f6400493e71783587840_09072026143400_6a4f6400493e71783587840.pdf"
+    },
+    {
+      "text": "Files/product_manual_6a4f64de6ad821783588062_09072026143742_6a4f64de6ad821783588062.txt",
+      "status": "ok",
+      "chars": 15236,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "product_manual_6a4f64de6ad821783588062_09072026143742_6a4f64de6ad821783588062.pdf"
+    },
+    {
+      "text": "Files/product_manual_6a55fa0b510211784019467_14072026142747_6a55fa0b510211784019467.txt",
+      "status": "ok",
+      "chars": 24869,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "product_manual_6a55fa0b510211784019467_14072026142747_6a55fa0b510211784019467.pdf"
+    },
+    {
+      "text": "Files/product_manual_6a561c2e8302b1784028206_14072026165326_6a561c2e8302b1784028206.txt",
+      "status": "ok",
+      "chars": 20752,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "product_manual_6a561c2e8302b1784028206_14072026165326_6a561c2e8302b1784028206.pdf"
+    },
+    {
+      "text": "Files/product_manual_6a69d5940c2511785320852_29072026155732_6a69d5940c2511785320852.txt",
+      "status": "ok",
+      "chars": 31302,
+      "method": "pdftotext-layout-filtered-hindi",
+      "translation": "official-English-section",
+      "sourcePdfFilename": "product_manual_6a69d5940c2511785320852_29072026155732_6a69d5940c2511785320852.pdf"
+    }
+  ],
+  "notes": [
+    "Digital bilingual BIS documents retain the official English section; Hindi duplicate lines are removed.",
+    "Scanned Hindi documents are OCR'd and translated to English; OCR/translation provenance is recorded per file.",
+    "Review translated scanned documents before using them for high-stakes legal or compliance decisions."
+  ]
+}

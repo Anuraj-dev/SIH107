@@ -1,0 +1,27 @@
+{
+  "generatedAt": "2026-09-18T10:49:23Z",
+  "source": "https://standards.bis.gov.in/website",
+  "apis": {
+    "catalogue": "https://standardsadmin.bis.gov.in/proposal-service/getWebsiteIndianStandardsList",
+    "documents": {
+      "gazette": "https://standardsadmin.bis.gov.in/review-service/getGazettedetails"
+    }
+  },
+  "counts": {
+    "standards": 24133,
+    "documentRecords": 24133,
+    "fileReferences": 12057,
+    "downloadedFiles": 283
+  },
+  "files": {
+    "metadata": "data/standards_metadata.ndjson",
+    "documents": "data/standard_documents.ndjson",
+    "fileManifest": "data/files.ndjson",
+    "downloadDirectory": "files/"
+  },
+  "notes": [
+    "Catalogue and attachment metadata are public BIS API responses.",
+    "Linked files are downloaded only when the public object-storage URL resolves.",
+    "The corpus is a research/prototype snapshot; verify current BIS status before production use."
+  ]
+}

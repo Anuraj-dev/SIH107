@@ -1,0 +1,129 @@
+xxxGIDHxxx
+                                                   CG-DL-E-12032026-270896
+                                                          xxxGIDExxx
+
+                                                      EXTRAORDINARY
+                                                      PART III—Section 4
+                                              PUBLISHED BY AUTHORITY
+
+No. 178]                    NEW DELHI, THURSDAY, MARCH 12, 2026/PHALGUNA 21, 1947
+
+(1)                               (2)                          (3)                           (4)                           (5)
+ 1
+                       10822-1 : 2025
+
+1801 GI/2026                                                     (1)
+
+2                                THE GAZETTE OF INDIA : EXTRAORDINARY                                [PART III—SEC.4]
+
+                      2026                                                  14 ) : 2019                     2026
+
+                      2024                                                18004 : 2015                      2026
+
+    2024
+
+                         2024
+
+      2025                                                                        24759 : 2017                      2026
+
+      2022
+                      300 GHz)
+
+                                           BUREAU OF INDIAN STANDARDS
+                                             (Department of Consumer Affairs)
+                                                    NOTIFICATION
+                                               New Delhi, the 9th March, 2026
+
+         Ref: HQ-PUB013/1/2020-PUB-BIS (1477) — In pursuance of Sub-rule (1) of Rule (15) of the Bureau of
+Indian Standards Rules, 2018, the Bureau of Indian Standards hereby notifies that Indian standards, particulars of
+which are given in the second column of the schedule hereto annexed have been established on the date indicated
+against it in third column. The particulars of the standards, if any which are given in the fourth column shall also
+remain in force concurrently till they are withdrawn on the date indicated against them in the fifth column.
+                                                         SCHEDULE
+
+Sl      No., Year & Title of the Indian                Date of          No. , Year & Title of the                Date of
+No.                                                 Establishment                                               Withdrawal
+            Standards Established                                        Indian Standards to be
+                                                                           Withdrawn, if any
+(1)                      (2)                             (3)                       (4)                             (5)
+
+ 1       IS/ISO/IEC TR 10822-1 : 2025               06 March 2026                   NA
+           Cloud Computing — Multi-                                                                                NA
+               Cloud Management
+         Part 1 Overview and Use Cases
+
+4                                THE GAZETTE OF INDIA : EXTRAORDINARY                           [PART III—SEC.4]
+
+             IS 14202 (Part 8) : 2026           06 March 2026    IS 14202 (Part 8) : 2021       06 September 2026
+    2         ISO/IEC 7816-8 : 2021                               ISO/IEC 7816-8 : 2019
+                  +AMD 1 : 2023                                   Identification Cards —
+         Identification Cards — Integrated                       Integrated Circuit Cards
+                    Circuit Cards                                  Part 8 Commands and
+        Part 8 Commands and Mechanisms                           Mechanisms for Security
+              for Security Operations                                    Operations
+                 (Second Revision)                                    (First Revision)
+
+             IS 14202 (Part 11) : 2026          06 March 2026    IS 14202 (Part 11) : 2021      06 September 2026
+    3         ISO/IEC 7816-11 : 2022                              ISO/IEC 7816-11 : 2017
+         Identification Cards — Integrated                         Identification Cards —
+                    Circuit Cards                                 Integrated Circuit Cards
+           Part 11 Personal Verification                        Part 11 Personal Verification
+            through Biometric Methods                           through Biometric Methods
+                 (Second Revision)                                     (First Revision)
+
+             IS 15474 (Part 1) : 2026           06 March 2026    IS 15474 (Part 1) : 2019       06 September 2026
+    4           IEC 60300-1 : 2024                                 IEC 60300-1 : 2014
+           Dependability Management                             Dependability Management
+          Part 1 Managing Dependability                            Part 1 Guidance for
+                  (First Revision)                              Management and Application
+
+    5     IS 15474 (Part 3/Sec 14) : 2026       06 March 2026    IS 15474 (Part 3/Sec 14) :     06 September 2026
+              IEC 60300-3-14 : 2024                                        2019
+            Dependability Management                               IEC 60300-3-14 : 2004
+             Part 3 Application Guide                           Dependability Management
+           Section 14 Supportability and                          Part 3 Application Guide
+                      Support                                   Section 14 Maintenance and
+                  (First Revision)                                  Maintenance Support
+
+    6        IS/ISO/IEC 18004 : 2024            06 March 2026    IS/ISO/IEC 18004 : 2015        06 September 2026
+            Information Technology —                            Information Technology —
+        Automatic Identification and Data                       Automatic Identification and
+         Capture Techniques — QR Code                           Data Capture Techniques —
+        Bar Code Symbology Specification                            QR Code Bar Code
+                  (First Revision)                               Symbology Specification
+
+    7       IS/ISO/IEC 22237-2 : 2024           06 March 2026               NA                        NA
+         Information Technology — Data
+        Centre Facilities and Infrastructures
+           Part 2 Building Construction
+
+    8       IS/ISO/IEC 22237-6 : 2024           06 March 2026               NA                        NA
+         Information Technology — Data
+        Centre Facilities and Infrastructures
+              Part 6 Security Systems
+
+ 9        IS/ISO/IEC 24759 : 2025            06 March 2026         IS/ISO/IEC 24759 : 2017                 06 September 2026
+            Information Security,                                 Information Technology —
+          Cybersecurity and Privacy                               Security Techniques — Test
+       Protection — Test Requirements                                  Requirements for
+         for Cryptographic Modules                                  Cryptographic Modules
+                (First Revision)
+
+ 10       IS/IEC/IEEE 63195-1 : 2022         06 March 2026                     NA                                                     NA
+        Assessment of Power Density of
+           Human Exposure to Radio
+        Frequency Fields from Wireless
+       Devices in Close Proximity to the
+       Head and Body (Frequency Range
+              of 6 Ghz to 300 Ghz)
+         Part 1 Measurement Procedure
+
+                                                  CHITRA GUPTA, Scientist G & DDG (Hallmarking and Training)
+                                                                                      [ADVT.-III/4/Exty./754/2025-26]
+
+           Uploaded by Dte. of Printing at Government of India Press, Ring Road, Mayapuri, New Delhi-110064
+                             and Published by the Controller of Publications, Delhi-110054. SARVESH KUMAR
+                                                                                                  Digitally signed by SARVESH KUMAR
+                                                                                                  SRIVASTAVA
+                                                                                            SRIVASTAVA
+                                                                                                  Date: 2026.03.12 23:21:57 +05'30'

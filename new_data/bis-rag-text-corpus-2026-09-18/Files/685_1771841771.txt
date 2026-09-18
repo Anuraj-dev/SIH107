@@ -1,0 +1,155 @@
+xxxGIDHxxx
+                                                   CG-DL-E-20022026-270369
+                                                          xxxGIDExxx
+
+                                                      EXTRAORDINARY
+                                                      PART III—Section 4
+                                              PUBLISHED BY AUTHORITY
+
+No. 108 ]                    NEW DELHI, TUESDAY, FEBRUARY 17, 2026/MAGHA 28, 1947
+
+(1)                              (2)                           (3)                           (4)                            (5)
+
+  1216 GI/2026                                                  (1)
+
+2                           THE GAZETTE OF INDIA : EXTRAORDINARY                          [PART III—SEC.4]
+
+          11801-4 : 2017
+
+        11801-9908 : 2020
+
+ 4                                  THE GAZETTE OF INDIA : EXTRAORDINARY                                  [PART III—SEC.4]
+
+                   2009                            2026                         2005                            2026
+
+                                         BUREAU OF INDIAN STANDARDS
+                                           (Department of Consumer Affairs)
+                                                   NOTIFICATION
+                                             New Delhi, 9th February, 2026
+          Ref: HQ-PUB013/1/2020-PUB-BIS (1427).—In pursuance of Sub-rule (1) of Rule (15) of the Bureau of
+ Indian Standards Rules, 2018, the Bureau of Indian Standards hereby notifies that Indian standards, particulars of
+ which are given in the second column of the schedule hereto annexed have been established on the date indicated
+ against it in third column. The particulars of the standards, if any which are given in the fourth column shall also
+ remain in force concurrently till they are withdrawn on the date indicated against them in the fifth column.
+
+                                                      SCHEDULE
+
+Sl.      No., Year & Title of the Indian            Date of          No. , Year & Title of the Indian          Date of
+No.          Standards Established               Establishment       Standards to be Withdrawn, if            Withdrawal
+                                                                                  any
+(1)                     (2)                            (3)                          (4)                            (5)
+
+ 1                IS 5211 : 2026                04 February 2026             IS 5211 – 1969                  04 August 2026
+       Dental Scissors, Straight and Curved                             Specification for Scissors,
+                 — Specification                                        Dental No. 1, Straight and
+                 (First Revision)                                            Curved on Flat
+
+                                                                                                 04 August 2026
+2              IS 5212 : 2026                04 February 2026           IS 5212 – 1969
+     Dental Crown Scissors, Straight and                           Specification for Scissors,
+          Curved — Specification                                  Crown, Dental, Straight and
+              (First Revision)                                          Curved on Flat
+                                                                                                 04 August 2026
+3             IS 10353 : 2026                04 February 2026         IS 10353 – 1982
+      Dental Mckellops’ Type Pliers —                              Specification for Pliers,
+               Specification                                       Mckellops’ Type, Dental
+              (First Revision)
+
+4         IS/ISO/IEC 11801-4 : 2017          04 February 2026                 NA                      NA
+     Information Technology — Generic
+       Cabling for Customer Premises
+        Part 4 Single-Tenant Homes
+
+5      IS/ISO/IEC 11801-9908 : 2020          04 February 2026                 NA                      NA
+     Information Technology — Generic
+        Cabling Systems for Customer
+                  Premises
+     Part 9908 Guidance for the Support
+     of Higher Speed Applications Over
+           Optical Fibre Channels
+
+                                                                                                 04 August 2026
+6          IS 17900 (Part 5) : 2026          04 February 2026      IS 14665 (Part 5) : 1999
+      Lifts for the Transport of Persons                           Electric Traction Lifts —
+                  and Goods                                              Specification
+     Part 5 Guide for Inspection of Lifts                          Part 5 Inspection Manual
+                                                                                                 04 August 2026
+7          IS/ISO/IEC 18031 : 2025           04 February 2026      IS/ISO/IEC 18031 : 2011
+     Information Technology — Security                            Information Technology —
+          Techniques — Random Bit                                   Security Techniques —
+                 Generation                                         Random Bit Generation
+              (First Revision)
+
+8             IS 19401 : 2026                04 February 2026                 NA                      NA
+             ISO 28888 : 2013
+     Dentistry — Screening Method for
+     Erosion Potential of Oral Rinses on
+            Dental Hard Tissues
+
+9             IS 19423 : 2026                04 February 2026                 NA                      NA
+              ISO 9693 : 2019
+     Dentistry — Compatibility Testing
+      for Metal-Ceramic and Ceramic-
+              Ceramic Systems
+
+6                                THE GAZETTE OF INDIA : EXTRAORDINARY                         [PART III—SEC.4]
+
+10            IS 19424 : 2026              04 February 2026               NA                          NA
+      Dentistry — Polymer-Based Die
+                 Materials
+         (ISO 14233 : 2003; MOD)
+
+11            IS 19429 : 2026              04 February 2026               NA                          NA
+              ISO 10323 : 2013
+      Dentistry — Bore Diameters for
+      Rotary Instruments Such as Discs
+                 and Wheels
+
+12            IS 19430 : 2026              04 February 2026               NA                          NA
+            ISO/TS 19736 : 2017
+     Dentistry — Bonding Test Between
+      Polymer Teeth and Denture Base
+                 Materials
+
+13            IS 19454 : 2026              04 February 2026               NA                          NA
+      Writable Functional Inks for Pens
+         (Conductive and Resistive)
+
+14            IS 19483 : 2026              04 February 2026               NA                          NA
+              ISO 13504 : 2012
+     Dentistry — General Requirements
+        for Instruments and Related
+     Accessories Used in Dental Implant
+         Placement and Treatment
+
+                                                         2
+15            IS 19494 : 2026              04 February 2026               NA                          NA
+           ISO/TR 28642 : 2016
+      Dentistry — Guidance on Colour
+                Measurement
+                                                                                                 04 August 2026
+16      IS/ISO/IEC 22123-1 : 2023          04 February 2026     IS/ISO/IEC 22123 (Part 1) :
+     Information Technology — Cloud                                       2021
+                Computing                                     Information Technology Cloud
+             Part 1 Vocabulary                                          Computing
+              (First Revision)                                      Part 1 Vocabulary
+
+17         IS/IEC 62308 : 2006             04 February 2026               NA                          NA
+     Equipment Reliability — Reliability
+           Assessment Methods
+
+                                                                                                                      04 August 2026
+18          IS/IEC 61746-1 : 2009                04 February 2026                IS/IEC 61746 : 2005
+     Calibration of Optical Time-Domain                                      Calibration of Optical Time-
+           Reflectometers (OTDR)                                               Domain Reflectometers
+     Part 1 OTDR for Single Mode Fibres                                                (OTDR)
+              (First Revision)
+
+                                                          CHITRA GUPTA, Scientist G & DDG (Hallmarking & Training)
+
+                                                                                             [ADVT.-III/4/Exty./683/2025-26]
+
+           Uploaded by Dte. of Printing at Government of India Press, Ring Road, Mayapuri, New Delhi-110064
+                             and Published by the Controller of Publications, Delhi-110054. GORAKHA NATH Digitally signed by GORAKHA
+                                                                                                         NATH YADAVA
+                                                                                                     YADAVA           Date: 2026.02.20 16:28:47 +05'30'

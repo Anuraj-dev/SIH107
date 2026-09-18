@@ -1,0 +1,320 @@
+PM/1171/2
+                                                                                         July 2026
+
+                                             www.bis.gov.in
+
+                                      Product Manual for
+                                 Ferromanganese-Specification
+                                  According to IS 1171: 2026
+
+This Product Manual shall be used as reference material by all Regional/Branch Offices &
+licensees to ensure uniformity of practice and transparency in operation of certification
+under Scheme-I of Bureau of Indian Standards (Conformity Assessment) Regulations,2018
+for various products. The document may also be used by prospective applicants desirous of
+obtaining BIS certification.
+
+ 1.                                  :
+      IS No.
+                                     :
+      Title
+                                     :
+      No. of amendments
+ 2.
+      Sampling Guidelines
+      Raw material
+                                       Note: This section indicates the requirements for
+ a)                                  : raw material (if specified in the IS) for which
+                                       compliance is to be established during Grant of
+                                       Licence/Change in Scope of Licence/Factory
+                                       Surveillance
+      Grouping Guidelines
+ b)                                  : The samples drawn, as mentioned above against the
+                                       grades should consist of all the Size classes intended
+                                       to be covered in licence scope.
+
+                                                                                     PM/1171/2
+                                                                                      July 2026
+
+     Sample Quantity                    to be ensured)
+
+                                      Note: This section indicates the quantity of the
+                                      sample of the product and/or the raw material (if
+                                      applicable), required to be sent to the laboratory for
+c)                                  :
+                                      testing, for the purpose of Grant of Licence/Change
+                                      in Scope of Licence/ Factory Surveillance (in case of
+                                      market surveillance, effort may be made to procure
+                                      the required quantity of product sample, as far as
+                                      possible since raw material sample may not be
+                                      available in market)
+d)                                  : Note: Apart from the above, any other
+     Parameters to be                 requirements/parameters may also be declared as per
+     Declared in Test Request         the standard, as applicable.
+3.                                  :
+     List of Test Equipment
+4. Scheme of Inspection and         :
+     Testing
+5.
+     Possible tests in a day
+     All tests.
+
+   Note: This section is for the guidance of BIS Certification Officers/Technical
+   Auditors of BIS Authorized Outside Surveillance Agencies (OSAs) during factory
+   inspection to provide ready reference regarding the tests which can be witnessed
+   during the inspection in the factory by the officer/auditor.
+     2026 with the following scope:
+7.
+     Name of the product
+     Type                           Ferromanganese Low Carbon, Ferromanganese Medium
+                                    Carbon, Ferromanganese High Carbon.
+     Grade Designation              8FeMn82,…
+     Size Designation               I, II,…..
+
+                          BUREAU OF INDIAN STANDARDS
+                       Manak Bhawan, 9, Bahadur Shah Zafar Marg,
+                                 New Delhi – 110002
+
+                                                                                     PM/1171/2
+                                                                                      July 2026
+
+                                       ANNEX-A
+                              TO PRODUCT MANUAL FOR
+                                    Ferromanganese
+                                According to IS 1171:2026
+
+1. IS 1171:2026 specifies three types of Ferromanganese, along with multiple grade
+designations under each type, as detailed below:
+(a) Low Carbon Ferromanganese- 05 grade designations
+(b) Medium Carbon Ferromanganese- 05 grade designations
+(c) High Carbon Ferromanganese- 05 grade designations
+
+2. Grouping has been done on the basis of grade designation as under:
+ Group       Type                 Grade            Remark
+                                  Designation
+ Group 1     Low Carbon           8 FeMn 82        Manufacturer shall declare the grade
+             Ferromanganese       8 FeMn 76        designations and size designations
+                                  8 FeMn 74        intended to be included in the scope of
+                                  8 FeMn 73        licence.
+                                  8 FeMn 68
+ Group 2     Medium Carbon        3 FeMn 92        One sample of highest grade (based on
+             Ferromanganese       3 FeMn 86        higher Mn content) may be drawn from
+                                  3 FeMn 80        each group for all tests, to cover all the
+                                  3 FeMn 76        grade designations of the product within
+                                  3 FeMn 73        that group.
+ Group 3     High Carbon          05 FeMn 92
+             Ferromanganese       05 FeMn 87       Further, with respect to size designations,
+                                  05 FeMn 83       the samples drawn amongst the groups
+                                  05 FeMn 78       should comprise of all the size designations
+                                  05 FeMn 73       intended to be included in the scope of
+                                                   licence, from any of the grades applied for.
+
+                                                   eg: One sample of 8FeMn82 of Size
+                                                   Designation-I and one sample of 3FeMn92
+                                                   of Size Designation-II
+                                                   OR One sample of 8FeMn82 of Size
+                                                   Designation-II and one sample of
+                                                   3FeMn92 of Size Designation-I should be
+                                                   tested to cover all grades in
+                                                   group-1&2 for size designations-I & II.
+
+3. However, the licence can be granted for all the particle sizes of the Ferromanganese specified
+in the specification and applied by the applicant/licencee, provided that the firm is having all
+the necessary manufacturing and testing facilities for the manufacture and testing of all other
+particle sizes of the Ferromanganese proposed to be included in the licence.
+4. During the operation of license, BO shall ensure that all sizes /grades covered in the license
+are drawn for independent testing on rotation over a period of time.
+
+                                                                               PM/1171/2
+                                                                                July 2026
+
+                                     ANNEX – B
+                         LIST OF TEST EQUIPMENTS
+                   (INDICATIVE LIST, FOR GUIDANCE ONLY)
+
+Major test equipment required to test as per requirements of Indian Standard.
+
+Sl.   Test Equipment/Chemicals and Identification Numbers              Tests Used in with Clause
+No.   (Where applicable)                                               Reference
+
+1     Rough Polishing Machine, Cutting Machine, Fine Polishing Preparation of specimen
+      Machine, Grinder Machine                                 for chemical composition
+                                                               (7.2)
+
+2     Instrumental methods                                        C,S,P,Mn,Si,Al (7.2)
+      Spectrometer: atomic-absorption spectrometry, inductively
+      coupled plasma atomic emission, inductively coupled plasma
+      mass spectrometry techniques, spark source optical emission
+      spectrometry.
+
+      Spectrophotometer                                                Si,Mn,S,P
+
+3     Digital weighing balance, Hot air oven, Muffle Furnace, Hot plate, C content (7.2)
+      Conc. Nitric Acid, Potassium chloride, phenolphthalein indicator, (Chemical method,
+      Hydrofluoric Acid, sodium hydroxide, Conc. Nitric Acid, Boric alternative to
+      Acid, Zinc, Barium Chloride,                                       instrumental method)
+
+4     Digital weighing balance, Hot air oven Hot plate, Potassium S content (7.2)
+      nitrate, Dilute Hydrochloric Acid, Conc. Hydrochloric Acid, (chemical method,
+      Dilute Sulphuric Acid, Hydrofluoric Acid, Conc. Nitric Acid, alternative to
+      Boric Acid, Zinc(Sulphur free), Barium Chloride, Nickel crucible, instrumental method)
+      Nickel rods, Hydrogen peroxide, sodium carbonate, sodium
+      peroxide
+5     Digital weighing balance, Hot air oven , nickel crucible, sodium Phosphorus content (7.2)
+      carbonate, sodium peroxide, Dilute Hydrochloric Acid, (chemical method,
+      Concentrated Nitric Acid, hydrofluoric acid, Dilute Sulphuric alternative to instrumental
+      Acid, conc. Ammonium hydroxide, dilute nitric acid, sulphurous method)
+      acid, potassium permanganate, potassium nitrite, ammonium
+      molybdate, Conc. Sulphuric acid, perchloric acid, hydrobromic
+      acid, potassium nitrate, sodium hydroxide, phenolphthalein
+      indicator
+6     Digital weighing balance,muffle furnace, Nickel Crucible - 30 to Silicon content (7.2)
+      50 ml capacity, with lid. Platinum Crucible - 25 to 30 ml capacity, (chemical method,
+      with lid, Sodium Hydroxide – solid, Dilute Hydrochloric Acid - 1 alternative to
+      : 1 and 1 :, 20 ( v/v), Concentrated HydrochIoric Acid, Dilute instrumental method)
+
+                                                                                 PM/1171/2
+                                                                                  July 2026
+
+        Sulphuric Acid - 1 : 1 ( v/v), Hydrofluoric Acid - 40 percent, Dilute
+        Nitric Acid, Filter paper No.40, IS sieve 15, Hot plate
+7       Apparatus: Gooch Crucible, Dark Coloured Glass, Stoppered Mn content (7.2)
+        Bottles, Glass wares like pipette, burettes, flasks etc, Facility for (chemical method,
+        cold water. Reagents for Bismuthate Method: Nitric Acid, alternative to
+        Sulphuric Acid, Sulphurous Acid (Facility to prepare sulphurous instrumental method)
+        acid by dissolving Sulphur dioxide in water), Sodium Bismuthate,
+        Ferrous Ammonium Sulphate, Phosphoric Acid, Potassium
+        Permanganate, Analar Sodium Oxalate.
+
+        Reagents for Volhard Method: Sulphuric Acid, Sodium
+        Carbonate, Zinc Oxide, Nitric Acid, Potassium Permanganate
+8       Different sizes of sieve                                   Particle Size Range (8)
+
+Note: The above is an indicative list for the purpose of guidance only
+
+                                                                                      PM/1171/2
+                                                                                       July 2026
+
+                                   ANNEX- C
+                       SCHEME OF INSPECTION AND TESTING
+
+1.     QUALITY ASSURANCE PLAN
+1.1     It is expected that during operation of BIS licence, manufacturers will implement a
+Quality Assurance Plan (QAP) i.e. a plan of regular testing and in-process controls, designed
+to ensure that the product bearing the Standard Mark conforms to all requirements of the Indian
+Standard.
+1.2      The manufacturers shall define a Quality Assurance Plan (QAP) defining the control
+unit (i.e. lot/batch etc.), the levels of control (i.e. the frequency and number of samples for
+conducting the different tests as per the Indian Standard) and declare the arrangement for
+testing i.e. whether in-house or subcontracting/sharing for each applicable test and submit the
+same to BIS Branch Office for information. The manufacturer shall comply with the QAP and
+maintain test records in accordance with para 2.1.
+1.3    RECOMMENDED LEVELS OF CONTROL/CONTROL UNIT:
+1.3.1 For the guidance of manufacturers, the recommended definition of control unit is: For
+the purpose of this scheme, material of one cast/ melt representing one furnace heat/ one tap of
+continuous furnace/ladle or holding furnace shall constitute one control unit.
+
+1.3.2 For the guidance of manufacturers in preparing the Quality Assurance Plan,
+recommended levels of control are given in Table 1. Manufacturer has the discretion of
+declaring their own levels of control or accept the levels of control given in this document.
+
+1.3.3 The manufacturer shall ensure inspection and testing as per the Quality Assurance Plan
+submitted by them on the whole production of the factory which is covered by this plan.
+2.     ENSURING COMPLIANCE THROUGH TESTING- manufacturers shall ensure
+compliance of their products to all the requirements of the Indian Standard for which they
+may have in-house test facilities. However, there is no obligation to maintain in-house
+laboratory. Licensee may use alternative arrangements for tests of the production as per the
+declared QAP. Various alternatives are available for operation of BIS certification as given
+below and the relevant guidelines for availing such relaxations by the manufacturers, as
+amended from time to time, are to be referred:
+i) Shared testing resources like common facility,
+ii) Cluster based testing facility,
+iii) Sub-contracting to outside laboratories which may either be:
+        a) BIS recognised/empanelled laboratories, or
+        b) Any accredited laboratory as per ISO/IEC 17025
+
+2.1     TEST RECORDS- The manufacturers shall maintain test records for the tests carried
+out (either in-house or at a sub-contracted or at shared test facility) to establish conformity of
+the product to the Standard for operation of licence. For the tests being subcontracted or
+
+                                                                                         PM/1171/2
+                                                                                          July 2026
+
+conducted at a shared test facility, test results issued by the laboratories or test facilities, shall
+be made available for inspection by BIS.
+
+3.      PACKING AND MARKING - The Standard Mark as given in the Schedule of the
+license and Licence Number (i.e. CM/L… ) shall be suitably incorporated on the material and
+on the test certificate issued along with each consignment, provided always that the product
+thus marked and packed conforms to all the requirement of the specification.
+3.1     Packing and Marking shall be done as per the Indian Standard.
+3.2    Additional Marking requirements: Additionally, the following shall also be marked
+on each Package of the material:
+a)     “For BIS certification details please visit www.bis.gov.in”
+b)     Any other requirement not specified in the Indian Standard
+
+4.     TEST CERTIFICATE – For each consignment of BIS Certified material conforming
+to IS 1171:2026 there shall be a test certificate which shall contain the Standard Mark, the
+cast/Control Unit number and the corresponding test results (as given in Annexure-I enclosed).
+
+5.     REJECTION - The production which conforms to the Indian Standard and covered
+under the scope of this licence shall be marked with the Standard Mark. Disposal of non-
+conforming product shall be done in such a way so as to ensure that there is no violation of
+provisions of BIS Act,2016.
+
+                                                                                                                            PM/1171/2
+                                                                                                                             July 2026
+
+                                                         TABLE 1
+                                  (Recommended Levels of Control by BIS- For Guidance Only)
+
+                          (1)                                         (3)                                      (4)
+                     TEST DETAILS                             LEVELS OF CONTROL                             REMARKS
+Clause   Requirements                Test Method             No. of  Frequency
+                              Clause         Reference       Samples
+7.2      Chemical          7.2.1 to    IS 1171               One     Each    Control            Samples may be taken at the time of
+         Composition       7.2.5       Various parts of IS           Unit                       tapping. Occasional analysis of
+                                       13452 and IS 1559 or                                     finished product shall also be done.
+                                       any other established                                    The finished sample may be
+                                       instrumental       or                                    composed of materials collected
+                                       chemical method                                          from different containers of same
+                                                                                                heat.
+8        Particle Size      8.1           IS 1171               Adequate inspection to ensure that the particle size range of material
+                            8.2           IS 1607               being supplied is in accordance with ISS.
+                                          IS 460 (Part 1)
+                                          IS 460 (Part 2)
+                                          IS 460 (Part 3)
+9        Extraneous         9             IS 1171               Adequate inspection to ensure that the material is reasonably free
+         Contamination                                          from extraneous contaminations.
+
+                                                                                                                                                  PM/1171/2
+                                                                                                                                                   July 2026
+
+                                                                                                                          ISI Mark
+                                                                        Annexure-I
+                                                      (Para 4 of the Scheme of Inspection and Testing)                    With IS No.
+                                                                      XYZ COMPANY                                         and CM/L
+                                                       (Registered office Address and works address)                      no.
+
+                                                      Test Certificate for Ferromanganese
+                                                           According to IS 1171:2026
+                                              TEST CERTIFICATE NO.____________________________
+
+To M/s___________________________________________                                                        Dated_____________________
+
+We certified that the material described below fully conforms to IS 1171:2026 Chemical and Physical properties of the product as tested in accordance with
+the Scheme of Inspection and Testing contained in the BIS Certification Marks LicenceNo.CM/L_________are as indicated below against each order No.
+
+                       (PLEASE REFER TO IS 1171:2026 FOR DETAILS OF SPECIFICATION REQUIREMENTS)
+                                                         TEST RESULTS
+
+Order    Grade       Cast       Qty (in              Chemical Composition (%)                 Size        Constitution of consignment   Remarks
+No. &    Designati   No./ Lot   tonnes)                                                    Designation
+Date     on          No.
+                                          C      S      P    Mn     Si   Al     Residual
+                                                                                elements
+
+Remarks
+Wagon No.
+Truck No.                                                                                                                          FOR XYZ COMPANY
+
+(It is suggested that size A4 paper be used for this test Certificate)

@@ -1,0 +1,321 @@
+PM/ IS 6454 (Part 2)/ 1
+                                                                                                           July 2026
+
+                               PRODUCT MANUAL
+                      RADIAL SPHERICAL ROLLER BEARINGS
+                 DOUBLE ROW WITH CYLINDRICAL OR TAPERED BORE
+                         According to IS 6454 (Part 2): 2026
+
+This Product Manual shall be used as reference material by all Regional/Branch Offices & licensees to ensure
+uniformity of practice and transparency in operation of certification under Scheme-I of Bureau of Indian
+Standards (Conformity Assessment) Regulations,2018 for various products. The document may also be used
+by prospective applicants desirous of obtaining BIS certification.
+
+                                                            Row with Cylindrical or Tapered Bore
+       No. of amendments
+     Raw material                                           Cage (Cl. 8.2)
+                                                            Note: This section indicates the requirements for raw material
+                                                            (if specified in the IS) for which compliance is to be
+                                                            established during Grant of Licence/Change in Scope of
+                                                            Licence/Factory Surveillance.
+
+     Grouping Guidelines
+       Sample Quantity
+                                                            Bearing outside diameter (D)
+                                                            Bearing width (B)
+       Parameters to be Declared in Test                    Material of the Rings, Rollers and Cages, in
+       Request                                              addition to the parameters given in scope of the
+                                                            licence under S. No. 6
+                                                            Note: Apart from the above, any other requirements/
+                                                            parameters may also be declared as per the standard, as
+                                                            applicable.
+     List of Test Equipment
+
+                                                                                                            Page 1 of 8
+
+                                                                                      PM/ IS 6454 (Part 2)/ 1
+                                                                                                  July 2026
+
+   Scheme of Inspection and Testing
+   Possible tests in a day
+                                                   Note: This section is for the guidance of BIS Certification
+                                                   Officers/ Technical Auditors of BIS Authorized Outside
+                                                   Surveillance Agencies (OSAs) during factory inspection to
+                                                   provide ready reference regarding the tests which can be
+                                                   witnessed during the inspection in the factory by the officer/
+                                                   auditor.
+ “Licence is granted to use Standard Mark as per IS 6454 (Part 2):2026 with the following scope:
+Name of the product         Radial Spherical Roller Bearings
+                            Part 2 Double Row with Cylindrical or Tapered Bore
+Type                        Double Row Radial Spherical Roller Bearings
+                            Double Row Radial Spherical Roller Bearings with Locating Snap Ring
+                            Double Row Radial Spherical Roller Bearings with Circlips
+Variant                     Cylindrical Bore / 1:12 Tapered Bore / 1:30 Tapered Bore
+Bearing bore                From ……. mm to ……. mm
+diameter (d)
+Material Rings              To be declared by the manufacturer
+          Rollers           To be declared by the manufacturer
+          Cage              To be declared by the manufacturer
+Tolerance Class             P0 (tolerance class normal) / P6 (tolerance class 6)/
+                            P5 (tolerance class 5)/ P4 (tolerance class 4)/ P2 (tolerance class 2)
+
+                      BUREAU OF INDIAN STANDARDS
+       MANAK BHAVAN, 9, BAHADUR SHAH ZAFAR MARG, NEW DELHI-110002
+                             www.bis.gov.in
+
+                                                                                                   Page 2 of 8
+
+                                                                             PM/ IS 6454 (Part 2)/ 1
+                                                                                         July 2026
+
+                                      ANNEX - A
+                                  Grouping Guidelines
+
+  1. Double Row Radial Spherical Roller Bearings as per IS 6454 (Part 2):2026 may be classified
+     as below:
+
+Type                     Double Row Radial Spherical Roller Bearings
+                         Double Row Radial Spherical Roller Bearings with Locating Snap Ring
+                         Double Row Radial Spherical Roller Bearings with Circlips
+Variant                  Cylindrical Bore / 1:12 Tapered Bore / 1:30 Tapered Bore
+Bearing bore             From ……. mm to ……. mm
+diameter (d)
+Material Rings           To be declared by the manufacturer
+          Rollers        To be declared by the manufacturer
+          Cage           To be declared by the manufacturer
+Tolerance Class          P0 (tolerance class normal) / P6 (tolerance class 6)/
+                         P5 (tolerance class 5)/ P4 (tolerance class 4)/ P2 (tolerance class 2)
+
+  2. Further, Double Row Radial Spherical Roller Bearings are grouped as following:
+
+       Group          Nominal Size for Bearing Bore Diameter (d)
+       Group-I        Upto and including 250 mm
+       Group-II       Above 250 mm to Upto and including 500 mm
+       Group-III      Above 500 mm to Upto and including 1000 mm
+       Group-IV       All others above 1000 mm
+
+  3. Based on the above classification and grouping, following grouping guidelines shall be
+     followed for considering Grant of Licence (GoL)/Change in Scope of Licence (CSoL):
+   Samples of Double Row Radial Spherical Roller Bearings of each type shall be tested
+      separately.
+   Samples of Double Row Radial Spherical Roller Bearings of each variant shall be tested
+      separately.
+   Samples of Double Row Radial Spherical Roller Bearings for each type of material (for
+      rings, rollers and cage) and each tolerance class shall be tested separately.
+   Samples of Double Row Radial Spherical Roller Bearings of any bearing bore diameter from
+      each of the group defined in Sl. No. 2 above, for any of bearing outside diameter and width
+      shall be tested to cover all other bearing bore diameter in that group. However, it shall be
+      ensured that bearing of largest nominal dia for which the firm intends to take the licence is
+      tested. For example, if a manufacturer intends to cover Double Row Radial Spherical Roller
+      Bearings upto bearing bore diameter of 1500 mm, Double Row Radial Spherical Roller
+      Bearings of any bearing bore diameter from Group-I, II & III shall be tested and largest
+      bearing bore diameter (i.e) 1500 mm shall be tested to cover the entire range.
+
+  4. However, the following relaxation may be considered:
+  (i) If sample of Double Row Radial Spherical Roller Bearings with Locating Snap Ring is tested,
+      Double Row Radial Spherical Roller Bearings without Locating Snap Ring may also be
+      covered in the scope of licence. If sample of Double Row Radial Spherical Roller Bearings
+      with Circlips is tested, Double Row Radial Spherical Roller Bearings without Circlips may
+      also be covered in the scope of licence.
+
+                                                                                        Page 3 of 8
+
+                                                                            PM/ IS 6454 (Part 2)/ 1
+                                                                                        July 2026
+
+(ii) If Double Row Radial Spherical Roller Bearings of variant 1:30 Tapered Bore is tested,
+     Double Row Radial Spherical Roller Bearings of variant 1:12 Tapered Bore and variant
+     Cylindrical Bore may also be included in the scope of licence. If Double Row Radial
+     Spherical Roller Bearings of variant 1:12 Tapered Bore is tested, Double Row Radial
+     Spherical Roller Bearings of variant Cylindrical Bore may also be included in the scope of
+     licence.
+
+(iii) If sample of Double Row Radial Spherical Roller Bearings having highest Tolerance class
+      is tested, all other tolerance class may be included in the scope of licence without further
+      testing.
+
+    Note: Tolerance class grading - P2 (tolerance class 2) > P4 (tolerance class 4) > P5
+    (tolerance class 5) > P6 (tolerance class 6) > P0 (tolerance class normal)
+
+5. Manufacturers shall declare all the designations of Double Row Radial Spherical Roller
+   Bearings they intend to cover in the scope of licence. The Scope of Licence may be
+   restricted based on the Manufacturing and testing capabilities of the Manufacturer.
+
+6. During the operation of the Licence, BO shall ensure that all the varieties of Double Row
+   Radial Spherical Roller Bearings covered in the Licence are tested in rotation, to the extent
+   possible.
+
+   Note:
+   Manufacturer shall submit the following:
+   (a) Hardness requirement, if an upper value is to be specified/ if any special heat treatment
+       is done as per Cl. 10
+   (b) Load Ratings as per Cl. 11
+   (c) Product Noise, as agreed (if any) as per Cl. 12.2
+   (d) Designation for all bearings as per Cl. 14
+
+                                                                                       Page 4 of 8
+
+                                                                              PM/ IS 6454 (Part 2)/ 1
+                                                                                          July 2026
+
+                                          ANNEX- B
+                                  List of Test Equipments
+                                (Indicative List, For Guidance Only)
+
+ Sl.    Cl. Ref.    Tests used in with         Test Equipment
+ No.                Clause Reference
+  1.     4, 6       Boundary Dimensions         Coordinate Measuring Machine (CMM)
+        Table 1                                 Computerized Profile measurement system
+                                                Height Gauge/Bore & OD Gauge
+                                                Micrometer
+                                                Dial Gauge
+  2.        5       Tolerances and              Runout Gauges for inner ring and outer ring
+                    Geometrical                 Roundness Tester Gauge/ measuring equipment
+                    Characteristics             Gauges or other dimensional measuring
+                                                arrangements for snap ring and snap ring grooves
+                                                Other gauges, as applicable as per IS 11027 (Part 2)
+  3         7       Radial Internal             Radial Internal Clearance Checking Machine
+                    Clearance
+  4.        8       Material                    Spectrometer
+                                                Chemical analysis kit
+  5.        9       Surface Finish               Computerized Profile Measurement System /
+                                                 Surface Roughness Gauge meter (Ra meter)
+  6.       10       Hardness                     Hardness Tester
+                                                 Sample preparation tools
+  7.      12.1      Visual Inspection            Magnifying glass
+                                                 Defect inspection light
+                                                 Surface Table
+  8.      12.4      Temperatures                 Thermometer
+                                                 Hot Air Oven
+  9.       13       Measuring and                As per IS 11027 (Part 2)
+                    Gauging Methods
+ 10.       4.2      Circlips                    Testing arrangement for bend & twist test
+                                                Testing arrangement for fracture test
+                                                Testing arrangement for Deformation (conical and
+                                                spiral) test
+                                                Test arrangement for Permanent Set and Grip Test
+                                                Tests for finish as per IS 3618
+
+The above list is indicative only and may not be treated as exhaustive.
+
+                                                                                         Page 5 of 8
+
+                                                                                   PM/ IS 6454 (Part 2)/ 1
+                                                                                               July 2026
+
+                                        ANNEX C
+                             Scheme of Inspection and Testing
+
+1. QUALITY ASSURANCE PLAN
+
+1.1 It is expected that during operation of BIS licence manufacturers will implement a Quality
+    Assurance Plan (QAP) i.e. a plan of regular testing and in-process controls, designed to ensure
+    that the product bearing the Standard Mark conforms to all requirements of the Indian Standard.
+
+1.2 The manufacturers shall define a Quality Assurance Plan (QAP) defining the control unit (i.e.
+    lot/batch etc.), the levels of control (i.e. the frequency and number of samples for conducting the
+    different tests as per the Indian Standard) and declare the arrangement for testing i.e. whether in-
+    house or sub-contracting/ sharing for each applicable test and submit the same to BIS Branch
+    Office for information. The manufacturer shall comply with the QAP and maintain test records in
+    accordance with para 2.1.
+
+1.3 Recommended Levels of Control/ Control Unit:
+ 1.3.1 For the guidance of manufacturers, the recommended definition of control unit is: entire
+       quantity of Double Row Radial Spherical Roller Bearings of same type, same variant and
+       same nominal bearing bore diameter with same tolerance class, manufactured in a day under
+       similar process condition from the same grade of raw materials shall constitute a control unit.
+ 1.3.2 For the guidance of manufacturers in preparing the Quality Assurance Plan, recommended
+       levels of control are given in Table 1. Manufacturer has the discretion of declaring their own
+       levels of control or accept the levels of control given in this document.
+ 1.3.3 The manufacturer shall ensure inspection and testing as per the Quality Assurance Plan
+       submitted by them on the whole production of the factory which is covered by this plan.
+
+1.4 However, all manufacturers shall ensure compliance of their products to all the requirements of
+    the Indian Standard.
+
+2. ENSURING COMPLIANCE THROUGH TESTING
+  The manufacturers shall ensure compliance of their products to all the requirements of the Indian
+  Standard for which they may have in-house test facilities. However, there is no obligation to
+  maintain in-house laboratory. Licensee may use alternative arrangements for tests of the
+  production as per the declared QAP. Various alternatives are available for operation of BIS
+  certification as given below and the relevant guidelines for availing such relaxations by the
+  manufacturers, as amended from time to time, are to be referred:
+           i) Shared testing resources like common facility,
+           ii) Cluster based testing facility,
+           iii) Sub-contracting to outside laboratories which may either be:
+                             a) BIS recognised/ empanelled laboratories, or
+                             b) Any accredited laboratory as per ISO/IEC 17025
+
+2.1 Test Records- The manufacturers shall maintain test records for the tests carried out (either in-
+    house or at a sub-contracted or at shared test facility) to establish conformity of the product to the
+    Standard for operation of licence. For the tests being subcontracted or conducted at a shared test
+    facility, test results issued by the laboratories or test facilities, shall be made available for
+    inspection by BIS.
+
+                                                                                              Page 6 of 8
+
+                                                                                 PM/ IS 6454 (Part 2)/ 1
+                                                                                             July 2026
+
+3. PACKING AND MARKING
+  The Standard Mark as given in the Schedule of the licence shall be incorporated legibly and indelibly
+  on on the packaging of the Double Row Radial Spherical Roller Bearings provided always that the
+  Double Row Radial Spherical Roller Bearings so marked conforms to each requirement of the
+  specification.
+
+3.1 Packing and Marking of Double Row Radial Spherical Roller Bearings shall be done as per Cl. 15
+    and Cl. 16 of IS 6454 (Part 2):2026.
+
+3.2 Additional Marking requirements: The Double Row Radial Spherical Roller Bearings shall also
+    be marked with the following additional requirement on its packaging:
+                        a) “For BIS certification details please visit www.bis.gov.in”
+
+4. REJECTION
+   The production which conforms to the Indian Standard and covered under the scope of this licence
+   shall be marked with the Standard Mark. Disposal of non-conforming product shall be done in such
+   a way so as to ensure that there is no violation of provisions of BIS Act, 2016.
+
+                                                                                            Page 7 of 8
+
+                                                                                                                                  PM/ IS 6454 (Part 2)/ 1
+                                                                                                                                              July 2026
+                                                                        TABLE-1
+                                                (Recommended Levels of Control by BIS- for Guidance Only)
+                                  (1)                                                                         (2)
+                             Test Details                                                              Levels of Control
+                                            Test Methods                 No. of
+Cl.          Requirement                                                                 Frequency                         Remarks
+                                       Clause     Reference             Sample
+8.1    Materials for Rings, Rollers                    IS 17111                                          No further testing is required if accompanied
+                                                                           01      Each consignment
+8.2    Materials for Cages              8.2         IS 6454 (Part 2)                                     with the Test Certificate or ISI marked.
+
+ 4     Boundary Dimensions                  4       IS 6454 (Part 2)
+
+       Double Row Radial                            IS 6454 (Part 2)
+4.1                                   Table 1
+       Spherical Roller Bearings                        IS 5669
+       Double Row Radial
+4.2    Spherical Roller Bearings                       IS 11904
+       with Locating Snap Ring
+                                                                        Firm to also have adequate in-process controls to check compliance of this
+       Double Row Radial                                                parameter as per the tolerances given in the Indian Standard. Appropriate
+4.2    Spherical Roller Bearings                    IS 3075 (Part 1)    records shall be maintained by the manufacturer for evidence of conformity.
+       with Circlips
+       Tolerances and
+ 5                                                      IS 5692
+       Geometrical Characteristics
+                                                    IS 5935 (Part 1)/
+ 7     Radial Internal Clearance
+                                                   IS 11027 (Part 2)
+ 9     Surface Finish                                   IS 3073
+                                                   IS 1586 (Part 1)/
+10     Hardness                                                            01      Each Control Unit
+                                                    IS 1501 (Part 1)
+12.1   Visual Inspection                12.1        IS 6454 (Part 2)    Firm to have adequate in-process controls to check compliance of this
+                                                                        parameter as per the tolerances given in the Indian Standard. Appropriate
+12.3   Interchangeability               12.3        IS 6454 (Part 2)    records shall be maintained by the manufacturer for evidence of conformity.
+
+12.4   Temperatures                     12.4        IS 6454 (Part 2)       01      Each Control Unit
+
+                                                                                                                                             Page 8 of 8

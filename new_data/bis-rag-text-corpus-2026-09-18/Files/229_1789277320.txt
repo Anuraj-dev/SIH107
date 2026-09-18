@@ -1,0 +1,449 @@
+PM / 3677 / 2
+                                                                                              Aug 2026
+
+                                      PRODUCT MANUAL
+                                            FOR
+                                UNBONDED ROCK AND SLAG WOOL
+                                   FOR THERMAL INSULATION
+                                  ACCORDING to IS 3677: 2026
+
+This Product Manual shall be used as reference material by all Regional/Branch Offices &
+licensees to ensure uniformity of practice and transparency in operation of certification
+underScheme-I of Bureau of Indian Standards (Conformity Assessment) Regulations,2018
+for variousproducts. The document may also be used by prospective applicants desirous
+of obtaining BIS certification.
+
+ 1.                                       : IS 3677: 2026
+      IS No.
+                                          : Unbonded Rock and Slag Wool for Thermal
+      Title
+                                            Insulation.
+                                          : Nil
+      No. of amendments
+ 2.
+      Sampling Guidelines
+a)                                            No specific requirement.
+      Raw material                        :
+b)                                        : Please refer to Annex-A.
+      Guidelines
+                                              15 kg.
+                                            Note: This section indicates the quantity of the sample
+c)                                        : required to be sent to the laboratory for testing, for the
+      Sample Quantity
+                                            purpose of Grant of Licence/Change in Scope of
+                                            Licence/ Factory Surveillance (in case of market
+                                            surveillance, effort may be made to procure the
+
+                                                                                            Page 1 of 10
+
+                                                                                       PM / 3677 / 2
+                                                                                           Aug 2026
+
+                                            required quantity of product sample, as far as possible
+                                            since raw material sample may not be available in
+                                            market)
+
+d)                                       : be tested in an operative year for all requirements of
+      Sampling guidelines            for   the IS.
+      surveillance
+
+                                       1. Type.
+                                              a. For Type 2
+                                                      i. Confining Medium – with/without
+                                                         metallic cage.
+                                                    iii. Thickness
+                                          for    thermal     conductivity  (or   k-value)
+      Parameters to be Declared           determination.
+      in Test Request                  3. Optional requirement – as applicable
+
+                                            Note: Apart from the above, any other
+                                            requirements/parameters may also be declared as per
+                                            the standard, as applicable.
+ 3.                                       : Please refer to Annex-B.
+      List of Test Equipment
+ 4.   Scheme of Inspection and : Please refer to Annex-C.
+      Testing
+ 5.
+      Possible tests in a day
+      (Cl. 5.1) Description, (Cl. 5.2) Apparent Density, (Cl. 5.3) Apparent Density Under
+      Specified Load, (5.4) Shot Content, (5.6) Incombustibility, (Cl. 5.9, 5.10, 5.11.9)
+      Dimensions, (5.8) Sulphur Content, (5.11.10) Alkalinity, (5.11.4) Oil Content, (5.11.5)
+      Carbon Content.
+      Note: This section is for the guidance of BIS Certification Officers/Technical Auditors of
+      BIS Authorized Outside Surveillance Agencies(OSAs) during factory inspection to provide
+      ready reference regarding the tests which can be witnessed during the inspection in the
+      factory by the officer/auditor.
+      “Licence is granted to use Standard Mark as per IS 3677: 2026 with the following scope:
+                                                  Unbonded Rock and Slag Wool for
+      Name of the product
+                                                  Thermal Insulation
+      Type(s)                                     1/2
+                                                  50 °C (200 kg/m3, 150 kg/m3, …..)
+      Mean Temperature(s) for Thermal 100 °C (….., 150 kg/m3, 120 kg/m3, …..)
+      Conductivity (at Specified Apparent …..
+      Density(ies))                               …..
+
+                                                                                         Page 2 of 10
+
+                                                                 PM / 3677 / 2
+                                                                     Aug 2026
+
+                                  With / without Moisture content
+                                  With / without Resistance to Micro-
+                                  organisms
+                                  …..
+                                  …..
+Optional Requirement(s)           With / without Heat Resistance at … °C as
+                                  maximum temperature of use
+                                  …..
+                                  …..
+                                  With / without Leachable Chloride
+                                  Content
+
+                   BUREAU OF INDIAN STANDARDS
+                MANAK BHAVAN,9, BAHADUR SHAH ZAFAR
+                      MARG,NEW DELHI-110002
+
+                                                                   Page 3 of 10
+
+                                                                                    PM / 3677 / 2
+                                                                                        Aug 2026
+
+                                        ANNEX - A
+                                   GROUPING GUIDELINES
+
+1. IS 3677: 2026 classifies Unbonded rock and slag wool for thermal insulation according to:
+         i. Types 1 & 2
+        ii. Mean Temperature(s) for Thermal Conductivity: 50/100/150/200/250 °C
+       iii. Sizes/Dimensions (for Type 2 only): Width and Thickness
+       iv.   Confining Medium (for Type 2 only): Metallic Cage, Hessian Cloth etc.
+
+2. For the purpose of grant of licence, and change in scope of licence, the following grouping
+   guidelines shall apply:
+        i. Sample(s) of each Type (1/2) of Unbounded Rock and Slag Wool for Thermal
+            Insulation at each Mean Temperature(s) for Thermal Conductivity
+            (50/100/150/200/250 °C) shall be drawn.
+       ii. Manufacturer shall declare the apparent density(ies) at which the Thermal
+            Conductivity measurement is to be carried out, against each mean temperature.
+      iii. For optional requirements (Cl. 5.11.1 to 5.11.11), manufacturer shall declare the
+            optional requirements intended to be covered in the licence and accordingly, any
+            one of the above samples shall also be tested for the applicable optional
+            requirements.
+                i. Variety tested with optional requirement(s) will also cover the variety
+                    without optional requirement(s).
+
+3. However, scope of licence shall be restricted according to the manufacturing and testing
+   facilities available.
+
+4. During operation of licence, samples of all varieties covered in the scope of licence, shall be
+   drawn in rotation, to the extent possible.
+
+                                                                                      Page 4 of 10
+
+                                                                                   PM / 3677 / 2
+                                                                                       Aug 2026
+
+                                            ANNEX - B
+                                     LIST OF TEST EQUIPMENT
+
+                           (INDICATIVE LIST, FOR GUIDANCE ONLY)
+
+                         Method of
+Cl. No.      Test                                              Test Facilities
+                         Test
+
+ 5.1      Description     IS 3677       1. Vernier or digital calliper
+
+                                        1. Container of known dimensions (for loose fill
+           Apparent                        material)
+ 5.2                    9 of IS 3144
+           Density                      2. Weighing Balance
+                                        3. Appropriate Scale or Vernier
+                                        1. Cutter
+                         10 of IS       2. Thickness measuring instrument as per IS 3144
+                           3144         3. Steel scale, Steel rule
+                          (Felted       4. Glass sheet or Mild Steel Sheet
+           Apparent
+                         Material)      5. Timer
+            Density
+                                        6. Weighing Balance
+ 5.3        Under
+                                        1. Cylindrical vessel
+           Specified
+                         10 of IS       2. Plunger
+             Load
+                           3144         3. Lifting device
+                          (Loose        4. Metre scale
+                         Material)      5. Weighing Balance
+                                        6. Timer
+                                        1. Elutriator
+                                        2. Muffle Furnace
+                                        3. Laboratory Balance
+                                        4. Sieves
+            Shot          13 of IS
+ 5.4                                    5. Weighing Balance
+           Content         3144
+                                        6. Timer
+                                        7. Knife
+                                        8. Glassware
+                                        9. Oven
+                                        1. Drying Unit
+                                        2. Humidity Chamber — thermostatically controlled
+           Moisture       15 of IS
+ 5.5                                    3. Cutter
+          Absorption       3144
+                                        4. Oven
+                                        5. Timer
+                                        1. Apparatus as per Fig. 3 of IS 3144
+                                        2. Thermocouple for above apparatus
+           Incombust      16 of IS      3. Oven
+ 5.6
+             ibility       3144         4. Timer
+                                        5. Wire gauze or thin metal sheet box, if and as
+                                           applicable
+
+                                                                                    Page 5 of 10
+
+                                                                                     PM / 3677 / 2
+                                                                                         Aug 2026
+
+                                      1.  Low-Temperature Guarded Hot Plate
+                                      2.  High-Temperature Guarded Hot Plate
+           Thermal
+                                      3.  Single Specimen Hot Plate Apparatus
+ 5.7     Conductivit     IS 3346
+                                      4.  Thermocouple
+         y or k-value
+                                      5.  Ventilated Oven
+                                      6.  Desiccator
+                                      1.  Apparatus as per Fig 4 of IS 3144
+                                      2.  Glassware
+           Sulphur       19 of IS     3.  Reagents
+ 5.8
+           Content        3144        4.  Weighing Balance
+                                      5.  Hot plate
+                                      6.  Timer
+                                      1.  Thermostat fitted drying Oven with a suitable vent for
+                                          escape of moisture
+          Moisture        14 of
+5.11.1                                2. Chicken gauze
+          Content        IS 3144
+                                      3. Cutter
+                                      4. Weighing Balance
+                                      1. Hot-air Oven
+                                      2. Incubator
+                                      3. Autoclave
+                                      4. Analytical balance
+                                      5. Stereoscopic Microscope
+         Resistance
+                         17 of IS     6. Test Organism — Aspergillus niger and Bacillus
+5.11.2   to Micro-
+                          3144            substilis
+         organisms
+                                      7. Glassware
+                                      8. Microbial Solutions
+                                      9. Reagents
+                                      10. Soyabean Casein Digest Agar (SCDA)
+                                      11. Potato Dextrose Agar (PDA)
+                                      1. Refrigerator
+           Odour                      2. Timer
+                         18 of IS
+5.11.3    Emission                    3. Pans
+                          3144
+            Test                      4. Glass squares
+                                      5. Butter
+                                      1. Soxhlet Extraction Apparatus
+                                      2. Reagent
+                                      3. Desiccator
+                         20 of IS     4. Timer
+5.11.4   Oil Content
+                          3144        5. Well ventilated Oven
+                                      6. Weighing Balance
+                                      7. Glassware arrangement
+                                      8. Reagents
+                                      1. Porcelain or silica boat
+                         21 of IS     2. Combustion tube
+                          3144        3. Electric furnace
+           Carbon
+5.11.5                                4. Absorption assembly
+           Content      (Volumetric   5. Reagents
+                          Method)     6. Weighing Balance
+                                      7. Thermocouple
+
+                                                                                       Page 6 of 10
+
+                                                                                    PM / 3677 / 2
+                                                                                        Aug 2026
+
+                                      8. Oxygen gas
+                                      9. Glassware
+
+                          21 of IS    1. Carbon determination apparatus as per Fig 5 of IS
+                           3144          3144
+                          (Direct     2. Reagents
+                          Method)     3. Glassware
+           Resistance    22.3 of IS   1. Apparatus as per Fig 6 of IS 3144
+5.11.6
+          to Vibration     3144       2. Timer
+
+          Resistance     22.4 of IS   1. Apparatus as per Fig 6 and Fig 9 of IS 3144
+5.11.7
+          to Jolting       3144       2. Timer
+                                      1.   Ventilated oven / Desiccator
+                                      2.   Hot plate
+            Heat           12 of      3.   Pipe mandrel
+5.11.8
+          Resistance      IS 3144     4.   Thermocouples
+                                      5.   Weighing Balance
+                                      6.   Timer
+                                      1.   pH meter conforming to IS 2711
+                           25 of
+5.11.10   Alkalinity                  2.   Weighing Balance
+                          IS 3144
+                                      3.   Timer
+                                      1.   Reagents
+                                      2.   Electronic Balance
+                                      3.   Blender
+                                      4.   Glassware
+          Leachable
+                         Annex C of   5.   Buchner Funnel — with suitable filter paper
+5.11.11    Chloride
+                          IS 8183     6.   Timer
+           Content
+                                      7.   Hot plate
+                                      8.   Cold water bath
+                                      9.   Amperometric – Coulometric / Specific Ion Electrode
+                                           / Ion Chromatography – apparatus.
+
+          The above list is indicative only and may not be treated as exhaustive.
+
+                                                                                       Page 7 of 10
+
+                                                                                      PM / 3677 / 2
+                                                                                          Aug 2026
+
+                                        ANNEX - C
+                                 SCHEME OF INSPECTION AND
+                                         TESTING
+
+1. QUALITY ASSURANCE PLAN
+
+1.1 It is expected that during operation of BIS licence, manufacturers will implement a
+ Quality Assurance Plan (QAP) i.e. a plan of regular testing and in-process controls, designed
+ to ensure that the product bearing theStandard Mark conforms to all requirements of the
+ Indian Standard.
+
+1.2 The manufacturers shall define a Quality Assurance Plan (QAP) defining the control unit
+(i.e. lot/batch etc.), the levels of control (i.e. the frequency and number of samples for
+conducting the different tests as per the Indian Standard) and declare the arrangement for
+testing i.e. whether in-house or subcontracting/sharing for each applicable test and submit
+the same to BIS Branch Office for information. The manufacturer shall comply with the QAP
+and maintain test records in accordance with para 2.1.
+
+1.3 RECOMMENDED LEVELS OF CONTROL/CONTROL UNIT:
+
+1.3.1 For the guidance of manufacturers, the recommended definition of control unit is: all
+   unbonded rock and slag wool for thermal insulation of the same type produced under
+   essentially the same conditions of manufacture in a day.
+
+1.3.2 For the guidance of manufacturers in preparing the Quality Assurance Plan,
+   recommendedlevels of control are given in Table 1. Manufacturer has the discretion of
+   declaring their own levels of control or accept the levels of control given in this document.
+
+1.3.3 The manufacturer shall ensure inspection and testing as per the Quality Assurance Plan
+   submitted by them on the whole production of the factory which is covered by this plan.
+
+2. ENSURING COMPLIANCE THROUGH TESTING- manufacturers shall ensure compliance
+  of their products to all the requirementsof the Indian Standard for which they may have
+  in-house test facilities. However, there is no obligation to maintain in-house laboratory.
+  Licensee may use alternative arrangements for tests of the production as per the declared
+  QAP. Various alternatives are available for operation of BIS certification as given below
+  and the relevant guidelines for availing such relaxations by the manufacturers, as
+  amended from time to time, are to be referred:
+  i) Shared testing resources like common facility,
+  ii) Cluster based testing facility,
+  iii) Sub-contracting to outside laboratories which may either be:
+   a) BIS recognised/empanelled laboratories, or
+   b) Any accredited laboratory as per ISO/IEC 17025
+
+2.1 TEST RECORDS- The manufacturers shall maintain test records for the tests carried out
+(either in-house or at a sub-contracted or at shared test facility) to establish conformity of the
+
+                                                                                        Page 8 of 10
+
+                                                                                          PM / 3677 / 2
+                                                                                              Aug 2026
+
+product to the Standard for operation of licence. For the tests being subcontracted or
+conducted at a shared test facility, test results issued by the laboratories or test facilities, shall
+be made available for inspection by BIS.
+
+3. PACKING AND MARKING - The Standard Mark, as given in the Schedule of the licence,
+  shall be incorporated legibly and indelibly on each package of Unbonded Rock and Slag
+  Wool for Thermal Insulation, provided always that the material so marked, conform to
+  every requirement of the specification.
+
+  3.1 Packing and marking shall be done as per the provision of the Indian Standard. In
+  addition, the package shall also be marked with the following additional requirement:
+   a) BIS Licence No. CM/L _________.
+    b) BIS website details: “For BIS certification details please visit www.bis.gov.in”
+
+4. REJECTION - The production which conforms to the Indian Standard and covered under
+the scope of this licence shall be marked with the Standard Mark. Disposal of non-conforming
+product shall be done in such a way so as to ensure that there is no violation of provisions
+of BIS Act,2016.
+
+                                                                                            Page 9 of 10
+
+                                                                                PM / 3677 / 2
+                                                                                    Aug 2026
+                                        TABLE 1
+               (Recommended Levels of Control by BIS - For Guidance Only)
+
+                        (1)                                           (2)
+                    Test Details                               Levels of Control
+Clause         Requirement             Test Methods    No. of Sample      Frequency
+                                    Clause Reference
+
+  5.1           Description          5.1     IS 3677       One        Each Control Unit
+
+  5.2        Apparent Density         9      IS 3144       One              -do-
+          Apparent Density Under             IS 3144
+  5.3                                10                    Five             -do-
+             Specified Load
+  5.4          Shot Content          13      IS 3144       One              -do-
+
+  5.5      Moisture Absorption       15      IS 3144       One        Once in a month
+
+  5.6        Incombustibility        16      IS 3144       One        Each Control Unit
+          Thermal Conductivity or                      One for each
+  5.7                                 -      IS 3346                   Once in a year
+                 k-value                                 density
+  5.8        Sulphur Content         19      IS 3144       One        Each Control Unit
+  5.9,                                5.9,
+ 5.10,         Dimensions            5.10,    3677         Five             -do-
+5.11.9                              5.11.9
+Optional Requirements:
+                                     14
+5.11.1       Moisture Content                IS 3144      Three
+           Resistance to Micro-
+5.11.2                               17      IS 3144       One
+                organisms
+5.11.3     Odour Emission Test       18      IS 3144      Three
+
+5.11.4          Oil Content          20      IS 3144       One
+                                                                         As agreed
+5.11.5        Carbon Content         21      IS 3144       One           between
+                                                                       manufacturer
+5.11.6    Resistance to Vibration   22.3     IS 3144       One
+                                                                       and purchaser
+5.11.7     Resistance to Jolting    22.4     IS 3144       One
+
+5.11.8        Heat Resistance        12      IS 3144       Two
+
+5.11.10         Alkalinity           25      IS 3144       One
+            Leachable Chloride      Annex
+5.11.11                                      IS 8183       One
+                 Content              C
+
+                                                                                   Page 10 of 10

@@ -1,0 +1,203 @@
+PM/ IS 11646 (Part 2)/2
+                                                                                                         June 2026
+
+                            PRODUCT MANUAL
+         CANE FOR PERSONS WITH VISUAL IMPAIRMENT - FOLDING TYPE
+                     According to IS 11646 (Part 2):2026
+
+This Product Manual shall be used as reference material by all Regional/Branch Offices & licensees to ensure
+uniformity of practice and transparency in operation of certification under Scheme-I of Bureau of Indian
+Standards (Conformity Assessment) Regulations,2018 for various products. The document may also be used
+by prospective applicants desirous of obtaining BIS certification.
+
+                                                            Type
+       No. of amendments
+       Raw material                                         Note: This section indicates the requirements for raw material
+                                                            (if specified in the IS) for which compliance is to be
+                                                            established during Grant of Licence/Change in Scope of
+                                                            Licence/Factory Surveillance.
+     Grouping Guidelines
+       Sample Quantity
+                                                            Note: Apart from the above, any other requirements/
+       Parameters to be Declared in Test
+                                                            parameters may also be declared as per the standard, as
+       Request                                              applicable.
+     List of Test Equipment
+     Scheme of Inspection and Testing
+     Possible tests in a day                                Note: This section is for the guidance of BIS Certification
+                                                            Officers/ Technical Auditors of BIS Authorized Outside
+                                                            Surveillance Agencies (OSAs) during factory inspection to
+                                                            provide ready reference regarding the tests which can be
+                                                            witnessed during the inspection in the factory by the officer/
+                                                            auditor.
+
+                                                                                                            Page 1 of 7
+
+                                                                       PM/ IS 11646 (Part 2)/2
+                                                                                  June 2026
+“License is granted to use Standard Mark as per IS 11646 (Part 2):2026 with the following
+scope:
+Name of the product              Cane for Persons with Visual Impairment - Folding Type
+Size                              Adult size / Child size
+
+                      BUREAU OF INDIAN STANDARDS
+       MANAK BHAVAN, 9, BAHADUR SHAH ZAFAR MARG, NEW DELHI-110002
+                             www.bis.gov.in
+
+                                                                                  Page 2 of 7
+
+                                                                              PM/ IS 11646 (Part 2)/2
+                                                                                         June 2026
+                                     ANNEX -A
+                                 Grouping Guidelines
+
+1. “Cane for Persons with Visual Impairment - Folding Type” covered in IS 11646 (Part 2):2026
+   is classified into following:
+
+   Size: Adult Size / Child Size
+
+2. Based on the above classification, following grouping guidelines shall be followed for
+   considering Grant of Licence (GoL)/Change in Scope of Licence (CSoL):
+
+    Sample of Cane for Persons with Visual Impairment - Folding Type of each size shall
+    be tested for all tests to cover that particular size. However, if sample of adult size is tested,
+    child size may also be covered.
+
+3. The manufacturer shall declare the sizes of Cane for Persons with Visual Impairment -
+   Folding Type they intend to cover in the Licence.
+
+4. The Scope of Licence may be restricted based on the Manufacturing and testing capabilities
+   of the manufacturer.
+
+5. During the operation of Licence, it shall be ensured that all the varieties covered in the
+   Licence are tested in rotation, to the extent possible.
+
+                                                                                           Page 3 of 7
+
+                                                                             PM/ IS 11646 (Part 2)/2
+                                                                                        June 2026
+                                          ANNEX- B
+                                  List of Test Equipments
+                                (Indicative List, For Guidance Only)
+
+Major test equipment required to test as per the Indian Standard
+
+ Sl.       Cl. Ref.      Tests used in with        Test Equipment
+ No.      (IS 11646      Clause Reference
+           (Part 2))
+  1.          5          Construction              Steel Scale
+                                                   Vernier calliper
+                                                   Micrometer
+                                                   Measuring Tape
+                                                   Weighing Scale
+  2.         7.1         Endurance Test            Manual/Mechanical means for folding and
+                                                   unfolding
+
+The above list is indicative only and may not be treated as exhaustive.
+
+                                                                                        Page 4 of 7
+
+                                                                                   PM/ IS 11646 (Part 2)/2
+                                                                                              June 2026
+
+                                         ANNEX - C
+                              Scheme of Inspection and Testing
+
+1. QUALITY ASSURANCE PLAN
+
+1.1 It is expected that during operation of BIS licence manufacturers will implement a Quality
+    Assurance Plan (QAP) i.e. a plan of regular testing and in-process controls, designed to ensure
+    that the product bearing the Standard Mark conforms to all requirements of the Indian Standard.
+
+ 1.2 The manufacturers shall define a Quality Assurance Plan (QAP) defining the control unit (i.e.
+     lot/batch etc.), the levels of control (i.e. the frequency and number of samples for conducting the
+     different tests as per the Indian Standard) and declare the arrangement for testing i.e. whether in-
+     house or sub-contracting/ sharing for each applicable test and submit the same to BIS Branch
+     Office for information. The manufacturer shall comply with the QAP and maintain test records in
+     accordance with para 2.1.
+
+ 1.3 Recommended Levels of Control/ Control Unit:
+1.3.1 For the guidance of manufacturers, the recommended definition of control unit is: entire quantity
+       of Cane for Persons with Visual Impairment - Folding Type of same size, manufactured from
+       same consignment of material under similar conditions of production constitute a control unit.
+     1.3.2 For the guidance of manufacturers in preparing the Quality Assurance Plan, recommended
+            levels of control are given in Table 1. Manufacturer has the discretion of declaring their
+            own levels of control or accept the levels of control given in this document.
+     1.3.3 The manufacturer shall ensure inspection and testing as per the Quality Assurance Plan
+            submitted by them on the whole production of the factory which is covered by this plan.
+
+ 1.4 However, all manufacturers shall ensure compliance of their products to all the requirements of
+     the Indian Standard.
+
+2. ENSURING COMPLIANCE THROUGH TESTING
+   The manufacturers shall ensure compliance of their products to all the requirements of the Indian
+   Standard for which they may have in-house test facilities. However, there is no obligation to
+   maintain in-house laboratory. Licensee may use alternative arrangements for tests of the
+   production as per the declared QAP. Various alternatives are available for operation of BIS
+   certification as given below and the relevant guidelines for availing such relaxations by the
+   manufacturers, as amended from time to time, are to be referred:
+            i) Shared testing resources like common facility,
+            ii) Cluster based testing facility,
+            iii) Sub-contracting to outside laboratories which may either be:
+                              a) BIS recognised/ empanelled laboratories, or
+                              b) Any accredited laboratory as per ISO/IEC 17025
+
+ 2.1 Test Records- The manufacturers shall maintain test records for the tests carried out (either in-
+     house or at a sub-contracted or at shared test facility) to establish conformity of the product to the
+     Standard for operation of licence. For the tests being subcontracted or conducted at a shared test
+     facility, test results issued by the laboratories or test facilities, shall be made available for
+     inspection by BIS.
+
+                                                                                               Page 5 of 7
+
+                                                                                PM/ IS 11646 (Part 2)/2
+                                                                                           June 2026
+
+3. PACKING AND MARKING
+  The Standard Mark as given in the Schedule of the licence shall be incorporated legibly and indelibly
+  on on the packaging of the Cane for Persons with Visual Impairment - Folding Type provided always
+  that the Cane for Persons with Visual Impairment - Folding Type so marked conforms to each
+  requirement of the specification.
+
+3.1 Marking and Packing of Cane for Persons with Visual Impairment - Folding Type shall be done as
+    per Cl. 8 and Cl. 9 of IS 11646 (Part 2):2026.
+
+3.2 Additional Marking requirements: The Cane for Persons with Visual Impairment - Folding Type
+    shall also be marked with the following additional requirement on its packaging:
+                         a) “For BIS certification details please visit www.bis.gov.in”
+
+4. REJECTION
+   The production which conforms to the Indian Standard and covered under the scope of this licence
+   shall be marked with the Standard Mark. Disposal of non-conforming product shall be done in such
+   a way so as to ensure that there is no violation of provisions of BIS Act, 2016.
+
+                                                                                            Page 6 of 7
+
+                                                                                                                             PM/ IS 11646 (Part 2)/2
+                                                                                                                                        June 2026
+                                                                  TABLE-1
+                                           (Recommended Levels of Control by BIS- for Guidance Only)
+
+                               (1)                                                                            (2)
+                           Test Details                                                                Levels of Control
+                                             Test Methods                     No. of
+Cl.        Requirement                                                                       Frequency                      Remarks
+                                 Clause              Reference               Sample
+
+                                                                                                                No further testing is required if
+3     Material                       3              IS 11646 (Part 2)           01       Each consignment       accompanied with test certificate
+                                                                                                                or ISI marked.
+
+5     Construction                   5              IS 11646 (Part 2)                  Each cane                Any cane not meeting the
+                                                                                                                requirement shall not be marked
+6     Workmanship and Finish         6              IS 11646 (Part 2)                  Each cane                and shall be rejected.
+
+                                                                                                                If any sample fails, two more
+                                                                            Once in a week or whenever
+                                                                                                                samples to be tested. Lot to be
+7.1   Endurance Test                 7.1            IS 11646 (Part 2)       there is any change in material
+                                                                                                                accepted only if both the
+                                                                            or construction
+                                                                                                                samples pass.
+
+                                                                                                                                         Page 7 of 7

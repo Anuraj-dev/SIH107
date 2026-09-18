@@ -1,0 +1,221 @@
+xxxGIDHxxx
+                                                        CG-DL-E-27022026-270536
+                                                               xxxGIDExxx
+
+                                                           EXTRAORDINARY
+                                                           PART III—Section 4
+                                                   PUBLISHED BY AUTHORITY
+
+       No. 122]                 NEW DELHI, TUESDAY, FEBRUARY 24, 2026/PHALGUNA 5, 1947
+
+(1)                               (2)                               (3)                           (4)                             (5)
+
+     1326 GI/2026                                                    (1)
+
+    2                              THE GAZETTE OF INDIA : EXTRAORDINARY                               [PART III—SEC.4]
+
+ 4                              THE GAZETTE OF INDIA : EXTRAORDINARY                              [PART III—SEC.4]
+
+                                                                           1988
+
+                1-31 : 2019                                            31 : 2010
+
+                                   BUREAU OF INDIAN STANDARDS
+                                     (Department of Consumer Affairs)
+                                              NOTIFICATION
+                                     New Delhi, the 19th February, 2026
+         Ref: HQ-PUB013/1/2020-PUB-BIS (1435).—In pursuance of Sub-rule (1) of Rule (15) of the
+ Bureau of Indian Standards Rules, 2018, the Bureau of Indian Standards hereby notifies that Indian standards,
+ particulars of which are given in the second column of the schedule hereto annexed have been established on
+ the date indicated against it in third column. The particulars of the standards, if any which are given in the
+ fourth column shall also remain in force concurrently till they are withdrawn on the date indicated against
+ them in the fifth column.
+                                                 SCHEDULE
+
+Sl     No., Year & Title of the Indian         Date of             No. , Year & Title of the            Date of
+No.        Standards Established            Establishment          Indian Standards to be              Withdrawal
+                                                                     Withdrawn, if any
+(1)                   (2)                         (3)                         (4)                           (5)
+
+ 1         IS/ISO 1996-1 : 2016               18 February              IS 9989 – 1981                   18 August
+         Acoustics — Description,                2026              Assessment of Noise with               2026
+       Measurement and Assessment of                                Respect to Community
+           Environmental Noise                                            Response
+
+6                          THE GAZETTE OF INDIA : EXTRAORDINARY                     [PART III—SEC.4]
+
+      Part 1 Basic Quantities and
+       Assessment Procedures
+
+2         IS/ISO 1996-2 : 2017        18 February         IS 9989 – 1981                 18 August
+       Acoustics — Description,          2026         Assessment of Noise with             2026
+    Measurement and Assessment of                      Respect to Community
+          Environmental Noise                                Response
+     Part 2 Determination of Sound
+             Pressure Levels
+
+3           IS 2264 : 2026            18 February          IS 2264 - 1963
+           ISO 266 : 1997                2026         Preferred Frequencies for          18 August
+        Acoustics — Preferred                         Acoustical Measurements              2026
+             Frequencies
+           (First Revision)
+
+4          IS 7709 : 2026             18 February         IS 7709 - 1975                 18 August
+         IEC 60500 : 2017                2026        Specification for Standard            2026
+      Underwater Acoustics —                                Hydrophone
+    Hydrophones — Properties of
+    Hydrophones in the Frequency
+       Range 1 Hz to 500 kHz
+          (First Revision)
+
+5            IS 8159 : 2026           18 February           IS 8159 : 1993
+           IEC 60263 : 2020              2026        Scales and Sizes for Plotting       18 August
+      Scales and Sizes for Plotting                 Frequency Characteristics and          2026
+     Frequency Characteristics and                         Polar Diagrams
+            Polar Diagrams                                 (First Revision)
+           (Second Revision)
+
+6            IS 11024 : 2026          18 February          IS 11024 - 1984               18 August
+            ISO 389-3 : 2016             2026        Specification for Standard            2026
+    Acoustics — Reference Zero for                    Reference Zero for The
+    The Calibration of Audiometric                   Calibration of Pure-Tone
+                Equipment                                Bone- Conduction
+      Part 3 Reference Equivalent                   Audiometers and Guidelines
+      Threshold Vibratory Force                     for Its Practical Application
+    Levels for Pure Tones and Bone
+                Vibrators
+             (First Revision)
+
+7     IS 14231 (Part 1) : 2026        18 February     IS 14231 (Part 1) : 1995
+         IEC 60728-1 : 2014              2026       Cabled Distribution Systems          18 August
+    Cable Networks for Television                    for Television and Sound              2026
+     Signals, Sound Signals and                             Signals —
+         Interactive Services                              Specification
+    Part 1 System Performance of                    Part 1 Safety Requirements
+            Forward Paths
+           (First Revision)
+
+8     IS 14231 (Part 3) : 2026        18 February     IS 14231 (Part 3) : 1995           18 August
+         IEC 60728-3 : 2017              2026       Cabled Distribution Systems            2026
+    Cable Networks for Television                                for
+     Signals, Sound Signals and                     Television and Sound Signals
+         Interactive Services                                    —
+
+         Part 3 Active Wideband                                     Specification
+      Equipment for Cable Networks                              Part 3 Active Coaxial
+             (First Revision)                                   Wideband Distribution
+                                                                     Components
+
+9       IS 14231 (Part 4) : 2026           18 February         IS 14231 (Part 4) : 1995
+           IEC 60728-4 : 2007                 2026           Cabled Distribution Systems     18 August
+      Cable Networks for Television                           for Television and Sound         2026
+       Signals, Sound Signals and                                     Signals —
+           Interactive Services                                      Specification
+        Part 4 Passive Wideband                                 Part 4 Passive Coaxial
+      Equipment for Coaxial Cable                               Wideband Distribution
+                Networks                                             Components
+             (First Revision)
+
+10      IS 14231 (Part 5) : 2026           18 February         IS 14231 (Part 5) : 1995      18 August
+           IEC 60728-5 : 2015                 2026          Cabled Distribution System for     2026
+      Cable Networks for Television                         Television and Sound Signals
+       Signals, Sound Signals and                                         —
+           Interactive Services                                     Specification
+       Part 5 Headend Equipment                                    Part 5 Headend
+             (First Revision)
+
+11      IS 14231 (Part 7) : 2026           18 February         IS 14231 (Part 7) : 1999      18 August
+          IEC 60728-12 : 2017                 2026          Cabled Distribution System for     2026
+      Cable Networks for Television                          Television and Sound Signal
+       Signals, Sound Signals and                               Part 7 Electromagnetic
+           Interactive Services                               Compatibility of Systems
+         Part 7 Electromagnetic
+        Compatibility of Systems
+             (First Revision)
+
+12      IS 18489 (Part 2) : 2026           18 February                   NA                    NA
+           ISO 20896-2 : 2023                 2026
+     Dentistry — Digital Impression
+                Devices
+      Part 2 Methods for Assessing
+     Accuracy for Implanted Devices
+
+13           IS 19479 : 2026               18 February                   NA                    NA
+     Sterile Blades for Ophthalmic            2026
+     Microsurgeries (for Single Use)
+       — Requirements and Test
+                 Methods
+
+14        IS/IEC 60118-9 : 2019            18 February        IS 10776 (Part 4) - 1984
+     Electroacoustics — Hearing Aids          2026           Methods of Measurements of      18 August
+     Part 9 Methods of Measurements                              Electro-Acoustical            2026
+            of the Performance                                      Characteristics
+          Characteristics of Bone                                  of Hearing Aids
+         Conduction Hearing Aids                              Part 4 Hearing Aids With
+              (First Revision)                                      Bone Vibrator
+
+15       IS/IEC 60118-12 : 1996            18 February              IS 3720 - 1983           18 August
+              Hearing Aids                    2026                   IEC 90 (1973)             2026
+     Part 12 Dimensions of Electrical                                Dimensions of
+
+8                              THE GAZETTE OF INDIA : EXTRAORDINARY                                      [PART III—SEC.4]
+
+            Connector Systems                                             Plugs for Hearing Aids
+            (Second Revision)                                                (First Revision)
+
+16        IS/IEC 60318-6 : 2007                 18 February                 IS 11449 - 1985
+     Electroacousitcs — Simulators of              2026               Specification for Mechanical                  18 August
+           Human Head and Ear                                         Coupler for Measurement on                      2026
+      Part 6 Mechanical Coupler for                                         Bone Vibrations
+        the Measurement on Bone
+                 Vibrators
+              (First Revision)
+
+17        IS/IEC 60461 : 2010                   18 February             IS 12429 (Part 1) – 1988                    18 August
+         Time and Control Code                     2026                Time and Control Code for                      2026
+                                                                          Video Tape Recorders
+                                                                     Part 1 Longitudinal Time Code
+                                                                                 (LTC)
+
+                                                                        IS 12429 (Part 2) : 1988
+                                                                       Time and Control Code for
+                                                                          Video Tape Recorder
+                                                                      Part 2 Vertical-Interval Time
+                                                                              Code (VITC)
+
+18    IS/ISO/IEC 60793-1-31 : 2019              18 February            IS/IEC 60793-1-31 : 2010
+               Optical Fibres                      2026                      Optical Fibres                         18 August
+     Part 1 Measurement Methods and                                  Part 1 Measurements Methods                      2026
+              Test Procedures                                             and Test Procedures
+        Section 31 Tensile Strength                                   Section 31 Tensile Strength
+              (First Revision)
+
+19       IS/IEC 60793-1-32 : 2018               18 February            IS/IEC 60793-1-32 : 2010                     18 August
+               Optical Fibres                      2026                       Optical Fibres                          2026
+     Part 1 Measurement Methods and                                   Part 1 Measurement Methods
+              Test Procedures                                              and Test Procedures
+      Section 32 Coating Strippability                                     Section 32 Coating
+              (First Revision)                                                 Strippability
+
+20       IS/IEC 60793-1-34 : 2021               18 February            IS/IEC 60793-1-34 : 2006
+               Optical Fibres                      2026                       Optical Fibres                        18 August
+     Part 1 Measurement Methods and                                   Part 1 Measurement Methods                      2026
+              Test Procedures                                              and Test Procedures
+           Section 34 Fibre Curl                                          Section 34 Fibre Curl
+              (First Revision)
+
+21       IS/IEC 60793-1-41 : 2024               18 February            IS/IEC 60793-1-41 : 2010                     18 August
+               Optical Fibres                      2026                       Optical Fibres                          2026
+     Part 1 Measurement Methods and                                   Part 1 Measurement Methods
+              Test Procedures                                              and Test Procedures
+           Section 41 Bandwidth                                          Section 41 Bandwidth
+              (First Revision)
+                                                   CHITRA GUPTA, Scientist G & DDG (Hallmarking and Training)
+
+                                                                                        [ADVT.-III/4/Exty./697/2025-26]
+
+           Uploaded by Dte. of Printing at Government of India Press, Ring Road, Mayapuri, New Delhi-110064
+                             and Published by the Controller of Publications, Delhi-110054. GORAKHA NATH YADAVA
+                                                                                                             Digitally signed by GORAKHA NATH
+                                                                                                             YADAVA
+                                                                                                             Date: 2026.02.27 12:23:36 +05'30'

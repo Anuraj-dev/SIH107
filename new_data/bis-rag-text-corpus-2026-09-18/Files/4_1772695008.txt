@@ -1,0 +1,166 @@
+xxxGIDHxxx
+                                                  CG-DL-E-28022026-270605
+                                                         xxxGIDExxx
+
+                                                      EXTRAORDINARY
+                                                      PART III—Section 4
+                                              PUBLISHED BY AUTHORITY
+
+ No. 126]                  NEW DELHI, TUESDAY, FEBRUARY 24, 2026/PHALGUNA 5, 1947
+
+1330 GI/2026                                                    (1)
+
+     2                              THE GAZETTE OF INDIA : EXTRAORDINARY                               [PART III—SEC.4]
+
+(1)                         (2)                               (3)                       (4)                      (5)
+
+                           2017
+
+ 2
+                       9909 : 2020
+
+ 3
+                       9910 : 2020
+
+ 4
+                           2026
+
+ 5
+                           2026
+
+6
+
+7
+
+8
+
+9
+
+10
+
+ 4                               THE GAZETTE OF INDIA : EXTRAORDINARY                                [PART III—SEC.4]
+
+11
+
+12
+
+13
+
+14
+
+                                        BUREAU OF INDIAN STANDARDS
+                                         (Department of Consumer Affairs)
+                                                NOTIFICATION
+                                          New Delhi, the 20th February, 2026
+          Ref: HQ-PUB013/1/2020-PUB-BIS (1439).—In pursuance of Sub-rule (1) of Rule (15) of the Bureau of
+ Indian Standards Rules, 2018, the Bureau of Indian Standards hereby notifies that Indian standards, particulars of which
+ are given in the second column of the schedule hereto annexed have been established on the date indicated against it in
+ third column. The particulars of the standards, if any which are given in the fourth column shall also remain in force
+ concurrently till they are withdrawn on the date indicated against them in the fifth column .
+                                                      SCHEDULE
+Sl.      No., Year & Title of the Indian           Date of              No. , Year & Title of the           Date of
+No.          Standards Established              Establishment           Indian Standards to be             Withdrawal
+                                                                          Withdrawn, if any
+(1)                     (2)                            (3)                         (4)                          (5)
+
+ 1         IS/ISO/IEC 11801-6 : 2017           18 February 2026                    NA                          NA
+       Information Technology — Generic
+         Cabling for Customer Premises
+       Part 6 Distributed Building Services
+
+ 2       IS/ISO/IEC 11801-9909 : 2020          18 February 2026                    NA                          NA
+       Information Technology — Generic
+         Cabling for Customer Premises
+        Part 9909 Evaluation of Balanced
+        Cabling in Support of 25 Gbit/s for
+          Reach Greater than 30 Metres
+
+ 3       IS/ISO/IEC 11801-9910 : 2020          18 February 2026                    NA                          NA
+       Information Technology — Generic
+         Cabling for Customer Premises
+       Part 9910 Specification for Modular
+          Plug-terminated Link Cabling
+
+ 4        IS 16910 (Part 2/Sec 11) : 2026      18 February 2026                    NA                          NA
+              IEC 62676-2-11 : 2024
+        Video Surveillance Systems (VSS)
+         for Use in Security Applications
+       Part 2 Video Transmission Protocols
+       Section 11 Interop Profiles for VMS
+        and Cloud VSaaS Systems for Safe
+           Cities and Law Enforcement
+
+ 5       IS 16910 (Part 2/Sec 33) : 2026       18 February 2026                    NA                          NA
+               IEC 62676-2-33 : 2022
+       Video Surveillance Systems for Use
+              in Security Applications
+       Part 2 Video Transmission Protocols
+            Cloud Uplink and Remote
+           Management System Access
+
+ 6    IS 16910 16910 (Part 5/Sec 1) : 2026     18 February 2026                    NA                          NA
+             IEC 62676-5-1 : 2024
+       Video Surveillance Systems for Use
+            in Security Applications
+
+6                               THE GAZETTE OF INDIA : EXTRAORDINARY                                        [PART III—SEC.4]
+
+     Part 5 Data Specifications and Image
+       Quality Performance for Camera
+                    Devices
+         Section 1 Environmental Test
+          Methods for Image Quality
+                 Performance
+
+7          IS/IEC 62820-1-2 : 2017            18 February 2026                    NA                                                   NA
+          Building Intercom Systems
+         Part 1 System Requirements
+     Section 2 Building Intercom Systems
+       Using the Internet Protocol (IP)
+
+8          IS/IEC 62820-2 : 2017              18 February 2026                    NA                                                   NA
+         Building Intercom Systems
+       Part 2 System Requirements —
+      Building Intercom Systems Using
+          the Internet Protocol (IP)
+
+9         IS/IEC 62820-3-1 : 2017             18 February 2026                    NA                                                   NA
+         Building Intercom Systems
+        Part 3 Application Guidelines
+              Section 1 General
+
+10         IS/IEC 62820-3-2 : 2018            18 February 2026                    NA                                                   NA
+         Building Intercom Systems
+        Part 3 Application Guidelines
+        Section 2 Advanced Security
+     Building Intercom Systems (ASBIS)
+
+11         IS/IEC 62851-1 : 2014              18 February 2026                    NA                                                   NA
+       Alarm and Electronic Security
+      Systems — Social Alarm Systems
+        Part 1 System Requirements
+
+12         IS/IEC 62851-2 : 2014              18 February 2026                    NA                                                   NA
+       Alarm and Electronic Security
+      Systems — Social Alarm Systems
+           Part 2 Trigger Devices
+
+13          IS/IEC 62851-3 : 2014             18 February 2026                    NA                                                   NA
+        Alarm and Electronic Security
+      Systems — Social Alarm Systems
+       Part 3 Local Unit and Controller
+
+14         IS/IEC 62851-5 : 2014              18 February 2026                    NA                                                   NA
+       Alarm and Electronic Security
+      Systems — Social Alarm Systems
+         Part 5 Interconnections and
+              Communications
+                                                   CHITRA GUPTA, Scientist G & DDG (Hallmarking and Training)
+                                                                                      [ADVT.-III/4/Exty./701/2025-26]
+
+            Uploaded by Dte. of Printing at Government of India Press, Ring Road, Mayapuri, New Delhi-110064
+                              and Published by the Controller of Publications, Delhi-110054. SARVESH KUMAR
+                                                                                                   Digitally signed by SARVESH
+                                                                                                   KUMAR SRIVASTAVA
+                                                                                             SRIVASTAVA
+                                                                                                   Date: 2026.02.28 17:43:00 +05'30'

@@ -1,0 +1,291 @@
+PM/ IS 12615/ 4
+                                                                                                                      June 2026
+
+                                PRODUCT MANUAL
+Line Operated Three Phase a.c. Motors (IE Code) Efficiency Classes and Performance
+                             according to 12615: 2026
+
+ This Product Manual shall be used as reference material by all Regional/Branch Offices & licensees to ensure
+ uniformity of practice and transparency in operation of certification under Scheme-I of Bureau of Indian Standards
+ (Conformity Assessment) Regulations,2018 for various products. The document may also be used by prospective
+ applicants desirous of obtaining BIS certification.
+
+                                                             Efficiency Classes and Performance
+         No. of amendments
+         Raw material                                        Note: This section indicates the requirements for raw material (if
+                                                             specified in the IS) for which compliance is to be established
+                                                             during Grant of Licence/Change in Scope of Licence/Factory
+                                                             Surveillance.
+         Grouping Guidelines
+                                                              Note: Apart from the above, any other requirements/
+                                                              parameters may also be declared as per the standard, as
+         in Test Request                                      applicable.
+       List of Test Equipment
+       Scheme of Inspection and Testing
+
+                             BUREAU OF INDIAN STANDARDS
+              MANAK BHAVAN, 9, BAHADUR SHAH ZAFAR MARG, NEW DELHI-110002
+                                    www.bis.gov.in
+
+                                                                                                                     Page 1 of 7
+
+                                                                                                 PM/ IS 12615/ 4
+                                                                                                     June 2026
+
+      Possible tests in a day               12615:2026.
+
+                                            Note: This section is for the guidance of BIS Certification
+                                            Officers/ Technical Auditors of BIS Authorized Outside
+                                            Surveillance Agencies(OSAs) during factory inspection to
+                                            provide ready reference regarding the tests which can be
+                                            witnessed during the inspection in the factory by the officer/
+                                            auditor.
+“Licence is granted to use Standard Mark as per IS 12615: 2026 with the following scope:
+
+Line Operated Three Phase a.c. motors, up to and including ….V, …Hz, … Duty, 2/4/6/8 Poles,
+Efficiency Class IE 2 /IE 3 /IE 4, Foot Mounted/Flange Mounted/Vertical Shaft, Insulation
+Class …….., Rated Outputs……”
+
+                                                                                                 Page 2 of 7
+
+                                                                                        PM/ IS 12615/ 4
+                                                                                            June 2026
+
+                                         ANNEX -A
+                                     Grouping Guidelines
+
+1. The following parameters are taken into consideration for the purpose of grouping for
+   efficiency confirmation:
+
+          i. Type of mounting: Foot mounted, flange mounted, Vertical shaft
+          ii. Number of Poles: 2,4,6,8
+          iii. Efficiency Class: IE2, IE3, IE4
+          iv. Insulation Class: B, F or higher
+          v. Rated Voltage: up to 1000 V
+          vi. Rated Output: 0.12 kW to 1000 kW
+
+   Motors with rated output from 0.12 kW to 1000 kW, having same other classifications as
+   above are considered as one group. Motors with lowest and highest rated output in the group
+   shall be tested for covering the entire range of the motors in that group. If the range consists
+   of more than 10 motors, one intermediate rating of motor shall also be tested.
+
+2. The following relaxation may be given when a variety is tested for all the requirements:
+
+          i. If efficiency class of IE4 is tested, IE3 and IE2 shall also be covered.
+
+          ii. For Foot Mounted, Flange Mounted and Vertical Shaft motors, separate samples
+              may not be drawn for Independent Testing. If motor with any one type of mounting
+              is drawn and tested, motors with other type of mounting may be covered by testing
+              the motor for dimensional requirements as per the applicable Indian Standard(s).
+
+          iii. By testing motors of any one rated voltage, motors with other rated voltages can
+               also be covered.
+
+3. When samples are tested to cover the entire range of motors as per IS 12615: 2026, it shall
+   be ensured that at least one sample for each type of pole/insulation shall be tested.
+
+4. The Firm shall declare the varieties of various Three Phase Squirrel Cage Energy Efficient
+   Induction Motors they intend to cover in the Licence. The Scope of Licence may be restricted
+   based on the Manufacturing and Testing capabilities of the Manufacturer.
+
+5. During the operation of the Licence, BO shall ensure all the Varieties covered in the Licence
+   are tested in rotation to the extent possible.
+
+6. A typical example for drawal of samples to cover the entire varieties under the scope of the
+   licence is given below for the purpose of general guidance:
+
+      a) Sample 1: 0.12 kW, 2 Pole, Efficiency Class IE 2, Insulation Class B, Foot mounted.
+      b) Sample 2: 30 kW, 4 Pole, Efficiency Class IE 3, Insulation Class F, Flange mounted.
+      c) Sample 3: 375 kW, 6 Pole, Efficiency Class IE 4, Insulation class F, Vertical shaft.
+      d) Sample 4: 1000 kW, 8 Pole, Efficiency Class IE 4, Insulation class higher than F, Foot
+         mounted.
+
+                                                                                        Page 3 of 7
+
+                                                                                        PM/ IS 12615/ 4
+                                                                                            June 2026
+
+                                           ANNEX- B
+                                   List of Test Equipments
+                                (Indicative List, For Guidance Only)
+
+Sl.
+      Test Equipment                                      Tests used in with Clause Reference
+No.
+1     Resistance Meter                                                     Cl. 16.1.2
+2     Digital Tachometer                                       Cl. 16.1.3, Cl. 16.1.4, Cl. 16.1.5
+3     Stand Vernier                                                        Cl. 16.2.1
+4     HV Test Meter                                                        Cl. 16.1.6
+5     Megger (Insulation tester)                                           Cl. 16.1.1
+6     Test Bench
+      Torque measuring device (inline torque meter                         Cl. 16.2.3
+      or a reaction torque sensor)
+7     Weighing Load cell                                                   Cl. 16.2.3
+8     Ammeter, Voltmeter and Wattmeter, or a                   Cl. 16.1.3, Cl. 16.1.4, Cl. 16.1.5
+      suitable Digital Power Panel, Multimeter,
+      Contact type Digital Tachometer
+ 9    Micrometer & Vernier Caliper & Stand Vernier                         Cl. 16.2.1
+10    Stop Watch                                                           Cl. 16.2.3
+
+         The above list is indicative only and may not be treated as exhaustive.
+
+                                                                                             Page 4 of 7
+
+                                                                                            PM/ IS 12615/ 4
+                                                                                                June 2026
+
+                                        ANNEX C
+                             Scheme of Inspection and Testing
+
+1. QUALITY ASSURANCE PLAN
+
+1.1 It is expected that during operation of BIS licence manufacturers will implement a Quality
+    Assurance Plan (QAP) i.e. a plan of regular testing and in-process controls, designed to ensure
+    that the product bearing the Standard Mark conforms to all requirements of the Indian Standard.
+
+1.2 The manufacturers shall define a Quality Assurance Plan (QAP) defining the control unit (i.e.
+    lot/batch etc.), the levels of control (i.e. the frequency and number of samples for conducting the
+    different tests as per the Indian Standard) and declare the arrangement for testing i.e. whether in-
+    house or sub-contracting/ sharing for each applicable test and submit the same to BIS Branch
+    Office for information. The manufacturer shall comply with the QAP and maintain test records in
+    accordance with para 2.1.
+
+1.3 Recommended Levels of Control/ Control Unit:
+    1.3.1 For the guidance of manufacturers, the recommended definition of control unit is: Motors
+           of the same rating and design manufactured in a day shall constitute a control unit.
+    1.3.2 For the guidance of manufacturers in preparing the Quality Assurance Plan, recommended
+          levels of control are given in Table 1. Manufacturer has the discretion of declaring their
+          own levels of control or accept the levels of control given in this document.
+    1.3.3 The manufacturer shall ensure inspection and testing as per the Quality Assurance Plan
+          submitted by them on the whole production of the factory which is covered by this plan.
+
+1.4 However, all manufacturers shall ensure compliance of their product to all the requirements of the
+    Indian Standard.
+
+2. ENSURING COMPLIANCE THROUGH TESTING
+
+  The manufacturers shall ensure compliance of their products to all the requirements of the Indian
+  Standard for which they may have in-house test facilities. However, there is no obligation to
+  maintain in-house laboratory. Licensee may use alternative arrangements for tests of the
+  production as per the declared QAP. Various alternatives are available for operation of BIS
+  certification as given below and the relevant guidelines for availing such relaxations by the
+  manufacturers, as amended from time to time, are to be referred:
+           i) Shared testing resources like common facility,
+           ii) Cluster based testing facility,
+           iii) Sub-contracting to outside laboratories which may either be:
+                             a) BIS recognised/ empanelled laboratories, or
+                             b) Any accredited laboratory as per ISO/IEC 17025
+
+2.1 Test Records- The manufacturers shall maintain test records for the tests carried out (either in-
+    house or at a sub-contracted or at shared test facility) to establish conformity of the product to the
+    Standard for operation of licence. For the tests being subcontracted or conducted at a shared test
+    facility, test results issued by the laboratories or test facilities, shall be made available for
+    inspection by BIS.
+
+                                                                                              Page 5 of 7
+
+                                                                                          PM/ IS 12615/ 4
+                                                                                              June 2026
+
+3. PACKING AND MARKING
+  The Standard Mark as given in the Schedule of the licence shall be incorporated legibly and indelibly
+  on each Motor and also on its packaging (wherever applicable) provided always that the material so
+  marked conforms to each requirement of the specification.
+
+3.1 Packing and Marking shall be done as per Cl. 18 of IS 12615: 2026.
+
+3.2 Additional Marking requirements: The motors shall also be marked with the following additional
+    requirement on each packaging:
+                       a) “For BIS certification details please visit www.bis.gov.in”
+
+4. REJECTION
+   The production which conforms to the Indian Standard and covered under the scope of this licence
+   shall be marked with the Standard Mark. Disposal of non-conforming product shall be done in such
+   a way so as to ensure that there is no violation of provisions of BIS Act, 2016.
+
+                                                                                            Page 6 of 7
+
+                                                                                                       PM/ IS 12615/ 4
+                                                                                                           June 2026
+
+                                                    TABLE-1
+                             (Recommended Levels of Control by BIS- for Guidance Only)
+                               -1                                                      -2
+                        Test Details                                              Levels of Control
+                                          Test Methods            No. of      Frequency                Remarks
+ Cl.          Requirement
+                                     Clause     Reference        Sample
+                                                                  Each
+  8      Earthing                    11.1     IS/IEC 60034-1
+                                                                  Motor
+                                                                  Each
+  9      Terminal Marking            –        IS/IEC 60034-8
+                                                                  Motor
+                                     16.1.1   IS 12615:2026
+         Insulation Resistance                                   Each
+16.1.1                                        IS/IEC 60034-
+         Test                        –                           Motor
+                                              27-4
+         Measurement of              8.6      IS/IEC 60034-1     Each
+16.1.2   Resistance of Windings
+                                     5.7      IS/IEC 60034-2-1   Motor
+         of Stator
+                                     9.1      IS/IEC 60034-1     Each
+16.1.3   No Load Test
+                                     _        IS/IEC 60034-2-1   Motor
+         Locked Rotor Readings
+         of Voltage, Current and                                 Each
+16.1.4                               16.1.4   IS 12615:2026
+         Power Input at a                                        Motor
+         suitable reduced voltage
+                                                                 Each
+16.1.5   High Voltage Test           9.2      IS/IEC 60034-1
+                                                                 Motor
+                                                                           Motors of each
+                                     16.2.1   IS 12615:2026                type & design
+                                                                           manufactured at
+                                                                 One
+16.2.1   Dimensions                           IS 1231, IS                  the first instance
+                                                                 Motor                          If any motor fails, all
+                                              2223, IS 2254,               or whenever
+                                                                           there is a change    the motors produced
+                                              IS 8223                                           subsequently shall be
+                                                                           in dimension.
+                                                                 One                            tested till three
+16.2.4   Temperature Rise Test                IS/IEC 60034-1                                    consecutive samples
+                                     8                           Motor
+                                                                                                pass. For every failure,
+         Full Load Test to                                                                      appropriate steps shall
+                                                                 One       Motors of each
+16.2.3   determine Efficiency,       _        IS/IEC 60034-2-1                                  be taken to rectify the
+                                                                 Motor     type & design,
+         Power Factor and Slip                                                                  defect in subsequent
+                                                                           manufactured in
+         Momentary Excess                                        One       three months.        motors and record of
+12.1                                 12.1     IS 12615:2026
+         Torque                                                  Motor                          the same maintained.
+                                                                 One
+16.2.2   Locked Rotor Test           16.2.2   IS 12615:2026                                     _
+                                                                 Motor
+ Annex C    Customer Specific Tests
+       Vibration Severity of
+ C-1                           _              IS 12075
+       Motor
+
+ C-2     Noise Levels of Motor       _        IS 12065
+
+         Degree of Protection by
+ C-3                                 _        IS/IEC 60034-5
+         Enclosure
+                                                                 As per the mutual agreement between the
+ C-4     Over Speed Test             9.7      IS/IEC 60034-1     manufacturer & the purchaser
+         Temperature rise at
+         Limiting Values of
+ C-5                                 8        IS/IEC 60034-1
+         Voltage & Frequency
+         variation
+         Momentary Overload
+ C-6                                 C-6      IS 12615:2026
+         Test
+
+                                                                                                          Page 7 of 7
