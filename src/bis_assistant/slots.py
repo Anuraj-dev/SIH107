@@ -22,8 +22,13 @@ def use_db(path) -> None:
         conn.close()
 
 
-def _active() -> dict[str, list[dict]]:
+def active_slots() -> dict[str, list[dict]]:
+    """Public accessor for the slot table (DB override when set, else SLOTS)."""
     return _DB_SLOTS if _DB_SLOTS is not None else SLOTS
+
+
+def _active() -> dict[str, list[dict]]:
+    return active_slots()
 
 SLOTS: dict[str, list[dict]] = {
     "IS 10500": [

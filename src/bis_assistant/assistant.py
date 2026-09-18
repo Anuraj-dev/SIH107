@@ -8,12 +8,16 @@ with margin, all required slots filled, user forces, or 2 rounds exhausted
 """
 from __future__ import annotations
 import re
-from .retriever import retrieve, format_citation, load_kb
-from .retriever import _tokens as _tok, CONTENT_STOPWORDS
+from .retriever import retrieve, format_citation
 from .safety import (check_never_infer, REFUSAL_EN, REFUSAL_HI,
                      DISCLAIMER_EN, DISCLAIMER_HI, BIS_CARE)
 from .i18n_privacy import detect_lang, find_pii, STRINGS
 from .slots import fills_for, unfilled_slots
+from .grounding import (RESET_WORDS, FORCE_WORDS, FALLBACK_THRESHOLDS,
+                        thresholds as _grounding_thresholds,
+                        content_overlap as _grounding_overlap,
+                        slot_grounded_iso as _grounding_slot_iso, assess)
+from . import threads as threadmod
 
 HALLMARK_HINTS = ("hallmark", "huid", "gold", "silver", "jewell", "sona", "chandi")
 LAB_HINTS = ("testing", "test house", "prayogshala", "parikshan")  # "lab" matched separately
@@ -45,58 +49,22 @@ def material_mismatch(is_number: str, text: str) -> str | None:
 
 
 def _content_overlap(query: str, std: dict) -> int:
-    """Shared non-stopword tokens between query and standard doc (weak-tier gate)."""
-    from .scorers import doc_text
-    q = _tok(query) - CONTENT_STOPWORDS
-    return len(q & (_tok(doc_text(std)) - CONTENT_STOPWORDS))
+    """Compat alias: owned by the grounding module."""
+    return _grounding_overlap(query, std)
 
 
 def _slot_grounded_iso(combined: str, stds: list[dict]) -> str | None:
-    """Distinctive slot-option match for threadless chip answers (e.g. 'Single-wall').
+    """Compat alias: owned by the grounding module."""
+    return _grounding_slot_iso(combined, stds)
 
-    Accepts an IS when the query shares a distinctive option word (len>=5, used by
-    <=2 standards' slots) or >=2 option words. Generic words (home/new/...) never
-    ground a thread alone.
-    """
-    from . import slots as slotmod
-    toks = _tok(combined) - CONTENT_STOPWORDS
-    active = slotmod._active()
-    per_iso: dict[str, set[str]] = {}
-    df: dict[str, int] = {}
-    for s in stds:
-        words: set[str] = set()
-        for sl in active.get(s["is_number"], []):
-            for opt in sl.get("options", []):
-                for w in opt.get("words", []):
-                    if w.lower() in toks:
-                        words.add(w.lower())
-        if words:
-            per_iso[s["is_number"]] = words
-            for w in words:
-                df[w] = df.get(w, 0) + 1
-    ranked = sorted(((len(v), iso) for iso, v in per_iso.items()), reverse=True)
-    for n, iso in ranked:
-        if n >= 2:
-            return iso
-        only = next(iter(per_iso[iso]))
-        if len(only) >= 5 and df.get(only, 99) <= 2:
-            return iso
-    return None
-
-RESET_WORDS = ("new question", "reset", "change topic", "naya sawal", "naya prashn", "नया सवाल")
-FORCE_WORDS = ("answer anyway", "assume", "just answer", "best guess")
 
 # Defaults; live values come from config.yaml (plan §4: threshold changes need eval re-gate).
-_FALLBACK = {"direct_score": 15.0, "direct_margin": 5.0, "clarify_floor": 6.0,
-             "weak_floor": 3.0, "max_rounds": 2, "max_questions_per_turn": 2}
+# (RESET_WORDS/FORCE_WORDS live in the grounding module; re-exported via import above.)
+_FALLBACK = dict(FALLBACK_THRESHOLDS)
 
 
 def _cfg() -> dict:
-    from .config import load as load_config
-    try:
-        return load_config()["retrieval"]
-    except Exception:
-        return dict(_FALLBACK)
+    return _grounding_thresholds()
 
 
 def _base(lang: str, **kw) -> dict:
@@ -108,15 +76,13 @@ def _base(lang: str, **kw) -> dict:
 def answer(query: str, lang: str | None = None, context: dict | None = None) -> dict:
     lang = lang or detect_lang(query)
     hi = lang == "hi"
-    ctx = {"history": list((context or {}).get("history", [])),
-           "rounds": int((context or {}).get("rounds", 0)),
-           "force": bool((context or {}).get("force", False))}
+    ctx = threadmod.normalize_context(context)
     ql = query.lower()
     t = _cfg()
     if any(w in ql for w in RESET_WORDS):
-        ctx = {"history": [], "rounds": 0, "force": False}
+        ctx = threadmod.reset_context()
     if any(w in ql for w in FORCE_WORDS):
-        ctx["force"] = True
+        ctx = threadmod.with_force(ctx)
 
     # 1. never-infer gate (current query)
     kind = check_never_infer(query)
@@ -133,35 +99,15 @@ def answer(query: str, lang: str | None = None, context: dict | None = None) -> 
         top_old = res_old["candidates"][0] if res_old["candidates"] else None
         if (top_old and top_old["score"] >= t["direct_score"]
                 and top_old["std"]["is_number"] != top_now["std"]["is_number"]):
-            ctx = {"history": [], "rounds": 0, "force": ctx["force"]}
+            ctx = threadmod.reset_context(force=ctx["force"])
 
-    combined = " ".join(ctx["history"] + [query]).strip()
+    combined = threadmod.combined_query(ctx["history"], query)
     res = retrieve(combined)
     cands = res["candidates"]
-    top = cands[0] if cands else None
-    st = top["score"] if top else 0.0
-    ss = cands[1]["score"] if len(cands) > 1 else 0.0
-    m = re.search(r"is\s*(\d+)", combined.lower())
-    exact = bool(m and top and m.group(1) in top["std"]["is_number"])
-    # Clarification only when a real phrase/IS hit grounds the thread;
-    # generic token overlap (no hits) falls through to journeys/glossary.
-    strong = bool(top and st >= t["clarify_floor"] and (top["hits"] or st >= t["direct_score"]))
-    # Weak tier: topical (content-word) overlap earns clarification questions;
-    # pure stopword overlap falls through to journeys/refusal as before.
-    weak = bool(top and st >= t["weak_floor"] and _content_overlap(combined, top["std"]) >= 1)
-    if not weak and not strong and not exact:
-        # Threadless chip answers (e.g. "Single-wall") match slot options but no
-        # doc text: ground via slots so the thread continues instead of refusing.
-        all_stds = load_kb()[0]
-        iso = _slot_grounded_iso(combined, all_stds)
-        if iso:
-            std = next(s for s in all_stds if s["is_number"] == iso)
-            top = {"score": t["weak_floor"], "std": std, "hits": [], "confidence": "low"}
-            st, ss, weak = t["weak_floor"], 0.0, True
-    unfilled = unfilled_slots(top["std"]["is_number"], combined) if top else []
-    direct = (exact or ctx["force"] or ctx["rounds"] >= t["max_rounds"]
-              or (top and st >= t["direct_score"] and (st - ss) >= t["direct_margin"])
-              or (strong and not unfilled))
+    a = assess(combined, cands, ctx, t)
+    top, st, ss = a["top"], a["st"], a["ss"]
+    exact, strong, weak = a["exact"], a["strong"], a["weak"]
+    unfilled, direct = a["unfilled"], a["direct"]
 
     # Material contradiction (e.g. plastic bottle vs steel-flask IS): never recommend,
     # never interrogate about the wrong subtypes — state the coverage gap at once.
@@ -220,7 +166,8 @@ def answer(query: str, lang: str | None = None, context: dict | None = None) -> 
     r = _base(lang, kind="needs_info", pii=find_pii(query), needs_info=True,
               questions=questions, known=known,
               citations=[format_citation(area)],
-              context={"history": ctx["history"] + [query], "rounds": ctx["rounds"] + 1})
+              context={"history": threadmod.append_turn(ctx["history"], query),
+                       "rounds": threadmod.next_rounds(ctx["rounds"])})
     r["text"] = "\n".join(lines)
     return _checked(r, res)
 
