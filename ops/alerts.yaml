@@ -1,0 +1,29 @@
+# Alert rules (plan §7). Each alert maps to a bis_* series on /metrics.
+# Windows/thresholds per reviewed plan; owner: on-call pilot rota (docs/runbook.md).
+alerts:
+  - name: CitationVerifierTrips
+    expr: increase(bis_citation_fail_total[5m]) > 0
+    severity: page
+    playbook: runbook#citation-trips
+  - name: RefusalRateSwing
+    expr: abs(delta(bis_refused_total[1h]) / clamp_min(delta(bis_answered_total[1h]),1)) > 0.10
+    severity: ticket
+    playbook: runbook#refusal-swing
+  - name: KBStale
+    expr: bis_kb_staleness_days > 14
+    severity: ticket
+    playbook: runbook#kb-refresh
+  - name: ChatLatencyHigh
+    expr: bis_chat_latency_p95_ms > 2000
+    severity: ticket
+    window: 5m
+    playbook: runbook#latency
+  - name: ChatErrors
+    expr: increase(bis_chat_5xx_total[5m]) > 0
+    severity: page
+    playbook: runbook#errors
+  - name: FeedbackNegativeSpike
+    expr: bis_feedback_neg_total / clamp_min(bis_feedback_total,1) > 0.15
+    severity: ticket
+    window: 24h
+    playbook: runbook#feedback

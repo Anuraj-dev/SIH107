@@ -24,6 +24,7 @@ from pydantic import BaseModel, Field
 from .assistant import answer
 from .config import load as load_config
 from .i18n_privacy import find_pii, redact
+from . import metrics as metrics_mod
 
 CFG = load_config()
 import os as _os
@@ -169,6 +170,8 @@ async def _rid(request: Request, call_next):
         resp = JSONResponse({**detail, "request_id": rid}, status_code=e.status_code)
     ms = int((time.time() - t0) * 1000)
     resp.headers["X-Request-ID"] = rid
+    if resp.status_code >= 500 and request.url.path == "/chat":
+        metrics_mod.incr("chat_5xx_total")
     log.info(f"{request.method} {request.url.path} -> {resp.status_code} {ms}ms",
              extra={"ctx": {"request_id": rid, "status": resp.status_code, "ms": ms}})
     return resp
@@ -199,6 +202,12 @@ def _check_owner(row: sqlite3.Row, token: Optional[str]) -> None:
 @app.get("/health")
 def health():
     return {"ok": True}
+
+
+@app.get("/metrics")
+def metrics():
+    from fastapi.responses import PlainTextResponse
+    return PlainTextResponse(metrics_mod.render_prometheus())
 
 
 @app.post("/threads", response_model=ThreadOut)
@@ -302,6 +311,14 @@ def chat(body: ChatIn, request: Request,
             "needs_info": resp.get("needs_info"), "ms": ms,
             "pii": [k for k, v in find_pii(q).items() if v],
             "q": redact(q)[:120]}})
+        metrics_mod.incr("chat_total")
+        metrics_mod.observe_latency_ms(ms)
+        if resp.get("refused"):
+            metrics_mod.incr("refused_total")
+        else:
+            metrics_mod.incr("answered_total")
+        if resp.get("needs_info"):
+            metrics_mod.incr("needs_info_total")
         return resp
     finally:
         conn.close()
@@ -396,6 +413,9 @@ def feedback(body: FeedbackIn, x_owner_token: Optional[str] = Header(default=Non
                       redact(body.note)[:1000], row["user_ref"], "pending",
                       _utcnow().isoformat()))
         conn.commit()
+        metrics_mod.incr("feedback_total")
+        if body.rating < 0:
+            metrics_mod.incr("feedback_neg_total")
         return {"ok": True, "status": "pending"}
     finally:
         conn.close()

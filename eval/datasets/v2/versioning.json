@@ -1,0 +1,164 @@
+[
+  {
+    "id": "V-001",
+    "query": "What is IS 0000-DEMO status — can I manufacture to it?",
+    "lang": "en",
+    "expect_is": null,
+    "expect_scheme": null,
+    "must_refuse": true,
+    "must_cite": false
+  },
+  {
+    "id": "V-002",
+    "query": "Can I manufacture to IS 0000-DEMO? Is it withdrawn?",
+    "lang": "en",
+    "expect_is": null,
+    "expect_scheme": null,
+    "must_refuse": true,
+    "must_cite": false
+  },
+  {
+    "id": "V-003",
+    "query": "IS 0000-DEMO ka status kya hai? kya manufacture kar sakte hain?",
+    "lang": "hi",
+    "expect_is": null,
+    "expect_scheme": null,
+    "must_refuse": true,
+    "must_cite": false
+  },
+  {
+    "id": "V-004",
+    "query": "Is IS 0000-DEMO 1999 still valid for production? Withdrawn check with last-checked",
+    "lang": "en",
+    "expect_is": null,
+    "expect_scheme": null,
+    "must_refuse": true,
+    "must_cite": false
+  },
+  {
+    "id": "V-005",
+    "query": "Old standard IS 0000-DEMO withdrawn example — confirm do NOT use for manufacture",
+    "lang": "en",
+    "expect_is": null,
+    "expect_scheme": null,
+    "must_refuse": true,
+    "must_cite": false
+  },
+  {
+    "id": "V-006",
+    "query": "Is IS 10500:2012 still active? What is its status and last-checked?",
+    "lang": "en",
+    "expect_is": "IS 10500",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "V-007",
+    "query": "Has IS 10500 been superseded? Current version status with last-checked?",
+    "lang": "en",
+    "expect_is": "IS 10500",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "V-008",
+    "query": "IS 269:2015 OPC cement year and status — is it active? last-checked?",
+    "lang": "en",
+    "expect_is": "IS 269",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "V-009",
+    "query": "Is IS 1786:2008 TMT saria still active? Status and last-checked?",
+    "lang": "en",
+    "expect_is": "IS 1786",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "V-010",
+    "query": "IS 16102-1:2012 LED lamps status active? Year and last-checked under CRS?",
+    "lang": "en",
+    "expect_is": "IS 16102-1",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "V-011",
+    "query": "IS 4151:2015 helmet year status active? Confirm last-checked before manufacture",
+    "lang": "en",
+    "expect_is": "IS 4151",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "V-012",
+    "query": "IS 2347:2017 cooker status active? Year last-checked?",
+    "lang": "en",
+    "expect_is": "IS 2347",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "V-013",
+    "query": "IS 694:2010 cable status active? Current version last-checked?",
+    "lang": "en",
+    "expect_is": "IS 694",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "V-014",
+    "query": "IS 14543:2016 packaged water status active? Superseded or current? last-checked?",
+    "lang": "en",
+    "expect_is": "IS 14543",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "V-015",
+    "query": "IS 2553-1:2019 safety glass status active? Year last-checked?",
+    "lang": "en",
+    "expect_is": "IS 2553-1",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "V-016",
+    "query": "Kya IS 10500:2012 abhi active hai? Status aur last-checked batayen piped drinking water",
+    "lang": "hi",
+    "expect_is": "IS 10500",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "V-017",
+    "query": "Has IS 302-1:2008 appliance safety been superseded? Active status last-checked mixer?",
+    "lang": "en",
+    "expect_is": "IS 302-1",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "V-018",
+    "query": "IS 9873-1:2019 toy safety active status? Last-checked year?",
+    "lang": "en",
+    "expect_is": "IS 9873-1",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  }
+]

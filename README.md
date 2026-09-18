@@ -17,6 +17,14 @@ cd ui && npm install && npm run dev   # http://127.0.0.1:5173, /api proxied to :
 ```
 Keep the Python API running on :8000 first. Test console: sample queries (EN/Hindi/refusal),
 citations panel, answered/refused + PII badges, raw-JSON toggle, EN/HI switch.
+Phase 5 adds: per-answer 👍/👎 (fixture-driven until `POST /feedback` ships), "known so far"
+chips + assumptions banner, redacted conversation export, token-gated admin KB diff-review
+screen, WCAG-AA pass (see `ui/A11Y.md`), and contract fixtures (`npm run test:contract`).
+
+## Legacy `web/` page
+The static `web/` page is legacy and superseded by the React console in `ui/` — do not link to
+it for new work. Physical removal is deferred (left untouched to avoid conflicts with parallel
+in-flight work); a follow-up will delete `web/` per plan §5.
 
 ## Design vs grill decisions
 - Ranked candidates + confidence + clarifying Qs, never single definitive IS (`src/bis_assistant/assistant.py:1`)

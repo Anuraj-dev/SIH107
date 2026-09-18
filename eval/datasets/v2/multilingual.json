@@ -1,0 +1,380 @@
+[
+  {
+    "id": "M-001",
+    "query": "Piped drinking water tap quality household supply potable — which IS?",
+    "lang": "en",
+    "expect_is": "IS 10500",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "M-002",
+    "query": "Nal ke peene ke paani ki gunvatta household supply piped drinking water — kaun sa IS?",
+    "lang": "hi",
+    "expect_is": "IS 10500",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "M-003",
+    "query": "Nal ka pani piped drinking water household supply kaunsa IS hai? tap water",
+    "lang": "hi",
+    "expect_is": "IS 10500",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "M-004",
+    "query": "Packaged drinking water 20 litre jar bottled new plant — which IS?",
+    "lang": "en",
+    "expect_is": "IS 14543",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "M-005",
+    "query": "Packaged drinking water 20 litre jar new plant bottled — kaun sa IS?",
+    "lang": "hi",
+    "expect_is": "IS 14543",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "M-006",
+    "query": "Bisleri type packaged water 20 litre jar new plant kaunsa IS lagega?",
+    "lang": "hi",
+    "expect_is": "IS 14543",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "M-007",
+    "query": "Packaged natural mineral water spring source — which IS?",
+    "lang": "en",
+    "expect_is": "IS 13428",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "M-008",
+    "query": "Prakritik spring mineral water source packaged — kaun sa IS?",
+    "lang": "hi",
+    "expect_is": "IS 13428",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "M-009",
+    "query": "Natural spring mineral water borewell source kaunsa IS hai packaged?",
+    "lang": "hi",
+    "expect_is": "IS 13428",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "M-010",
+    "query": "Vacuum insulated steel flask 1 litre household — which IS?",
+    "lang": "en",
+    "expect_is": "IS 17803",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "M-011",
+    "query": "Steel vacuum insulated flask 1 litre gharelu — kaun sa IS?",
+    "lang": "hi",
+    "expect_is": "IS 17803",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "M-012",
+    "query": "Vacuum insulated steel bottle 1 litre household kaunsa IS hai?",
+    "lang": "hi",
+    "expect_is": "IS 17803",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "M-013",
+    "query": "PVC cable 1100V house wiring single-core — which IS?",
+    "lang": "en",
+    "expect_is": "IS 694",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "M-014",
+    "query": "Ghar wiring PVC cable 1100V single-core — kaun sa IS?",
+    "lang": "hi",
+    "expect_is": "IS 694",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "M-015",
+    "query": "House wiring PVC cable 1100V kaunsa IS lagega?",
+    "lang": "hi",
+    "expect_is": "IS 694",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "M-016",
+    "query": "16A plug socket household 250V — which IS?",
+    "lang": "en",
+    "expect_is": "IS 1293",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "M-017",
+    "query": "Ghar 16 amp plug socket 250V — kaun sa IS?",
+    "lang": "hi",
+    "expect_is": "IS 1293",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "M-018",
+    "query": "16A plug socket ghar 250V kaunsa IS hai?",
+    "lang": "hi",
+    "expect_is": "IS 1293",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "M-019",
+    "query": "Mixer grinder household safety general — which IS?",
+    "lang": "en",
+    "expect_is": "IS 302-1",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "M-020",
+    "query": "Gharelu mixer grinder suraksha household — kaun sa IS?",
+    "lang": "hi",
+    "expect_is": "IS 302-1",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "M-021",
+    "query": "Mixer grinder ghar safety kaunsa IS hai household?",
+    "lang": "hi",
+    "expect_is": "IS 302-1",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "M-022",
+    "query": "LED bulb 9W B22 retrofit self-ballasted — which IS? CRS?",
+    "lang": "en",
+    "expect_is": "IS 16102-1",
+    "expect_scheme": "CRS",
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "M-023",
+    "query": "LED bulb 9W B22 retrofit self-ballasted — kaun sa IS? CRS?",
+    "lang": "hi",
+    "expect_is": "IS 16102-1",
+    "expect_scheme": "CRS",
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "M-024",
+    "query": "9W B22 LED bulb retrofit kaunsa IS hai? CRS registration?",
+    "lang": "hi",
+    "expect_is": "IS 16102-1",
+    "expect_scheme": "CRS",
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "M-025",
+    "query": "Toy safety 3 year child mechanical — which IS?",
+    "lang": "en",
+    "expect_is": "IS 9873-1",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "M-026",
+    "query": "3 saal bachche khilona safety mechanical — kaun sa IS?",
+    "lang": "hi",
+    "expect_is": "IS 9873-1",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "M-027",
+    "query": "3 year bachche khilona safety kaunsa IS hai?",
+    "lang": "hi",
+    "expect_is": "IS 9873-1",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "M-028",
+    "query": "OPC 53 grade cement — which IS?",
+    "lang": "en",
+    "expect_is": "IS 269",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "M-029",
+    "query": "OPC 53 grade cement — kaun sa IS?",
+    "lang": "hi",
+    "expect_is": "IS 269",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "M-030",
+    "query": "OPC 53 grade cement kaunsa IS hai?",
+    "lang": "hi",
+    "expect_is": "IS 269",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "M-031",
+    "query": "Fe500 TMT saria 12mm concrete — which IS?",
+    "lang": "en",
+    "expect_is": "IS 1786",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "M-032",
+    "query": "Fe500 TMT saria 12mm concrete — kaun sa IS?",
+    "lang": "hi",
+    "expect_is": "IS 1786",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "M-033",
+    "query": "Fe500 saria 12mm concrete kaunsa IS hai?",
+    "lang": "hi",
+    "expect_is": "IS 1786",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "M-034",
+    "query": "UPVC pipe 110mm potable water — which IS?",
+    "lang": "en",
+    "expect_is": "IS 4985",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "M-035",
+    "query": "UPVC pipe 110mm potable peya jal — kaun sa IS?",
+    "lang": "hi",
+    "expect_is": "IS 4985",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "M-036",
+    "query": "UPVC pipe 110mm potable kaunsa IS hai?",
+    "lang": "hi",
+    "expect_is": "IS 4985",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "M-037",
+    "query": "Bike helmet two-wheeler rider — which IS?",
+    "lang": "en",
+    "expect_is": "IS 4151",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "M-038",
+    "query": "Bike helmet two-wheeler rider — kaun sa IS?",
+    "lang": "hi",
+    "expect_is": "IS 4151",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "M-039",
+    "query": "Bike helmet two-wheeler kaunsa IS hai?",
+    "lang": "hi",
+    "expect_is": "IS 4151",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "M-040",
+    "query": "Pressure cooker 5 litre aluminium domestic — which IS?",
+    "lang": "en",
+    "expect_is": "IS 2347",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "M-041",
+    "query": "Pressure cooker 5 litre aluminium gharelu — kaun sa IS?",
+    "lang": "hi",
+    "expect_is": "IS 2347",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "M-042",
+    "query": "5 litre cooker aluminium domestic kaunsa IS hai?",
+    "lang": "hi",
+    "expect_is": "IS 2347",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  }
+]

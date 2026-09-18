@@ -1,0 +1,308 @@
+[
+  {
+    "id": "S-001",
+    "query": "Explain ISI mark product certification process for domestic manufacturer step by step",
+    "lang": "en",
+    "expect_is": null,
+    "expect_scheme": "ISI",
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "S-002",
+    "query": "ISI mark licence ke liye factory nirikshan hota hai kya? domestic manufacturer process samjhayen",
+    "lang": "hi",
+    "expect_is": null,
+    "expect_scheme": "ISI",
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "S-003",
+    "query": "How to get ISI licence for cement steel helmet? factory inspection sample testing CM/L process",
+    "lang": "en",
+    "expect_is": null,
+    "expect_scheme": "ISI",
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "S-004",
+    "query": "ISI certification ke liye BIS portal par apply kaise karen? fee documents factory inspection steps",
+    "lang": "hi",
+    "expect_is": null,
+    "expect_scheme": "ISI",
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "S-005",
+    "query": "What is ISI Scheme-I vs CRS? domestic product certification ISI process for packaged water",
+    "lang": "en",
+    "expect_is": "IS 14543",
+    "expect_scheme": "ISI",
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "S-006",
+    "query": "ISI mark lagane ke liye licence number CM/L kaise milta hai? manufacturer journey",
+    "lang": "hi",
+    "expect_is": null,
+    "expect_scheme": "ISI",
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "S-007",
+    "query": "How does CRS registration work for electronics, is factory visit needed? LED lamps",
+    "lang": "en",
+    "expect_is": "IS 16102-1",
+    "expect_scheme": "CRS",
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "S-008",
+    "query": "Electronics ke liye CRS panjikaran prakriya samjhayen, factory visit hota hai kya?",
+    "lang": "hi",
+    "expect_is": null,
+    "expect_scheme": "CRS",
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "S-009",
+    "query": "I make 9W B22 self-ballasted LED bulbs retrofit, is CRS compulsory? registration steps R-number",
+    "lang": "en",
+    "expect_is": "IS 16102-1",
+    "expect_scheme": "CRS",
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "S-010",
+    "query": "CRS portal par test report ke saath apply kaise karen? BIS recognised lab LED lamp",
+    "lang": "hi",
+    "expect_is": "IS 16102-1",
+    "expect_scheme": "CRS",
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "S-011",
+    "query": "Compulsory Registration Scheme Scheme-II for IT electronics — check CRS list, lab test, no factory visit",
+    "lang": "en",
+    "expect_is": null,
+    "expect_scheme": "CRS",
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "S-012",
+    "query": "LED lamp ke liye CRS registration me R-number marking kaise hoti hai? lab test process",
+    "lang": "hi",
+    "expect_is": "IS 16102-1",
+    "expect_scheme": "CRS",
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "S-013",
+    "query": "I am a foreign manufacturer. Explain FMCS and AIR requirement for selling in India",
+    "lang": "en",
+    "expect_is": null,
+    "expect_scheme": "FMCS",
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "S-014",
+    "query": "Videshi nirmata ke liye FMCS me AIR niyukt karna kyon jaroori hai? Bharat me licence process",
+    "lang": "hi",
+    "expect_is": null,
+    "expect_scheme": "FMCS",
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "S-015",
+    "query": "Foreign factory inspection abroad sampling BIS lab testing — FMCS licence steps with AIR",
+    "lang": "en",
+    "expect_is": null,
+    "expect_scheme": "FMCS",
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "S-016",
+    "query": "FMCS ke liye manakonline portal par documents fee ke saath apply kaise karen? AIR details",
+    "lang": "hi",
+    "expect_is": null,
+    "expect_scheme": "FMCS",
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "S-017",
+    "query": "We are a Nepal factory selling steel in India, do we need FMCS with Authorised Indian Representative?",
+    "lang": "en",
+    "expect_is": null,
+    "expect_scheme": "FMCS",
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "S-018",
+    "query": "How to verify gold jewellery HUID on BIS Care app? 6-digit hallmark check",
+    "lang": "en",
+    "expect_is": null,
+    "expect_scheme": "HALLMARK",
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "S-019",
+    "query": "Sone ke gehne par HUID kaise verify karen? BIS Care app par 6-ank hallmark",
+    "lang": "hi",
+    "expect_is": null,
+    "expect_scheme": "HALLMARK",
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "S-020",
+    "query": "Jeweller registration AHC testing HUID hallmark for silver jewellery — process?",
+    "lang": "en",
+    "expect_is": null,
+    "expect_scheme": "HALLMARK",
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "S-021",
+    "query": "Hallmarking mandatory districts me sona chandi ke liye HUID kyon jaroori hai? AHC jaanch",
+    "lang": "hi",
+    "expect_is": null,
+    "expect_scheme": "HALLMARK",
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "S-022",
+    "query": "Bought gold chain, how to check HUID hallmark authenticity and file complaint on BIS Care?",
+    "lang": "en",
+    "expect_is": null,
+    "expect_scheme": "HALLMARK",
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "S-023",
+    "query": "Where do I find a BIS recognised lab for testing my cable IS 694? Check scope on LIMS",
+    "lang": "en",
+    "expect_is": "IS 694",
+    "expect_scheme": "LIMS",
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "S-024",
+    "query": "Apne product ki testing ke liye BIS lab ka IS-wise scope LIMS par kaise dekhen?",
+    "lang": "hi",
+    "expect_is": null,
+    "expect_scheme": "LIMS",
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "S-025",
+    "query": "Confirm IS-wise testing scope on LIMS before sending helmet samples for IS 4151",
+    "lang": "en",
+    "expect_is": "IS 4151",
+    "expect_scheme": "LIMS",
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "S-026",
+    "query": "LIMS par IS 10500 drinking water testing facility ka scope kaise confirm karen? sample bhejne se pehle",
+    "lang": "hi",
+    "expect_is": "IS 10500",
+    "expect_scheme": "LIMS",
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "S-027",
+    "query": "BIS Central Laboratory Sahibabad scope on LIMS — verify before sending pressure cooker samples",
+    "lang": "en",
+    "expect_is": "IS 2347",
+    "expect_scheme": "LIMS",
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "S-028",
+    "query": "Tell me about Standards Clubs and training programmes for students, school nodal officer",
+    "lang": "en",
+    "expect_is": null,
+    "expect_scheme": "training",
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "S-029",
+    "query": "Standards Club school me kaise banayen? BIS training calendar vidyarthi prashikshan",
+    "lang": "hi",
+    "expect_is": null,
+    "expect_scheme": "training",
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "S-030",
+    "query": "BIS training programmes calendar for MSME — where to see training-2 schedule?",
+    "lang": "en",
+    "expect_is": null,
+    "expect_scheme": "training",
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "S-031",
+    "query": "How to file consumer complaint about ISI marked helmet on BIS Care? defective product",
+    "lang": "en",
+    "expect_is": null,
+    "expect_scheme": "ISI",
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "S-032",
+    "query": "ISI mark wale cooker me kharabi hai, consumer complaint BIS portal par kaise darj karen?",
+    "lang": "hi",
+    "expect_is": null,
+    "expect_scheme": "ISI",
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "S-033",
+    "query": "Gold hallmark HUID mismatch — how to complain to BIS? BIS Care grievance jeweller",
+    "lang": "en",
+    "expect_is": null,
+    "expect_scheme": "HALLMARK",
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "S-034",
+    "query": "Training ke baad Standards Club certificate milta hai kya? student training query",
+    "lang": "hi",
+    "expect_is": null,
+    "expect_scheme": "training",
+    "must_refuse": false,
+    "must_cite": true
+  }
+]
