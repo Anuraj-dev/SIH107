@@ -21,6 +21,13 @@ _DEFAULTS = {
                "refresh_days": 7, "staleness_alert_days": 14},
     "observability": {"trace_sample_rate": 0.05, "trace_retention_days": 14,
                       "latency_p95_ms": 2000},
+    "rag": {"enabled": False, "db_path": "kb/bis_rag.db", "top_k": 5,
+            "semantic": True, "embedding_model": "", "weight_lexical": 1.0,
+            "weight_semantic": 0.3, "exact_boost": 50.0, "catalogue": True},
+    "llm": {"provider": "openai-compatible", "model": "", "api_key": "",
+            "base_url": "https://api.openai.com/v1",
+            "temperature": 0.2, "max_tokens": 512, "timeout_s": 20.0, "retries": 1},
+    "guidance": {"adaptive": True},
 }
 
 _TYPES = {"port": int, "retention_days": int, "thread_ttl_days": int,
@@ -29,7 +36,11 @@ _TYPES = {"port": int, "retention_days": int, "thread_ttl_days": int,
           "refresh_days": int, "staleness_alert_days": int, "trace_retention_days": int,
           "latency_p95_ms": int, "direct_score": float, "direct_margin": float,
           "clarify_floor": float, "weak_floor": float, "max_rounds": int, "max_questions_per_turn": int,
-          "crawl_delay_s": float, "trace_sample_rate": float}
+          "crawl_delay_s": float, "trace_sample_rate": float,
+          "top_k": int, "max_tokens": int, "temperature": float, "timeout_s": float,
+          "weight_lexical": float, "weight_semantic": float, "exact_boost": float,
+          "enabled": bool, "semantic": bool, "live_crawl_enabled": bool,
+          "retries": int, "catalogue": bool, "adaptive": bool}
 
 
 def _deep_merge(base: dict, over: dict) -> dict:

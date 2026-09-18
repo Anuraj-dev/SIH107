@@ -107,6 +107,13 @@ class Turn:
     thread: ThreadHandle | None = None
     request_id: str = ""
     context: dict = field(default_factory=dict)  # legacy bridge; prefer .thread
+    sources: tuple[dict, ...] = ()  # RAG corpus sources (title/number/link)
+    rag_mode: str = ""
+    rag_used_llm: bool = False
+    intent: str = "general"  # NLU intent (nlu.classify)
+    intent_confidence: str = "low"
+    context_summary: str = ""  # extractive thread summary (memory)
+    guidance_adaptive: bool = False
 
     def to_dict(self) -> dict:
         d: dict = {
@@ -123,6 +130,13 @@ class Turn:
             "assumptions": list(self.assumptions),
             "context": dict(self.context),
             "request_id": self.request_id,
+            "sources": [dict(s) for s in self.sources],
+            "rag_mode": self.rag_mode,
+            "rag_used_llm": bool(self.rag_used_llm),
+            "intent": self.intent,
+            "intent_confidence": self.intent_confidence,
+            "context_summary": self.context_summary,
+            "guidance_adaptive": bool(self.guidance_adaptive),
         }
         if self.thread is not None:
             if self.thread.id is not None:
@@ -205,7 +219,14 @@ def chat(
         known=tuple(resp.get("known", [])),
         assumptions=tuple(resp.get("assumptions", [])),
         pii=dict(resp.get("pii", {})), thread=new_handle,
-        context=dict(resp_ctx))
+        context=dict(resp_ctx),
+        sources=tuple(resp.get("sources", []) or resp.get("rag_evidence", []) or ()),
+        rag_mode=str(resp.get("rag_mode", "")),
+        rag_used_llm=bool(resp.get("rag_used_llm", False)),
+        intent=str(resp.get("intent", "general")),
+        intent_confidence=str(resp.get("intent_confidence", "low")),
+        context_summary=str(resp.get("context_summary", "")),
+        guidance_adaptive=bool(resp.get("guidance_adaptive", False)))
 
 
 def preview_answer(

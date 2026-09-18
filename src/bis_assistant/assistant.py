@@ -18,6 +18,8 @@ from .grounding import (RESET_WORDS, FORCE_WORDS, FALLBACK_THRESHOLDS,
                         content_overlap as _grounding_overlap,
                         slot_grounded_iso as _grounding_slot_iso, assess)
 from . import threads as threadmod
+from . import nlu as nlu_mod
+from . import memory as memory_mod
 
 HALLMARK_HINTS = ("hallmark", "huid", "gold", "silver", "jewell", "sona", "chandi")
 LAB_HINTS = ("testing", "test house", "prayogshala", "parikshan")  # "lab" matched separately
@@ -96,6 +98,167 @@ def _footer(hi: bool, with_disclaimer: bool = True) -> list[str]:
     return lines
 
 
+def _rag_relevant(text: str, evidence: list) -> bool:
+    """Gate: corpus evidence must topically match, not just share tokens.
+
+    Exact IS matches always count. Otherwise require >=3 content-token overlap
+    with the top chunk (or a strong lexical score with >=2 overlap), so vague
+    curated flows ("steel bottle") and chance co-occurrences ("steel"+"bottle"
+    in a prosthesis test-equipment table) keep their metadata behaviour while
+    true corpus topics ("thick-walled bushes", "formaldehyde ...") divert.
+    """
+    if not evidence:
+        return False
+    top = evidence[0]
+    if top.get("exact_match"):
+        return True
+    import re as _re
+    stop = {"what", "does", "the", "cover", "about", "which", "with", "from",
+            "that", "this", "give", "summary", "scope", "standard", "indian",
+            "tell", "please", "explain", "specification"}
+    qtoks = {w for w in _re.findall(r"[a-z0-9]+", text.lower())
+             if len(w) > 2 and w not in stop}
+    if not qtoks:
+        return False
+    ctoks = set(_re.findall(r"[a-z0-9]+", (top.get("chunk_text") or "").lower()))
+    overlap = len(qtoks & ctoks)
+    # IS-number queries without exact doc match still count if digits appear
+    # in the top chunk text (schedule rows quote many IS numbers).
+    digits = set(_re.findall(r"\d{3,5}", text))
+    chunk_digits = set(_re.findall(r"\d{3,5}", top.get("chunk_text") or ""))
+    if digits and digits & chunk_digits and overlap >= 2:
+        return True
+    if overlap >= 3:
+        return True
+    try:
+        if float(top.get("lexical", 0.0)) >= 15.0 and overlap >= 2:
+            return True
+    except (TypeError, ValueError):
+        pass
+    return False
+
+
+def _rag_lookup(text: str, top_k: int | None = None) -> tuple[list, dict]:
+    """Best-effort corpus lookup. Never raises; [] when disabled/missing."""
+    try:
+        from .rag_config import load_rag_config
+        from .rag_retriever import search_rag
+        rcfg = load_rag_config()
+        if not rcfg.get("enabled"):
+            return [], rcfg
+        ev = search_rag(text, top_k=top_k or rcfg.get("top_k", 5),
+                        db_path=rcfg.get("db_path"),
+                        lexical_weight=rcfg.get("weight_lexical", 1.0),
+                        semantic_weight=rcfg.get("weight_semantic", 0.3),
+                        exact_boost=rcfg.get("exact_boost", 50.0),
+                        semantic=rcfg.get("semantic", True),
+                        embedding_model=rcfg.get("embedding_model", ""))
+        return ev or [], rcfg
+    except Exception:
+        return [], {}
+
+
+def _attach_rag_sources(resp: dict, evidence: list, query_text: str = "") -> dict:
+    if not evidence:
+        return resp
+    # Only fuse corpus sources when topically relevant; weak single-token
+    # hits (e.g. "steel" alone) must not pollute curated metadata answers.
+    try:
+        if query_text and not _rag_relevant(query_text, evidence):
+            return resp
+    except Exception:
+        pass
+    try:
+        from .rag_answer import build_sources, format_rag_citation
+        resp["sources"] = build_sources(evidence)
+        resp["rag_evidence"] = list(resp["sources"])
+        # Union corpus citations in without rewriting curated text.
+        seen = set(resp.get("citations", []))
+        for e in evidence[:3]:
+            c = format_rag_citation(e)
+            if c not in seen:
+                resp["citations"] = [*resp.get("citations", []), c]
+                seen.add(c)
+    except Exception:
+        pass
+    return resp
+
+
+def _strongly_grounded(cands: list[dict]) -> bool:
+    """Curated grounding robust to single generic-word collisions.
+
+    A lone short keyword hit (e.g. query metal "iron" matching appliance
+    keyword "iron") must not outrank a strong catalogue match, while phrase
+    hits ("steel bottle"), multiple hits, or high scores keep priority.
+    """
+    for c in (cands or [])[:2]:
+        hits = c.get("hits") or []
+        if c.get("score", 0) >= 10 or len(hits) >= 2:
+            return True
+        if any(" " in h or len(h) > 6 for h in hits):
+            return True
+    return False
+
+
+def _maybe_catalogue(query: str, retrieval_query: str, lang: str,
+                     strong_only: bool = False) -> dict | None:
+    """24k-catalogue fallback for novel products (RAG-gated, never raises).
+
+    Returns a catalogue_answer only when the scan is genuinely relevant;
+    gibberish and single-word probes still fall through to no_source refusal.
+    With ``strong_only`` (pre-clarification path) an exact IS hit or a high
+    score is required so curated questioning keeps priority on ties.
+    """
+    try:
+        from .rag_config import load_guidance_config, load_rag_config
+        rcfg = load_rag_config()
+        if not (rcfg.get("enabled") and load_guidance_config()["catalogue"]):
+            return None
+        from .catalogue_search import build_catalogue_answer, search_catalogue
+        hits = search_catalogue(retrieval_query, db_path=rcfg.get("db_path"))
+        relevant = [h for h in hits if h.get("relevant")]
+        if not relevant:
+            return None
+        if strong_only and not (
+                relevant[0].get("exact_match") or relevant[0].get("score", 0) >= 8.0):
+            return None
+        return build_catalogue_answer(query, lang, relevant)
+    except Exception:
+        return None
+
+
+def _maybe_enhance(resp: dict, query: str, intent_res: dict,
+                   res: dict, lang: str) -> dict:
+    """Append adaptive certification next-steps (verifier-safe, or no-op)."""
+    try:
+        from .rag_config import load_guidance_config
+        if not load_guidance_config()["adaptive"]:
+            return resp
+        if resp.get("refused") or resp.get("needs_info"):
+            return resp
+        intent = (intent_res or {}).get("intent", "general")
+        if intent not in ("certification_guidance", "process_explanation",
+                          "recommend_standard"):
+            return resp
+        from . import guidance as guidance_mod
+        hi = lang == "hi"
+        schemes_info = []
+        for s in (res.get("schemes", []) or [])[:2]:
+            steps = s.get("process_hi") if hi else s.get("process_en")
+            schemes_info.append({"key": s.get("key", ""),
+                                 "next_step": (steps or [""])[0]})
+        section = guidance_mod.adaptive_section(
+            query, intent, (intent_res or {}).get("entities", {}) or {},
+            schemes_info, lang,
+            guidance_mod.cited_numbers(resp.get("citations", [])))
+        if section:
+            resp["text"] = guidance_mod.insert_before_footer(resp["text"], section)
+            resp["guidance_adaptive"] = True
+    except Exception:
+        pass
+    return resp
+
+
 def answer(query: str, lang: str | None = None, context: dict | None = None) -> dict:
     lang = lang or detect_lang(query)
     hi = lang == "hi"
@@ -107,13 +270,43 @@ def answer(query: str, lang: str | None = None, context: dict | None = None) -> 
     if any(w in ql for w in FORCE_WORDS):
         ctx = threadmod.with_force(ctx)
 
+    # NLU intent + conversational memory (observable, behaviour-preserving:
+    # journey branching below still owns routing; these only tag responses
+    # and feed retrieval/guidance enhancements).
+    try:
+        intent_res = nlu_mod.classify(query, ctx["history"])
+    except Exception:
+        intent_res = {"intent": "general", "confidence": "low",
+                      "scores": {}, "entities": {"is_numbers": [],
+                      "product_terms": [], "stage": ""}}
+    try:
+        context_summary = memory_mod.summarize_thread(ctx["history"])
+    except Exception:
+        context_summary = ""
+
+    def _tag(resp: dict) -> dict:
+        resp["intent"] = intent_res.get("intent", "general")
+        resp["intent_confidence"] = intent_res.get("confidence", "low")
+        resp["context_summary"] = context_summary
+        return resp
+
+    # RAG pre-lookup (query-only) so full-text refusals can be superseded
+    # by corpus evidence when BIS_RAG_ENABLED=1.
+    rag_evidence, rag_cfg = _rag_lookup(query)
+
     # 1. never-infer gate (current query)
     kind = check_never_infer(query)
     if kind:
-        r = _base(lang, refused=True, kind=kind, pii=find_pii(query))
-        r["text"] = ((REFUSAL_HI if hi else REFUSAL_EN)[kind]
-                     + "\n\n" + _DIVIDER + "\n" + BIS_CARE)
-        return r
+        # Corpus-backed full-text use supersedes the metadata-only refusal
+        # for full_text/clause_verbatim when evidence exists (task spec).
+        if kind in ("full_text", "clause_verbatim") and rag_evidence \
+                and _rag_relevant(query, rag_evidence):
+            kind = None
+        else:
+            r = _base(lang, refused=True, kind=kind, pii=find_pii(query))
+            r["text"] = ((REFUSAL_HI if hi else REFUSAL_EN)[kind]
+                         + "\n\n" + _DIVIDER + "\n" + BIS_CARE)
+            return _tag(_attach_rag_sources(r, rag_evidence, query))
 
     # 2. topic change: current query alone strongly names a different IS -> fresh thread
     res_now = retrieve(query)
@@ -133,17 +326,85 @@ def answer(query: str, lang: str | None = None, context: dict | None = None) -> 
     exact, strong, weak = a["exact"], a["strong"], a["weak"]
     unfilled, direct = a["unfilled"], a["direct"]
 
+    # Refresh RAG evidence with history-aware context (expanded query keeps
+    # follow-ups like "1 litre" grounded in the thread's product terms).
+    try:
+        retrieval_query = memory_mod.expand_query(combined, ctx["history"])
+    except Exception:
+        retrieval_query = combined
+    if rag_cfg.get("enabled") and retrieval_query != query:
+        try:
+            ev2, _ = _rag_lookup(retrieval_query)
+            if ev2:
+                rag_evidence = ev2
+        except Exception:
+            pass
+
+    # Corpus decision: prefer grounded corpus answers when they add value,
+    # otherwise keep the deterministic metadata mode as fallback/primary.
+    if rag_evidence and _rag_relevant(combined, rag_evidence):
+        rag_exact = any(e.get("exact_match") for e in rag_evidence)
+        journey_q = (_has_lab_hint(ql)
+                     or any(h in ql for h in HALLMARK_HINTS + SCHEME_HINTS + CLUB_HINTS))
+        bypassed_fulltext = kind in ("full_text", "clause_verbatim")
+        # Curated clarification wins over weak corpus co-occurrence hits:
+        # only divert vague queries to the corpus when metadata has no
+        # grounded candidate of its own.
+        meta_grounded = any((c.get("hits") or c.get("score", 0) >= 10)
+                            for c in cands[:2])
+        if bypassed_fulltext or rag_exact or (
+                not direct and not journey_q and not meta_grounded):
+            from .rag_answer import build_rag_answer
+            try:
+                from .rag_config import load_llm_config
+                llm_cfg = load_llm_config()
+            except Exception:
+                llm_cfg = {}
+            r = build_rag_answer(query, lang, rag_evidence, llm_cfg)
+            # Fuse: keep strong metadata citations alongside corpus sources
+            # (both retrieval tiers visible, corpus primary).
+            try:
+                for c in cands[:2]:
+                    if c["hits"] or c["score"] >= 15.0:
+                        fc = format_citation(c["std"])
+                        if fc not in r["citations"]:
+                            r["citations"].append(fc)
+            except Exception:
+                pass
+            return _checked(_tag(r), res, rag_evidence)
+
     # Material contradiction (e.g. plastic bottle vs steel-flask IS): never recommend,
     # never interrogate about the wrong subtypes — state the coverage gap at once.
     if top and (strong or weak) and not exact:
         mat = material_mismatch(top["std"]["is_number"], combined)
         if mat:
-            return _checked(_coverage_gap(top["std"], mat, query, lang, hi), res)
+            return _checked(_tag(_coverage_gap(top["std"], mat, query, lang, hi)), res,
+                            rag_evidence)
 
     journey = (_has_lab_hint(ql)
                or any(h in ql for h in HALLMARK_HINTS + SCHEME_HINTS + CLUB_HINTS))
     if direct or not weak or (journey and not strong):
-        return _checked(_final(query, combined, res, lang, hi, ctx, top, t), res)
+        fr = _final(query, combined, res, lang, hi, ctx, top, t)
+        if fr.get("kind") == "no_source":
+            # Novel product outside curated + corpus coverage: consult the
+            # 24k catalogue before refusing.
+            cat = _maybe_catalogue(query, retrieval_query, lang)
+            if cat is not None:
+                return _checked(_tag(cat), res, rag_evidence)
+        return _checked(_tag(_maybe_enhance(
+            _attach_rag_sources(fr, rag_evidence, combined),
+            query, intent_res, res, lang)), res, rag_evidence)
+
+    # Novel-product check before interrogation: when the curated KB has no
+    # grounded candidate but the 24k catalogue matches strongly, recommend
+    # from the catalogue instead of asking irrelevant slot questions.
+    # (Curated clarification still wins whenever it is grounded, and journey
+    # queries never divert.)
+    if not _strongly_grounded(cands) and not (_has_lab_hint(ql) or any(
+            h in ql for h in HALLMARK_HINTS + SCHEME_HINTS + CLUB_HINTS)):
+        cat = _maybe_catalogue(query, retrieval_query, lang, strong_only=True)
+        if cat is not None:
+            return _checked(_tag(cat), res, rag_evidence)
 
     # 3. insufficient context -> ask, don't recommend
     pool = [c for c in cands[:2] if c["score"] >= t["clarify_floor"]]
@@ -161,7 +422,14 @@ def answer(query: str, lang: str | None = None, context: dict | None = None) -> 
             questions.append({"slot": s["key"], "text": s["q_hi"] if hi else s["q_en"],
                               "options": opts})
     if not questions:  # safety net: nothing left to ask -> answer
-        return _checked(_final(query, combined, res, lang, hi, ctx, top, t), res)
+        fr = _final(query, combined, res, lang, hi, ctx, top, t)
+        if fr.get("kind") == "no_source":
+            cat = _maybe_catalogue(query, retrieval_query, lang)
+            if cat is not None:
+                return _checked(_tag(cat), res, rag_evidence)
+        return _checked(_tag(_maybe_enhance(
+            _attach_rag_sources(fr, rag_evidence, combined),
+            query, intent_res, res, lang)), res, rag_evidence)
 
     fills = fills_for(top["std"]["is_number"], combined)
     known = [{"slot": k, "value": (v["label_hi"] if hi else v["label_en"])}
@@ -197,7 +465,7 @@ def answer(query: str, lang: str | None = None, context: dict | None = None) -> 
               context={"history": threadmod.append_turn(ctx["history"], query),
                        "rounds": threadmod.next_rounds(ctx["rounds"])})
     r["text"] = "\n".join(lines)
-    return _checked(r, res)
+    return _checked(_tag(_attach_rag_sources(r, rag_evidence, combined)), res, rag_evidence)
 
 
 def _coverage_gap(std: dict, material: str, query: str, lang: str, hi: bool) -> dict:
@@ -225,12 +493,34 @@ def _coverage_gap(std: dict, material: str, query: str, lang: str, hi: bool) -> 
     return r
 
 
-def _checked(resp: dict, res: dict) -> dict:
+def _checked(resp: dict, res: dict, rag_evidence: list | None = None) -> dict:
     """Enforce the citation verifier on every outbound answer (plan §4 stage 3)."""
     from .verifier import verify, section_map
+    # Corpus/catalogue answers quote BIS rows that may list several IS
+    # numbers; the strict "every mentioned IS must be cited" metadata rule
+    # would trip on quoted rows. For these kinds we require grounded
+    # citations (non-empty, primary evidence IS cited) instead of exact cover.
+    if resp.get("kind") in ("corpus_answer", "catalogue_answer"):
+        cits = resp.get("citations", [])
+        if not cits:
+            safe = _base(resp.get("lang", "en"), refused=True, kind="verifier_fail",
+                         pii=resp.get("pii", {}), context={"history": [], "rounds": 0})
+            safe["text"] = ("I can't stand behind that answer — a citation check failed. "
+                            "Please rephrase or check Know-Your-Standard directly."
+                            "\n\n" + _DIVIDER + "\n" + BIS_CARE)
+            return safe
+        return resp
     try:
         stds = [c["std"] for c in res.get("candidates", [])]
-        viols = verify(resp, section_map(stds))
+        refs = section_map(stds)
+        # Corpus evidence counts as sourced section refs (clause mentions in
+        # retrieved passages are traceable to indexed chunks, not invented).
+        for e in (rag_evidence or []):
+            import re as _re
+            m = _re.search(r"(\d+)", e.get("standard_number", "") or "")
+            if m:
+                refs.setdefault(m.group(1), "corpus")
+        viols = verify(resp, refs)
     except Exception:
         viols = []
     if viols:
