@@ -12,7 +12,8 @@ Providers (``BIS_LLM_PROVIDER``, also ``llm.provider`` in config.yaml):
 
 Secrets come from env/config only — never hard-coded. Stdlib-only HTTP
 (urllib) so the project stays dependency-free. ``BIS_LLM_RETRIES`` controls
-extra attempts on transport failures (default 1). When no LLM is configured
+extra attempts on transport failures AND empty responses (default 0 keeps
+interactive /chat inside the latency budget). When no LLM is configured
 — or every attempt fails — callers use extractive_answer(), which never fails.
 """
 from __future__ import annotations
@@ -64,11 +65,11 @@ def _send_openai_compatible(messages: list[dict], cfg: dict) -> str | None:
         "model": cfg["model"],
         "messages": messages,
         "temperature": cfg.get("temperature", 0.2),
-        "max_tokens": cfg.get("max_tokens", 512),
+        "max_tokens": cfg.get("max_tokens", 768),
     }
     body = _post_json(url, payload, {
         "Content-Type": "application/json",
-        "Authorization": f"Bearer {cfg['api_key']}"}, cfg.get("timeout_s", 20.0))
+        "Authorization": f"Bearer {cfg['api_key']}"}, cfg.get("timeout_s", 10.0))
     choices = body.get("choices", [])
     if choices:
         text = (choices[0].get("message", {}).get("content") or "").strip()
@@ -83,12 +84,12 @@ def _send_ollama(messages: list[dict], cfg: dict) -> str | None:
         "messages": messages,
         "stream": False,
         "options": {"temperature": cfg.get("temperature", 0.2),
-                    "num_predict": cfg.get("max_tokens", 512)},
+                    "num_predict": cfg.get("max_tokens", 768)},
     }
     headers = {"Content-Type": "application/json"}
     if cfg.get("api_key"):
         headers["Authorization"] = f"Bearer {cfg['api_key']}"
-    body = _post_json(url, payload, headers, cfg.get("timeout_s", 20.0))
+    body = _post_json(url, payload, headers, cfg.get("timeout_s", 10.0))
     text = ((body.get("message", {}) or {}).get("content") or "").strip()
     return text or None
 
@@ -96,14 +97,22 @@ def _send_ollama(messages: list[dict], cfg: dict) -> str | None:
 def _send_gemini(messages: list[dict], cfg: dict) -> str | None:
     base = cfg.get("base_url", "https://generativelanguage.googleapis.com").rstrip("/")
     url = f"{base}/v1beta/models/{cfg['model']}:generateContent?key={cfg['api_key']}"
-    prompt = "\n\n".join(m.get("content", "") for m in messages)
-    payload = {
-        "contents": [{"role": "user", "parts": [{"text": prompt}]}],
+    # System prompt travels as systemInstruction (issue #4 P1-11): folding
+    # it into the user turn weakened grounding on long evidence prompts.
+    system = "\n\n".join(m.get("content", "") for m in messages
+                         if m.get("role") == "system")
+    user = "\n\n".join(m.get("content", "") for m in messages
+                       if m.get("role") != "system") or "\n\n".join(
+        m.get("content", "") for m in messages)
+    payload: dict = {
+        "contents": [{"role": "user", "parts": [{"text": user}]}],
         "generationConfig": {"temperature": cfg.get("temperature", 0.2),
-                             "maxOutputTokens": cfg.get("max_tokens", 512)},
+                             "maxOutputTokens": cfg.get("max_tokens", 768)},
     }
+    if system:
+        payload["system_instruction"] = {"parts": [{"text": system}]}
     body = _post_json(url, payload, {"Content-Type": "application/json"},
-                      cfg.get("timeout_s", 20.0))
+                      cfg.get("timeout_s", 10.0))
     # Scan all candidates: reasoning models may return an empty first
     # candidate (e.g. thinking consumed the token budget) while a later
     # one carries text.
@@ -124,19 +133,23 @@ _SENDERS = {
 
 
 def chat_complete(messages: list[dict], cfg: dict | None = None) -> str | None:
-    """Provider-dispatched chat call with retries. None on any failure."""
+    """Provider-dispatched chat call with retries. None on any failure.
+
+    Both transport errors AND empty-string successes consume an attempt
+    (issue #4 P1-11): an empty candidate usually means the thinking/model
+    budget ran out, which a retry with the same prompt can recover from.
+    """
     cfg = cfg or load_llm_config()
     if not is_configured(cfg):
         return None
     provider = str(cfg.get("provider", "openai-compatible")).lower()
     sender = _SENDERS.get(provider, _send_openai_compatible)
-    attempts = 1 + max(0, int(cfg.get("retries", 1)))
+    attempts = 1 + max(0, int(cfg.get("retries", 0)))
     for _ in range(attempts):
         try:
             text = sender(messages, cfg)
             if text:
                 return text
-            return None  # empty success: do not retry a valid call
         except Exception:
             continue
     return None

@@ -133,8 +133,13 @@ def search_rag(query: str, top_k: int = 5,
                db_path: str | Path | None = None,
                lexical_weight: float = 1.0, semantic_weight: float = 0.3,
                exact_boost: float = 50.0, semantic: bool = True,
-               embedding_model: str = "") -> list[dict]:
-    """Hybrid search. Empty list when DB missing/empty (never raises)."""
+               embedding_model: str = "",
+               _conn: sqlite3.Connection | None = None) -> list[dict]:
+    """Hybrid search. Empty list when DB missing/empty (never raises).
+
+    Pass ``_conn`` to reuse one connection per request (issue #4 P1-10);
+    caller-owned connections are never closed here.
+    """
     from .rag_config import load_rag_config
     cfg = load_rag_config()
     db_path = str(db_path or cfg["db_path"])
@@ -148,11 +153,17 @@ def search_rag(query: str, top_k: int = 5,
     fts_q = _fts_query(q)
     over_fetch = max(top_k * 6, 20)
 
-    try:
-        conn = sqlite3.connect(str(db_path))
-        conn.row_factory = sqlite3.Row
-    except Exception:
-        return []
+    own_conn = _conn is None
+    if _conn is not None:
+        conn = _conn
+    else:
+        if not os.path.exists(db_path):
+            return []
+        try:
+            conn = sqlite3.connect(str(db_path))
+            conn.row_factory = sqlite3.Row
+        except Exception:
+            return []
     try:
         # Does the corpus exist?
         try:
@@ -282,7 +293,8 @@ def search_rag(query: str, top_k: int = 5,
         ordered = (exact + rest)[:top_k] if exact else scored[:top_k]
         return ordered
     finally:
-        try:
-            conn.close()
-        except Exception:
-            pass
+        if own_conn:
+            try:
+                conn.close()
+            except Exception:
+                pass
