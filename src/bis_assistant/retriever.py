@@ -22,12 +22,22 @@ def _kb_path() -> str:
 KB_BACKEND = _backend()
 KB_PATH = _kb_path()
 
+# In-process KB cache keyed by (db path, mtime): breadth KBs (~20k rows)
+# must not be re-read from SQLite on every /chat call (p95 <2 s SLO).
+# Callers only read the cached rows; mtime check keeps refreshes visible.
+_KB_CACHE: dict = {}
+
 
 HINGLISH = {"pani": "water", "paani": "water", "peene": "drinking", "peyne": "drinking",
             "peyjal": "drinking water", "nal": "drinking water", "manak": "standard",
             "sona": "gold", "chandi": "silver", "bijli": "electrical", "khilona": "toy",
             "khilauna": "toy", "saria": "steel bar", "panjikaran": "registration",
-            "jaanch": "testing", "parikshan": "testing", "gehne": "jewellery"}
+            "jaanch": "testing", "parikshan": "testing", "gehne": "jewellery",
+            "taar": "wire cable", "tar": "wire", "balb": "bulb", "helmat": "helmet",
+            "helmet": "helmet", "tayar": "tyre", "tyre": "tyre", "loha": "steel iron",
+            "lakdi": "wood", "kagaz": "paper", "tel": "oil", "chini": "sugar",
+            "aata": "flour", "cement": "cement", "khel": "toy", "dabaav": "pressure",
+            "upkaran": "appliance"}
 
 # Function words excluded when judging whether a query has TOPICAL overlap
 # (weak-clarify tier). Without this, stopwords like do/on/is route journey
@@ -45,7 +55,11 @@ DEVNAGARI = {"पानी": "water", "पेय": "drinking", "पेयजल"
              "पंजीकरण": "registration", "जाँच": "testing", "जांच": "testing",
              "परीक्षण": "testing", "गेहना": "jewellery", "गेहने": "jewellery",
              "बोतल": "bottle", "स्टील": "steel", "प्रयोगशाला": "lab", "हॉलमार्क": "hallmark",
-             "कांच": "glass", "शीशा": "glass", "काँच": "glass"}
+             "कांच": "glass", "शीशा": "glass", "काँच": "glass",
+             "तार": "wire", "केबल": "cable", "बल्ब": "bulb", "हेलमेट": "helmet",
+             "टायर": "tyre", "लोहा": "steel", "लकड़ी": "wood", "कागज": "paper",
+             "तेल": "oil", "चीनी": "sugar", "सीमेंट": "cement", "दबाव": "pressure",
+             "उपकरण": "appliance", "पाइप": "pipe"}
 
 
 def _tokens(s: str) -> set[str]:
@@ -65,17 +79,35 @@ def _tokens(s: str) -> set[str]:
 def load_kb():
     if _backend() == "sqlite":
         from . import kb_store
+        path = _kb_path()
         try:
-            conn = kb_store.connect(_kb_path())
+            mtime = os.path.getmtime(path)
+        except OSError:
+            mtime = -1
+        key = (path, mtime)
+        if _KB_CACHE.get("key") != key:  # (re)load on DB change; stat is cheap
             try:
-                stds = kb_store.load_standards(conn)
-                if stds:  # populated SQLite KB (breadth v2)
-                    return (stds, kb_store.load_schemes(conn),
-                            kb_store.load_labs(conn), kb_store.load_glossary(conn))
-            finally:
-                conn.close()
-        except Exception:
-            pass
+                conn = kb_store.connect(path) if mtime >= 0 else None
+                if conn is None:
+                    _KB_CACHE.pop("kb", None)
+                    _KB_CACHE["key"] = key
+                else:
+                    try:
+                        stds = kb_store.load_standards(conn)
+                        if stds:  # populated SQLite KB (breadth v2)
+                            _KB_CACHE.update(key=key, kb=(
+                                stds, kb_store.load_schemes(conn),
+                                kb_store.load_labs(conn), kb_store.load_glossary(conn)))
+                        else:
+                            _KB_CACHE.pop("kb", None)
+                            _KB_CACHE["key"] = key
+                    finally:
+                        conn.close()
+            except Exception:
+                _KB_CACHE.pop("kb", None)
+                _KB_CACHE["key"] = key
+        if "kb" in _KB_CACHE and _KB_CACHE.get("key") == key:
+            return _KB_CACHE["kb"]
         # empty/missing SQLite KB (fresh clone) -> JSON fallback, never refuse-all
     stds = json.loads((DATA_DIR / "standards.json").read_text())["standards"]
     schemes = json.loads((DATA_DIR / "schemes.json").read_text())["schemes"]

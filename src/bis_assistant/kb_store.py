@@ -45,6 +45,8 @@ CREATE TABLE IF NOT EXISTS pending_diffs(
   id INTEGER PRIMARY KEY AUTOINCREMENT, snapshot_id INTEGER REFERENCES snapshots(id),
   change_type TEXT NOT NULL, is_number TEXT NOT NULL, details_json TEXT DEFAULT '{}',
   status TEXT DEFAULT 'pending', decided_at TEXT);
+CREATE INDEX IF NOT EXISTS idx_standards_is_ver ON standards(is_number, version, id);
+CREATE INDEX IF NOT EXISTS idx_diffs_status ON pending_diffs(status, change_type);
 """
 
 KB_VERSION = "v2"
@@ -100,6 +102,7 @@ def upsert_standard(conn: sqlite3.Connection, row: dict, snapshot_id: int) -> No
 
 def _row_to_std(r: sqlite3.Row) -> dict:
     d = dict(r)
+    d.pop("rn", None)  # window-query helper column, not a standard field
     d["keywords"] = json.loads(d.pop("keywords_json") or "[]")
     d["category_keywords"] = d.pop("keywords")
     d["clarify"] = json.loads(d.pop("clarify_json") or "[]")
@@ -108,12 +111,15 @@ def _row_to_std(r: sqlite3.Row) -> dict:
 
 
 def load_standards(conn: sqlite3.Connection) -> list[dict]:
-    """Latest version per IS number (max version, then max id)."""
+    """Latest version per IS number (max version, then max id).
+
+    Single-pass window query + index: correlated-subquery form is O(n^2)
+    and collapses at breadth scale (~20k rows).
+    """
     rows = conn.execute(
-        """SELECT * FROM standards s1 WHERE version = (
-             SELECT MAX(version) FROM standards s2 WHERE s2.is_number = s1.is_number)
-           AND id = (SELECT MAX(id) FROM standards s3
-                     WHERE s3.is_number = s1.is_number AND s3.version = s1.version)""").fetchall()
+        """SELECT * FROM (SELECT *, ROW_NUMBER() OVER (
+              PARTITION BY is_number ORDER BY version DESC, id DESC) AS rn
+            FROM standards) WHERE rn = 1""").fetchall()
     return [_row_to_std(r) for r in rows]
 
 
