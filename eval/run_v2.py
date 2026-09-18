@@ -20,6 +20,7 @@ Run: PYTHONPATH=src .venv/bin/python eval/run_v2.py
 """
 from __future__ import annotations
 import json
+import os as _os
 import sys
 from pathlib import Path
 
@@ -35,6 +36,27 @@ FILES = [
     "multilingual.json",
     "versioning.json",
 ]
+
+
+def pin_eval_env() -> dict:
+    """Deterministic baseline (issue #4 P1-16): see run_eval.py."""
+    allow = _os.environ.get("BIS_EVAL_ALLOW_ENV") == "1"
+    if not allow:
+        _os.environ["BIS_RAG_ENABLED"] = "0"
+        _os.environ["BIS_CATALOGUE_ENABLED"] = "0"
+        _os.environ["BIS_LLM_MODEL"] = ""
+        _os.environ["BIS_LLM_API_KEY"] = ""
+    snap = {k: _os.environ.get(k, "") for k in
+            ("BIS_RAG_ENABLED", "BIS_CATALOGUE_ENABLED", "BIS_LLM_PROVIDER",
+             "BIS_LLM_MODEL", "BIS_RETRIEVAL_SCORER", "BIS_RETRIEVAL_KB_BACKEND")}
+    snap["llm_key_set"] = bool(_os.environ.get("BIS_LLM_API_KEY"))
+    snap["eval_env_pinned"] = not allow
+    return snap
+
+
+def citation_has_url(cites: list) -> bool:
+    import re as _re
+    return any(_re.search(r"https?://\S+", c or "") for c in cites)
 
 
 def is_withdrawn_safe(text: str) -> bool:
@@ -89,12 +111,12 @@ def score_item(g: dict, dataset: str) -> dict:
     else:
         checks["scheme"] = None
 
-    # --- citation presence when must_cite ---
+    # --- citation presence when must_cite (+ verifiable URL, issue #4 P1-16) ---
     if g.get("must_cite"):
-        ok_cite = bool(cites)
+        ok_cite = bool(cites) and citation_has_url(cites)
         checks["citation"] = ok_cite
         if not ok_cite:
-            reasons.append("missing_citation")
+            reasons.append("missing_citation" if not cites else "citation_without_url")
     else:
         checks["citation"] = None
 
@@ -163,6 +185,11 @@ def score_item(g: dict, dataset: str) -> dict:
 
 
 def main() -> None:
+    env = pin_eval_env()
+    print(f"Eval v2 env: pinned={env['eval_env_pinned']} "
+          f"RAG={env['BIS_RAG_ENABLED'] or '0'} catalogue={env['BIS_CATALOGUE_ENABLED'] or '0'} "
+          f"llm_model={env['BIS_LLM_MODEL'] or '(none)'} key_set={env['llm_key_set']} "
+          f"scorer={env['BIS_RETRIEVAL_SCORER'] or 'default'} kb={env['BIS_RETRIEVAL_KB_BACKEND'] or 'default'}")
     all_results: list[dict] = []
     per_file: dict[str, list[dict]] = {}
     for fname in FILES:
@@ -231,6 +258,7 @@ def main() -> None:
     clar = [(r["dataset"], r["id"]) for r in all_results if r.get("clarified")]
     if clar:
         print(f"  single-shot clarification needed on {len(clar)} items (answered with assumptions in eval mode)")
+    print(f"  forced-clarify rate: {len(clar)}/{total} = {100*len(clar)/total:.1f}% (reported separately; forced answers still gated)")
     fails = [r for r in all_results if not r["ok"]]
     for r in fails:
         print(f"  FAIL {r['dataset']}#{r['id']}: {', '.join(r['reasons'])}")
