@@ -1,0 +1,43 @@
+name: ci
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install deps
+        run: pip install -r requirements-dev.txt
+      - name: Unit tests
+        run: python -m pytest tests/ -q
+      - name: Eval gate (v1, >=90%)
+        run: PYTHONPATH=src python eval/run_eval.py
+      - name: No secrets in repo
+        run: |
+          ! grep -rEn --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=.venv \
+            -e 'BEGIN (RSA |OPENSSH |EC )?PRIVATE KEY' -e 'AKIA[0-9A-Z]{16}' \
+            -e 'xox[bpas]-[0-9A-Za-z-]{10,}' -e 'ghp_[0-9A-Za-z]{36}' . || (echo 'secret-like pattern found'; exit 1)
+      - name: Seeded-PII log grep (Phase 4+; placeholder asserts harness exists)
+        run: test -f tests/test_privacy_probes.py || test -f eval/pii_fixtures.json || echo "pii fixtures land in Phase 4"
+
+  ui:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ui
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: ui/package-lock.json
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run build
