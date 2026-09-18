@@ -98,6 +98,7 @@ export interface Msg {
   resp?: ChatResponse;
   error?: string;
   ms?: number;
+  system?: boolean;
   /** per-answer feedback state (fixture-driven until POST /feedback ships) */
   feedback?: 1 | -1 | null;
   feedbackNote?: string;

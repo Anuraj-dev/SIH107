@@ -146,6 +146,21 @@ class TestWeakTier(unittest.TestCase):
         self.assertTrue(r["refused"])
         self.assertEqual(r["kind"], "no_source")
 
+    def test_threadless_chip_continues_thread(self):
+        r = answer("Vacuum insulated (double-wall)")
+        self.assertTrue(r.get("needs_info"))
+        self.assertTrue(any("capacity" in q["text"].lower() for q in r["questions"]))
+
+    def test_threadless_single_wall_continues_thread(self):
+        r = answer("Single-wall")
+        self.assertTrue(r.get("needs_info"))
+
+    def test_generic_word_alone_still_refuses(self):
+        for q in ("home", "new", "bought"):
+            with self.subTest(q=q):
+                r = answer(q)
+                self.assertFalse(r.get("needs_info"), q)
+
 
 if __name__ == "__main__":
     unittest.main()

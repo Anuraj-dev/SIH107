@@ -8,7 +8,7 @@ with margin, all required slots filled, user forces, or 2 rounds exhausted
 """
 from __future__ import annotations
 import re
-from .retriever import retrieve, format_citation
+from .retriever import retrieve, format_citation, load_kb
 from .retriever import _tokens as _tok, CONTENT_STOPWORDS
 from .safety import (check_never_infer, REFUSAL_EN, REFUSAL_HI,
                      DISCLAIMER_EN, DISCLAIMER_HI, BIS_CARE)
@@ -49,6 +49,39 @@ def _content_overlap(query: str, std: dict) -> int:
     from .scorers import doc_text
     q = _tok(query) - CONTENT_STOPWORDS
     return len(q & (_tok(doc_text(std)) - CONTENT_STOPWORDS))
+
+
+def _slot_grounded_iso(combined: str, stds: list[dict]) -> str | None:
+    """Distinctive slot-option match for threadless chip answers (e.g. 'Single-wall').
+
+    Accepts an IS when the query shares a distinctive option word (len>=5, used by
+    <=2 standards' slots) or >=2 option words. Generic words (home/new/...) never
+    ground a thread alone.
+    """
+    from . import slots as slotmod
+    toks = _tok(combined) - CONTENT_STOPWORDS
+    active = slotmod._active()
+    per_iso: dict[str, set[str]] = {}
+    df: dict[str, int] = {}
+    for s in stds:
+        words: set[str] = set()
+        for sl in active.get(s["is_number"], []):
+            for opt in sl.get("options", []):
+                for w in opt.get("words", []):
+                    if w.lower() in toks:
+                        words.add(w.lower())
+        if words:
+            per_iso[s["is_number"]] = words
+            for w in words:
+                df[w] = df.get(w, 0) + 1
+    ranked = sorted(((len(v), iso) for iso, v in per_iso.items()), reverse=True)
+    for n, iso in ranked:
+        if n >= 2:
+            return iso
+        only = next(iter(per_iso[iso]))
+        if len(only) >= 5 and df.get(only, 99) <= 2:
+            return iso
+    return None
 
 RESET_WORDS = ("new question", "reset", "change topic", "naya sawal", "naya prashn", "नया सवाल")
 FORCE_WORDS = ("answer anyway", "assume", "just answer", "best guess")
@@ -116,6 +149,15 @@ def answer(query: str, lang: str | None = None, context: dict | None = None) -> 
     # Weak tier: topical (content-word) overlap earns clarification questions;
     # pure stopword overlap falls through to journeys/refusal as before.
     weak = bool(top and st >= t["weak_floor"] and _content_overlap(combined, top["std"]) >= 1)
+    if not weak and not strong and not exact:
+        # Threadless chip answers (e.g. "Single-wall") match slot options but no
+        # doc text: ground via slots so the thread continues instead of refusing.
+        all_stds = load_kb()[0]
+        iso = _slot_grounded_iso(combined, all_stds)
+        if iso:
+            std = next(s for s in all_stds if s["is_number"] == iso)
+            top = {"score": t["weak_floor"], "std": std, "hits": [], "confidence": "low"}
+            st, ss, weak = t["weak_floor"], 0.0, True
     unfilled = unfilled_slots(top["std"]["is_number"], combined) if top else []
     direct = (exact or ctx["force"] or ctx["rounds"] >= t["max_rounds"]
               or (top and st >= t["direct_score"] and (st - ss) >= t["direct_margin"])
@@ -135,6 +177,8 @@ def answer(query: str, lang: str | None = None, context: dict | None = None) -> 
 
     # 3. insufficient context -> ask, don't recommend
     pool = [c for c in cands[:2] if c["score"] >= t["clarify_floor"]]
+    if not pool and weak and top:
+        pool = [top]  # weak/slot-grounded top still yields its unfilled slots
     questions: list[dict] = []
     seen: set[str] = set()
     for c in pool:

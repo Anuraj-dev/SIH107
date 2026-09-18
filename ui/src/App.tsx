@@ -73,6 +73,7 @@ export default function App() {
   const newTopic = useCallback(() => {
     setThread(null);
     setPendingQ("");
+    setMsgs((m) => [...m, { id: nextId++, role: "assistant", text: "— New topic started —", system: true }]);
   }, []);
 
   const rate = useCallback(
@@ -203,7 +204,9 @@ export default function App() {
               </div>
             )}
             {msgs.map((m) =>
-              m.role === "user" ? (
+              m.system ? (
+                <div key={m.id} className="sysdiv">{m.text}</div>
+              ) : m.role === "user" ? (
                 <div key={m.id} className="bubble user"><RichText text={m.text} /></div>
               ) : (
                 <div key={m.id} className="bubble bot">
