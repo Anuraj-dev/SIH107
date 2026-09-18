@@ -9,6 +9,7 @@ with margin, all required slots filled, user forces, or 2 rounds exhausted
 from __future__ import annotations
 import re
 from .retriever import retrieve, format_citation
+from .retriever import _tokens as _tok, CONTENT_STOPWORDS
 from .safety import (check_never_infer, REFUSAL_EN, REFUSAL_HI,
                      DISCLAIMER_EN, DISCLAIMER_HI, BIS_CARE)
 from .i18n_privacy import detect_lang, find_pii, STRINGS
@@ -25,12 +26,36 @@ _LAB_WORD = re.compile(r"\blaborator(?:y|ies)\b|\blab\b", re.IGNORECASE)  # not 
 def _has_lab_hint(text: str) -> bool:
     return bool(_LAB_WORD.search(text)) or any(h in text for h in LAB_HINTS)
 
+
+# Materials a standard demonstrably does NOT cover (from its title/scope).
+# Naming one of these downgrades recommendation -> honest coverage-gap, never a guess.
+MATERIAL_EXCLUDES = {
+    "IS 17803": ["plastic", "glass", "copper", "aluminium", "aluminum", "clay",
+                 "silicone", "paper", "wooden", "wood"],
+    "IS 694": ["rubber", "silicone"],
+}
+
+
+def material_mismatch(is_number: str, text: str) -> str | None:
+    low = text.lower()
+    for mat in MATERIAL_EXCLUDES.get(is_number, []):
+        if re.search(r"\b" + re.escape(mat) + r"\b", low):
+            return mat
+    return None
+
+
+def _content_overlap(query: str, std: dict) -> int:
+    """Shared non-stopword tokens between query and standard doc (weak-tier gate)."""
+    from .scorers import doc_text
+    q = _tok(query) - CONTENT_STOPWORDS
+    return len(q & (_tok(doc_text(std)) - CONTENT_STOPWORDS))
+
 RESET_WORDS = ("new question", "reset", "change topic", "naya sawal", "naya prashn", "नया सवाल")
 FORCE_WORDS = ("answer anyway", "assume", "just answer", "best guess")
 
 # Defaults; live values come from config.yaml (plan §4: threshold changes need eval re-gate).
 _FALLBACK = {"direct_score": 15.0, "direct_margin": 5.0, "clarify_floor": 6.0,
-             "max_rounds": 2, "max_questions_per_turn": 2}
+             "weak_floor": 3.0, "max_rounds": 2, "max_questions_per_turn": 2}
 
 
 def _cfg() -> dict:
@@ -88,12 +113,24 @@ def answer(query: str, lang: str | None = None, context: dict | None = None) -> 
     # Clarification only when a real phrase/IS hit grounds the thread;
     # generic token overlap (no hits) falls through to journeys/glossary.
     strong = bool(top and st >= t["clarify_floor"] and (top["hits"] or st >= t["direct_score"]))
+    # Weak tier: topical (content-word) overlap earns clarification questions;
+    # pure stopword overlap falls through to journeys/refusal as before.
+    weak = bool(top and st >= t["weak_floor"] and _content_overlap(combined, top["std"]) >= 1)
     unfilled = unfilled_slots(top["std"]["is_number"], combined) if top else []
     direct = (exact or ctx["force"] or ctx["rounds"] >= t["max_rounds"]
               or (top and st >= t["direct_score"] and (st - ss) >= t["direct_margin"])
               or (strong and not unfilled))
 
-    if direct or not strong:
+    # Material contradiction (e.g. plastic bottle vs steel-flask IS): never recommend,
+    # never interrogate about the wrong subtypes — state the coverage gap at once.
+    if top and (strong or weak) and not exact:
+        mat = material_mismatch(top["std"]["is_number"], combined)
+        if mat:
+            return _checked(_coverage_gap(top["std"], mat, query, lang, hi), res)
+
+    journey = (_has_lab_hint(ql)
+               or any(h in ql for h in HALLMARK_HINTS + SCHEME_HINTS + CLUB_HINTS))
+    if direct or not weak or (journey and not strong):
         return _checked(_final(query, combined, res, lang, hi, ctx, top, t), res)
 
     # 3. insufficient context -> ask, don't recommend
@@ -118,6 +155,10 @@ def answer(query: str, lang: str | None = None, context: dict | None = None) -> 
     lines = [("Mujhe sahi manak chunne ke liye thodi aur jankari chahiye — "
               "kripya in sawalon ke jawab den:" if hi else
               "I need a bit more detail before I can narrow down the standard — please answer:")]
+    if not strong:
+        lines.append("Note: my coverage here is thin — if these questions don't fit your product, "
+                     "tell me and I'll point you to the right BIS search instead." if not hi else
+                     "Note: is kshetra me mera coverage seemit hai." )
     for i, q in enumerate(questions, 1):
         lines.append(f"{i}. {q['text']}")
         for o in q["options"]:
@@ -138,6 +179,22 @@ def answer(query: str, lang: str | None = None, context: dict | None = None) -> 
               context={"history": ctx["history"] + [query], "rounds": ctx["rounds"] + 1})
     r["text"] = "\n".join(lines)
     return _checked(r, res)
+
+
+def _coverage_gap(std: dict, material: str, query: str, lang: str, hi: bool) -> dict:
+    portal = "https://www.bis.gov.in/know-your-standard"
+    if hi:
+        text = (f"{std['is_number']}:{std['year']} — {std['title_en']} — yah {material} utpadon "
+                f"ke liye nahin hai. Mere vartaman KB me {material} utpadon ke liye koi BIS srot "
+                f"nahin hai, isliye andaza nahin lagaunga. Know-Your-Standard par khojen: {portal}")
+    else:
+        text = (f"{std['is_number']}:{std['year']} — {std['title_en']} — covers {std['title_en'].lower()}, "
+                f"not {material} products. My current KB has no BIS source for {material} products, "
+                f"so I won't guess. Search Know-Your-Standard: {portal}")
+    r = _base(lang, refused=True, kind="coverage_gap", pii=find_pii(query),
+              citations=[format_citation(std)], context={"history": [], "rounds": 0})
+    r["text"] = text + "\n\n" + BIS_CARE
+    return r
 
 
 def _checked(resp: dict, res: dict) -> dict:
@@ -203,6 +260,8 @@ def _final(query: str, combined: str, res: dict, lang: str, hi: bool,
             s = c["std"]
             if not (c["hits"] or c["score"] >= 10):
                 continue
+            if material_mismatch(s["is_number"], combined):
+                continue  # never present a materially contradicted standard
             if s["status"] == "Withdrawn":
                 lines.append(f'- ⚠️ {s["is_number"]}:{s["year"]} is **Withdrawn** — do NOT use for manufacture.')
                 citations.append(format_citation(s))

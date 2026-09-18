@@ -29,6 +29,16 @@ HINGLISH = {"pani": "water", "paani": "water", "peene": "drinking", "peyne": "dr
             "khilauna": "toy", "saria": "steel bar", "panjikaran": "registration",
             "jaanch": "testing", "parikshan": "testing", "gehne": "jewellery"}
 
+# Function words excluded when judging whether a query has TOPICAL overlap
+# (weak-clarify tier). Without this, stopwords like do/on/is route journey
+# queries into interrogation.
+CONTENT_STOPWORDS = frozenset("""
+is are was were do does did done for on in of to a an the and or my i me we you
+your yours which what how when where who whom it its this that these those with
+from by as at be been being have has had will would can could should s t ve re ll
+mujhe mujhko kya hai ka ki ke ko me men ne par ya aur nahin nahi karke liye
+""".split())
+
 DEVNAGARI = {"पानी": "water", "पेय": "drinking", "पेयजल": "drinking water", "नल": "drinking water",
              "मानक": "standard", "सोना": "gold", "चाँदी": "silver", "चांदी": "silver",
              "बिजली": "electrical", "खिलौना": "toy", "सरिया": "steel bar",
