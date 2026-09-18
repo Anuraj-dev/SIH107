@@ -1,10 +1,16 @@
-import type { ChatResponse, Lang, ThreadCtx } from "./types";
+import type { ChatResponse, Lang } from "./types";
+
+export interface ServerThread {
+  id: string;
+  token: string;
+}
 
 async function req(path: string, init?: RequestInit, timeoutMs = 15000) {
   const ctl = new AbortController();
   const t = setTimeout(() => ctl.abort(), timeoutMs);
   try {
     const r = await fetch(path, { ...init, signal: ctl.signal });
+    if (r.status === 410) throw new Error("Thread expired — starting a new topic");
     if (!r.ok) throw new Error(`HTTP ${r.status}`);
     return await r.json();
   } finally {
@@ -24,19 +30,22 @@ export async function checkHealth(): Promise<boolean> {
 export async function sendChat(
   query: string,
   lang: Lang,
-  context?: ThreadCtx | null,
+  thread?: ServerThread | null,
   force = false,
-): Promise<{ resp: ChatResponse; ms: number }> {
+): Promise<{ resp: ChatResponse; ms: number; thread: ServerThread | null }> {
   const t0 = performance.now();
-  const body: Record<string, unknown> = { query };
+  const body: Record<string, unknown> = { query, force };
   if (lang !== "auto") body.lang = lang;
-  if (context && (context.history.length > 0 || context.rounds > 0))
-    body.context = { ...context, force };
-  else if (force) body.context = { history: [query], rounds: 0, force: true };
+  if (thread) body.thread_id = thread.id;
+  const headers: Record<string, string> = { "Content-Type": "application/json" };
+  if (thread) headers["X-Owner-Token"] = thread.token;
   const resp = (await req("/api/chat", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers,
     body: JSON.stringify(body),
   })) as ChatResponse;
-  return { resp, ms: Math.round(performance.now() - t0) };
+  const next: ServerThread | null = resp.thread_id
+    ? { id: resp.thread_id, token: resp.owner_token ?? thread?.token ?? "" }
+    : null;
+  return { resp, ms: Math.round(performance.now() - t0), thread: next };
 }

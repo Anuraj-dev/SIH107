@@ -29,6 +29,8 @@ export interface ChatResponse {
   known: { slot: string; value: string }[];
   assumptions: string[];
   context: ThreadCtx;
+  thread_id?: string;
+  owner_token?: string;
 }
 
 export interface Msg {
