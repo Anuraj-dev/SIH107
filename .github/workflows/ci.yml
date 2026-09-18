@@ -23,8 +23,8 @@ jobs:
           ! grep -rEn --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=.venv \
             -e 'BEGIN (RSA |OPENSSH |EC )?PRIVATE KEY' -e 'AKIA[0-9A-Z]{16}' \
             -e 'xox[bpas]-[0-9A-Za-z-]{10,}' -e 'ghp_[0-9A-Za-z]{36}' . || (echo 'secret-like pattern found'; exit 1)
-      - name: Seeded-PII log grep (Phase 4+; placeholder asserts harness exists)
-        run: test -f tests/test_privacy_probes.py || test -f eval/pii_fixtures.json || echo "pii fixtures land in Phase 4"
+      - name: Seeded-PII probe tests (no raw PII in DB/logs)
+        run: python -m pytest tests/test_privacy_probes.py -q
 
   ui:
     runs-on: ubuntu-latest

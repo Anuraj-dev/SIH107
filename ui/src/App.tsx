@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { checkHealth, sendChat } from "./api";
-import { Badge, RichText } from "./components";
+import { checkHealth, fetchThreadExport, sendChat, sendFeedback } from "./api";
+import AdminPanel from "./admin";
+import { AssumptionsBanner, Badge, FeedbackButtons, KnownChips, RichText } from "./components";
 import type { Lang, Msg } from "./types";
 import type { ServerThread } from "./api";
 import "./styles.css";
@@ -27,6 +28,8 @@ export default function App() {
   const [showRaw, setShowRaw] = useState(false);
   const [thread, setThread] = useState<ServerThread | null>(null);
   const [pendingQ, setPendingQ] = useState("");
+  const [view, setView] = useState<"chat" | "admin">("chat");
+  const [exportNote, setExportNote] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
 
   const ping = useCallback(async () => {
@@ -53,7 +56,7 @@ export default function App() {
       setInput("");
       try {
         const { resp, ms, thread: next } = await sendChat(q, lang, useThread, opts?.force ?? false);
-        setMsgs((m) => [...m, { id: nextId++, role: "assistant", text: resp.text, resp, ms }]);
+        setMsgs((m) => [...m, { id: nextId++, role: "assistant", text: resp.text, resp, ms, feedback: null }]);
         setThread(resp.needs_info ? next : null);
       } catch (e) {
         const msg = e instanceof Error ? e.message : "request failed";
@@ -72,120 +75,225 @@ export default function App() {
     setPendingQ("");
   }, []);
 
+  const rate = useCallback(
+    async (id: number, rating: 1 | -1) => {
+      const target = msgs.find((m) => m.id === id);
+      if (!target?.resp?.thread_id && !thread) {
+        setMsgs((m) => m.map((x) => (x.id === id ? { ...x, feedback: rating } : x)));
+        return;
+      }
+      const tid = target?.resp?.thread_id ?? thread?.id ?? "local";
+      setMsgs((m) => m.map((x) => (x.id === id ? { ...x, feedback: rating } : x)));
+      await sendFeedback(tid, rating);
+    },
+    [msgs, thread],
+  );
+
+  /** Download the current thread as redacted JSON: server export when a token is known, else local transcript. */
+  const exportThread = useCallback(async () => {
+    setExportNote("");
+    const stamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const save = (name: string, payload: unknown) => {
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    };
+    if (thread) {
+      try {
+        const data = await fetchThreadExport(thread);
+        save(`bis-thread-${thread.id}-${stamp}.json`, { ...data, redacted: true, source: "server" });
+        setExportNote("Exported redacted server thread.");
+        return;
+      } catch {
+        // fall through to the local transcript
+      }
+    }
+    save(`bis-thread-local-${stamp}.json`, {
+      redacted: true,
+      source: "local-transcript",
+      exported_at: new Date().toISOString(),
+      messages: msgs.map((m) => ({
+        role: m.role,
+        text: m.text,
+        kind: m.resp?.kind ?? (m.error ? "error" : "user"),
+        lang: m.resp?.lang ?? null,
+        citations: m.resp?.citations ?? [],
+      })),
+    });
+    setExportNote(
+      thread
+        ? "Server export unavailable — downloaded the local transcript instead."
+        : "No server thread open — downloaded the local transcript.",
+    );
+  }, [msgs, thread]);
+
   const piiFlags = (m: Msg) =>
     m.resp ? Object.entries(m.resp.pii).filter(([, v]) => v).map(([k]) => k) : [];
 
   return (
     <div className="shell">
+      <a className="skip" href="#chat-log">Skip to conversation</a>
       <header className="top">
         <div>
           <h1>BIS Assistant — Test Console</h1>
           <p className="sub">MVP · sources: bis.gov.in Know-Your-Standard only · EN + हिंदी</p>
         </div>
         <div className="health">
-          <span className={`pill ${healthy === null ? "unknown" : healthy ? "ok" : "down"}`}>
+          <span className={`pill ${healthy === null ? "unknown" : healthy ? "ok" : "down"}`} role="status">
             {healthy === null ? "checking…" : healthy ? "API :8000 up" : "API down"}
           </span>
           <button className="ghost" onClick={ping}>recheck</button>
         </div>
       </header>
 
-      <section className="samples">
-        {SAMPLES.map((s) => (
-          <button key={s.label} className="chip" disabled={busy} onClick={() => send(s.q, { fresh: true })} title={s.q}>
-            {s.label}
-          </button>
-        ))}
-        <button className="chip new" disabled={busy} onClick={() => { newTopic(); }} title="Drop follow-up context">
-          + new topic{thread ? " (thread open)" : ""}
+      <nav className="viewnav" aria-label="Console views">
+        <button
+          type="button"
+          className={view === "chat" ? "chip active" : "chip"}
+          aria-current={view === "chat" ? "page" : undefined}
+          onClick={() => setView("chat")}
+        >
+          Chat
         </button>
-      </section>
-
-      <main className="log">
-        {msgs.length === 0 && (
-          <div className="empty">
-            Ask e.g. “steel water bottle which IS?” or try a sample above. Every grounded answer must carry
-            an <code>IS:year [status, last-checked] + URL</code> citation; refusals are expected behaviour, not bugs.
-          </div>
+        <button
+          type="button"
+          className={view === "admin" ? "chip active" : "chip"}
+          aria-current={view === "admin" ? "page" : undefined}
+          onClick={() => setView("admin")}
+        >
+          Admin diff review
+        </button>
+        {view === "chat" && (
+          <button type="button" className="chip" onClick={exportThread} aria-label="Export conversation as redacted JSON">
+            ⬇ Export conversation
+          </button>
         )}
-        {msgs.map((m) =>
-          m.role === "user" ? (
-            <div key={m.id} className="bubble user"><RichText text={m.text} /></div>
-          ) : (
-            <div key={m.id} className="bubble bot">
-              {m.error ? (
-                <div className="error">{m.error}</div>
+      </nav>
+      {exportNote && <p className="hint" role="status">{exportNote}</p>}
+
+      {view === "admin" ? (
+        <AdminPanel />
+      ) : (
+        <>
+          <section className="samples" aria-label="Sample queries">
+            {SAMPLES.map((s) => (
+              <button key={s.label} className="chip" disabled={busy} onClick={() => send(s.q, { fresh: true })} title={s.q}>
+                {s.label}
+              </button>
+            ))}
+            <button className="chip new" disabled={busy} onClick={() => { newTopic(); }} title="Drop follow-up context">
+              + new topic{thread ? " (thread open)" : ""}
+            </button>
+          </section>
+
+          <main className="log" id="chat-log" aria-label="Conversation" tabIndex={-1}>
+            {msgs.length === 0 && (
+              <div className="empty">
+                Ask e.g. “steel water bottle which IS?” or try a sample above. Every grounded answer must carry
+                an <code>IS:year [status, last-checked] + URL</code> citation; refusals are expected behaviour, not bugs.
+              </div>
+            )}
+            {msgs.map((m) =>
+              m.role === "user" ? (
+                <div key={m.id} className="bubble user"><RichText text={m.text} /></div>
               ) : (
-                <>
-                  <div className="meta">
-                    {m.resp!.needs_info
-                      ? <Badge tone="refuse">needs info · follow-up</Badge>
-                      : m.resp!.refused
-                        ? <Badge tone="refuse">refused · {m.resp!.kind}</Badge>
-                        : <Badge tone="ok">answered · {m.resp!.kind}</Badge>}
-                    <Badge tone="lang">{m.resp!.lang === "hi" ? "हिंदी" : "EN"}</Badge>
-                    {typeof m.ms === "number" && <span className="ms">{m.ms} ms</span>}
-                    {piiFlags(m).length > 0 && <Badge tone="pii">PII: {piiFlags(m).join(", ")}</Badge>}
-                  </div>
-                  <RichText text={m.text} />
-                  {m.resp!.needs_info && (
-                    <div className="qs">
-                      {m.resp!.questions.map((q) => (
-                        <div key={q.slot} className="qcard">
-                          <div className="qq">{q.text}</div>
-                          <div className="qopts">
-                            {q.options.map((o) => (
-                              <button key={o.send} className="chip" disabled={busy}
-                                onClick={() => send(o.send)}>
-                                {o.label}
-                              </button>
-                            ))}
-                            {q.options.length === 0 && <span className="hint">reply in your own words</span>}
+                <div key={m.id} className="bubble bot">
+                  {m.error ? (
+                    <div className="error">{m.error}</div>
+                  ) : (
+                    <>
+                      <div className="meta">
+                        {m.resp!.needs_info
+                          ? <Badge tone="refuse">needs info · follow-up</Badge>
+                          : m.resp!.refused
+                            ? <Badge tone="refuse">refused · {m.resp!.kind}</Badge>
+                            : <Badge tone="ok">answered · {m.resp!.kind}</Badge>}
+                        <Badge tone="lang">{m.resp!.lang === "hi" ? "हिंदी" : "EN"}</Badge>
+                        {typeof m.ms === "number" && <span className="ms">{m.ms} ms</span>}
+                        {piiFlags(m).length > 0 && <Badge tone="pii">PII: {piiFlags(m).join(", ")}</Badge>}
+                      </div>
+                      <RichText text={m.text} />
+                      {m.resp!.assumptions.length > 0 && <AssumptionsBanner items={m.resp!.assumptions} />}
+                      <KnownChips known={m.resp!.known} />
+                      {m.resp!.needs_info && (
+                        <div className="qs">
+                          {m.resp!.questions.map((q) => (
+                            <div key={q.slot} className="qcard">
+                              <div className="qq">{q.text}</div>
+                              <div className="qopts">
+                                {q.options.map((o) => (
+                                  <button key={o.send} className="chip" disabled={busy}
+                                    onClick={() => send(o.send)}>
+                                    {o.label}
+                                  </button>
+                                ))}
+                                {q.options.length === 0 && <span className="hint">reply in your own words</span>}
+                              </div>
+                            </div>
+                          ))}
+                          <div className="qacts">
+                            <button className="ghost" disabled={busy}
+                              onClick={() => send(pendingQ, { force: true })}>
+                              Answer with assumptions
+                            </button>
+                            <button className="ghost" disabled={busy} onClick={newTopic}>New topic</button>
                           </div>
                         </div>
-                      ))}
-                      <div className="qacts">
-                        <button className="ghost" disabled={busy}
-                          onClick={() => send(pendingQ, { force: true })}>
-                          Answer with assumptions
-                        </button>
-                        <button className="ghost" disabled={busy} onClick={newTopic}>New topic</button>
+                      )}
+                      {m.resp!.citations.length > 0 && (
+                        <div className="cites">
+                          <div className="cites-h">Citations ({m.resp!.citations.length})</div>
+                          {m.resp!.citations.map((c, i) => <div key={i} className="cite">{c}</div>)}
+                        </div>
+                      )}
+                      <div className="fbrow">
+                        <FeedbackButtons value={m.feedback} disabled={busy} onRate={(r) => rate(m.id, r)} />
+                        {m.feedback != null && (
+                          <span className="hint" role="status">
+                            Thanks — recorded {m.feedback === 1 ? "👍" : "👎"} (fixture until POST /feedback ships).
+                          </span>
+                        )}
                       </div>
-                    </div>
+                      {showRaw && <pre className="raw">{JSON.stringify(m.resp, null, 2)}</pre>}
+                    </>
                   )}
-                  {m.resp!.citations.length > 0 && (
-                    <div className="cites">
-                      <div className="cites-h">Citations ({m.resp!.citations.length})</div>
-                      {m.resp!.citations.map((c, i) => <div key={i} className="cite">{c}</div>)}
-                    </div>
-                  )}
-                  {showRaw && <pre className="raw">{JSON.stringify(m.resp, null, 2)}</pre>}
-                </>
-              )}
-            </div>
-          ),
-        )}
-        <div ref={bottomRef} />
-      </main>
+                </div>
+              ),
+            )}
+            <div ref={bottomRef} />
+          </main>
 
-      <footer className="bar">
-        <select value={lang} onChange={(e) => setLang(e.target.value as Lang)} aria-label="Language">
-          <option value="auto">auto</option>
-          <option value="en">en</option>
-          <option value="hi">hi</option>
-        </select>
-        <input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && send(input)}
-          placeholder="Type a product or BIS question… (Enter to send)"
-        />
-        <button className="primary" disabled={busy || !input.trim()} onClick={() => send(input)}>
-          {busy ? "…" : "Ask"}
-        </button>
-        <label className="rawtgl"><input type="checkbox" checked={showRaw} onChange={(e) => setShowRaw(e.target.checked)} /> raw</label>
-        <button className="ghost" onClick={() => setMsgs([])}>clear</button>
-      </footer>
+          <footer className="bar">
+            <label className="sr-only" htmlFor="lang-sel">Language</label>
+            <select id="lang-sel" value={lang} onChange={(e) => setLang(e.target.value as Lang)} aria-label="Language">
+              <option value="auto">auto</option>
+              <option value="en">en</option>
+              <option value="hi">hi</option>
+            </select>
+            <label className="sr-only" htmlFor="chat-input">Type a product or BIS question</label>
+            <input
+              id="chat-input"
+              value={input}
+              lang={lang === "hi" ? "hi" : lang === "en" ? "en" : undefined}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && send(input)}
+              placeholder="Type a product or BIS question… (Enter to send)"
+              autoComplete="off"
+            />
+            <button className="primary" disabled={busy || !input.trim()} onClick={() => send(input)}>
+              {busy ? "…" : "Ask"}
+            </button>
+            <label className="rawtgl"><input type="checkbox" checked={showRaw} onChange={(e) => setShowRaw(e.target.checked)} /> raw</label>
+            <button className="ghost" onClick={() => setMsgs([])}>clear</button>
+          </footer>
+        </>
+      )}
     </div>
   );
 }

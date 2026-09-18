@@ -43,6 +43,17 @@ CREATE TABLE IF NOT EXISTS consents(
   user_ref TEXT PRIMARY KEY, purpose TEXT, granted_at TEXT, expires_at TEXT, revoked_at TEXT);
 CREATE TABLE IF NOT EXISTS users(
   key_hash TEXT PRIMARY KEY, tier TEXT DEFAULT 'registered', created_at TEXT);
+CREATE TABLE IF NOT EXISTS profiles(
+  user_ref TEXT PRIMARY KEY, fields_json TEXT DEFAULT '{}', updated_at TEXT);
+CREATE TABLE IF NOT EXISTS feedback(
+  id INTEGER PRIMARY KEY AUTOINCREMENT, thread_id TEXT, message_id INTEGER,
+  rating INTEGER, note_redacted TEXT DEFAULT '', user_ref TEXT DEFAULT '',
+  status TEXT DEFAULT 'pending', created_at TEXT);
+CREATE TABLE IF NOT EXISTS kb_reviews(
+  diff_id INTEGER PRIMARY KEY, publisher TEXT, approver TEXT, decided_at TEXT,
+  CHECK (publisher <> approver));
+CREATE TABLE IF NOT EXISTS audit_log(
+  id INTEGER PRIMARY KEY AUTOINCREMENT, actor TEXT, action TEXT, target_ref TEXT, at TEXT);
 """
 
 # ---- logging (redacted JSON, request_id) ----
@@ -64,6 +75,24 @@ log.propagate = False
 # ---- rate limiting (in-process; single-instance pilot) ----
 _hits: dict[str, deque] = {}
 _registered: set[str] = set()
+
+
+def _admin_hashes() -> set[str]:
+    import os
+    return {_key_hash(k.strip()) for k in os.environ.get("BIS_ADMIN_API_KEYS", "").split(",") if k.strip()}
+
+
+def _require_admin(key: Optional[str]) -> str:
+    if not key or _key_hash(key) not in _admin_hashes() or not _admin_hashes():
+        raise HTTPException(status_code=403, detail={
+            "error": "admin key required", "code": "forbidden", "retryable": False})
+    return _key_hash(key)[:16]
+
+
+def _audit(conn: sqlite3.Connection, actor: str, action: str, target: str) -> None:
+    conn.execute("INSERT INTO audit_log(actor, action, target_ref, at) VALUES (?,?,?,?)",
+                 (actor, action, target, _utcnow().isoformat()))
+    conn.commit()
 
 
 def _key_hash(raw: str) -> str:
@@ -301,15 +330,10 @@ def _erase_user(conn: sqlite3.Connection, user_ref: str) -> dict:
     for tid in tids:
         conn.execute("DELETE FROM messages WHERE thread_id=?", (tid,))
     conn.execute("DELETE FROM threads WHERE user_ref=?", (user_ref,))
+    conn.execute("DELETE FROM feedback WHERE user_ref=? OR thread_id IN (%s)" % (
+        ",".join("?" * len(tids)) if tids else "SELECT '' WHERE 0"), tids)
+    conn.execute("DELETE FROM profiles WHERE user_ref=?", (user_ref,))
     conn.execute("DELETE FROM consents WHERE user_ref=?", (user_ref,))
-    try:
-        conn.execute("DELETE FROM profiles WHERE user_ref=?", (user_ref,))
-    except sqlite3.OperationalError:
-        pass  # profiles table lands in Phase 4
-    try:
-        conn.execute("DELETE FROM feedback WHERE user_ref=?", (user_ref,))
-    except sqlite3.OperationalError:
-        pass
     conn.commit()
     return {"erased_threads": len(tids)}
 
@@ -322,6 +346,7 @@ def erase_me(x_user_ref: Optional[str] = Header(default=None)):
     conn = _db()
     try:
         out = _erase_user(conn, x_user_ref)
+        _audit(conn, "user:" + _key_hash(x_user_ref)[:16], "erasure", "self")
         log.info("erasure", extra={"ctx": {"erased_threads": out["erased_threads"]}})
         return {"user_ref": x_user_ref, **out, "sla_hours": CFG["privacy"]["erasure_sla_hours"]}
     finally:
@@ -345,5 +370,82 @@ def export_me(x_user_ref: Optional[str] = Header(default=None)):
         cons = [dict(r) for r in conn.execute(
             "SELECT * FROM consents WHERE user_ref=?", (x_user_ref,)).fetchall()]
         return {"user_ref": x_user_ref, "threads": threads, "consents": cons}
+    finally:
+        conn.close()
+
+
+class FeedbackIn(BaseModel):
+    thread_id: str
+    rating: int = Field(ge=-1, le=1)
+    note: str = Field(default="", max_length=1000)
+
+
+@app.post("/feedback")
+def feedback(body: FeedbackIn, x_owner_token: Optional[str] = Header(default=None)):
+    conn = _db()
+    try:
+        row = _get_thread(conn, body.thread_id)
+        if row["owner_token_hash"]:
+            _check_owner(row, x_owner_token)
+        msg = conn.execute("SELECT id FROM messages WHERE thread_id=? AND role='assistant'"
+                           " ORDER BY id DESC LIMIT 1", (body.thread_id,)).fetchone()
+        conn.execute("INSERT INTO feedback(thread_id, message_id, rating, note_redacted,"
+                     " user_ref, status, created_at) VALUES (?,?,?,?,?,?,?)",
+                     (body.thread_id, msg["id"] if msg else None, body.rating,
+                      redact(body.note)[:1000], row["user_ref"], "pending",
+                      _utcnow().isoformat()))
+        conn.commit()
+        return {"ok": True, "status": "pending"}
+    finally:
+        conn.close()
+
+
+@app.get("/kb/diff")
+def kb_diff(x_admin_key: Optional[str] = Header(default=None)):
+    import os
+    admin = _require_admin(x_admin_key)
+    kb = os.environ.get("BIS_KB_PATH", str(Path(__file__).resolve().parents[2] / "kb" / "bis.db"))
+    from . import kb_store
+    conn = kb_store.connect(kb)
+    try:
+        rows = conn.execute("SELECT * FROM pending_diffs WHERE status='pending' ORDER BY id").fetchall()
+        return {"pending": [dict(r) for r in rows], "reviewed_by": admin}
+    finally:
+        conn.close()
+
+
+class PublishIn(BaseModel):
+    diff_id: int
+    approve: bool
+    publisher_key: str
+    approver_key: str
+
+
+@app.post("/kb/publish")
+def kb_publish(body: PublishIn):
+    import os
+    pub, appr = _require_admin(body.publisher_key), _require_admin(body.approver_key)
+    if pub == appr:
+        raise HTTPException(status_code=400, detail={
+            "error": "publisher and approver must be distinct", "code": "bad_request",
+            "retryable": False})
+    kb = os.environ.get("BIS_KB_PATH", str(Path(__file__).resolve().parents[2] / "kb" / "bis.db"))
+    from . import kb_store
+    from ingest import review as reviewmod
+    kconn = kb_store.connect(kb)
+    try:
+        if body.approve:
+            reviewmod.cmd_approve(kconn, body.diff_id, by=f"admin:{pub}")
+        else:
+            reviewmod.cmd_reject(kconn, body.diff_id)
+    finally:
+        kconn.close()
+    conn = _db()
+    try:
+        conn.execute("INSERT INTO kb_reviews(diff_id, publisher, approver, decided_at)"
+                     " VALUES (?,?,?,?)", (body.diff_id, pub, appr, _utcnow().isoformat()))
+        _audit(conn, f"admin:{pub}", f"kb_publish:{body.diff_id}:{body.approve}", str(body.diff_id))
+        conn.commit()
+        return {"ok": True, "diff_id": body.diff_id, "approved": body.approve}
     finally:
         conn.close()
