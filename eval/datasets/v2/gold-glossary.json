@@ -28,7 +28,7 @@
   },
   {
     "id": "G-004",
-    "query": "QCO ka matlab kya hota hai? MSME ke liye saral bhasha me",
+    "query": "QCO ka arth kya hota hai? MSME ke liye saral bhasha me samjhayen",
     "lang": "hi",
     "expect_is": null,
     "expect_scheme": null,
@@ -100,7 +100,7 @@
   },
   {
     "id": "G-012",
-    "query": "HUID number ka kya matlab hai? sona chandi gehne par",
+    "query": "HUID number ka kya arth hai? sona chandi gehne par saral me",
     "lang": "hi",
     "expect_is": null,
     "expect_scheme": null,

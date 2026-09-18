@@ -37,7 +37,7 @@
   },
   {
     "id": "V-005",
-    "query": "Old standard IS 0000-DEMO withdrawn example — confirm do NOT use for manufacture",
+    "query": "IS 0000-DEMO withdrawn demo status check — old standard example",
     "lang": "en",
     "expect_is": null,
     "expect_scheme": null,

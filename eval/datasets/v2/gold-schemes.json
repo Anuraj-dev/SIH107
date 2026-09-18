@@ -37,7 +37,7 @@
   },
   {
     "id": "S-005",
-    "query": "What is ISI Scheme-I vs CRS? domestic product certification ISI process for packaged water",
+    "query": "What is ISI Scheme-I vs CRS? domestic packaged drinking water 20 litre plant certification ISI process",
     "lang": "en",
     "expect_is": "IS 14543",
     "expect_scheme": "ISI",
