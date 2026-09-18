@@ -33,3 +33,27 @@ observability:
   trace_sample_rate: 0.05
   trace_retention_days: 14
   latency_p95_ms: 2000
+
+rag:
+  enabled: false        # BIS_RAG_ENABLED=1 to serve corpus answers in /chat
+  db_path: kb/bis_rag.db  # BIS_RAG_DB_PATH
+  top_k: 5              # BIS_RAG_TOP_K
+  semantic: true        # BIS_RAG_SEMANTIC — semantic rerank channel
+  embedding_model: ""   # BIS_RAG_EMBEDDING_MODEL — optional sentence-transformers name
+  weight_lexical: 1.0
+  weight_semantic: 0.3
+  exact_boost: 50.0     # exact IS-number/designation boost
+  catalogue: true       # BIS_RAG_CATALOGUE — 24k catalogue fallback for novel products
+
+llm:
+  provider: openai-compatible  # BIS_LLM_PROVIDER — openai-compatible | gemini | ollama
+  model: ""             # BIS_LLM_MODEL, e.g. gpt-4o-mini / gemini-2.0-flash / llama3 (empty = extractive fallback)
+  api_key: ""           # BIS_LLM_API_KEY (never commit; env only; not needed for ollama)
+  base_url: https://api.openai.com/v1  # BIS_LLM_BASE_URL (ollama default http://localhost:11434)
+  temperature: 0.2
+  max_tokens: 512
+  timeout_s: 20.0
+  retries: 1            # BIS_LLM_RETRIES — extra attempts on transport failure
+
+guidance:
+  adaptive: true        # BIS_GUIDANCE_ADAPTIVE — user-tailored certification next steps
