@@ -8,6 +8,23 @@ import re
 
 from .retriever import _tokens
 
+_DB_SLOTS: dict[str, list[dict]] | None = None  # Phase 1: DB-backed override
+
+
+def use_db(path) -> None:
+    """Switch slot source to the SQLite KB (KB_BACKEND=sqlite)."""
+    global _DB_SLOTS
+    from . import kb_store
+    conn = kb_store.connect(path)
+    try:
+        _DB_SLOTS = kb_store.load_slots(conn)
+    finally:
+        conn.close()
+
+
+def _active() -> dict[str, list[dict]]:
+    return _DB_SLOTS if _DB_SLOTS is not None else SLOTS
+
 SLOTS: dict[str, list[dict]] = {
     "IS 10500": [
         {"key": "water_source",
@@ -208,7 +225,7 @@ def fills_for(is_number: str, text: str) -> dict[str, dict]:
     toks = _tokens(text)
     low = text.lower()
     out: dict[str, dict] = {}
-    for slot in SLOTS.get(is_number, []):
+    for slot in _active().get(is_number, []):
         pat = slot.get("pattern")
         if pat:
             m = re.search(pat, low)
@@ -228,4 +245,4 @@ def fills_for(is_number: str, text: str) -> dict[str, dict]:
 
 def unfilled_slots(is_number: str, text: str) -> list[dict]:
     filled = fills_for(is_number, text)
-    return [s for s in SLOTS.get(is_number, []) if s["key"] not in filled]
+    return [s for s in _active().get(is_number, []) if s["key"] not in filled]
