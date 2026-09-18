@@ -1,0 +1,12 @@
+{
+  "title": "BIS Assistant pilot",
+  "panels": [
+    {"title": "chat p50/p95 ms", "metrics": ["bis_chat_latency_p50_ms", "bis_chat_latency_p95_ms"]},
+    {"title": "answered vs refused", "metrics": ["bis_answered_total", "bis_refused_total"]},
+    {"title": "needs_info rate", "metrics": ["bis_needs_info_total"]},
+    {"title": "citation verifier trips", "metrics": ["bis_citation_fail_total"]},
+    {"title": "KB staleness (days)", "metrics": ["bis_kb_staleness_days"]},
+    {"title": "feedback neg share", "metrics": ["bis_feedback_total", "bis_feedback_neg_total"]},
+    {"title": "chat 5xx", "metrics": ["bis_chat_5xx_total"]}
+  ]
+}
