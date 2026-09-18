@@ -7,7 +7,8 @@
     "dev": "vite --port 5173 --strictPort",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview --port 5173 --strictPort",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test:contract": "node --test tests/contract.mjs"
   },
   "dependencies": {
     "react": "^18.3.1",

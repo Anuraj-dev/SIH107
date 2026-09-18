@@ -1,0 +1,30 @@
+{
+  "name": "kb-diff",
+  "description": "Fixture for planned admin GET /kb/diff and POST /kb/publish (stub only). Backend does not implement either yet.",
+  "diff": {
+    "diff_id": "diff-fixture-001",
+    "generated_at": "2026-09-18T00:00:00+00:00",
+    "changes": [
+      {
+        "id": "is-10500",
+        "is_number": "IS 10500:2012",
+        "change": "changed",
+        "old_status": "Active",
+        "new_status": "Active",
+        "source_url": "https://www.bis.gov.in/know-your-standard/",
+        "last_checked": "2026-09-18"
+      },
+      {
+        "id": "is-99999",
+        "is_number": "IS 99999:2026",
+        "change": "withdrawn",
+        "old_status": "Active",
+        "new_status": "Withdrawn",
+        "source_url": "https://www.bis.gov.in/know-your-standard/",
+        "last_checked": "2026-09-18"
+      }
+    ]
+  },
+  "publish_request_example": { "diff_id": "diff-fixture-001", "decision": "approve" },
+  "publish_response": { "ok": true, "diff_id": "diff-fixture-001", "decision": "approve" }
+}

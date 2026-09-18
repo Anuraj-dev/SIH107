@@ -1,0 +1,9 @@
+[
+  {"type": "phone", "raw": "9876543210", "query": "my factory number is 9876543210, which IS for cement?"},
+  {"type": "phone_intl", "raw": "+91 98110 12345", "query": "call us at +91 98110 12345 about LED CRS"},
+  {"type": "email", "raw": "owner@sharma-udyog.in", "query": "contact owner@sharma-udyog.in for helmet licence help"},
+  {"type": "aadhaar_like", "raw": "2345 6789 0123", "query": "id 2345 6789 0123 needs hallmark info"},
+  {"type": "name", "raw": "Ramesh Sharma", "query": "Ramesh Sharma from Ludhiana asks about TMT saria standard"},
+  {"type": "address", "raw": "Plot 12, MIDC Bhosari, Pune 411026", "query": "our unit at Plot 12, MIDC Bhosari, Pune 411026 makes PVC pipes"},
+  {"type": "firm", "raw": "Sharma Udyog Pvt Ltd", "query": "Sharma Udyog Pvt Ltd wants ISI mark for pressure cookers"}
+]

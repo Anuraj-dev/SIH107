@@ -15,7 +15,7 @@ STRINGS = {
 }
 
 PII_PATTERNS = {
-    "phone": re.compile(r"(?:\+?91[\s-]?)?[6-9]\d{9}"),
+    "phone": re.compile(r"(?:\+?91[\s-]?)?[6-9](?:[\s-]?\d){9}"),
     "email": re.compile(r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+"),
     "aadhaar_like": re.compile(r"\b\d{4}\s?\d{4}\s?\d{4}\b"),
 }
