@@ -1,0 +1,178 @@
+"""Search over the 24k-row BIS catalogue (breadth tier) for novel products.
+
+The curated 16-row KB answers head queries; the full-text corpus answers
+gazette/manual topics. Everything else — novel products outside both —
+falls back to this catalogue scan (number + title + department + committee),
+so /chat can suggest candidate standards instead of bluntly refusing.
+Results are explicitly labelled catalogue-level (title/year only, status
+unverified) and always carry the Know-Your-Standard verification pointer.
+"""
+from __future__ import annotations
+
+import os
+import re
+import sqlite3
+from pathlib import Path
+
+_TOKEN_RE = re.compile(r"[a-z0-9]+", re.IGNORECASE)
+_PORTAL = "https://www.bis.gov.in/know-your-standard"
+
+_STOP = frozenset("""
+what does the cover about which with from that this give summary scope standard
+indian tell please explain specification requirements requirement information info
+is are was were do does did done for on in of to a an the and or my i me we you
+your yours how when where who whom it its these those from by as at be been being
+have has had will would can could should suggest recommend suitable applicable
+for my product startup manufacturing manufacture makes make
+""".split())
+
+
+def _qtoks(query: str) -> set[str]:
+    return {w for w in _TOKEN_RE.findall((query or "").lower())
+            if len(w) > 2 and w not in _STOP}
+
+
+def _digits(s: str) -> str:
+    m = re.search(r"\d+", s or "")
+    return m.group(0) if m else ""
+
+
+def search_catalogue(query: str, db_path: str | Path | None = None,
+                     limit: int = 5) -> list[dict]:
+    """Keyword scan of catalogue_standards. [] when DB/table missing.
+
+    Each hit: {standard_id, standard_number, title, department, committee,
+    type_name, published_on, source_url, score, exact_match, relevant}.
+    """
+    from .rag_config import load_rag_config
+    db_path = str(db_path or load_rag_config()["db_path"])
+    q = (query or "").strip()
+    if not q or not os.path.exists(db_path):
+        return []
+    qt = _qtoks(q)
+    qdigits = {d for d in re.findall(r"\d{3,5}", q)}
+    if not qt and not qdigits:
+        return []
+    try:
+        conn = sqlite3.connect(str(db_path))
+        conn.row_factory = sqlite3.Row
+    except Exception:
+        return []
+    try:
+        try:
+            rows = conn.execute(
+                "SELECT standard_id, standard_number, standard_label,"
+                " standard_name, department, committee, type_name, published_on"
+                " FROM catalogue_standards").fetchall()
+        except Exception:
+            return []
+        # source URLs for the indexed (downloaded) subset
+        url_by_sid: dict = {}
+        try:
+            for r in conn.execute(
+                    "SELECT standard_id, source_url FROM corpus_documents"
+                    " WHERE source_url <> ''"):
+                url_by_sid[r["standard_id"]] = r["source_url"]
+        except Exception:
+            pass
+        scored: list[dict] = []
+        for r in rows:
+            num = r["standard_number"] or ""
+            name = r["standard_name"] or ""
+            dept = (r["department"] or "") + " " + (r["committee"] or "")
+            name_toks = set(_TOKEN_RE.findall(name.lower()))
+            dept_toks = set(_TOKEN_RE.findall(dept.lower()))
+            num_toks = set(_TOKEN_RE.findall(num.lower()))
+            overlap_name = len(qt & name_toks)
+            overlap = len(qt & (name_toks | dept_toks | num_toks))
+            score = 2.0 * overlap_name + 0.5 * len(qt & dept_toks)
+            exact = bool(qdigits and _digits(num) in qdigits)
+            if exact:
+                score += 20.0
+            if score <= 0:
+                continue
+            relevant = bool(exact or overlap_name >= 2 or overlap >= 3)
+            scored.append({
+                "standard_id": r["standard_id"],
+                "standard_number": num,
+                "title": name or r["standard_label"] or num,
+                "department": r["department"] or "",
+                "committee": r["committee"] or "",
+                "type_name": r["type_name"] or "",
+                "published_on": r["published_on"] or "",
+                "source_url": url_by_sid.get(r["standard_id"], _PORTAL),
+                "score": score,
+                "exact_match": exact,
+                "relevant": relevant,
+            })
+        scored.sort(key=lambda d: -d["score"])
+        return scored[:limit]
+    finally:
+        try:
+            conn.close()
+        except Exception:
+            pass
+
+
+def format_catalogue_citation(h: dict) -> str:
+    num = h.get("standard_number") or "BIS catalogue entry"
+    title = h.get("title") or ""
+    pub = h.get("published_on") or "date unknown"
+    url = h.get("source_url") or _PORTAL
+    return (f"{num} — {title} [catalogue, published {pub}] — Source: {url}")
+
+
+def build_catalogue_answer(query: str, lang: str, hits: list[dict]) -> dict:
+    """Deterministic catalogue-level recommendation (no clause content)."""
+    from .i18n_privacy import find_pii
+    from .safety import BIS_CARE, DISCLAIMER_EN, DISCLAIMER_HI
+    hi = lang == "hi"
+    hits = [h for h in hits if h.get("relevant")][:3]
+    citations = [format_catalogue_citation(h) for h in hits]
+    sources = [{
+        "standard_number": h.get("standard_number", ""),
+        "title": h.get("title", ""),
+        "url": h.get("source_url", ""),
+        "doc_type": "catalogue",
+        "heading": h.get("type_name", ""),
+        "chunk_text": "",
+        "chunk_index": 0,
+        "source_file": "",
+        "score": round(float(h.get("score", 0.0)), 3),
+    } for h in hits]
+    if hi:
+        lines = ["BIS catalogue me aapke vivaran se milte-julte manak mile:",
+                 ""]
+    else:
+        lines = ["Closest catalogue matches for your description "
+                 "(title-level only — confirm scope before relying on these):",
+                 ""]
+    for h in hits:
+        dept = f" — {h['department']}" if h.get("department") else ""
+        lines.append(f"- **{h['standard_number']}** — {h['title']}{dept}")
+        if h.get("source_url") and h["source_url"] != _PORTAL:
+            lines.append(f"  Source: {h['source_url']}")
+    lines += ["",
+              (f"Catalogue rows carry titles only — verify scope, year and status "
+               f"on Know-Your-Standard before manufacture or sale: {_PORTAL}"
+               if not hi else
+               f"Catalogue me keval title hai — utpadan se pehle scope/varsh/sthiti "
+               f"pusht karen: {_PORTAL}")]
+    lines += ["", "---", DISCLAIMER_HI if hi else DISCLAIMER_EN, BIS_CARE]
+    return {
+        "text": "\n".join(lines),
+        "refused": False,
+        "kind": "catalogue_answer",
+        "lang": lang,
+        "citations": citations,
+        "sources": sources,
+        "rag_evidence": list(sources),
+        "rag_mode": "catalogue (24k BIS catalogue scan)",
+        "rag_used_llm": False,
+        "pii": find_pii(query),
+        "needs_info": False,
+        "questions": [],
+        "known": [],
+        "assumptions": [],
+        "context": {"history": [], "rounds": 0},
+    }
