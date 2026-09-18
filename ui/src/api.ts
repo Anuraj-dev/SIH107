@@ -78,21 +78,25 @@ export async function sendChat(
 }
 
 /**
- * Fixture-driven feedback: POST /feedback live when the backend ships it,
- * graceful fallback to fixture-ok when it 404s/is unreachable (plan §5).
+ * Fixture-driven feedback: live POST /feedback when the backend ships it
+ * (body {thread_id, rating: 1|-1, note}, X-Owner-Token for owned threads),
+ * graceful fallback to fixture-ok otherwise (plan §5).
  */
 export async function sendFeedback(
   threadId: string,
   rating: 1 | -1,
+  ownerToken?: string,
   note?: string,
 ): Promise<FeedbackResult> {
   try {
     const j = await req("/api/feedback", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(
-        note ? { thread_id: threadId, rating, note } : { thread_id: threadId, rating },
-      ),
+      headers: {
+        "Content-Type": "application/json",
+        ...(ownerToken ? { "X-Owner-Token": ownerToken } : {}),
+      },
+      // Backend schema: {thread_id, rating: -1..1, note: str ≤1000}; UI only ever sends ±1.
+      body: JSON.stringify({ thread_id: threadId, rating, note: note ?? "" }),
     });
     if (j && j.ok === true) return { ok: true };
     return { ok: true, fixture: true };
@@ -109,12 +113,43 @@ export async function fetchThreadExport(thread: ServerThread): Promise<ThreadExp
   })) as ThreadExport;
 }
 
-/** Admin diff-review: live GET /kb/diff when available, else the bundled fixture (plan §5 stub). */
-export async function fetchKbDiff(adminToken: string): Promise<{ diff: KbDiff; fixture: boolean }> {
+/** Live pending_diffs row shape from GET /kb/diff (Phase 4 backend). */
+interface LiveDiffRow {
+  id: number;
+  snapshot_id: number;
+  change_type: string;
+  is_number: string;
+  details_json: string;
+  status: string;
+  decided_at: string | null;
+}
+
+function normaliseLiveDiff(j: { pending: LiveDiffRow[]; reviewed_by?: string }): KbDiff {
+  return {
+    diff_id: "live",
+    generated_at: new Date().toISOString(),
+    reviewed_by: j.reviewed_by,
+    changes: j.pending.map((r) => ({
+      id: String(r.id),
+      is_number: r.is_number,
+      change: (["added", "changed", "missing-upstream"].includes(r.change_type)
+        ? r.change_type
+        : "changed") as KbDiff["changes"][number]["change"],
+      snapshot_id: r.snapshot_id,
+      details: r.details_json,
+    })),
+  };
+}
+
+/** Admin diff-review: live GET /kb/diff (x-admin-key) when available, else the bundled fixture. */
+export async function fetchKbDiff(adminKey: string): Promise<{ diff: KbDiff; fixture: boolean }> {
   try {
     const j = (await req("/api/kb/diff", {
-      headers: adminToken ? { "X-Owner-Token": adminToken } : {},
-    })) as KbDiff;
+      headers: adminKey ? { "x-admin-key": adminKey } : {},
+    })) as KbDiff & { pending?: LiveDiffRow[]; reviewed_by?: string };
+    if (Array.isArray(j.pending)) {
+      return { diff: normaliseLiveDiff(j as { pending: LiveDiffRow[]; reviewed_by?: string }), fixture: false };
+    }
     if (j && typeof j.diff_id === "string" && Array.isArray(j.changes)) {
       return { diff: j, fixture: false };
     }
@@ -124,24 +159,48 @@ export async function fetchKbDiff(adminToken: string): Promise<{ diff: KbDiff; f
   }
 }
 
-/** Admin publish decision: live POST /kb/publish when available, else fixture-ok. */
+/**
+ * Admin publish decision: live POST /kb/publish
+ * ({diff_id: int, approve: bool, publisher_key, approver_key} — 2-person, distinct actors)
+ * when available, else fixture-ok.
+ */
 export async function publishKbDiff(
   diffId: string,
   decision: "approve" | "reject",
-  adminToken: string,
+  publisherKey: string,
+  approverKey?: string,
 ): Promise<KbPublishResult> {
+  const pub = publisherKey.trim();
+  const appr = (approverKey ?? "").trim();
+  if (pub && appr && pub !== appr && /^\d+$/.test(diffId)) {
+    try {
+      const j = await req("/api/kb/publish", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          diff_id: Number(diffId),
+          approve: decision === "approve",
+          publisher_key: pub,
+          approver_key: appr,
+        }),
+      });
+      if (j && j.ok === true) return { ok: true, diff_id: diffId, decision };
+    } catch {
+      // fall through to fixture-ok
+    }
+  }
+  // Fixture endpoint: single-key review or non-numeric fixture diff id.
   try {
-    const j = await req("/api/kb/publish", {
+    await req("/api/kb/publish", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        ...(adminToken ? { "X-Owner-Token": adminToken } : {}),
+        ...(pub ? { "X-Owner-Token": pub } : {}),
       },
       body: JSON.stringify({ diff_id: diffId, decision }),
     });
-    if (j && j.ok === true) return { ok: true, diff_id: diffId, decision };
-    return { ok: true, diff_id: diffId, decision, fixture: true };
   } catch {
-    return { ok: true, diff_id: diffId, decision, fixture: true };
+    // fixture-ok without a live backend
   }
+  return { ok: true, diff_id: diffId, decision, fixture: true };
 }

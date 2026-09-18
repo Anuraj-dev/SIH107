@@ -95,11 +95,14 @@ export function FeedbackButtons({
 }
 
 export function NoteInput({
+  id,
   onSubmit,
 }: {
+  id: string;
   onSubmit: (note: string) => void;
 }) {
   const [note, setNote] = useState("");
+  const inputId = `fb-note-${id}`;
   return (
     <form
       className="noteform"
@@ -109,9 +112,9 @@ export function NoteInput({
         setNote("");
       }}
     >
-      <label className="sr-only" htmlFor="fb-note">Optional feedback note</label>
+      <label className="sr-only" htmlFor={inputId}>Optional feedback note</label>
       <input
-        id="fb-note"
+        id={inputId}
         value={note}
         onChange={(e) => setNote(e.target.value)}
         placeholder="Optional note (no personal details)…"

@@ -1,6 +1,29 @@
 {
   "name": "kb-diff",
-  "description": "Fixture for planned admin GET /kb/diff and POST /kb/publish (stub only). Backend does not implement either yet.",
+  "description": "Admin KB diff-review fixtures. The live backend serves GET /kb/diff -> {pending:[...], reviewed_by} (x-admin-key) with pending_diffs rows, and POST /kb/publish {diff_id:int, approve:bool, publisher_key, approver_key} (distinct actors) -> {ok, diff_id, approved}. The UI normalises live rows into the `diff` shape below and falls back to it as a fixture when the backend is unreachable.",
+  "live_shapes": {
+    "get_diff": {
+      "method": "GET",
+      "path": "/kb/diff",
+      "auth_header": "x-admin-key",
+      "row_example": {
+        "id": 7,
+        "snapshot_id": 3,
+        "change_type": "changed",
+        "is_number": "IS 10500:2012",
+        "details_json": "{\"was\": {}, \"now\": {}}",
+        "status": "pending",
+        "decided_at": null
+      },
+      "change_type_enum": ["added", "changed", "missing-upstream"]
+    },
+    "publish": {
+      "method": "POST",
+      "path": "/kb/publish",
+      "body_example": { "diff_id": 7, "approve": true, "publisher_key": "<key-1>", "approver_key": "<key-2>" },
+      "response_example": { "ok": true, "diff_id": 7, "approved": true }
+    }
+  },
   "diff": {
     "diff_id": "diff-fixture-001",
     "generated_at": "2026-09-18T00:00:00+00:00",

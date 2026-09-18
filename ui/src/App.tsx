@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { checkHealth, fetchThreadExport, sendChat, sendFeedback } from "./api";
 import AdminPanel from "./admin";
-import { AssumptionsBanner, Badge, FeedbackButtons, KnownChips, RichText } from "./components";
+import { AssumptionsBanner, Badge, FeedbackButtons, KnownChips, NoteInput, RichText } from "./components";
 import type { Lang, Msg } from "./types";
 import type { ServerThread } from "./api";
 import "./styles.css";
@@ -76,15 +76,18 @@ export default function App() {
   }, []);
 
   const rate = useCallback(
-    async (id: number, rating: 1 | -1) => {
+    async (id: number, rating: 1 | -1, note?: string) => {
       const target = msgs.find((m) => m.id === id);
       if (!target?.resp?.thread_id && !thread) {
         setMsgs((m) => m.map((x) => (x.id === id ? { ...x, feedback: rating } : x)));
         return;
       }
       const tid = target?.resp?.thread_id ?? thread?.id ?? "local";
+      // Prefer the thread owner token so the live POST /feedback (owned threads) succeeds;
+      // without it the call falls back to fixture-ok.
+      const ownerToken = thread?.id === tid ? thread.token : target?.resp?.owner_token || thread?.token;
       setMsgs((m) => m.map((x) => (x.id === id ? { ...x, feedback: rating } : x)));
-      await sendFeedback(tid, rating);
+      await sendFeedback(tid, rating, ownerToken, note);
     },
     [msgs, thread],
   );
@@ -260,6 +263,9 @@ export default function App() {
                           </span>
                         )}
                       </div>
+                      {m.feedback != null && (
+                        <NoteInput id={String(m.id)} onSubmit={(note) => rate(m.id, m.feedback ?? 1, note)} />
+                      )}
                       {showRaw && <pre className="raw">{JSON.stringify(m.resp, null, 2)}</pre>}
                     </>
                   )}
