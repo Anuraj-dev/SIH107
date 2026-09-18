@@ -1,4 +1,9 @@
-"""Stdlib-only HTTP API: POST /chat {query, lang?} | GET /health. Run: python -m bis_assistant.api"""
+"""Stdlib-only HTTP API: POST /chat {query, lang?, force?, new_topic?} | GET /health. Run: python -m bis_assistant.api
+
+Legacy client-held ``context`` dict is accepted as a one-turn migration
+bridge only (use ``thread_id`` via the FastAPI server for real threads;
+see chat.py ThreadHandle). New clients: ``{query, lang?, force?, new_topic?}``.
+"""
 from __future__ import annotations
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
@@ -39,8 +44,10 @@ class H(BaseHTTPRequestHandler):
         if not q:
             return self._json({"error": "empty query"}, 400)
         ctx = payload.get("context")
-        if not isinstance(ctx, dict):
+        if not isinstance(ctx, dict) or payload.get("new_topic"):
             ctx = None
+        if payload.get("force"):
+            ctx = {**(ctx or {}), "force": True}
         return self._json(answer(q, payload.get("lang"), ctx))
 
     def log_message(self, *a):

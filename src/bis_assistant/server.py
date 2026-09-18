@@ -154,8 +154,12 @@ class ChatIn(BaseModel):
     query: str = Field(min_length=1, max_length=4000)
     lang: Optional[str] = None
     thread_id: Optional[str] = None
-    context: Optional[dict] = None  # deprecated bridge; thread_id authoritative
+    context: Optional[dict] = None  # deprecated bridge; thread_id authoritative.
+    # One-turn migration only: accepted, truncated to last 4 turns, then the
+    # server mints a thread_id clients must use afterwards. New code must
+    # pass thread_id (see chat.py ThreadHandle) — context will be removed.
     force: bool = False
+    new_topic: bool = False  # Design 3: ignore thread_id/context, mint fresh thread
 
 
 class ThreadOut(BaseModel):
@@ -280,7 +284,10 @@ def chat(body: ChatIn, request: Request,
     conn = _db()
     try:
         history, rounds, tid = [], 0, body.thread_id
-        if tid:
+        if body.new_topic:
+            # Explicit fresh topic: drop any carried state, mint below.
+            history, rounds, tid = [], 0, None
+        elif tid:
             row = _get_thread(conn, tid)
             if row["owner_token_hash"]:
                 _check_owner(row, x_owner_token)
@@ -289,6 +296,9 @@ def chat(body: ChatIn, request: Request,
                 "rounds": row["rounds"]})
             history, rounds = ctx["history"], ctx["rounds"]
         elif isinstance(body.context, dict) and body.context.get("history"):
+            log.warning("legacy context bridge used; minting thread_id — "
+                        "clients must switch to thread_id",
+                        extra={"ctx": {"request_id": request.headers.get("X-Request-ID", "")}})
             ctx = threadmod.normalize_context({
                 "history": threadmod.bridge_history(
                     [redact(h)[:2000] for h in body.context["history"]]),

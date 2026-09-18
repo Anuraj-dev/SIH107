@@ -59,13 +59,15 @@ export async function sendChat(
   lang: Lang,
   thread?: ServerThread | null,
   force = false,
+  newTopic = false,
 ): Promise<{ resp: ChatResponse; ms: number; thread: ServerThread | null }> {
   const t0 = performance.now();
-  const body: Record<string, unknown> = { query, force };
+  const body: Record<string, unknown> = { query, force, new_topic: newTopic };
   if (lang !== "auto") body.lang = lang;
-  if (thread) body.thread_id = thread.id;
+  // Design 3: new_topic ignores thread server-side; don't send a stale id.
+  if (thread && !newTopic) body.thread_id = thread.id;
   const headers: Record<string, string> = { "Content-Type": "application/json" };
-  if (thread) headers["X-Owner-Token"] = thread.token;
+  if (thread && !newTopic) headers["X-Owner-Token"] = thread.token;
   const resp = (await req("/api/chat", {
     method: "POST",
     headers,
@@ -77,6 +79,63 @@ export async function sendChat(
   return { resp, ms: Math.round(performance.now() - t0), thread: next };
 }
 
+/**
+ * Design 3 common-case facade: one happy-path entry point with strong defaults.
+ * `sendChat` above stays as the low-level compat primitive; new code should
+ * prefer `bisChat.send()` which centralises the fresh/force policy.
+ */
+export interface BisChatSendOpts {
+  lang?: Lang;
+  thread?: ServerThread | null;
+  force?: boolean;
+  /** Drop follow-up context server-side (POSTs new_topic, sends no stale id). */
+  fresh?: boolean;
+}
+
+export const bisChat = {
+  async send(
+    query: string,
+    opts: BisChatSendOpts = {},
+  ): Promise<{ resp: ChatResponse; ms: number; thread: ServerThread | null }> {
+    const { lang = "auto", thread = null, force = false, fresh = false } = opts;
+    return sendChat(query, lang, fresh ? null : thread, force, fresh);
+  },
+  /** Design 3 policy (mirrors App + chat.py): keep the thread while clarifying. */
+  shouldKeepThread(resp: ChatResponse): boolean {
+    return resp.needs_info === true;
+  },
+  newTopic(): null {
+    return null;
+  },
+};
+
+/** Stateful closure for non-React callers; React (App.tsx) keeps thread in state. */
+export function createBisChat(initialLang: Lang = "auto") {
+  let thread: ServerThread | null = null;
+  let lang: Lang = initialLang;
+  return {
+    getThread: (): ServerThread | null => thread,
+    setLang: (l: Lang): void => {
+      lang = l;
+    },
+    newTopic(): void {
+      thread = null;
+    },
+    async send(
+      query: string,
+      opts: { force?: boolean; fresh?: boolean; lang?: Lang } = {},
+    ): Promise<{ resp: ChatResponse; ms: number; thread: ServerThread | null }> {
+      const out = await bisChat.send(query, {
+        lang: opts.lang ?? lang,
+        thread: opts.fresh ? null : thread,
+        force: opts.force ?? false,
+        fresh: opts.fresh ?? false,
+      });
+      thread = bisChat.shouldKeepThread(out.resp) ? out.thread : null;
+      return out;
+    },
+  };
+}
 /**
  * Fixture-driven feedback: live POST /feedback when the backend ships it
  * (body {thread_id, rating: 1|-1, note}, X-Owner-Token for owned threads),
