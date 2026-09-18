@@ -60,9 +60,10 @@ llm:
   api_key: ""           # BIS_LLM_API_KEY (never commit; env only; not needed for ollama)
   base_url: https://api.openai.com/v1  # BIS_LLM_BASE_URL (ollama default http://localhost:11434)
   temperature: 0.2
-  max_tokens: 512
-  timeout_s: 20.0
-  retries: 1            # BIS_LLM_RETRIES — extra attempts on transport failure
+  max_tokens: 768         # 768 for Hindi: Devanagari is token-hungry (issue #4 P1-11)
+  timeout_s: 10.0           # interactive budget vs latency_p95_ms (issue #4 P1-10)
+  retries: 0              # BIS_LLM_RETRIES — extra attempts; 0 keeps /chat inside budget
+  cache_ttl: 300          # BIS_LLM_CACHE_TTL — reuse identical grounded answers (s)
 
 memory:
   expand_turns: 2       # BIS_MEMORY_EXPAND_TURNS — history turns feeding retrieval

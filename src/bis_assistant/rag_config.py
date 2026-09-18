@@ -11,9 +11,11 @@ Switches:
   BIS_LLM_API_KEY=""              never hard-code; env/config only
   BIS_LLM_BASE_URL="https://api.openai.com/v1"  (ollama default http://localhost:11434)
   BIS_LLM_TEMPERATURE=0.2
-  BIS_LLM_MAX_TOKENS=512
-  BIS_LLM_TIMEOUT_S=20
-  BIS_LLM_RETRIES=1
+  BIS_LLM_MAX_TOKENS=768
+  BIS_LLM_TIMEOUT_S=10
+  BIS_LLM_RETRIES=0
+  BIS_LLM_CACHE_TTL=300       seconds to reuse a grounded answer for an
+                              identical (query, evidence, lang); 0 disables
   BIS_RAG_CATALOGUE=1             24k catalogue fallback for novel products
   BIS_GUIDANCE_ADAPTIVE=1         user-tailored certification next steps
 """
@@ -102,11 +104,13 @@ def load_llm_config() -> dict:
         "temperature": _float_env(
             "BIS_LLM_TEMPERATURE", float(file_cfg.get("temperature", 0.2))),
         "max_tokens": _int_env(
-            "BIS_LLM_MAX_TOKENS", int(file_cfg.get("max_tokens", 512))),
+            "BIS_LLM_MAX_TOKENS", int(file_cfg.get("max_tokens", 768))),
         "timeout_s": _float_env(
-            "BIS_LLM_TIMEOUT_S", float(file_cfg.get("timeout_s", 20.0))),
+            "BIS_LLM_TIMEOUT_S", float(file_cfg.get("timeout_s", 10.0))),
         "retries": _int_env(
-            "BIS_LLM_RETRIES", int(file_cfg.get("retries", 1))),
+            "BIS_LLM_RETRIES", int(file_cfg.get("retries", 0))),
+        "cache_ttl": _int_env(
+            "BIS_LLM_CACHE_TTL", int(file_cfg.get("cache_ttl", 300))),
     }
 
 

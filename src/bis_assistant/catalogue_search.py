@@ -37,8 +37,24 @@ def _digits(s: str) -> str:
     return m.group(0) if m else ""
 
 
+def _fts_match(query_toks: set[str], digits: set[str]) -> str:
+    parts = [f'"{t}"' for t in sorted(query_toks) if len(t) > 1]
+    parts += [f'"{d}"' for d in sorted(digits)]
+    return " OR ".join(parts[:14]) if parts else ""
+
+
+def _fts_table(conn: sqlite3.Connection) -> bool:
+    try:
+        row = conn.execute(
+            "SELECT name FROM sqlite_master WHERE type='table'"
+            " AND name='catalogue_fts'").fetchone()
+        return row is not None
+    except Exception:
+        return False
+
+
 def search_catalogue(query: str, db_path: str | Path | None = None,
-                     limit: int = 5) -> list[dict]:
+                     limit: int = 5, _conn: sqlite3.Connection | None = None) -> list[dict]:
     """Keyword scan of catalogue_standards. [] when DB/table missing.
 
     Each hit: {standard_id, standard_number, title, department, committee,
@@ -47,25 +63,50 @@ def search_catalogue(query: str, db_path: str | Path | None = None,
     from .rag_config import load_rag_config
     db_path = str(db_path or load_rag_config()["db_path"])
     q = (query or "").strip()
-    if not q or not os.path.exists(db_path):
+    if not q:
         return []
     qt = _qtoks(q)
     qdigits = {d for d in re.findall(r"\d{3,5}", q)}
     if not qt and not qdigits:
         return []
-    try:
-        conn = sqlite3.connect(str(db_path))
-        conn.row_factory = sqlite3.Row
-    except Exception:
-        return []
-    try:
+    own_conn = _conn is None
+    if _conn is not None:
+        conn = _conn
+    else:
+        if not os.path.exists(db_path):
+            return []
         try:
-            rows = conn.execute(
-                "SELECT standard_id, standard_number, standard_label,"
-                " standard_name, department, committee, type_name, published_on"
-                " FROM catalogue_standards").fetchall()
+            conn = sqlite3.connect(str(db_path))
+            conn.row_factory = sqlite3.Row
         except Exception:
             return []
+    try:
+        # FTS candidate generation (issue #4 P1-10): MATCH narrows the 24k
+        # rows to a small set; Python scoring below keeps exact semantics.
+        # Full scan remains the fallback when FTS is missing or silent.
+        rows = None
+        match = _fts_match(qt, qdigits)
+        if match and _fts_table(conn):
+            try:
+                # BM25 pre-rank keeps rare-term rows (the ones Python
+                # scoring promotes) inside the candidate window.
+                rows = conn.execute(
+                    "SELECT s.standard_id, s.standard_number, s.standard_label,"
+                    " s.standard_name, s.department, s.committee, s.type_name,"
+                    " s.published_on FROM catalogue_fts"
+                    " JOIN catalogue_standards s ON s.standard_id = catalogue_fts.rowid"
+                    " WHERE catalogue_fts MATCH ? ORDER BY bm25(catalogue_fts)"
+                    " LIMIT 200", (match,)).fetchall()
+            except Exception:
+                rows = None
+        if rows is None:
+            try:
+                rows = conn.execute(
+                    "SELECT standard_id, standard_number, standard_label,"
+                    " standard_name, department, committee, type_name, published_on"
+                    " FROM catalogue_standards").fetchall()
+            except Exception:
+                return []
         # source URLs for the indexed (downloaded) subset
         url_by_sid: dict = {}
         try:
@@ -108,10 +149,11 @@ def search_catalogue(query: str, db_path: str | Path | None = None,
         scored.sort(key=lambda d: -d["score"])
         return scored[:limit]
     finally:
-        try:
-            conn.close()
-        except Exception:
-            pass
+        if own_conn:
+            try:
+                conn.close()
+            except Exception:
+                pass
 
 
 def format_catalogue_citation(h: dict) -> str:

@@ -151,7 +151,8 @@ def _rag_relevant(text: str, evidence: list) -> bool:
     return False
 
 
-def _rag_lookup(text: str, top_k: int | None = None) -> tuple[list, dict]:
+def _rag_lookup(text: str, top_k: int | None = None,
+                _conn=None) -> tuple[list, dict]:
     """Best-effort corpus lookup. Never raises; [] when disabled/missing."""
     try:
         from .rag_config import load_rag_config
@@ -165,10 +166,46 @@ def _rag_lookup(text: str, top_k: int | None = None) -> tuple[list, dict]:
                         semantic_weight=rcfg.get("weight_semantic", 0.3),
                         exact_boost=rcfg.get("exact_boost", 50.0),
                         semantic=rcfg.get("semantic", True),
-                        embedding_model=rcfg.get("embedding_model", ""))
+                        embedding_model=rcfg.get("embedding_model", ""),
+                        _conn=_conn)
         return ev or [], rcfg
     except Exception:
         return [], {}
+
+
+class _RagConnHolder:
+    """One SQLite connection per /chat turn (issue #4 P1-10).
+
+    Lazily opened on first retrieval use, closed by ``answer()`` when the
+    turn resolves. Missing DBs yield None (callers treat as no evidence).
+    """
+
+    def __init__(self) -> None:
+        self.conn = None
+        self.path: str | None = None
+
+    def get(self, db_path: str | None):
+        import os as _os
+        if self.conn is not None:
+            return self.conn
+        if not db_path or not _os.path.exists(str(db_path)):
+            return None
+        try:
+            from .rag_store import connect_rag
+            self.conn = connect_rag(db_path)
+            self.path = str(db_path)
+            return self.conn
+        except Exception:
+            return None
+
+    def close(self) -> None:
+        try:
+            if self.conn is not None:
+                self.conn.close()
+        except Exception:
+            pass
+        finally:
+            self.conn = None
 
 
 def _attach_rag_sources(resp: dict, evidence: list, query_text: str = "") -> dict:
@@ -220,7 +257,7 @@ def _strongly_grounded(cands: list[dict], t: dict | None = None) -> bool:
 
 
 def _maybe_catalogue(query: str, retrieval_query: str, lang: str,
-                     strong_only: bool = False) -> dict | None:
+                     strong_only: bool = False, _conn=None) -> dict | None:
     """24k-catalogue fallback for novel products (RAG-gated, never raises).
 
     Returns a catalogue_answer only when the scan is genuinely relevant;
@@ -231,12 +268,13 @@ def _maybe_catalogue(query: str, retrieval_query: str, lang: str,
     try:
         from .rag_config import load_guidance_config, load_rag_config
         rcfg = load_rag_config()
-        # Catalogue fallback is independent of the corpus switch (issue #4
-        # P0-1): it only needs the catalogue DB table to exist.
+        # Independent of the corpus switch (issue #4 P0-1): only the
+        # catalogue DB table must exist.
         if not load_guidance_config()["catalogue"]:
             return None
         from .catalogue_search import build_catalogue_answer, search_catalogue
-        hits = search_catalogue(retrieval_query, db_path=rcfg.get("db_path"))
+        hits = search_catalogue(retrieval_query, db_path=rcfg.get("db_path"),
+                                _conn=_conn)
         relevant = [h for h in hits if h.get("relevant")]
         if not relevant:
             return None
@@ -285,217 +323,238 @@ def _maybe_enhance(resp: dict, query: str, intent_res: dict,
 
 
 def answer(query: str, lang: str | None = None, context: dict | None = None) -> dict:
-    lang = lang or detect_lang(query)
-    hi = lang == "hi"
-    ctx = threadmod.normalize_context(context)
-    ql = query.lower()
-    t = _cfg()
-    if any(w in ql for w in RESET_WORDS):
-        ctx = threadmod.reset_context()
-    if any(w in ql for w in FORCE_WORDS):
-        ctx = threadmod.with_force(ctx)
-
-    # NLU intent + conversational memory (observable, behaviour-preserving:
-    # journey branching below still owns routing; these only tag responses
-    # and feed retrieval/guidance enhancements).
+    """One RAG/catalogue SQLite connection per turn (issue #4 P1-10)."""
+    holder = _RagConnHolder()
     try:
-        intent_res = nlu_mod.classify(query, ctx["history"])
-    except Exception:
-        intent_res = {"intent": "general", "confidence": "low",
-                      "scores": {}, "entities": {"is_numbers": [],
-                      "product_terms": [], "stage": ""}}
-    try:
-        context_summary = memory_mod.summarize_thread(ctx["history"])
-    except Exception:
-        context_summary = ""
+        return _answer_inner(query, lang, context, holder)
+    finally:
+        holder.close()
 
-    def _tag(resp: dict) -> dict:
-        resp["intent"] = intent_res.get("intent", "general")
-        resp["intent_confidence"] = intent_res.get("confidence", "low")
-        resp["context_summary"] = context_summary
-        return resp
 
-    # RAG pre-lookup (query-only) so full-text refusals can be superseded
-    # by corpus evidence when BIS_RAG_ENABLED=1.
-    rag_evidence, rag_cfg = _rag_lookup(query)
+def _answer_inner(query: str, lang: str | None = None, context: dict | None = None,
+                  holder: _RagConnHolder | None = None) -> dict:
+        lang = lang or detect_lang(query)
+        hi = lang == "hi"
+        ctx = threadmod.normalize_context(context)
+        ql = query.lower()
+        t = _cfg()
+        if any(w in ql for w in RESET_WORDS):
+            ctx = threadmod.reset_context()
+        if any(w in ql for w in FORCE_WORDS):
+            ctx = threadmod.with_force(ctx)
 
-    # 1. never-infer gate (current query)
-    kind = check_never_infer(query)
-    if kind:
-        # Corpus-backed full-text use supersedes the metadata-only refusal
-        # for full_text/clause_verbatim when evidence exists (task spec).
-        if kind in ("full_text", "clause_verbatim") and rag_evidence \
-                and _rag_relevant(query, rag_evidence):
-            kind = None
-        else:
-            r = _base(lang, refused=True, kind=kind, pii=find_pii(query))
-            r["text"] = ((REFUSAL_HI if hi else REFUSAL_EN)[kind]
-                         + "\n\n" + _DIVIDER + "\n" + BIS_CARE)
-            return _tag(_attach_rag_sources(r, rag_evidence, query))
-
-    # 2. topic change: the current query alone strongly names an IS that
-    # differs from the thread's topic -> fresh thread. The old side needs no
-    # strength threshold: a weak opener (e.g. `steel bottle`) followed by a
-    # direct new topic (e.g. `OPC 53 cement`) must not fuse both standards
-    # into one answer (issue #4 P0-6).
-    res_now = retrieve(query)
-    top_now = res_now["candidates"][0] if res_now["candidates"] else None
-    if ctx["history"] and top_now and top_now["score"] >= t["direct_score"]:
-        res_old = retrieve(" ".join(ctx["history"]))
-        top_old = res_old["candidates"][0] if res_old["candidates"] else None
-        if top_old is None or top_old["std"]["is_number"] != top_now["std"]["is_number"]:
-            ctx = threadmod.reset_context(force=ctx["force"])
-
-    combined = threadmod.combined_query(ctx["history"], query)
-    res = retrieve(combined)
-    cands = res["candidates"]
-    a = assess(combined, cands, ctx, t)
-    top, st, ss = a["top"], a["st"], a["ss"]
-    exact, strong, weak = a["exact"], a["strong"], a["weak"]
-    unfilled, direct = a["unfilled"], a["direct"]
-
-    # Refresh RAG evidence with history-aware context (expanded query keeps
-    # follow-ups like "1 litre" grounded in the thread's product terms).
-    try:
-        retrieval_query = memory_mod.expand_query(combined, ctx["history"])
-    except Exception:
-        retrieval_query = combined
-    if rag_cfg.get("enabled") and retrieval_query != query:
+        # NLU intent + conversational memory (observable, behaviour-preserving:
+        # journey branching below still owns routing; these only tag responses
+        # and feed retrieval/guidance enhancements).
         try:
-            ev2, _ = _rag_lookup(retrieval_query)
-            if ev2:
-                rag_evidence = ev2
+            intent_res = nlu_mod.classify(query, ctx["history"])
         except Exception:
-            pass
+            intent_res = {"intent": "general", "confidence": "low",
+                          "scores": {}, "entities": {"is_numbers": [],
+                          "product_terms": [], "stage": ""}}
+        try:
+            context_summary = memory_mod.summarize_thread(ctx["history"])
+        except Exception:
+            context_summary = ""
 
-    # Corpus decision: prefer grounded corpus answers when they add value,
-    # otherwise keep the deterministic metadata mode as fallback/primary.
-    if rag_evidence and _rag_relevant(combined, rag_evidence):
-        rag_exact = any(e.get("exact_match") for e in rag_evidence)
-        journey_q = (_has_lab_hint(ql)
-                     or any(h in ql for h in HALLMARK_HINTS + SCHEME_HINTS + CLUB_HINTS))
-        bypassed_fulltext = kind in ("full_text", "clause_verbatim")
-        # Curated clarification wins over weak corpus co-occurrence hits:
-        # only divert vague queries to the corpus when metadata has no
-        # grounded candidate of its own.
-        meta_grounded = any((c.get("hits") or c.get("score", 0) >= t.get("grounded_score", 10))
-                            for c in cands[:2])
-        if bypassed_fulltext or rag_exact or (
-                not direct and not journey_q and not meta_grounded):
-            from .rag_answer import build_rag_answer
+        def _tag(resp: dict) -> dict:
+            resp["intent"] = intent_res.get("intent", "general")
+            resp["intent_confidence"] = intent_res.get("confidence", "low")
+            resp["context_summary"] = context_summary
+            return resp
+
+        def _shared_conn(rcfg: dict | None = None):
             try:
-                from .rag_config import load_llm_config
-                llm_cfg = load_llm_config()
+                from .rag_config import load_rag_config
+                path = (rcfg or load_rag_config()).get("db_path")
             except Exception:
-                llm_cfg = {}
-            r = build_rag_answer(query, lang, rag_evidence, llm_cfg)
-            # Fuse: keep strong metadata citations alongside corpus sources
-            # (both retrieval tiers visible, corpus primary).
+                path = None
+            return holder.get(path) if holder is not None else None
+
+        # RAG pre-lookup (query-only) so full-text refusals can be superseded
+        # by corpus evidence when BIS_RAG_ENABLED=1.
+        rag_evidence, rag_cfg = _rag_lookup(query, _conn=_shared_conn())
+
+        # 1. never-infer gate (current query)
+        kind = check_never_infer(query)
+        if kind:
+            # Corpus-backed full-text use supersedes the metadata-only refusal
+            # for full_text/clause_verbatim when evidence exists (task spec).
+            if kind in ("full_text", "clause_verbatim") and rag_evidence \
+                    and _rag_relevant(query, rag_evidence):
+                kind = None
+            else:
+                r = _base(lang, refused=True, kind=kind, pii=find_pii(query))
+                r["text"] = ((REFUSAL_HI if hi else REFUSAL_EN)[kind]
+                             + "\n\n" + _DIVIDER + "\n" + BIS_CARE)
+                return _tag(_attach_rag_sources(r, rag_evidence, query))
+
+        # 2. topic change: the current query alone strongly names an IS that
+        # differs from the thread's topic -> fresh thread. The old side needs no
+        # strength threshold: a weak opener (e.g. `steel bottle`) followed by a
+        # direct new topic (e.g. `OPC 53 cement`) must not fuse both standards
+        # into one answer (issue #4 P0-6).
+        res_now = retrieve(query)
+        top_now = res_now["candidates"][0] if res_now["candidates"] else None
+        if ctx["history"] and top_now and top_now["score"] >= t["direct_score"]:
+            res_old = retrieve(" ".join(ctx["history"]))
+            top_old = res_old["candidates"][0] if res_old["candidates"] else None
+            if top_old is None or top_old["std"]["is_number"] != top_now["std"]["is_number"]:
+                ctx = threadmod.reset_context(force=ctx["force"])
+
+        combined = threadmod.combined_query(ctx["history"], query)
+        res = retrieve(combined)
+        cands = res["candidates"]
+        a = assess(combined, cands, ctx, t)
+        top, st, ss = a["top"], a["st"], a["ss"]
+        exact, strong, weak = a["exact"], a["strong"], a["weak"]
+        unfilled, direct = a["unfilled"], a["direct"]
+
+        # Refresh RAG evidence with history-aware context (expanded query keeps
+        # follow-ups like "1 litre" grounded in the thread's product terms).
+        try:
+            retrieval_query = memory_mod.expand_query(combined, ctx["history"])
+        except Exception:
+            retrieval_query = combined
+        if rag_cfg.get("enabled") and retrieval_query != query:
             try:
-                for c in cands[:2]:
-                    if c["hits"] or c["score"] >= t.get("fusion_strong_score", 15.0):
-                        fc = format_citation(c["std"])
-                        if fc not in r["citations"]:
-                            r["citations"].append(fc)
+                ev2, _ = _rag_lookup(retrieval_query, _conn=_shared_conn(rag_cfg))
+                if ev2:
+                    rag_evidence = ev2
             except Exception:
                 pass
-            return _checked(_tag(r), res, rag_evidence)
 
-    # Material contradiction (e.g. plastic bottle vs steel-flask IS): never recommend,
-    # never interrogate about the wrong subtypes — state the coverage gap at once.
-    # This check intentionally ignores `exact`: naming an IS number the user typed
-    # does not license contradicting its own scope (issue #4 P0-5).
-    if top and (strong or weak or exact):
-        mat = material_mismatch(top["std"]["is_number"], combined)
-        if mat:
-            return _checked(_tag(_coverage_gap(top["std"], mat, query, lang, hi)), res,
-                            rag_evidence)
+        # Corpus decision: prefer grounded corpus answers when they add value,
+        # otherwise keep the deterministic metadata mode as fallback/primary.
+        if rag_evidence and _rag_relevant(combined, rag_evidence):
+            rag_exact = any(e.get("exact_match") for e in rag_evidence)
+            journey_q = (_has_lab_hint(ql)
+                         or any(h in ql for h in HALLMARK_HINTS + SCHEME_HINTS + CLUB_HINTS))
+            bypassed_fulltext = kind in ("full_text", "clause_verbatim")
+            # Curated clarification wins over weak corpus co-occurrence hits:
+            # only divert vague queries to the corpus when metadata has no
+            # grounded candidate of its own.
+            meta_grounded = any((c.get("hits") or c.get("score", 0) >= t.get("grounded_score", 10))
+                                for c in cands[:2])
+            if bypassed_fulltext or rag_exact or (
+                    not direct and not journey_q and not meta_grounded):
+                from .rag_answer import build_rag_answer
+                try:
+                    from .rag_config import load_llm_config
+                    llm_cfg = load_llm_config()
+                except Exception:
+                    llm_cfg = {}
+                r = build_rag_answer(query, lang, rag_evidence, llm_cfg)
+                # Fuse: keep strong metadata citations alongside corpus sources
+                # (both retrieval tiers visible, corpus primary).
+                try:
+                    for c in cands[:2]:
+                        if c["hits"] or c["score"] >= t.get("fusion_strong_score", 15.0):
+                            fc = format_citation(c["std"])
+                            if fc not in r["citations"]:
+                                r["citations"].append(fc)
+                except Exception:
+                    pass
+                return _checked(_tag(r), res, rag_evidence)
 
-    journey = (_has_lab_hint(ql)
-               or any(h in ql for h in HALLMARK_HINTS + SCHEME_HINTS + CLUB_HINTS))
-    if direct or not weak or (journey and not strong):
-        fr = _final(query, combined, res, lang, hi, ctx, top, t)
-        if fr.get("kind") == "no_source":
-            # Novel product outside curated + corpus coverage: consult the
-            # 24k catalogue before refusing.
-            cat = _maybe_catalogue(query, retrieval_query, lang)
+        # Material contradiction (e.g. plastic bottle vs steel-flask IS): never recommend,
+        # never interrogate about the wrong subtypes — state the coverage gap at once.
+        # This check intentionally ignores `exact`: naming an IS number the user typed
+        # does not license contradicting its own scope (issue #4 P0-5).
+        if top and (strong or weak or exact):
+            mat = material_mismatch(top["std"]["is_number"], combined)
+            if mat:
+                return _checked(_tag(_coverage_gap(top["std"], mat, query, lang, hi)), res,
+                                rag_evidence)
+
+        journey = (_has_lab_hint(ql)
+                   or any(h in ql for h in HALLMARK_HINTS + SCHEME_HINTS + CLUB_HINTS))
+        if direct or not weak or (journey and not strong):
+            fr = _final(query, combined, res, lang, hi, ctx, top, t)
+            if fr.get("kind") == "no_source":
+                # Novel product outside curated + corpus coverage: consult the
+                # 24k catalogue before refusing.
+                cat = _maybe_catalogue(query, retrieval_query, lang,
+                                     _conn=_shared_conn(rag_cfg))
+                if cat is not None:
+                    return _checked(_tag(cat), res, rag_evidence)
+            return _checked(_tag(_maybe_enhance(
+                _attach_rag_sources(fr, rag_evidence, combined),
+                query, intent_res, res, lang)), res, rag_evidence)
+
+        # Novel-product check before interrogation: when the curated KB has no
+        # grounded candidate but the 24k catalogue matches strongly, recommend
+        # from the catalogue instead of asking irrelevant slot questions.
+        # (Curated clarification still wins whenever it is grounded, and journey
+        # queries never divert.)
+        if not _strongly_grounded(cands, t) and not (_has_lab_hint(ql) or any(
+                h in ql for h in HALLMARK_HINTS + SCHEME_HINTS + CLUB_HINTS)):
+            cat = _maybe_catalogue(query, retrieval_query, lang, strong_only=True,
+                                     _conn=_shared_conn(rag_cfg))
             if cat is not None:
                 return _checked(_tag(cat), res, rag_evidence)
-        return _checked(_tag(_maybe_enhance(
-            _attach_rag_sources(fr, rag_evidence, combined),
-            query, intent_res, res, lang)), res, rag_evidence)
 
-    # Novel-product check before interrogation: when the curated KB has no
-    # grounded candidate but the 24k catalogue matches strongly, recommend
-    # from the catalogue instead of asking irrelevant slot questions.
-    # (Curated clarification still wins whenever it is grounded, and journey
-    # queries never divert.)
-    if not _strongly_grounded(cands, t) and not (_has_lab_hint(ql) or any(
-            h in ql for h in HALLMARK_HINTS + SCHEME_HINTS + CLUB_HINTS)):
-        cat = _maybe_catalogue(query, retrieval_query, lang, strong_only=True)
-        if cat is not None:
-            return _checked(_tag(cat), res, rag_evidence)
+        # 3. insufficient context -> ask, don't recommend
+        pool = [c for c in cands[:2] if c["score"] >= t["clarify_floor"]]
+        if not pool and weak and top:
+            pool = [top]  # weak/slot-grounded top still yields its unfilled slots
+        questions: list[dict] = []
+        seen: set[str] = set()
+        for c in pool:
+            for s in unfilled_slots(c["std"]["is_number"], combined):
+                if s["key"] in seen or len(questions) >= t["max_questions_per_turn"]:
+                    continue
+                seen.add(s["key"])
+                opts = [{"label": (o["label_hi"] if hi else o["label_en"]), "send": o["label_en"]}
+                        for o in s.get("options", [])]
+                questions.append({"slot": s["key"], "text": s["q_hi"] if hi else s["q_en"],
+                                  "options": opts})
+        if not questions:  # safety net: nothing left to ask -> answer
+            fr = _final(query, combined, res, lang, hi, ctx, top, t)
+            if fr.get("kind") == "no_source":
+                cat = _maybe_catalogue(query, retrieval_query, lang,
+                                     _conn=_shared_conn(rag_cfg))
+                if cat is not None:
+                    return _checked(_tag(cat), res, rag_evidence)
+            return _checked(_tag(_maybe_enhance(
+                _attach_rag_sources(fr, rag_evidence, combined),
+                query, intent_res, res, lang)), res, rag_evidence)
 
-    # 3. insufficient context -> ask, don't recommend
-    pool = [c for c in cands[:2] if c["score"] >= t["clarify_floor"]]
-    if not pool and weak and top:
-        pool = [top]  # weak/slot-grounded top still yields its unfilled slots
-    questions: list[dict] = []
-    seen: set[str] = set()
-    for c in pool:
-        for s in unfilled_slots(c["std"]["is_number"], combined):
-            if s["key"] in seen or len(questions) >= t["max_questions_per_turn"]:
-                continue
-            seen.add(s["key"])
-            opts = [{"label": (o["label_hi"] if hi else o["label_en"]), "send": o["label_en"]}
-                    for o in s.get("options", [])]
-            questions.append({"slot": s["key"], "text": s["q_hi"] if hi else s["q_en"],
-                              "options": opts})
-    if not questions:  # safety net: nothing left to ask -> answer
-        fr = _final(query, combined, res, lang, hi, ctx, top, t)
-        if fr.get("kind") == "no_source":
-            cat = _maybe_catalogue(query, retrieval_query, lang)
-            if cat is not None:
-                return _checked(_tag(cat), res, rag_evidence)
-        return _checked(_tag(_maybe_enhance(
-            _attach_rag_sources(fr, rag_evidence, combined),
-            query, intent_res, res, lang)), res, rag_evidence)
-
-    fills = fills_for(top["std"]["is_number"], combined)
-    known = [{"slot": k, "value": (v["label_hi"] if hi else v["label_en"])}
-             for k, v in fills.items()]
-    lines = [("Mujhe sahi manak chunne ke liye thodi aur jankari chahiye — "
-              "kripya in sawalon ke jawab den:" if hi else
-              "I need a bit more detail before I can narrow down the standard — please answer:")]
-    if not strong:
+        fills = fills_for(top["std"]["is_number"], combined)
+        known = [{"slot": k, "value": (v["label_hi"] if hi else v["label_en"])}
+                 for k, v in fills.items()]
+        lines = [("Mujhe sahi manak chunne ke liye thodi aur jankari chahiye — "
+                  "kripya in sawalon ke jawab den:" if hi else
+                  "I need a bit more detail before I can narrow down the standard — please answer:")]
+        if not strong:
+            lines.append("")
+            lines.append("Note: my coverage here is thin — if these questions don't fit your product, "
+                         "tell me and I'll point you to the right BIS search instead." if not hi else
+                         "Note: is kshetra me mera coverage seemit hai.")
+        for i, q in enumerate(questions, 1):
+            lines.append("")
+            lines.append(f"{i}. {q['text']}")
+            for o in q["options"]:
+                lines.append(f"   - {o['label']}")
+        if known:
+            lines.append("")
+            lines.append("Ab tak maloom:" if hi else "Known so far:")
+            for k in known:
+                lines.append(f"- {k['slot']} = {k['value']}")
         lines.append("")
-        lines.append("Note: my coverage here is thin — if these questions don't fit your product, "
-                     "tell me and I'll point you to the right BIS search instead." if not hi else
-                     "Note: is kshetra me mera coverage seemit hai.")
-    for i, q in enumerate(questions, 1):
-        lines.append("")
-        lines.append(f"{i}. {q['text']}")
-        for o in q["options"]:
-            lines.append(f"   - {o['label']}")
-    if known:
-        lines.append("")
-        lines.append("Ab tak maloom:" if hi else "Known so far:")
-        for k in known:
-            lines.append(f"- {k['slot']} = {k['value']}")
-    lines.append("")
-    area = top["std"]
-    lines.append("Sambhavit kshetra (pushti ke baad hi IS naam diya jayega):" if hi else
-                 "Possible area (IS number only after you confirm):")
-    lines.append(f"- {area['title_en']}")
-    lines.append(f"- Source: {area['source_url']}")
-    lines.extend(_footer(hi, with_disclaimer=False))
-    r = _base(lang, kind="needs_info", pii=find_pii(query), needs_info=True,
-              questions=questions, known=known,
-              citations=[format_citation(area)],
-              context={"history": threadmod.append_turn(ctx["history"], query),
-                       "rounds": threadmod.next_rounds(ctx["rounds"])})
-    r["text"] = "\n".join(lines)
-    return _checked(_tag(_attach_rag_sources(r, rag_evidence, combined)), res, rag_evidence)
+        area = top["std"]
+        lines.append("Sambhavit kshetra (pushti ke baad hi IS naam diya jayega):" if hi else
+                     "Possible area (IS number only after you confirm):")
+        lines.append(f"- {area['title_en']}")
+        lines.append(f"- Source: {area['source_url']}")
+        lines.extend(_footer(hi, with_disclaimer=False))
+        r = _base(lang, kind="needs_info", pii=find_pii(query), needs_info=True,
+                  questions=questions, known=known,
+                  citations=[format_citation(area)],
+                  context={"history": threadmod.append_turn(ctx["history"], query),
+                           "rounds": threadmod.next_rounds(ctx["rounds"])})
+        r["text"] = "\n".join(lines)
+        return _checked(_tag(_attach_rag_sources(r, rag_evidence, combined)), res, rag_evidence)
 
 
 def _coverage_gap(std: dict, material: str, query: str, lang: str, hi: bool) -> dict:

@@ -29,7 +29,7 @@ _DEFAULTS = {
             "min_overlap": 3, "min_lexical": 15.0, "catalogue_min_score": 8.0},
     "llm": {"provider": "openai-compatible", "model": "", "api_key": "",
             "base_url": "https://api.openai.com/v1",
-            "temperature": 0.2, "max_tokens": 512, "timeout_s": 20.0, "retries": 1},
+            "temperature": 0.2, "max_tokens": 768, "timeout_s": 10.0, "retries": 0},
     "guidance": {"adaptive": True},
     "memory": {"expand_turns": 2, "expand_terms": 6, "expand_chars": 200},
 }
@@ -44,10 +44,17 @@ _TYPES = {"port": int, "retention_days": int, "thread_ttl_days": int,
           "top_k": int, "max_tokens": int, "temperature": float, "timeout_s": float,
           "weight_lexical": float, "weight_semantic": float, "exact_boost": float,
           "enabled": bool, "semantic": bool, "live_crawl_enabled": bool,
-          "retries": int, "catalogue": bool, "adaptive": bool,
+          "retries": int, "cache_ttl": int, "catalogue": bool, "adaptive": bool,
           "grounded_score": float, "fusion_strong_score": float,
           "min_overlap": int, "min_lexical": float, "catalogue_min_score": float,
           "expand_turns": int, "expand_terms": int, "expand_chars": int}
+
+
+# File-content cache keyed by (path, mtime) (issue #4 P1-10): answers read
+# config 3-5x per turn, but YAML re-parsing on every read is pure overhead.
+# Only file content is cached — BIS_* env overrides are applied live on
+# every load(), so monkeypatched env in tests keeps working.
+_FILE_CACHE: dict = {}
 
 
 def _deep_merge(base: dict, over: dict) -> dict:
@@ -60,13 +67,34 @@ def _deep_merge(base: dict, over: dict) -> dict:
     return out
 
 
+def _read_file(p: Path) -> dict:
+    if yaml is None:
+        return {}
+    try:
+        mtime = p.stat().st_mtime
+    except OSError:
+        return {}
+    key = str(p.resolve())
+    ent = _FILE_CACHE.get(key)
+    if ent is not None and ent[0] == mtime:
+        return ent[1]
+    try:
+        with open(p) as f:
+            data = yaml.safe_load(f) or {}
+    except Exception:
+        return {}
+    if not isinstance(data, dict):
+        return {}
+    _FILE_CACHE[key] = (mtime, data)
+    return data
+
+
 def load(path: str | Path | None = None) -> dict:
     """Load config.yaml (repo root default), apply BIS_* env overrides."""
     cfg = {s: dict(v) for s, v in _DEFAULTS.items()}
     p = Path(path) if path else Path(__file__).resolve().parents[2] / "config.yaml"
-    if p.exists() and yaml is not None:
-        with open(p) as f:
-            cfg = _deep_merge(cfg, yaml.safe_load(f) or {})
+    if p.exists():
+        cfg = _deep_merge(cfg, _read_file(p))
     for section, keys in cfg.items():
         for key in keys:
             env = os.environ.get(f"BIS_{section.upper()}_{key.upper()}")

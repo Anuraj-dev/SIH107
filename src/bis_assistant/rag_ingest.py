@@ -20,7 +20,7 @@ import re
 from pathlib import Path
 
 from .chunking import chunk_text, clean_text, normalize_for_dedup
-from .rag_store import connect_rag, counts, now
+from .rag_store import connect_rag, counts, has_fts, now
 
 IS_IN_TEXT_RE = re.compile(r"IS\s*\d[\d/\-()A-Za-z ]{0,40}:\d{4}")
 
@@ -136,7 +136,12 @@ def map_txt_to_metadata(txt_rel: str, index: dict) -> dict:
 
 def import_corpus(corpus_dir: str | Path, db_path: str | Path,
                   batch_commit: bool = True) -> dict:
-    """Full import: catalogue + documents + chunks + FTS. Returns stats."""
+    """Full import: catalogue + documents + chunks + FTS. Returns stats.
+
+    ``batch_commit`` commits every 50 documents so a 359-doc import never
+    holds one giant transaction; at the end the FTS indexes are optimized
+    and the DB vacuumed (issue #4 P1-10).
+    """
     corpus_dir = Path(corpus_dir)
     files_dir = corpus_dir / "Files"
     index = build_manifest_index(corpus_dir)
@@ -146,20 +151,23 @@ def import_corpus(corpus_dir: str | Path, db_path: str | Path,
     try:
         # 1. Catalogue (dedupe by standardId; keep part/section rows distinct)
         snap_rows = 0
+        cat_rows = []
         for r in index["standards"]:
             sid = r.get("standardId")
             if sid is None:
                 continue
-            conn.execute(
-                "INSERT OR REPLACE INTO catalogue_standards(standard_id, standard_number,"
-                " standard_label, standard_name, department, committee, type_name, published_on)"
-                " VALUES (?,?,?,?,?,?,?,?)",
+            cat_rows.append(
                 (sid, r.get("standardNumber", ""), r.get("standardLabel", ""),
                  r.get("standardName", ""), r.get("departmentName", ""),
                  r.get("sectionalCommitteeName", ""), r.get("typeOfStandardName", ""),
                  r.get("publishedOn", "")))
-            snap_rows += 1
-        stats["catalogue"] = snap_rows
+        conn.executemany(
+            "INSERT OR REPLACE INTO catalogue_standards(standard_id, standard_number,"
+            " standard_label, standard_name, department, committee, type_name, published_on)"
+            " VALUES (?,?,?,?,?,?,?,?)", cat_rows)
+        stats["catalogue"] = len(cat_rows)
+        if batch_commit:
+            conn.commit()
 
         # 2. Documents + chunks
         txt_files = sorted(p for p in files_dir.glob("*.txt") if p.is_file())
@@ -218,7 +226,22 @@ def import_corpus(corpus_dir: str | Path, db_path: str | Path,
                 ci += 1
             stats["documents"] += 1
             stats["chunks"] += ci
+            if batch_commit and stats["documents"] % 50 == 0:
+                conn.commit()
         conn.commit()
+        try:
+            if has_fts(conn):
+                conn.execute(
+                    "INSERT INTO corpus_chunks_fts(corpus_chunks_fts) VALUES('optimize')")
+            conn.execute(
+                "INSERT INTO catalogue_fts(catalogue_fts) VALUES('optimize')")
+        except Exception:
+            pass
+        conn.commit()
+        try:
+            conn.execute("VACUUM")
+        except Exception:
+            pass
         stats.update(counts(conn))
         return stats
     finally:

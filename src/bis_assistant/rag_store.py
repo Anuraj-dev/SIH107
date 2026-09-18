@@ -66,6 +66,32 @@ CREATE INDEX IF NOT EXISTS idx_docs_stdnum ON corpus_documents(standard_number);
 CREATE INDEX IF NOT EXISTS idx_catalogue_number ON catalogue_standards(standard_number);
 """
 
+CATALOGUE_FTS_SCHEMA = """
+CREATE VIRTUAL TABLE IF NOT EXISTS catalogue_fts USING fts5(
+  standard_number, standard_name, department, committee, type_name,
+  content='catalogue_standards', content_rowid='standard_id', tokenize='porter');
+CREATE TRIGGER IF NOT EXISTS catalogue_ai AFTER INSERT ON catalogue_standards BEGIN
+  INSERT INTO catalogue_fts(rowid, standard_number, standard_name, department, committee, type_name)
+  VALUES (new.standard_id, new.standard_number, new.standard_name,
+          new.department, new.committee, new.type_name);
+END;
+CREATE TRIGGER IF NOT EXISTS catalogue_ad AFTER DELETE ON catalogue_standards BEGIN
+  INSERT INTO catalogue_fts(catalogue_fts, rowid, standard_number, standard_name,
+          department, committee, type_name)
+  VALUES ('delete', old.standard_id, old.standard_number, old.standard_name,
+          old.department, old.committee, old.type_name);
+END;
+CREATE TRIGGER IF NOT EXISTS catalogue_au AFTER UPDATE ON catalogue_standards BEGIN
+  INSERT INTO catalogue_fts(catalogue_fts, rowid, standard_number, standard_name,
+          department, committee, type_name)
+  VALUES ('delete', old.standard_id, old.standard_number, old.standard_name,
+          old.department, old.committee, old.type_name);
+  INSERT INTO catalogue_fts(rowid, standard_number, standard_name, department, committee, type_name)
+  VALUES (new.standard_id, new.standard_number, new.standard_name,
+          new.department, new.committee, new.type_name);
+END;
+"""
+
 FTS_SCHEMA = """
 CREATE VIRTUAL TABLE IF NOT EXISTS corpus_chunks_fts USING fts5(
   chunk_text, standard_number, doc_type, heading,
@@ -102,6 +128,11 @@ def connect_rag(path: str | Path) -> sqlite3.Connection:
     except sqlite3.OperationalError:
         # FTS5 unavailable (minimal builds): lexical search falls back to LIKE.
         pass
+    try:
+        conn.executescript(CATALOGUE_FTS_SCHEMA)
+        _ensure_catalogue_fts(conn)
+    except sqlite3.OperationalError:
+        pass
     # Lightweight migration: older DBs may miss columns.
     try:
         cols = {r["name"] for r in conn.execute("PRAGMA table_info(corpus_documents)").fetchall()}
@@ -113,6 +144,46 @@ def connect_rag(path: str | Path) -> sqlite3.Connection:
         pass
     conn.execute("PRAGMA foreign_keys=ON")
     return conn
+
+
+def _ensure_catalogue_fts(conn: sqlite3.Connection) -> None:
+    """Backfill + self-heal the catalogue FTS index (issue #4 P1-10).
+
+    One-time backfill for DBs imported before catalogue_fts existed, plus
+    a MATCH probe: a populated-but-unsearchable index (observed once on a
+    migrated DB) is rebuilt from the content table. DELETE+rebuild is
+    idempotent, so re-running is always safe.
+    """
+    import re as _re
+    try:
+        n_cat = conn.execute("SELECT COUNT(*) c FROM catalogue_standards").fetchone()["c"]
+    except Exception:
+        return
+    if not n_cat:
+        return
+    try:
+        n_fts = conn.execute("SELECT COUNT(*) c FROM catalogue_fts").fetchone()["c"]
+    except Exception:
+        return
+    healthy = False
+    if n_fts == n_cat:
+        try:
+            row = conn.execute(
+                "SELECT standard_name FROM catalogue_standards"
+                " WHERE standard_name <> '' LIMIT 1").fetchone()
+            toks = _re.findall(r"[a-z0-9]{3,}", (row[0] if row else "").lower())
+            if toks:
+                probe = conn.execute(
+                    "SELECT rowid FROM catalogue_fts"
+                    " WHERE catalogue_fts MATCH ? LIMIT 1", (f'"{toks[0]}"',)
+                ).fetchone()
+                healthy = probe is not None
+        except Exception:
+            healthy = False
+    if not healthy:
+        conn.execute("DELETE FROM catalogue_fts")
+        conn.execute("INSERT INTO catalogue_fts(catalogue_fts) VALUES('rebuild')")
+        conn.commit()
 
 
 def has_fts(conn: sqlite3.Connection) -> bool:

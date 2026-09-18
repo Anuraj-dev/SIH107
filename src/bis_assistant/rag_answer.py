@@ -14,6 +14,46 @@ from .safety import BIS_CARE, DISCLAIMER_EN, DISCLAIMER_HI
 
 _PORTAL = "https://www.bis.gov.in/know-your-standard"
 
+# Bounded in-process TTL cache for grounded LLM text (issue #4 P1-10):
+# identical (provider, model, lang, query, evidence) within the TTL reuses
+# one generation instead of re-billing the model per repeated turn.
+_LLM_CACHE: dict = {}
+_LLM_CACHE_MAX = 128
+
+
+def _norm_query(query: str) -> str:
+    import re as _re
+    return _re.sub(r"\s+", " ", (query or "").strip().lower())
+
+
+def _llm_cache_key(query: str, lang: str, evidence: list[dict],
+                   llm_cfg: dict) -> tuple:
+    ids = tuple((e.get("standard_number", ""), e.get("chunk_index", 0),
+                 e.get("source_file", "")) for e in (evidence or [])[:6])
+    return (str(llm_cfg.get("provider", "")), str(llm_cfg.get("model", "")),
+            lang, _norm_query(query), ids)
+
+
+def _llm_cache_get(key: tuple, ttl: int) -> str | None:
+    if ttl <= 0:
+        return None
+    import time as _time
+    ent = _LLM_CACHE.get(key)
+    if ent is not None and ent[0] > _time.time():
+        return ent[1]
+    if ent is not None:
+        _LLM_CACHE.pop(key, None)
+    return None
+
+
+def _llm_cache_put(key: tuple, text: str, ttl: int) -> None:
+    if ttl <= 0 or not text:
+        return
+    import time as _time
+    if len(_LLM_CACHE) >= _LLM_CACHE_MAX:
+        _LLM_CACHE.pop(next(iter(_LLM_CACHE)), None)
+    _LLM_CACHE[key] = (_time.time() + ttl, text)
+
 
 def format_rag_citation(e: dict) -> str:
     num = e.get("standard_number") or "BIS document"
@@ -51,9 +91,20 @@ def build_rag_answer(query: str, lang: str, evidence: list[dict],
     sources = build_sources(evidence)
     used_llm = False
     text = None
+    try:
+        cache_ttl = int((llm_cfg or {}).get("cache_ttl", 300))
+    except (TypeError, ValueError):
+        cache_ttl = 300
+    cache_key = None
     if evidence and is_configured(llm_cfg):
-        text = generate_grounded_answer(query, evidence, lang, llm_cfg)
+        cache_key = _llm_cache_key(query, lang, evidence, llm_cfg)
+        text = _llm_cache_get(cache_key, cache_ttl)
         used_llm = text is not None
+        if text is None:
+            text = generate_grounded_answer(query, evidence, lang, llm_cfg)
+            used_llm = text is not None
+            if used_llm:
+                _llm_cache_put(cache_key, text, cache_ttl)
     if not text:
         text = extractive_answer(query, evidence, lang)
     lines = [text.rstrip(), "", "---",

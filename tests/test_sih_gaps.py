@@ -157,6 +157,52 @@ def test_llm_unconfigured_returns_none(monkeypatch):
     assert chat_complete([{"role": "user", "content": "q"}]) is None
 
 
+def test_empty_response_consumes_a_retry(monkeypatch):
+    _hermetic(monkeypatch, BIS_LLM_MODEL="m", BIS_LLM_API_KEY="k",
+              BIS_LLM_RETRIES="1")
+    from bis_assistant.rag_llm import chat_complete
+    seen = []
+    _mock_urlopen(monkeypatch, [{"choices": [{"message": {"content": "  "}}]},
+                                {"choices": [{"message": {"content": "recovered"}}]}],
+                  seen)
+    assert chat_complete([{"role": "user", "content": "q"}]) == "recovered"
+    assert len(seen) == 2
+
+
+def test_gemini_uses_system_instruction(monkeypatch):
+    _hermetic(monkeypatch, BIS_LLM_PROVIDER="gemini",
+              BIS_LLM_MODEL="gemini-2.0-flash", BIS_LLM_API_KEY="gkey")
+    from bis_assistant.rag_llm import chat_complete
+    seen = []
+    body = {"candidates": [{"content": {"parts": [{"text": "ok"}]}}]}
+    _mock_urlopen(monkeypatch, [body], seen)
+    msgs = [{"role": "system", "content": "SYS"}, {"role": "user", "content": "Q"}]
+    assert chat_complete(msgs) == "ok"
+    payload = seen[0]["data"]
+    assert payload["system_instruction"]["parts"] == [{"text": "SYS"}]
+    assert payload["contents"][0]["parts"] == [{"text": "Q"}]
+
+
+def test_grounded_answer_cache_reuses_generation(monkeypatch):
+    _hermetic(monkeypatch, BIS_LLM_MODEL="m", BIS_LLM_API_KEY="k")
+    from bis_assistant import rag_answer as ra
+    ra._LLM_CACHE.clear()
+    seen = []
+    _mock_urlopen(monkeypatch, [{"choices": [{"message": {"content": "gen"}}]}], seen)
+    ev = [{"standard_number": "IS 1:2020", "title": "T", "doc_type": "gazette",
+           "heading": "", "chunk_text": "text", "chunk_index": 0,
+           "source_file": "Files/a.txt", "source_url": "https://x.invalid",
+           "score": 1.0}]
+    cfg = {"provider": "openai-compatible", "model": "m", "api_key": "k",
+           "base_url": "https://api.openai.com/v1", "temperature": 0.2,
+           "max_tokens": 512, "timeout_s": 10.0, "retries": 0, "cache_ttl": 300}
+    r1 = ra.build_rag_answer("cache me please", "en", ev, cfg)
+    r2 = ra.build_rag_answer("cache me please", "en", ev, cfg)
+    assert r1["rag_used_llm"] and r2["rag_used_llm"]
+    assert len(seen) == 1, "second identical turn must not re-bill the model"
+    ra._LLM_CACHE.clear()
+
+
 def test_llm_provider_endpoint_defaults(monkeypatch):
     _hermetic(monkeypatch)
     from bis_assistant.rag_config import load_llm_config
@@ -182,6 +228,55 @@ def test_catalogue_search_finds_novel_standard():
                             db_path=RAG_DB)
     assert hits and hits[0]["standard_number"] == "IS 11319:2026"
     assert hits[0]["relevant"] is True
+
+
+@needs_ragdb
+def test_catalogue_fts_matches_full_scan():
+    import sqlite3
+    from bis_assistant.catalogue_search import _fts_table, search_catalogue
+    from bis_assistant.rag_store import connect_rag
+    connect_rag(RAG_DB).close()  # migrate pre-FTS databases (backfill once)
+    conn = sqlite3.connect(str(RAG_DB))
+    conn.row_factory = sqlite3.Row
+    try:
+        assert _fts_table(conn) is True
+        n = conn.execute("SELECT COUNT(*) c FROM catalogue_fts").fetchone()["c"]
+        assert n >= 24000
+    finally:
+        conn.close()
+    for q in ["ENT surgery instruments oesophagoscope",
+              "sugarcane juice extractor specification"]:
+        fts_top = [h["standard_id"] for h in
+                   search_catalogue(q, db_path=RAG_DB)[:3]]
+        assert fts_top, q
+        # parity: disabling FTS must surface the same top hit
+        import bis_assistant.catalogue_search as cs
+        real = cs._fts_table
+        cs._fts_table = lambda conn: False
+        try:
+            scan_top = [h["standard_id"] for h in
+                        search_catalogue(q, db_path=RAG_DB)[:3]]
+        finally:
+            cs._fts_table = real
+        assert scan_top[0] == fts_top[0], (q, scan_top, fts_top)
+
+
+def test_shared_conn_reused_and_left_open(tmp_path):
+    import sqlite3
+    from bis_assistant.catalogue_search import search_catalogue
+    from bis_assistant.rag_store import connect_rag
+    db = tmp_path / "c.db"
+    conn = connect_rag(db)
+    try:
+        conn.execute(
+            "INSERT INTO catalogue_standards VALUES (?,?,?,?,?,?,?,?)",
+            (7, "IS 7:2020", "L", "Galvanized iron widgets", "D", "C", "T", "2020"))
+        conn.commit()
+        hits = search_catalogue("galvanized iron widgets", db_path=str(db), _conn=conn)
+        assert hits and hits[0]["standard_id"] == 7
+        conn.execute("SELECT 1").fetchone()  # still open: caller owns it
+    finally:
+        conn.close()
 
 
 def _widget_db(tmp_path):
