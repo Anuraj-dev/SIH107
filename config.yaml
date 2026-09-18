@@ -4,6 +4,7 @@ retrieval:
   direct_score: 15.0
   direct_margin: 5.0
   clarify_floor: 6.0
+  weak_floor: 3.0
   max_rounds: 2
   max_questions_per_turn: 2
   scorer: keyword        # keyword | bm25 (Phase 2)

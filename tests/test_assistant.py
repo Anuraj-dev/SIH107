@@ -116,5 +116,36 @@ class TestClarify(unittest.TestCase):
         self.assertIn("IS 694", r2["text"])
 
 
+class TestWeakTier(unittest.TestCase):
+    def test_water_bottle_clarifies_instead_of_refusing(self):
+        r = answer("My startup makes water bottle. Which IS?")
+        self.assertTrue(r.get("needs_info"))
+        self.assertTrue(r["questions"])
+        self.assertIn("thin", r["text"])
+
+    def test_water_bottle_followup_grounds(self):
+        r1 = answer("My startup makes water bottle. Which IS?")
+        r2 = answer("stainless steel vacuum, 1 litre", None, r1["context"])
+        self.assertFalse(r2.get("needs_info"))
+        self.assertIn("IS 17803", r2["text"])
+
+    def test_plastic_bottle_coverage_gap(self):
+        r = answer("My startup make plastic bottle. Which IS?")
+        self.assertTrue(r["refused"])
+        self.assertEqual(r["kind"], "coverage_gap")
+        self.assertNotIn("Candidate standards", r["text"])
+
+    def test_plastic_followup_never_recommends_steel(self):
+        r1 = answer("steel bottle")
+        r2 = answer("actually plastic, 1 litre", None, r1["context"])
+        self.assertTrue(r2["refused"])
+        self.assertEqual(r2["kind"], "coverage_gap")
+
+    def test_gibberish_still_refuses(self):
+        r = answer("xyzzy qwerty zzz")
+        self.assertTrue(r["refused"])
+        self.assertEqual(r["kind"], "no_source")
+
+
 if __name__ == "__main__":
     unittest.main()

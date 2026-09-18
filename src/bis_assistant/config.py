@@ -10,7 +10,7 @@ except ImportError:  # stdlib-only fallback (MVP core)
 
 _DEFAULTS = {
     "retrieval": {"direct_score": 15.0, "direct_margin": 5.0, "clarify_floor": 6.0,
-                  "max_rounds": 2, "max_questions_per_turn": 2,
+                  "weak_floor": 3.0, "max_rounds": 2, "max_questions_per_turn": 2,
                   "scorer": "keyword", "kb_backend": "json"},
     "privacy": {"thread_ttl_days": 7, "retention_days": 90,
                 "consent_valid_days": 365, "erasure_sla_hours": 24},
@@ -28,7 +28,7 @@ _TYPES = {"port": int, "retention_days": int, "thread_ttl_days": int,
           "anon_per_hour": int, "anon_burst_per_min": int, "registered_per_hour": int,
           "refresh_days": int, "staleness_alert_days": int, "trace_retention_days": int,
           "latency_p95_ms": int, "direct_score": float, "direct_margin": float,
-          "clarify_floor": float, "max_rounds": int, "max_questions_per_turn": int,
+          "clarify_floor": float, "weak_floor": float, "max_rounds": int, "max_questions_per_turn": int,
           "crawl_delay_s": float, "trace_sample_rate": float}
 
 
