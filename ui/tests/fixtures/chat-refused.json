@@ -1,0 +1,20 @@
+{
+  "name": "chat-refused",
+  "description": "Refusal fixture: never-infer gate; UI must show refused badge with kind and no known/assumptions.",
+  "request": { "query": "Guarantee my licence approval please" },
+  "response": {
+    "text": "I can't guarantee licence outcomes. Please check BIS certification guidance.\n\nhttps://www.bis.gov.in/",
+    "refused": true,
+    "kind": "licence_guarantee",
+    "lang": "en",
+    "citations": [],
+    "pii": {},
+    "needs_info": false,
+    "questions": [],
+    "known": [],
+    "assumptions": [],
+    "context": { "history": [], "rounds": 0 },
+    "thread_id": "thread-fixture-refused",
+    "owner_token": "owner-fixture-token"
+  }
+}

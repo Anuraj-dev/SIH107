@@ -1,0 +1,15 @@
+{
+  "name": "feedback",
+  "description": "Fixture for planned POST /feedback {thread_id, rating, note?} -> {ok:true}. Backend does not implement it yet; UI falls back to fixture-ok.",
+  "request_examples": [
+    { "thread_id": "thread-fixture-answered", "rating": 1 },
+    { "thread_id": "thread-fixture-answered", "rating": -1, "note": "cited the wrong IS year" }
+  ],
+  "response": { "ok": true },
+  "contract": {
+    "method": "POST",
+    "path": "/feedback",
+    "rating_enum": [1, -1],
+    "note_max_length": 500
+  }
+}

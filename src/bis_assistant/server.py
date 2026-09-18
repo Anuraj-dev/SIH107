@@ -330,8 +330,9 @@ def _erase_user(conn: sqlite3.Connection, user_ref: str) -> dict:
     for tid in tids:
         conn.execute("DELETE FROM messages WHERE thread_id=?", (tid,))
     conn.execute("DELETE FROM threads WHERE user_ref=?", (user_ref,))
-    conn.execute("DELETE FROM feedback WHERE user_ref=? OR thread_id IN (%s)" % (
-        ",".join("?" * len(tids)) if tids else "SELECT '' WHERE 0"), tids)
+    conn.execute("DELETE FROM feedback WHERE user_ref=?" + (
+        " OR thread_id IN (%s)" % ",".join("?" * len(tids)) if tids else ""),
+        [user_ref, *tids])
     conn.execute("DELETE FROM profiles WHERE user_ref=?", (user_ref,))
     conn.execute("DELETE FROM consents WHERE user_ref=?", (user_ref,))
     conn.commit()
