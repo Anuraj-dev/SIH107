@@ -352,6 +352,72 @@ def test_topic_reset_on_strong_new_is(monkeypatch):
     assert "IS 17803" not in " ".join(r2["citations"])
 
 
+# --- P1 retrieval tests (issue #4) --------------------------------------------------
+
+def test_is_boost_tiers_separate_parts():
+    from bis_assistant.rag_retriever import _is_boost
+    full, exact = _is_boost("IS 101 (Part 2/Sec 6):2026",
+                            ["IS 101 (Part 2/Sec 6):2026"], 50.0)
+    sibling, _ = _is_boost("IS 101 (Part 5/Sec 1):2026",
+                           ["IS 101 (Part 2/Sec 6):2026"], 50.0)
+    base, _ = _is_boost("IS 101 (Part 2/Sec 6):2026", ["IS 101"], 50.0)
+    assert (full, exact) == (75.0, True)
+    assert sibling < full and base == 50.0
+    assert _is_boost("IS 14478:2026", ["IS 14478"], 50.0) == (75.0, True)
+    assert _is_boost("IS 10500:2012", ["IS 10"], 50.0) == (0.0, False)
+    assert _is_boost("IS 10500:2012", [], 50.0) == (0.0, False)
+
+
+def test_semantic_channel_is_pure_cosine_and_batched(monkeypatch):
+    from bis_assistant import rag_embeddings as emb
+    from bis_assistant import rag_retriever as rr
+    calls = []
+
+    class _FakeST:
+        def encode(self, texts, normalize_embeddings=False):
+            calls.append(list(texts))
+            import math
+            out = []
+            for t in texts:
+                v = [float(len(t) % 7 + 1), float(len(t) % 5 + 1)]
+                n = math.sqrt(sum(x * x for x in v))
+                out.append([x / n for x in v])
+            return out
+
+    monkeypatch.setattr(emb, "get_model", lambda name: _FakeST())
+    # semantic_score must reuse a passed query vector (no per-chunk re-encode).
+    qv = [1.0, 0.0]
+    s1 = emb.semantic_score("query text here", "doc one", "m", _qvec=qv)
+    assert calls == [["doc one"]]
+    import math
+    assert s1 == pytest.approx(1.0 / math.sqrt(10), abs=1e-6)
+    # search_rag: exactly 2 encodes (query + one batch) for N chunks.
+    import sqlite3
+    import tempfile, os
+    from bis_assistant.rag_store import connect_rag
+    tmp = tempfile.mkdtemp()
+    db = os.path.join(tmp, "t.db")
+    conn = connect_rag(db)
+    try:
+        cur = conn.execute(
+            "INSERT INTO corpus_documents(source_file, standard_id, standard_number,"
+            " imported_at) VALUES (?,?,?,?)", ("Files/a.txt", 1, "IS 1:2020", "t"))
+        did = cur.lastrowid
+        for i in range(6):
+            conn.execute(
+                "INSERT INTO corpus_chunks(doc_id, chunk_index, chunk_text,"
+                " standard_number) VALUES (?,?,?,?)",
+                (did, i, f"plain bearings bushes regime {i}", "IS 1:2020"))
+        conn.commit()
+    finally:
+        conn.close()
+    calls.clear()
+    res = rr.search_rag("plain bearings bushes", top_k=3, db_path=db,
+                        embedding_model="m")
+    assert len(res) == 3 and all(r["semantic"] > 0 for r in res)
+    assert len(calls) == 2 and len(calls[1]) == 6, calls
+
+
 # --- contract -----------------------------------------------------------------------
 
 def test_chat_turn_carries_intent_and_summary(monkeypatch):

@@ -21,10 +21,14 @@ _FTS_RESERVED = re.compile(r"[\":*^()]")
 
 
 def extract_is_numbers(query: str) -> list[str]:
-    """Raw IS designations found in text, e.g. ['IS 101 (Part 2/Sec 6):2026']."""
+    """Raw IS designations found in text, e.g. ['IS 101 (Part 2/Sec 6):2026'].
+
+    Hyphenated forms (`IS-10500`) are accepted; use
+    ``retriever.normalize_is_ref`` for canonical comparison.
+    """
     out = []
     for m in re.finditer(
-            r"IS\s*\d+(?:\s*\([^)]*\))?\s*(?::\s*\d{4})?", query, re.IGNORECASE):
+            r"IS\s*-?\s*\d+(?:\s*\([^)]*\))?\s*(?::\s*\d{4})?", query, re.IGNORECASE):
         out.append(re.sub(r"\s+", " ", m.group(0).strip()))
     return out
 
@@ -32,6 +36,62 @@ def extract_is_numbers(query: str) -> list[str]:
 def _digits(s: str) -> str:
     m = re.search(r"\d+", s or "")
     return m.group(0) if m else ""
+
+
+def _parse_is_parts(ref: str) -> tuple[str, str, str]:
+    """Split a designation into (base, part, sec), e.g. IS 101 (Part 2/Sec 6).
+
+    Handles `IS 302-1` hyphen parts and `IS/IEC ...` prefixes. Year is
+    ignored: retrieval matches designations, not editions.
+    """
+    n = _normalize_is(ref)
+    base, part, sec = "", "", ""
+    m = re.search(r"IS(?:/[A-Z]+)?\s*(\d+)", n)
+    if m:
+        base = m.group(1)
+    else:
+        return base, part, sec
+    mp = re.search(r"PART\s*([A-Z0-9]+)", n)
+    if mp:
+        part = mp.group(1)
+    else:
+        mh = re.search(r"IS(?:/[A-Z]+)?\s*\d+\s*-\s*([A-Z0-9]+)", n)
+        if mh:
+            part = mh.group(1)
+    ms = re.search(r"SEC(?:TION|\.)?\s*([A-Z0-9]+)", n)
+    if ms:
+        sec = ms.group(1)
+    return base, part, sec
+
+
+def _is_boost(std_num: str, query_refs: list[str], exact_boost: float) -> tuple[float, bool]:
+    """Tiered IS boost (issue #4 P1-7): full designation > base+part > base.
+
+    Any tier counts as an exact match (preserves base-query diversion);
+    the multiplier separates `IS 101 (Part 2/Sec 6)` from its siblings
+    instead of boosting every Part/Sec variant equally.
+    """
+    if not query_refs or not std_num:
+        return 0.0, False
+    sb, sp, ss = _parse_is_parts(std_num)
+    if not sb:
+        return 0.0, False
+    best = 0.0
+    for qr in query_refs:
+        qb, qp, qs = _parse_is_parts(qr)
+        if not qb or qb != sb:
+            continue
+        if qp and qp == sp and (not qs or not ss or qs == ss):
+            best = max(best, exact_boost * 1.5)  # full designation
+        elif qp and qp == sp:
+            best = max(best, exact_boost * 1.25)  # same part, other section
+        elif not qp:
+            # Query names the base only: full marks when the doc is also
+            # part-less, base marks when it refines into parts/sections.
+            best = max(best, exact_boost * 1.5 if not sp else exact_boost)
+        else:
+            best = max(best, exact_boost * 0.5)  # same base, other part
+    return (best, True) if best > 0 else (0.0, False)
 
 
 def _normalize_is(s: str) -> str:
@@ -85,8 +145,6 @@ def search_rag(query: str, top_k: int = 5,
     if not q:
         return []
     q_is = extract_is_numbers(q)
-    q_digits = {_digits(x) for x in q_is if _digits(x)}
-    q_norm = {_normalize_is(x) for x in q_is}
     fts_q = _fts_query(q)
     over_fetch = max(top_k * 6, 20)
 
@@ -136,13 +194,32 @@ def search_rag(query: str, top_k: int = 5,
         # Enrich with document metadata
         doc_cache: dict = {}
         scored: list[dict] = []
+        # Semantic vectors, resolved once (issue #4 P1-9): a real ST model is
+        # batch-encoded (1 query + 1 batch call); otherwise hashed vectors
+        # give a pure-cosine lexical-similarity channel (P1-8), documented
+        # in rag_embeddings — set BIS_RAG_EMBEDDING_MODEL for true semantics.
+        model_name = embedding_model or cfg.get("embedding_model", "")
+        st_model = emb.get_model(model_name) if semantic and model_name else None
         qvec = None
         if semantic:
             try:
-                _, qvec = emb.embed_query(q, embedding_model or cfg.get("embedding_model", ""))
+                if st_model is not None:
+                    qvec = [float(x) for x in
+                            st_model.encode([q], normalize_embeddings=True)[0]]
+                else:
+                    _, qvec = emb.embed_query(q, "")
             except Exception:
                 qvec = None
-        for r in rows:
+        doc_vecs = None
+        if semantic and st_model is not None and rows:
+            try:
+                mat = st_model.encode(
+                    [(r.get("chunk_text", "")[:2000]) for r in rows],
+                    normalize_embeddings=True)
+                doc_vecs = [[float(x) for x in row] for row in mat]
+            except Exception:
+                doc_vecs = None
+        for pos, r in enumerate(rows):
             doc_id = r.get("doc_id")
             if doc_id not in doc_cache:
                 try:
@@ -153,12 +230,8 @@ def search_rag(query: str, top_k: int = 5,
                     doc_cache[doc_id] = {}
             d = doc_cache[doc_id]
             std_num = r.get("standard_number") or d.get("standard_number", "")
-            # Exact IS boost: digit match strong; full designation match stronger
-            boost = 0.0
-            if q_digits and _digits(std_num) in q_digits:
-                boost = exact_boost
-                if q_norm and _normalize_is(std_num) in q_norm:
-                    boost *= 1.5
+            # Tiered IS boost (P1-7): full designation > base+part > base.
+            boost, is_exact = _is_boost(std_num, q_is, exact_boost)
             # Lexical: convert FTS rank (negative, closer to 0 = better) to positive
             rank = r.get("rank", 0.0) or 0.0
             try:
@@ -167,17 +240,18 @@ def search_rag(query: str, top_k: int = 5,
                 lex = 0.0
             if not used_fts:
                 lex = _token_overlap_score(q, r.get("chunk_text", "")) * 10.0
-            # Semantic channel
+            # Semantic channel: pure cosine (P1-8) — no overlap blending, so
+            # the weight means what it says next to the lexical variance.
             sem = 0.0
-            if semantic:
+            if semantic and qvec is not None:
                 try:
-                    sem = emb.semantic_score(
-                        q, (r.get("chunk_text", "")[:2000]),
-                        embedding_model or cfg.get("embedding_model", ""), _qvec=qvec)
+                    if doc_vecs is not None:
+                        sem = emb.cosine(qvec, doc_vecs[pos])
+                    else:
+                        sem = emb.cosine(qvec, emb.hash_embed(
+                            r.get("chunk_text", "")[:2000]))
                 except Exception:
                     sem = 0.0
-                # blend hashed-cosine with plain overlap for stability
-                sem = 0.5 * sem + 0.5 * min(1.0, _token_overlap_score(q, r.get("chunk_text", "")))
             fused = lexical_weight * lex + boost + semantic_weight * sem * 10.0
             scored.append({
                 "chunk_id": r.get("id"),
@@ -199,7 +273,7 @@ def search_rag(query: str, top_k: int = 5,
                 "lexical": lex,
                 "semantic": sem,
                 "exact_boost": boost,
-                "exact_match": boost > 0,
+                "exact_match": is_exact,
             })
         scored.sort(key=lambda x: -x["score"])
         # Prefer exact matches first regardless of fusion noise
