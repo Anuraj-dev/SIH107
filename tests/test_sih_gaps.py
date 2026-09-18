@@ -513,6 +513,17 @@ def test_semantic_channel_is_pure_cosine_and_batched(monkeypatch):
     assert len(calls) == 2 and len(calls[1]) == 6, calls
 
 
+# --- P2 hardening (issue #4) ----------------------------------------------------------
+
+def test_rag_db_path_guard_rejects_empty_and_nul():
+    import pytest as _pytest
+    from bis_assistant.rag_store import connect_rag
+    with _pytest.raises(ValueError):
+        connect_rag("")
+    with _pytest.raises(ValueError):
+        connect_rag("kb/ba\x00d.db")
+
+
 # --- contract -----------------------------------------------------------------------
 
 def test_chat_turn_carries_intent_and_summary(monkeypatch):

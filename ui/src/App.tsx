@@ -105,7 +105,10 @@ export default function App() {
       } catch (e) {
         const msg = e instanceof Error ? e.message : "request failed";
         if (msg.startsWith("Thread expired")) setThread(null);
-        setMsgs((m) => [...m, { id: nextId++, role: "assistant", text: "", error: `${msg}. Is the API running?` }]);
+        const friendly = /HTTP 429/.test(msg)
+          ? "Rate limited — please wait a minute and retry."
+          : `${msg}. Is the API running?`;
+        setMsgs((m) => [...m, { id: nextId++, role: "assistant", text: "", error: friendly }]);
         setHealthy(false);
       } finally {
         setBusy(false);

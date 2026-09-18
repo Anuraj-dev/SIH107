@@ -118,6 +118,8 @@ def now() -> str:
 
 
 def connect_rag(path: str | Path) -> sqlite3.Connection:
+    if not str(path) or "\x00" in str(path):
+        raise ValueError("refusing empty/NUL RAG database path (issue #4 P2)")
     p = Path(path)
     p.parent.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(str(p))
