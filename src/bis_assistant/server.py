@@ -22,6 +22,7 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
 from .assistant import answer
+from . import threads as threadmod
 from .config import load as load_config
 from .i18n_privacy import find_pii, redact
 from . import metrics as metrics_mod
@@ -283,11 +284,16 @@ def chat(body: ChatIn, request: Request,
             row = _get_thread(conn, tid)
             if row["owner_token_hash"]:
                 _check_owner(row, x_owner_token)
-            history = json.loads(row["history_redacted_json"] or "[]")
-            rounds = row["rounds"]
+            ctx = threadmod.normalize_context({
+                "history": json.loads(row["history_redacted_json"] or "[]"),
+                "rounds": row["rounds"]})
+            history, rounds = ctx["history"], ctx["rounds"]
         elif isinstance(body.context, dict) and body.context.get("history"):
-            history = [redact(h)[:2000] for h in body.context["history"][-4:]]
-            rounds = int(body.context.get("rounds", 0))
+            ctx = threadmod.normalize_context({
+                "history": threadmod.bridge_history(
+                    [redact(h)[:2000] for h in body.context["history"]]),
+                "rounds": body.context.get("rounds", 0)})
+            history, rounds = ctx["history"], ctx["rounds"]
         q = body.query.strip()
         if not q:
             raise HTTPException(status_code=400, detail={
@@ -296,8 +302,8 @@ def chat(body: ChatIn, request: Request,
         t0 = time.time()
         resp = answer(q, lang, {"history": history, "rounds": rounds, "force": body.force})
         ms = int((time.time() - t0) * 1000)
-        new_history = (history + [redact(q)[:2000]])[-6:]
-        new_rounds = resp.get("context", {}).get("rounds", rounds)
+        new_history = threadmod.push_history(history, redact(q)[:2000])
+        new_rounds = threadmod.rounds_from(resp.get("context"), default=rounds)
         if tid is None:  # mint server thread (bridge + fresh turns)
             tid = secrets.token_hex(8)
             token = secrets.token_urlsafe(32)
