@@ -161,6 +161,21 @@ class TestWeakTier(unittest.TestCase):
                 r = answer(q)
                 self.assertFalse(r.get("needs_info"), q)
 
+    def test_assume_answers_weak_thread_with_assumptions(self):
+        r1 = answer("My startup makes water bottle. Which IS?")
+        r2 = answer("My startup makes water bottle. Which IS?",
+                    None, {**r1["context"], "force": True})
+        self.assertFalse(r2.get("needs_info"))
+        self.assertFalse(r2["refused"])
+        self.assertTrue(r2["assumptions"] and r2["citations"])
+
+    def test_assume_cannot_override_material_mismatch(self):
+        r = answer("My startup make plastic bottle. Which IS?",
+                   None, {"history": ["My startup make plastic bottle. Which IS?"],
+                          "rounds": 0, "force": True})
+        self.assertTrue(r["refused"])
+        self.assertEqual(r["kind"], "coverage_gap")
+
 
 if __name__ == "__main__":
     unittest.main()

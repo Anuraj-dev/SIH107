@@ -291,6 +291,13 @@ def _final(query: str, combined: str, res: dict, lang: str, hi: bool,
             citations.append(f"{s['key']} — {s['source_url']}")
 
     grounded = [c for c in cands if c["hits"] or c["score"] >= 10]
+    forced = bool(ctx.get("force") or ctx.get("rounds", 0) >= t["max_rounds"])
+    if forced and not grounded:
+        # "Answer with assumptions" must answer, not refuse: admit weak candidates
+        # so assumptions can be stated explicitly (material mismatches still filtered).
+        grounded = [c for c in cands
+                    if (c["hits"] or c["score"] >= t["weak_floor"])
+                    and not material_mismatch(c["std"]["is_number"], combined)]
     if grounded and (not lines or top):
         if top and (ctx["force"] or ctx["rounds"] >= t["max_rounds"]):
             unf = unfilled_slots(top["std"]["is_number"], combined)
@@ -302,7 +309,7 @@ def _final(query: str, combined: str, res: dict, lang: str, hi: bool,
         lines.append(STRINGS["candidates_hi"] if hi else STRINGS["candidates_en"])
         for c in cands[:3]:
             s = c["std"]
-            if not (c["hits"] or c["score"] >= 10):
+            if not (c["hits"] or c["score"] >= 10 or (forced and c in grounded)):
                 continue
             if material_mismatch(s["is_number"], combined):
                 continue  # never present a materially contradicted standard
