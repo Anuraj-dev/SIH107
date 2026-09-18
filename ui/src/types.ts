@@ -17,6 +17,15 @@ export interface Question {
   options: QuestionOpt[];
 }
 
+export interface StructuredCitation {
+  is_number: string;
+  year: string;
+  status: string;
+  last_checked: string;
+  source_url: string;
+  display: string;
+}
+
 export interface ChatResponse {
   text: string;
   refused: boolean;
@@ -29,6 +38,8 @@ export interface ChatResponse {
   known: { slot: string; value: string }[];
   assumptions: string[];
   context: ThreadCtx;
+  /** Machine-readable citation rows (chat.py facade); absent on legacy responses. */
+  structured_citations?: StructuredCitation[];
   thread_id?: string;
   owner_token?: string;
 }
