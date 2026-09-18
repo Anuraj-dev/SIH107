@@ -42,6 +42,29 @@ export interface ChatResponse {
   structured_citations?: StructuredCitation[];
   thread_id?: string;
   owner_token?: string;
+  /** RAG corpus evidence (title/standard number/link per chunk). */
+  sources?: RagSource[];
+  rag_evidence?: RagSource[];
+  rag_mode?: string;
+  rag_used_llm?: boolean;
+  /** NLU intent for this turn (nlu.classify). */
+  intent?: string;
+  intent_confidence?: string;
+  /** Extractive thread summary used for history-aware retrieval. */
+  context_summary?: string;
+  guidance_adaptive?: boolean;
+}
+
+export interface RagSource {
+  standard_number: string;
+  title: string;
+  url: string;
+  doc_type: string;
+  heading: string;
+  chunk_text: string;
+  chunk_index: number;
+  source_file: string;
+  score: number;
 }
 
 export interface FeedbackPayload {
