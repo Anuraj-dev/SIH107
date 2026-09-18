@@ -1,7 +1,7 @@
 # BIS Conversational Assistant — Production Implementation Plan
 _Date: 2026-09-18 | Method: ECC blueprint (research → design → draft → review → register)_
 _Source docs: `docs/product-brief.md`, `docs/decisions.md` (decisions #1–#11)_
-_Status: DRAFT — pending adversarial review gate (§11)_
+_Status: APPROVED + IMPLEMENTED (Phases 0–9, 2026-09-18; go-no-go conditional GO, human sign-off pending §10.7)_
 
 > Current state: working MVP (stdlib Python API + React/TS Vite UI, 16 standards rows —
 > 15 real + 1 withdrawn demo — + 4 schemes + 5 lab samples + 6 glossary terms in curated

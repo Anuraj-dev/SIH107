@@ -14,5 +14,6 @@ _Date: 2026-09-18_
 | 9 | Evaluation | Gold 50+ Q/A, groundedness + refusal rate, >90% ship gate + plain-language glossary check | Fluency-only eval hides hallucinations; users lack standards vocab | Build dataset before any model work |
 | 10 | Never-infer | Strict list: no certified/compliant claims, no verbatim clauses, no licence guarantees, no invented labs; refuse + redirect | Legal/safety boundary | Encode as system prompt + tests |
 | 11 | Multi-turn grounding | Vague query → ask ≤2 discriminative Qs/turn until context suffices; no IS naming until grounded; max 2 rounds then answer with stated assumptions | Wrong IS = wrong manufacturing; single-shot guesses unsafe | Slots in `slots.py`; thread ctx over API/CLI/UI; 6 new tests; eval single-shot force fallback |
+| 12 | Production plan approved + implemented (Phases 0–9) | `docs/implementation-plan.md` built in full: versioned SQLite KB, BM25 flag, citation verifier, FastAPI + server threads, DPDP endpoints, metrics/alerts, v2 eval (267), journey E2E, go-no-go conditional GO | Pilot readiness with measured acceptance | Human sign-off pending: BIS reviewer sample (§10.7), 14-day uptime window |
 
 **Grill method:** grill-me, one question at a time, 9 areas covered. No implementation started.
