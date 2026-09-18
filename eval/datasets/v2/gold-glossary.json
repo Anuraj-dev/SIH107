@@ -1,0 +1,218 @@
+[
+  {
+    "id": "G-001",
+    "query": "What is QCO? Explain simply",
+    "lang": "en",
+    "expect_is": null,
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": false
+  },
+  {
+    "id": "G-002",
+    "query": "QCO kya hai? simple shabdon me samjhayen",
+    "lang": "hi",
+    "expect_is": null,
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": false
+  },
+  {
+    "id": "G-003",
+    "query": "Explain QCO meaning for a new MSME in plain words",
+    "lang": "en",
+    "expect_is": null,
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": false
+  },
+  {
+    "id": "G-004",
+    "query": "QCO ka matlab kya hota hai? MSME ke liye saral bhasha me",
+    "lang": "hi",
+    "expect_is": null,
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": false
+  },
+  {
+    "id": "G-005",
+    "query": "What is CM/L number? Explain simply",
+    "lang": "en",
+    "expect_is": null,
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": false
+  },
+  {
+    "id": "G-006",
+    "query": "CM/L number kya hota hai? simple shabdon me samjhayen",
+    "lang": "hi",
+    "expect_is": null,
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": false
+  },
+  {
+    "id": "G-007",
+    "query": "Explain CM/L licence number on ISI marked products in plain English",
+    "lang": "en",
+    "expect_is": null,
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": false
+  },
+  {
+    "id": "G-008",
+    "query": "ISI mark ke saath CM/L number ka kya arth hai? saral Hindi me",
+    "lang": "hi",
+    "expect_is": null,
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": false
+  },
+  {
+    "id": "G-009",
+    "query": "What is HUID hallmark verification? Explain simply",
+    "lang": "en",
+    "expect_is": null,
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "G-010",
+    "query": "Sone ke gehne par HUID kya hai? saral bhasha me samjhayen",
+    "lang": "hi",
+    "expect_is": null,
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "G-011",
+    "query": "Explain HUID 6-digit number on gold jewellery in plain words",
+    "lang": "en",
+    "expect_is": null,
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "G-012",
+    "query": "HUID number ka kya matlab hai? sona chandi gehne par",
+    "lang": "hi",
+    "expect_is": null,
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "G-013",
+    "query": "What is CRS registration for electronics? Explain simply",
+    "lang": "en",
+    "expect_is": null,
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "G-014",
+    "query": "CRS kya hai electronics ke liye? saral shabdon me",
+    "lang": "hi",
+    "expect_is": null,
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "G-015",
+    "query": "Explain CRS Scheme-II in plain English for a startup",
+    "lang": "en",
+    "expect_is": null,
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "G-016",
+    "query": "CRS ka full form aur arth kya hai? startup ke liye saral me",
+    "lang": "hi",
+    "expect_is": null,
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "G-017",
+    "query": "What is FMCS for foreign manufacturers? Explain simply",
+    "lang": "en",
+    "expect_is": null,
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "G-018",
+    "query": "FMCS kya hai videshi nirmata ke liye? saral me samjhayen",
+    "lang": "hi",
+    "expect_is": null,
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "G-019",
+    "query": "Explain FMCS and AIR requirement in plain words",
+    "lang": "en",
+    "expect_is": null,
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "G-020",
+    "query": "FMCS me AIR ka kya role hai? saral Hindi me",
+    "lang": "hi",
+    "expect_is": null,
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "G-021",
+    "query": "What is Indian Standard (IS)? Explain with IS 10500 drinking water household supply example",
+    "lang": "en",
+    "expect_is": "IS 10500",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "G-022",
+    "query": "Indian Standard kya hota hai? IS 10500 piped drinking water household example se samjhayen",
+    "lang": "hi",
+    "expect_is": "IS 10500",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "G-023",
+    "query": "Explain Indian Standard concept using IS 269 OPC 53 grade cement example",
+    "lang": "en",
+    "expect_is": "IS 269",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "G-024",
+    "query": "Bharatiya manak kya hai? IS 4151 bike helmet two-wheeler example se saral me",
+    "lang": "hi",
+    "expect_is": "IS 4151",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  }
+]

@@ -1,0 +1,947 @@
+[
+  {
+    "id": "P-001",
+    "query": "Piped drinking water tap water quality for household supply, potable limits pH turbidity — which IS?",
+    "lang": "en",
+    "expect_is": "IS 10500",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-002",
+    "query": "What standard covers municipal tap water supply drinking quality? piped water household use",
+    "lang": "en",
+    "expect_is": "IS 10500",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-003",
+    "query": "Piped tap water for drinking, not packaged bottled water for sale — household supply standard?",
+    "lang": "en",
+    "expect_is": "IS 10500",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-004",
+    "query": "Nal ke peene ke paani ki gunvatta household supply ke liye kaun sa IS? piped drinking water tap water potable",
+    "lang": "hi",
+    "expect_is": "IS 10500",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-005",
+    "query": "Nal ka pani piped drinking water household supply ke liye kaunsa manak hai? tap water quality",
+    "lang": "hi",
+    "expect_is": "IS 10500",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-006",
+    "query": "Municipal piped water supply potable quality colour turbidity pH — drinking water IS for household?",
+    "lang": "en",
+    "expect_is": "IS 10500",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-007",
+    "query": "Drinking water specification colour turbidity pH chemical bacteriological for piped supply household — which IS?",
+    "lang": "en",
+    "expect_is": "IS 10500",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-008",
+    "query": "I want to start a packaged drinking water plant 20 litre jars bottled water, which IS for licence?",
+    "lang": "en",
+    "expect_is": "IS 14543",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-009",
+    "query": "Packaged drinking water other than mineral water, 1 litre bottle new plant — standard for sale?",
+    "lang": "en",
+    "expect_is": "IS 14543",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-010",
+    "query": "Bottled bisleri type packaged water plant new licence 20L jar — packaged vs piped, which IS?",
+    "lang": "en",
+    "expect_is": "IS 14543",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-011",
+    "query": "Packaged drinking water 20 litre jar new plant licence ke liye kaun sa IS? bottled water plant",
+    "lang": "hi",
+    "expect_is": "IS 14543",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-012",
+    "query": "Bisleri type bottled water plant lagana hai 20 litre jar, packaged drinking water kaunsa IS lagega new plant?",
+    "lang": "hi",
+    "expect_is": "IS 14543",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-013",
+    "query": "Packaged drinking water treatment packing quality labelling for commercial sale 20 litre — IS?",
+    "lang": "en",
+    "expect_is": "IS 14543",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-014",
+    "query": "Starting packaged water business 1L bottle 20L jar, new plant licence renewal — which packaged IS, not tap water?",
+    "lang": "en",
+    "expect_is": "IS 14543",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-015",
+    "query": "Packaged natural mineral water from spring source borewell for sale — which IS?",
+    "lang": "en",
+    "expect_is": "IS 13428",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-016",
+    "query": "Natural spring mineral water composition stability packing — mineral vs packaged drinking water standard?",
+    "lang": "en",
+    "expect_is": "IS 13428",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-017",
+    "query": "My source is natural spring claimed as mineral water, treated or natural? Which IS for mineral sale?",
+    "lang": "en",
+    "expect_is": "IS 13428",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-018",
+    "query": "Prakritik spring mineral water borewell source se packaged sale ke liye kaun sa IS? natural mineral water",
+    "lang": "hi",
+    "expect_is": "IS 13428",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-019",
+    "query": "Natural spring se mineral water bechna hai, borewell source prakritik, kaunsa IS lagega packaged natural mineral?",
+    "lang": "hi",
+    "expect_is": "IS 13428",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-020",
+    "query": "Spring water natural mineral composition packing quality — IS for natural mineral, not RO treated?",
+    "lang": "en",
+    "expect_is": "IS 13428",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-021",
+    "query": "Packaged natural mineral water source stability for commercial sale — spring borewell standard?",
+    "lang": "en",
+    "expect_is": "IS 13428",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-022",
+    "query": "Vacuum insulated stainless steel flask double-wall 1 litre for household food contact — which IS?",
+    "lang": "en",
+    "expect_is": "IS 17803",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-023",
+    "query": "My startup makes thermosteel water bottle steel insulated flask 750ml — standard?",
+    "lang": "en",
+    "expect_is": "IS 17803",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-024",
+    "query": "Stainless steel single-wall vs vacuum insulated double-wall flask 1L household — which IS?",
+    "lang": "en",
+    "expect_is": "IS 17803",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-025",
+    "query": "Steel ki paani bottle vacuum insulated flask double-wall 1 litre gharelu upyog ke liye kaun sa IS?",
+    "lang": "hi",
+    "expect_is": "IS 17803",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-026",
+    "query": "Vacuum insulated steel bottle flask 1 litre household ke liye kaunsa IS hai? thermosteel double-wall",
+    "lang": "hi",
+    "expect_is": "IS 17803",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-027",
+    "query": "Insulated flask stainless steel water bottle thermal safety marking 500ml food contact — IS?",
+    "lang": "en",
+    "expect_is": "IS 17803",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-028",
+    "query": "Water bottle steel flask vacuum insulated 2 litre household food contact — standard with QCO check?",
+    "lang": "en",
+    "expect_is": "IS 17803",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-029",
+    "query": "PVC insulated house wiring cable single-core up to 1100V for household wiring — which IS?",
+    "lang": "en",
+    "expect_is": "IS 694",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-030",
+    "query": "Flexible PVC cables sheathed unsheathed multi-core 1100V house wiring industrial — standard?",
+    "lang": "en",
+    "expect_is": "IS 694",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-031",
+    "query": "House wiring wire 1100V PVC insulated cable cord power supply — which IS?",
+    "lang": "en",
+    "expect_is": "IS 694",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-032",
+    "query": "Ghar wiring ke liye PVC insulated cable 1100V single-core house wiring kaun sa IS?",
+    "lang": "hi",
+    "expect_is": "IS 694",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-033",
+    "query": "House wiring ke liye PVC cable 1100V multi-core sheathed kaunsa IS lagega? flexible wire",
+    "lang": "hi",
+    "expect_is": "IS 694",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-034",
+    "query": "PVC insulated unsheathed and sheathed cables up to 1100V for power supply house — IS?",
+    "lang": "en",
+    "expect_is": "IS 694",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-035",
+    "query": "1100V PVC cable for house wiring vs industrial, single-core sheathed — which standard?",
+    "lang": "en",
+    "expect_is": "IS 694",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-036",
+    "query": "16 amp plug and socket-outlet for household 250V — which IS?",
+    "lang": "en",
+    "expect_is": "IS 1293",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-037",
+    "query": "5 amp plug top socket for home use, plug vs adaptor 6A — standard?",
+    "lang": "en",
+    "expect_is": "IS 1293",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-038",
+    "query": "Household plug socket-outlet 16A 250V similar purposes — which IS?",
+    "lang": "en",
+    "expect_is": "IS 1293",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-039",
+    "query": "Ghar ke liye 16 amp plug socket 250V household kaun sa IS? plug top",
+    "lang": "hi",
+    "expect_is": "IS 1293",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-040",
+    "query": "16A plug socket ghar ke liye 250V, plug top kaunsa IS hai? 6A socket outlet",
+    "lang": "hi",
+    "expect_is": "IS 1293",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-041",
+    "query": "Socket-outlet adaptor plug 6A 16A household 250V — IS for plugs?",
+    "lang": "en",
+    "expect_is": "IS 1293",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-042",
+    "query": "Plug top 5 amp vs 16 amp socket household purposes — which standard?",
+    "lang": "en",
+    "expect_is": "IS 1293",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-043",
+    "query": "General safety for household mixer grinder appliance domestic use — which IS?",
+    "lang": "en",
+    "expect_is": "IS 302-1",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-044",
+    "query": "Electric iron safety household appliance general requirements Part 1 — standard?",
+    "lang": "en",
+    "expect_is": "IS 302-1",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-045",
+    "query": "Mixer vs geyser vs microwave safety household commercial — general appliance IS?",
+    "lang": "en",
+    "expect_is": "IS 302-1",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-046",
+    "query": "Gharelu mixer grinder bijli upkaran suraksha household ke liye kaun sa IS? general requirements",
+    "lang": "hi",
+    "expect_is": "IS 302-1",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-047",
+    "query": "Mixer grinder ghar ke liye safety standard kaunsa hai? household appliance iron geyser general",
+    "lang": "hi",
+    "expect_is": "IS 302-1",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-048",
+    "query": "Household electrical appliance safety Part 1 general, Part 2 per appliance mixer iron — IS?",
+    "lang": "en",
+    "expect_is": "IS 302-1",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-049",
+    "query": "Geyser cooler heater household safety domestic use — general appliance standard?",
+    "lang": "en",
+    "expect_is": "IS 302-1",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-050",
+    "query": "Self-ballasted LED bulb retrofit 9W B22 for general lighting — which IS and is CRS needed?",
+    "lang": "en",
+    "expect_is": "IS 16102-1",
+    "expect_scheme": "CRS",
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-051",
+    "query": "I manufacture LED lamps 9W E27 self-ballasted retrofit bulb — standard and CRS registration?",
+    "lang": "en",
+    "expect_is": "IS 16102-1",
+    "expect_scheme": "CRS",
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-052",
+    "query": "LED lamp vs luminaire fixture 12W B22 retrofit — which IS under CRS Scheme-II?",
+    "lang": "en",
+    "expect_is": "IS 16102-1",
+    "expect_scheme": "CRS",
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-053",
+    "query": "LED bulb 9W B22 self-ballasted retrofit samanya roshni ke liye kaun sa IS? CRS registration kya chahiye?",
+    "lang": "hi",
+    "expect_is": "IS 16102-1",
+    "expect_scheme": "CRS",
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-054",
+    "query": "9W B22 LED bulb retrofit self-ballasted general lighting kaunsa IS hai? CRS me registration hota hai kya?",
+    "lang": "hi",
+    "expect_is": "IS 16102-1",
+    "expect_scheme": "CRS",
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-055",
+    "query": "Self-ballasted LED lamps safety performance 7W E27 retrofit bulb — CRS compulsory registration IS?",
+    "lang": "en",
+    "expect_is": "IS 16102-1",
+    "expect_scheme": "CRS",
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-056",
+    "query": "LED tube light lamp general lighting safety 9W luminaire vs retrofit bulb — which CRS IS?",
+    "lang": "en",
+    "expect_is": "IS 16102-1",
+    "expect_scheme": "CRS",
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-057",
+    "query": "Safety of toys mechanical physical for 3 year old child plastic wooden — which IS?",
+    "lang": "en",
+    "expect_is": "IS 9873-1",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-058",
+    "query": "Children khilona safety soft toy mechanical 5 year age group — toy standard?",
+    "lang": "en",
+    "expect_is": "IS 9873-1",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-059",
+    "query": "Electronic battery toy vs soft mechanical toy for toddler infant — safety IS Part 1?",
+    "lang": "en",
+    "expect_is": "IS 9873-1",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-060",
+    "query": "3 saal ke bachche ke khilaune ki suraksha mechanical plastic ke liye kaun sa IS? toy safety",
+    "lang": "hi",
+    "expect_is": "IS 9873-1",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-061",
+    "query": "3 year old bachche ke liye khilona safety plastic mechanical kaunsa IS hai? soft toy",
+    "lang": "hi",
+    "expect_is": "IS 9873-1",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-062",
+    "query": "Toy safety flammability migration mechanical properties for 2 year toddler — IS?",
+    "lang": "en",
+    "expect_is": "IS 9873-1",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-063",
+    "query": "Khilona painted electric vs wooden mechanical for 4 year child — which toy safety IS?",
+    "lang": "en",
+    "expect_is": "IS 9873-1",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-064",
+    "query": "Ordinary Portland Cement OPC 53 grade manufacture chemical physical — which IS?",
+    "lang": "en",
+    "expect_is": "IS 269",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-065",
+    "query": "OPC vs PPC cement, OPC 43 grade — which IS for OPC?",
+    "lang": "en",
+    "expect_is": "IS 269",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-066",
+    "query": "Portland cement 53 grade PPC PSC type — OPC standard?",
+    "lang": "en",
+    "expect_is": "IS 269",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-067",
+    "query": "Ordinary Portland Cement OPC 53 grade rasayanik bhautik ke liye kaun sa IS? cement",
+    "lang": "hi",
+    "expect_is": "IS 269",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-068",
+    "query": "OPC 53 grade cement kaunsa IS hai? Ordinary Portland Cement manufacture",
+    "lang": "hi",
+    "expect_is": "IS 269",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-069",
+    "query": "Cement OPC 33 43 53 grade chemical physical requirements — IS for OPC?",
+    "lang": "en",
+    "expect_is": "IS 269",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-070",
+    "query": "PPC vs OPC vs PSC cement grade 43 — OPC specification IS?",
+    "lang": "en",
+    "expect_is": "IS 269",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-071",
+    "query": "TMT saria Fe500 high-strength deformed steel bars 12mm for concrete reinforcement — which IS?",
+    "lang": "en",
+    "expect_is": "IS 1786",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-072",
+    "query": "Rebar steel bar Fe415 10mm reinforcement concrete — standard?",
+    "lang": "en",
+    "expect_is": "IS 1786",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-073",
+    "query": "Fe550 vs Fe500 vs Fe415 TMT saria diameter range construction — which IS?",
+    "lang": "en",
+    "expect_is": "IS 1786",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-074",
+    "query": "Concrete ke liye TMT saria Fe500 12mm uchch shakti deformed steel kaun sa IS?",
+    "lang": "hi",
+    "expect_is": "IS 1786",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-075",
+    "query": "Fe500 TMT saria 12mm concrete reinforcement ke liye kaunsa IS hai? steel bar",
+    "lang": "hi",
+    "expect_is": "IS 1786",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-076",
+    "query": "High-strength deformed steel bars wires Fe500 8mm concrete — IS?",
+    "lang": "en",
+    "expect_is": "IS 1786",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-077",
+    "query": "Reinforcement steel saria Fe415 Fe500 construction 16mm — which standard?",
+    "lang": "en",
+    "expect_is": "IS 1786",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-078",
+    "query": "Unplasticized PVC UPVC pipe 110mm for potable water supplies drinking — which IS?",
+    "lang": "en",
+    "expect_is": "IS 4985",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-079",
+    "query": "Agriculture water pipe UPVC potable vs drainage 90mm pressure — standard?",
+    "lang": "en",
+    "expect_is": "IS 4985",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-080",
+    "query": "PVC pipe UPVC 110mm potable drinking water supply, not sewage — which IS?",
+    "lang": "en",
+    "expect_is": "IS 4985",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-081",
+    "query": "Peya jal ke liye UPVC pipe 110mm potable water supply kaun sa IS? agriculture pipe",
+    "lang": "hi",
+    "expect_is": "IS 4985",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-082",
+    "query": "Potable water ke liye UPVC pipe 110mm kaunsa IS hai? agriculture irrigation pipe pressure",
+    "lang": "hi",
+    "expect_is": "IS 4985",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-083",
+    "query": "UPVC pipes potable water 63mm diameter pressure non-pressure — IS?",
+    "lang": "en",
+    "expect_is": "IS 4985",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-084",
+    "query": "Water pipe UPVC for drinking supply 140mm potable — which standard?",
+    "lang": "en",
+    "expect_is": "IS 4985",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-085",
+    "query": "Protective helmet for two-wheeler bike riders M size construction impact — which IS compulsory?",
+    "lang": "en",
+    "expect_is": "IS 4151",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-086",
+    "query": "Bike helmet ISI compulsory two wheeler scooter rider — standard?",
+    "lang": "en",
+    "expect_is": "IS 4151",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-087",
+    "query": "Two-wheeler rider helmet size L impact marking — helmet IS?",
+    "lang": "en",
+    "expect_is": "IS 4151",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-088",
+    "query": "Do-pahiya bike scooter helmet suraksha two-wheeler rider ke liye kaun sa IS? ISI compulsory?",
+    "lang": "hi",
+    "expect_is": "IS 4151",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-089",
+    "query": "Bike helmet two-wheeler rider ke liye kaunsa IS hai? ISI compulsory hai kya M size?",
+    "lang": "hi",
+    "expect_is": "IS 4151",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-090",
+    "query": "Helmet for scooter rider protective construction 580mm — IS?",
+    "lang": "en",
+    "expect_is": "IS 4151",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-091",
+    "query": "Two wheeler helmet ISI marking compulsory rider safety — which standard?",
+    "lang": "en",
+    "expect_is": "IS 4151",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-092",
+    "query": "Domestic pressure cooker 5 litre aluminium for household use material safety — which IS?",
+    "lang": "en",
+    "expect_is": "IS 2347",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-093",
+    "query": "Aluminium vs steel cooker 3 litre domestic pressure safety devices — standard?",
+    "lang": "en",
+    "expect_is": "IS 2347",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-094",
+    "query": "Pressure cooker 5L steel domestic household — ISI compulsory IS?",
+    "lang": "en",
+    "expect_is": "IS 2347",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-095",
+    "query": "Gharelu pressure cooker 5 litre aluminium steel gharelu upyog ke liye kaun sa IS?",
+    "lang": "hi",
+    "expect_is": "IS 2347",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-096",
+    "query": "5 litre pressure cooker aluminium domestic ke liye kaunsa IS hai? steel cooker safety",
+    "lang": "hi",
+    "expect_is": "IS 2347",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-097",
+    "query": "Domestic cooker material pressure safety tests 2 litre — IS?",
+    "lang": "en",
+    "expect_is": "IS 2347",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-098",
+    "query": "Cooker 5 litre ISI compulsory domestic aluminium — which standard?",
+    "lang": "en",
+    "expect_is": "IS 2347",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-099",
+    "query": "Automobile toughened safety glass windshield laminated for car vehicle — which IS Part 1?",
+    "lang": "en",
+    "expect_is": "IS 2553-1",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-100",
+    "query": "Laminated vs toughened glass automobile building windshield — safety glass standard?",
+    "lang": "en",
+    "expect_is": "IS 2553-1",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-101",
+    "query": "Car windshield safety glass automotive requirements tests — which IS?",
+    "lang": "en",
+    "expect_is": "IS 2553-1",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-102",
+    "query": "Automobile car windshield suraksha kaanch toughened laminated ke liye kaun sa IS?",
+    "lang": "hi",
+    "expect_is": "IS 2553-1",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-103",
+    "query": "Car windshield ke liye safety glass automobile kaunsa IS hai? toughened laminated",
+    "lang": "hi",
+    "expect_is": "IS 2553-1",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-104",
+    "query": "Safety glass automotive Part 1 construction impact — IS?",
+    "lang": "en",
+    "expect_is": "IS 2553-1",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  },
+  {
+    "id": "P-105",
+    "query": "Building vs automobile safety glass window door toughened — which automotive IS?",
+    "lang": "en",
+    "expect_is": "IS 2553-1",
+    "expect_scheme": null,
+    "must_refuse": false,
+    "must_cite": true
+  }
+]

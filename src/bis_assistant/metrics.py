@@ -55,11 +55,16 @@ def kb_staleness_days() -> int:
         return -1
 
 
+SERIES = ["chat_total", "answered_total", "refused_total", "needs_info_total",
+          "feedback_total", "feedback_neg_total", "chat_5xx_total"]
+
+
 def snapshot() -> dict:
     from . import verifier
     with _lock:
         lat = list(_lat)
-        counts = dict(_counts)
+        counts = {k: _counts.get(k, 0) for k in SERIES}
+        counts.update({k: v for k, v in _counts.items() if k not in counts})
     out = dict(counts)
     out["chat_latency_p50_ms"] = _pct(lat, 0.5)
     out["chat_latency_p95_ms"] = _pct(lat, 0.95)
