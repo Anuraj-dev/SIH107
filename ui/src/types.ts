@@ -77,6 +77,8 @@ export interface FeedbackResult {
   ok: boolean;
   /** true when the live backend lacks POST /feedback and the UI used the fixture fallback */
   fixture?: boolean;
+  /** set when the call itself failed — show it instead of thanking */
+  error?: string;
 }
 
 export interface ThreadMessage {
@@ -123,6 +125,7 @@ export interface KbPublishResult {
   diff_id: string;
   decision: "approve" | "reject";
   fixture?: boolean;
+  error?: string;
 }
 
 export interface Msg {

@@ -3,15 +3,18 @@ import { bisChat, checkHealth, fetchThreadExport, sendFeedback } from "./api";
 import AdminPanel from "./admin";
 import {
   AssumptionsBanner,
+  EvidenceSources,
   FeedbackButtons,
   KnownChips,
+  MetaBadges,
   NoteInput,
   QuestionPills,
+  RawJson,
   RichText,
   Sources,
   TypingDots,
 } from "./components";
-import type { Msg } from "./types";
+import type { Lang, Msg } from "./types";
 import type { ServerThread } from "./api";
 import "./styles.css";
 
@@ -43,6 +46,7 @@ let nextId = 1;
 export default function App() {
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
+  const [lang, setLang] = useState<Lang>("auto");
   const [busy, setBusy] = useState(false);
   const [healthy, setHealthy] = useState<boolean | null>(null);
   const [thread, setThread] = useState<ServerThread | null>(null);
@@ -91,6 +95,7 @@ export default function App() {
       setInput("");
       try {
         const { resp, ms, thread: next } = await bisChat.send(q, {
+          lang,
           thread: useThread,
           force: opts?.force ?? false,
           fresh: opts?.fresh ?? false,
@@ -106,7 +111,7 @@ export default function App() {
         setBusy(false);
       }
     },
-    [busy, thread],
+    [busy, lang, thread],
   );
 
   const newTopic = useCallback(() => {
@@ -126,9 +131,11 @@ export default function App() {
       const tid = target?.resp?.thread_id ?? thread?.id ?? "local";
       const ownerToken = thread?.id === tid ? thread.token : target?.resp?.owner_token || thread?.token;
       setMsgs((m) => m.map((x) => (x.id === id ? { ...x, feedback: rating } : x)));
-      await sendFeedback(tid, rating, ownerToken, note);
+      const res = await sendFeedback(tid, rating, ownerToken, note);
+      if (!res.ok) showToast(`Feedback failed: ${res.error ?? "request failed"}.`);
+      else if (res.fixture) showToast("Feedback recorded locally (no live backend).");
     },
-    [msgs, thread],
+    [msgs, thread, showToast],
   );
 
   /** Download the current thread as redacted JSON, else the local transcript. */
@@ -185,9 +192,23 @@ export default function App() {
           <span
             className={`status-dot ${healthy === null ? "unknown" : healthy ? "ok" : "down"}`}
             role="status"
-            title={healthy === null ? "Checking API…" : healthy ? "API connected" : "API unreachable"}
-            aria-label={healthy === null ? "Checking API status" : healthy ? "API connected" : "API unreachable"}
+            aria-hidden="true"
           />
+          <span className="sr-only" role="status">
+            {healthy === null ? "Checking API status" : healthy ? "API connected" : "API unreachable"}
+          </span>
+          <label className="sr-only" htmlFor="lang-sel">Answer language</label>
+          <select
+            id="lang-sel"
+            className="langsel"
+            value={lang}
+            onChange={(e) => setLang(e.target.value as Lang)}
+            title="Answer language: auto-detect, English, or Hindi"
+          >
+            <option value="auto">Auto</option>
+            <option value="en">EN</option>
+            <option value="hi">हिंदी</option>
+          </select>
           <button type="button" className="btn" onClick={newTopic}>+ New chat</button>
           <button
             type="button" className="icon-btn" onClick={exportThread}
@@ -221,7 +242,7 @@ export default function App() {
         </main>
       ) : (
         <>
-          <main className="thread wrap" id="chat-log" aria-label="Conversation" tabIndex={-1}>
+          <main className="thread wrap" id="chat-log" role="log" aria-live="polite" aria-label="Conversation" tabIndex={-1}>
             {msgs.length === 0 ? (
               <div className="hero">
                 <h1>What standard does your product need?</h1>
@@ -245,7 +266,7 @@ export default function App() {
                 ) : (
                   <div key={m.id} className="msg bot">
                     <div className="avatar" aria-hidden="true">B</div>
-                    <div className="content">
+                    <div className="content" lang={m.resp?.lang === "hi" ? "hi" : undefined}>
                       {m.error ? (
                         <div className="error">
                           <RichText text={m.error} />
@@ -253,21 +274,28 @@ export default function App() {
                             Retry
                           </button>
                         </div>
+                      ) : !m.resp ? (
+                        <div className="error">
+                          <RichText text="Empty answer payload — please retry." />
+                        </div>
                       ) : (
                         <>
+                          <MetaBadges resp={m.resp} ms={m.ms} />
                           <RichText text={m.text} />
-                          {m.resp!.assumptions.length > 0 && <AssumptionsBanner items={m.resp!.assumptions} />}
-                          <KnownChips known={m.resp!.known} />
-                          {m.resp!.needs_info && (
+                          {m.resp.assumptions.length > 0 && <AssumptionsBanner items={m.resp.assumptions} />}
+                          <KnownChips known={m.resp.known} />
+                          {m.resp.needs_info && (
                             <QuestionPills
-                              questions={m.resp!.questions}
+                              questions={m.resp.questions}
                               disabled={busy}
                               onPick={(answer) => send(answer)}
                               onAssume={() => send(pendingQ, { force: true })}
                               onNewTopic={newTopic}
                             />
                           )}
-                          {m.resp!.citations.length > 0 && <Sources items={m.resp!.citations} />}
+                          {m.resp.citations.length > 0 && <Sources items={m.resp.citations} />}
+                          <EvidenceSources items={m.resp.sources ?? m.resp.rag_evidence} />
+                          <RawJson data={m.resp} />
                           <div className="fbrow">
                             <FeedbackButtons value={m.feedback} disabled={busy} onRate={(r) => rate(m.id, r)} />
                             {m.feedback != null && <span className="hint">Thanks for the feedback.</span>}
@@ -300,6 +328,7 @@ export default function App() {
                 ref={taRef}
                 rows={1}
                 value={input}
+                lang={lang === "hi" ? "hi" : undefined}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey) {

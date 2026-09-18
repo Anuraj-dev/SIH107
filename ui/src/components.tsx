@@ -58,8 +58,8 @@ const DIVIDER_RE = /^(---|\*\*\*|___)\s*$/;
 const QUOTE_RE = /^>\s?(.*)$/;
 
 /** Structured reply renderer: headings, numbered questions, nested bullets, notes, dividers, links. */
-export function RichText({ text }: { text: string }) {
-  const lines = text.split("\n");
+export function RichText({ text }: { text: string | null | undefined }) {
+  const lines = (text ?? "").split("\n");
   const nodes: React.ReactNode[] = [];
   let prevGap = true; // collapse leading blank lines
   lines.forEach((ln, i) => {
@@ -156,7 +156,7 @@ export function AssumptionsBanner({ items }: { items: string[] }) {
 }
 
 /** Strict citations live here — one click away, always attached to the answer. */
-export function Sources({ items }: { items: string[] }) {
+export function Sources({ items }: { items: string[] | null | undefined }) {
   if (!items || items.length === 0) return null;
   return (
     <details className="sources">
@@ -166,6 +166,89 @@ export function Sources({ items }: { items: string[] }) {
           <li key={i}>{renderInline(c, `src${i}`)}</li>
         ))}
       </ul>
+    </details>
+  );
+}
+
+export interface EvidenceItem {
+  standard_number: string;
+  title: string;
+  url: string;
+  doc_type: string;
+  heading: string;
+  chunk_text: string;
+  chunk_index: number;
+  source_file: string;
+  score: number;
+}
+
+/** RAG/catalogue evidence behind an answer (issue #4 P1-12). */
+export function EvidenceSources({ items }: { items: EvidenceItem[] | null | undefined }) {
+  if (!items || items.length === 0) return null;
+  return (
+    <details className="sources evidence">
+      <summary>Evidence passages ({items.length})</summary>
+      <ul>
+        {items.map((e, i) => (
+          <li key={i}>
+            <strong>{e.standard_number || "BIS document"}</strong>
+            {e.title ? ` — ${e.title}` : ""}
+            {e.doc_type ? <span className="ev-meta"> [{e.doc_type}]</span> : null}
+            {e.heading ? <div className="ev-meta">Section: {e.heading}</div> : null}
+            {e.chunk_text ? <div className="ev-meta">“{e.chunk_text.slice(0, 280)}{e.chunk_text.length > 280 ? "…" : ""}”</div> : null}
+            {e.url ? (
+              <div>
+                <a href={e.url} target="_blank" rel="noreferrer">Source link</a>
+                <span className="ev-meta"> · score {e.score}</span>
+              </div>
+            ) : null}
+          </li>
+        ))}
+      </ul>
+    </details>
+  );
+}
+
+/** Answer metadata badges: kind, language, intent, RAG mode, latency, refusal, PII. */
+export function MetaBadges({ resp, ms }: {
+  resp: {
+    kind?: string; lang?: string; refused?: boolean;
+    intent?: string; intent_confidence?: string;
+    rag_mode?: string; rag_used_llm?: boolean;
+    pii?: Record<string, boolean>;
+  };
+  ms?: number;
+}) {
+  const piiHits = Object.entries(resp.pii ?? {}).filter(([, v]) => v).map(([k]) => k);
+  return (
+    <div className="meta-row" aria-label="Answer metadata">
+      {resp.kind ? <span className="badge info">{resp.kind}</span> : null}
+      {resp.lang ? <span className="badge lang">{resp.lang.toUpperCase()}</span> : null}
+      {resp.intent ? (
+        <span className="badge info" title={`confidence ${resp.intent_confidence ?? "low"}`}>
+          intent: {resp.intent}
+        </span>
+      ) : null}
+      {resp.rag_mode ? (
+        <span className="badge ok" title={resp.rag_used_llm ? "written by the configured LLM from retrieved passages" : "deterministic extractive answer"}>
+          {resp.rag_used_llm ? "LLM-grounded" : "extractive"}
+        </span>
+      ) : null}
+      {typeof ms === "number" ? <span className="badge info">{ms} ms</span> : null}
+      {resp.refused ? <span className="badge refuse">refused</span> : null}
+      {piiHits.length > 0 ? (
+        <span className="badge pii">PII redacted: {piiHits.join(", ")}</span>
+      ) : null}
+    </div>
+  );
+}
+
+/** Raw response JSON for debugging/verification (issue #4 P1-12). */
+export function RawJson({ data }: { data: unknown }) {
+  return (
+    <details className="rawjson">
+      <summary>Raw JSON</summary>
+      <pre>{JSON.stringify(data, null, 2)}</pre>
     </details>
   );
 }

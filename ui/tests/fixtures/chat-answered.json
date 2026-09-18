@@ -1,20 +1,54 @@
 {
   "name": "chat-answered",
   "description": "Fixture mirroring POST /chat grounded answer incl. known/assumptions/thread fields the UI consumes.",
-  "request": { "query": "My startup makes vacuum insulated stainless steel water bottle. Which IS?", "force": false },
+  "request": {
+    "query": "My startup makes vacuum insulated stainless steel water bottle. Which IS?",
+    "force": false
+  },
   "response": {
     "text": "**IS 17570:2021** (high confidence) — Vacuum insulated stainless steel flask. Scope: insulated flasks.\n\nVerify scope on Know-Your-Standard before manufacture.",
     "refused": false,
     "kind": "answered",
     "lang": "en",
-    "citations": ["IS 17570:2021 [Active, last-checked 2026-09-18] + https://www.bis.gov.in/know-your-standard/"],
+    "citations": [
+      "IS 17570:2021 [Active, last-checked 2026-09-18] + https://www.bis.gov.in/know-your-standard/"
+    ],
     "pii": {},
     "needs_info": false,
     "questions": [],
-    "known": [{ "slot": "material", "value": "stainless steel" }],
-    "assumptions": ["intended use = food contact (you didn't specify this)"],
-    "context": { "history": [], "rounds": 0 },
+    "known": [
+      {
+        "slot": "material",
+        "value": "stainless steel"
+      }
+    ],
+    "assumptions": [
+      "intended use = food contact (you didn't specify this)"
+    ],
+    "context": {
+      "history": [],
+      "rounds": 0
+    },
     "thread_id": "thread-fixture-answered",
-    "owner_token": "owner-fixture-token"
+    "owner_token": "owner-fixture-token",
+    "sources": [
+      {
+        "standard_number": "IS 17570:2021",
+        "title": "Vacuum insulated stainless steel flask",
+        "url": "https://www.bis.gov.in/know-your-standard/",
+        "doc_type": "catalogue",
+        "heading": "Product Specification",
+        "chunk_text": "",
+        "chunk_index": 0,
+        "source_file": "",
+        "score": 9.5
+      }
+    ],
+    "rag_mode": "catalogue (24k BIS catalogue scan)",
+    "rag_used_llm": false,
+    "intent": "recommend_standard",
+    "intent_confidence": "high",
+    "context_summary": "My startup makes vacuum insulated stainless steel water bottle. Which IS?",
+    "guidance_adaptive": false
   }
 }

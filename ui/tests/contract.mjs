@@ -93,6 +93,32 @@ describe("ui contract fixtures", () => {
     assert.match(dev, /[\u0900-\u097F]/, "chat-hindi fixture must contain Devanagari");
   });
 
+  it("RAG/intent fields are validated when present (issue #4 P1-12)", () => {
+    for (const f of files.filter((x) => x.startsWith("chat-"))) {
+      const resp = load(f).response;
+      if (resp.sources !== undefined) {
+        assert.ok(Array.isArray(resp.sources), `${f}: sources must be array`);
+        for (const s of resp.sources) {
+          for (const k of ["standard_number", "title", "url", "doc_type"]) {
+            assert.equal(typeof s[k], "string", `${f}: source.${k} must be string`);
+          }
+          assert.equal(typeof s.score, "number", `${f}: source.score must be number`);
+        }
+      }
+      if (resp.rag_mode !== undefined) assert.equal(typeof resp.rag_mode, "string");
+      if (resp.rag_used_llm !== undefined) assert.equal(typeof resp.rag_used_llm, "boolean");
+      if (resp.intent !== undefined) assert.equal(typeof resp.intent, "string");
+      if (resp.intent_confidence !== undefined) {
+        assert.ok(["high", "medium", "low"].includes(resp.intent_confidence));
+      }
+      if (resp.guidance_adaptive !== undefined) assert.equal(typeof resp.guidance_adaptive, "boolean");
+    }
+    const c = load("chat-corpus.json").response;
+    assert.equal(c.kind, "corpus_answer");
+    assert.equal(c.rag_used_llm, true);
+    assert.ok(c.sources.length > 0 && c.sources[0].standard_number.includes("IS 101"));
+  });
+
   it("feedback fixture matches POST /feedback contract", () => {
     const j = load("feedback.json");
     assert.equal(j.response.ok, true);

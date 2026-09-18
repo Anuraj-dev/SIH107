@@ -39,10 +39,15 @@ export default function AdminPanel() {
   const decide = async (changeId: string, decision: "approve" | "reject") => {
     if (!diff) return;
     setStatus("");
-    const res = await publishKbDiff(diff.diff_id, decision, publisherKey, approverKey);
+    // Live rows carry numeric pending_diffs ids and can publish per row;
+    // fixture rows (string ids) can only be recorded locally (issue #4 P1-14).
+    const res = await publishKbDiff(changeId, decision, publisherKey, approverKey);
     setDecisions((d) => ({ ...d, [changeId]: decision }));
+    const verb = decision === "approve" ? "Approved" : "Rejected";
     setStatus(
-      `Recorded ${decision} for ${changeId} (${res.fixture ? "fixture endpoint" : "live POST /kb/publish"}).`,
+      res.ok
+        ? `${verb} ${changeId} (${res.fixture ? "recorded locally — fixture endpoint" : "live POST /kb/publish"}).`
+        : `Could not record ${decision} for ${changeId}: ${res.error ?? "request failed"}.`,
     );
   };
 
@@ -122,7 +127,7 @@ export default function AdminPanel() {
                     : (c.details ?? "—")}
                 </td>
                 <td>
-                  {c.source_url ? (
+                  {c.source_url && /^https?:\/\//i.test(c.source_url) ? (
                     <a href={c.source_url} target="_blank" rel="noreferrer">{c.source_url}</a>
                   ) : (
                     <span className="hint">{c.details ?? "no source link"}</span>
@@ -131,7 +136,9 @@ export default function AdminPanel() {
                 </td>
                 <td>
                   {decisions[c.id] ? (
-                    <span className="badge ok">{decisions[c.id]}d</span>
+                    <span className="badge ok">
+                      {decisions[c.id] === "approve" ? "Approved" : "Rejected"}
+                    </span>
                   ) : (
                     <div className="decide">
                       <button type="button" className="ghost" onClick={() => decide(c.id, "approve")}>

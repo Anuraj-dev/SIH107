@@ -243,3 +243,22 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 @media (prefers-reduced-motion: reduce) {
   * { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
 }
+
+/* Answer metadata badges (issue #4 P1-12): high-contrast, never color-only. */
+.meta-row { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 2px; }
+.badge { display: inline-block; font-size: 11px; font-weight: 600; line-height: 1.5;
+  padding: 1px 8px; border-radius: 999px; border: 1px solid transparent; }
+.badge.ok { color: #14532d; background: #dff2e2; border-color: #14532d; }
+.badge.refuse { color: #713f12; background: #fef3c7; border-color: #713f12; }
+.badge.lang { color: #312e81; background: #e0e7ff; border-color: #312e81; }
+.badge.pii { color: #7f1d1d; background: #fde2e2; border-color: #7f1d1d; }
+.badge.info { color: #123a63; background: #eef6ff; border-color: #123a63; }
+.evidence ul { margin: 6px 0 0 18px; padding: 0; font-size: 13px; }
+.evidence li { margin: 4px 0; }
+.evidence .ev-meta { color: var(--mut); font-size: 12px; }
+.rawjson { margin-top: 6px; }
+.rawjson pre { font-size: 11px; max-height: 260px; overflow: auto; background: #0f1f33;
+  color: #d7e3f4; padding: 10px 12px; border-radius: 8px; white-space: pre-wrap;
+  overflow-wrap: anywhere; }
+.langsel { font-size: 13px; padding: 6px 8px; border: 1px solid var(--line);
+  border-radius: 8px; background: #fff; color: var(--ink); }
