@@ -95,11 +95,36 @@ def score_standard(query: str, std: dict) -> tuple[float, list[str]]:
     return score, hits
 
 
+_BM25_CACHE: dict = {}
+
+
+def _scorer() -> str:
+    import os
+    try:
+        from .config import load as load_config
+        default = load_config()["retrieval"].get("scorer", "keyword")
+    except Exception:
+        default = "keyword"
+    return os.environ.get("BIS_RETRIEVAL_SCORER", default)
+
+
 def retrieve(query: str, top_k: int = 3):
+    from .verifier import section_map
     stds, schemes, labs, glossary = load_kb()
+    scorer = _scorer()
+    index = None
+    if scorer == "bm25":
+        from .scorers import BM25Index, score_bm25
+        key = (len(stds), stds[0]["is_number"] if stds else "")
+        if _BM25_CACHE.get("key") != key:
+            _BM25_CACHE.update(key=key, index=BM25Index(stds))
+        index = _BM25_CACHE["index"]
     ranked = []
-    for s in stds:
-        sc, hits = score_standard(query, s)
+    for i, s in enumerate(stds):
+        if scorer == "bm25":
+            sc, hits = score_bm25(query, s, index, i)
+        else:
+            sc, hits = score_standard(query, s)
         if sc > 0:
             for u in (s["source_url"],):
                 assert_allowlisted(u)
@@ -114,7 +139,8 @@ def retrieve(query: str, top_k: int = 3):
         w in ql for w in s["name_en"].lower().split()[:4])]
     # glossary match
     gloss_hits = [g for g in glossary if g["term"].lower().split()[0] in ql or g["term"].lower() in ql]
-    return {"candidates": cands, "schemes": scheme_hits, "glossary": gloss_hits}
+    return {"candidates": cands, "schemes": scheme_hits, "glossary": gloss_hits,
+            "section_refs": section_map(stds), "scorer": scorer}
 
 
 def format_citation(std: dict) -> str:

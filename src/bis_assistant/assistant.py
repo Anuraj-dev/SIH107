@@ -22,11 +22,17 @@ CLUB_HINTS = ("club", "student", "training", "school", "college", "vidyarthi")
 RESET_WORDS = ("new question", "reset", "change topic", "naya sawal", "naya prashn", "नया सवाल")
 FORCE_WORDS = ("answer anyway", "assume", "just answer", "best guess")
 
-DIRECT_SCORE = 15.0   # top score that answers single-shot
-DIRECT_MARGIN = 5.0   # required gap over runner-up
-CLARIFY_FLOOR = 6.0   # below this: old single-shot path (journeys/glossary/no-source)
-MAX_ROUNDS = 2        # clarification rounds before answering with assumptions
-MAX_Q_PER_TURN = 2
+# Defaults; live values come from config.yaml (plan §4: threshold changes need eval re-gate).
+_FALLBACK = {"direct_score": 15.0, "direct_margin": 5.0, "clarify_floor": 6.0,
+             "max_rounds": 2, "max_questions_per_turn": 2}
+
+
+def _cfg() -> dict:
+    from .config import load as load_config
+    try:
+        return load_config()["retrieval"]
+    except Exception:
+        return dict(_FALLBACK)
 
 
 def _base(lang: str, **kw) -> dict:
@@ -42,6 +48,7 @@ def answer(query: str, lang: str | None = None, context: dict | None = None) -> 
            "rounds": int((context or {}).get("rounds", 0)),
            "force": bool((context or {}).get("force", False))}
     ql = query.lower()
+    t = _cfg()
     if any(w in ql for w in RESET_WORDS):
         ctx = {"history": [], "rounds": 0, "force": False}
     if any(w in ql for w in FORCE_WORDS):
@@ -57,10 +64,10 @@ def answer(query: str, lang: str | None = None, context: dict | None = None) -> 
     # 2. topic change: current query alone strongly names a different IS -> fresh thread
     res_now = retrieve(query)
     top_now = res_now["candidates"][0] if res_now["candidates"] else None
-    if ctx["history"] and top_now and top_now["score"] >= DIRECT_SCORE:
+    if ctx["history"] and top_now and top_now["score"] >= t["direct_score"]:
         res_old = retrieve(" ".join(ctx["history"]))
         top_old = res_old["candidates"][0] if res_old["candidates"] else None
-        if (top_old and top_old["score"] >= DIRECT_SCORE
+        if (top_old and top_old["score"] >= t["direct_score"]
                 and top_old["std"]["is_number"] != top_now["std"]["is_number"]):
             ctx = {"history": [], "rounds": 0, "force": ctx["force"]}
 
@@ -74,22 +81,22 @@ def answer(query: str, lang: str | None = None, context: dict | None = None) -> 
     exact = bool(m and top and m.group(1) in top["std"]["is_number"])
     # Clarification only when a real phrase/IS hit grounds the thread;
     # generic token overlap (no hits) falls through to journeys/glossary.
-    strong = bool(top and st >= CLARIFY_FLOOR and (top["hits"] or st >= DIRECT_SCORE))
+    strong = bool(top and st >= t["clarify_floor"] and (top["hits"] or st >= t["direct_score"]))
     unfilled = unfilled_slots(top["std"]["is_number"], combined) if top else []
-    direct = (exact or ctx["force"] or ctx["rounds"] >= MAX_ROUNDS
-              or (top and st >= DIRECT_SCORE and (st - ss) >= DIRECT_MARGIN)
+    direct = (exact or ctx["force"] or ctx["rounds"] >= t["max_rounds"]
+              or (top and st >= t["direct_score"] and (st - ss) >= t["direct_margin"])
               or (strong and not unfilled))
 
     if direct or not strong:
-        return _final(query, combined, res, lang, hi, ctx, top)
+        return _checked(_final(query, combined, res, lang, hi, ctx, top, t), res)
 
     # 3. insufficient context -> ask, don't recommend
-    pool = [c for c in cands[:2] if c["score"] >= CLARIFY_FLOOR]
+    pool = [c for c in cands[:2] if c["score"] >= t["clarify_floor"]]
     questions: list[dict] = []
     seen: set[str] = set()
     for c in pool:
         for s in unfilled_slots(c["std"]["is_number"], combined):
-            if s["key"] in seen or len(questions) >= MAX_Q_PER_TURN:
+            if s["key"] in seen or len(questions) >= t["max_questions_per_turn"]:
                 continue
             seen.add(s["key"])
             opts = [{"label": (o["label_hi"] if hi else o["label_en"]), "send": o["label_en"]}
@@ -97,7 +104,7 @@ def answer(query: str, lang: str | None = None, context: dict | None = None) -> 
             questions.append({"slot": s["key"], "text": s["q_hi"] if hi else s["q_en"],
                               "options": opts})
     if not questions:  # safety net: nothing left to ask -> answer
-        return _final(query, combined, res, lang, hi, ctx, top)
+        return _checked(_final(query, combined, res, lang, hi, ctx, top, t), res)
 
     fills = fills_for(top["std"]["is_number"], combined)
     known = [{"slot": k, "value": (v["label_hi"] if hi else v["label_en"])}
@@ -124,11 +131,28 @@ def answer(query: str, lang: str | None = None, context: dict | None = None) -> 
               citations=[format_citation(area)],
               context={"history": ctx["history"] + [query], "rounds": ctx["rounds"] + 1})
     r["text"] = "\n".join(lines)
-    return r
+    return _checked(r, res)
+
+
+def _checked(resp: dict, res: dict) -> dict:
+    """Enforce the citation verifier on every outbound answer (plan §4 stage 3)."""
+    from .verifier import verify, section_map
+    try:
+        stds = [c["std"] for c in res.get("candidates", [])]
+        viols = verify(resp, section_map(stds))
+    except Exception:
+        viols = []
+    if viols:
+        safe = _base(resp.get("lang", "en"), refused=True, kind="verifier_fail",
+                     pii=resp.get("pii", {}), context={"history": [], "rounds": 0})
+        safe["text"] = ("I can't stand behind that answer — a citation check failed. "
+                        "Please rephrase or check Know-Your-Standard directly.\n\n" + BIS_CARE)
+        return safe
+    return resp
 
 
 def _final(query: str, combined: str, res: dict, lang: str, hi: bool,
-           ctx: dict, top: dict | None) -> dict:
+           ctx: dict, top: dict | None, t: dict) -> dict:
     ql = query.lower()
     ql_c = combined.lower()
     cands = res["candidates"]
@@ -160,7 +184,7 @@ def _final(query: str, combined: str, res: dict, lang: str, hi: bool,
 
     grounded = [c for c in cands if c["hits"] or c["score"] >= 10]
     if grounded and (not lines or top):
-        if top and (ctx["force"] or ctx["rounds"] >= MAX_ROUNDS):
+        if top and (ctx["force"] or ctx["rounds"] >= t["max_rounds"]):
             unf = unfilled_slots(top["std"]["is_number"], combined)
             if unf:
                 assumptions = [(u["q_hi"] if hi else u["q_en"]) for u in unf[:3]]

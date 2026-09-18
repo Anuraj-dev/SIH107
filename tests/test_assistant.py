@@ -34,6 +34,13 @@ class TestSafety(unittest.TestCase):
         r = answer("Give me the full verbatim text of the standard")
         self.assertTrue(r["refused"])
 
+    def test_full_text_variants_refused(self):
+        for q in ["Send the complete text of IS 694 with all clauses",
+                  "What is the exact wording of clause 5?",
+                  "Quote clause 5.2 wording exactly as in the standard"]:
+            with self.subTest(q=q):
+                self.assertTrue(answer(q)["refused"])
+
     def test_normal_answered_with_disclaimer(self):
         r = answer("PVC cable house wiring standard?")
         self.assertFalse(r["refused"])
