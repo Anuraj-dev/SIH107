@@ -1,10 +1,26 @@
 """Allowlisted retrieval over local BIS metadata only. No external scraping."""
 from __future__ import annotations
-import json, re
+import json
+import os
+import re
 from pathlib import Path
 
 DATA_DIR = Path(__file__).resolve().parents[2] / "data"
 ALLOWED_HOSTS = ("bis.gov.in", "crsbis.in", "manakonline.in", "lims.bis.gov.in", "standardsbis.bsbedge.com")
+
+def _backend() -> str:
+    import os
+    return os.environ.get("BIS_RETRIEVAL_KB_BACKEND", "json")  # json | sqlite
+
+
+def _kb_path() -> str:
+    import os
+    return os.environ.get("BIS_KB_PATH",
+                          str(Path(__file__).resolve().parents[2] / "kb" / "bis.db"))
+
+# Back-compat names (import-time snapshot; load_kb() reads env dynamically).
+KB_BACKEND = _backend()
+KB_PATH = _kb_path()
 
 
 HINGLISH = {"pani": "water", "paani": "water", "peene": "drinking", "peyne": "drinking",
@@ -36,6 +52,14 @@ def _tokens(s: str) -> set[str]:
 
 
 def load_kb():
+    if _backend() == "sqlite":
+        from . import kb_store
+        conn = kb_store.connect(_kb_path())
+        try:
+            return (kb_store.load_standards(conn), kb_store.load_schemes(conn),
+                    kb_store.load_labs(conn), kb_store.load_glossary(conn))
+        finally:
+            conn.close()
     stds = json.loads((DATA_DIR / "standards.json").read_text())["standards"]
     schemes = json.loads((DATA_DIR / "schemes.json").read_text())["schemes"]
     labs = json.loads((DATA_DIR / "labs.json").read_text())
