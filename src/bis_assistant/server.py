@@ -100,9 +100,27 @@ def _key_hash(raw: str) -> str:
     return hashlib.sha256(raw.encode()).hexdigest()
 
 
+def _is_registered(api_key: str) -> bool:
+    h = _key_hash(api_key)
+    if h in _registered:
+        return True
+    try:
+        conn = _db()
+        try:
+            row = conn.execute("SELECT 1 FROM users WHERE key_hash=?", (h,)).fetchone()
+        finally:
+            conn.close()
+        if row:
+            _registered.add(h)
+            return True
+    except Exception:
+        pass
+    return False
+
+
 def _check_limit(ip: str, api_key: Optional[str], path: str) -> None:
     now = time.time()
-    if api_key and _key_hash(api_key) in _registered:
+    if api_key and _is_registered(api_key):
         bucket, window, n = f"reg:{api_key}", 3600, CFG["api"]["registered_per_hour"]
     else:
         if path == "/chat":
