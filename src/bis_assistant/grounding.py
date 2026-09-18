@@ -12,8 +12,6 @@ same fallbacks as before.
 """
 from __future__ import annotations
 
-import re
-
 from .retriever import _tokens as _tok, CONTENT_STOPWORDS
 from .slots import active_slots, unfilled_slots
 
@@ -22,7 +20,8 @@ FORCE_WORDS = ("answer anyway", "assume", "just answer", "best guess")
 
 # Defaults; live values come from config.yaml (plan §4: threshold changes need eval re-gate).
 FALLBACK_THRESHOLDS = {"direct_score": 15.0, "direct_margin": 5.0, "clarify_floor": 6.0,
-                       "weak_floor": 3.0, "max_rounds": 2, "max_questions_per_turn": 2}
+                       "weak_floor": 3.0, "max_rounds": 2, "max_questions_per_turn": 2,
+                       "grounded_score": 10.0, "fusion_strong_score": 15.0}
 
 
 def thresholds() -> dict:
@@ -83,8 +82,8 @@ def assess(combined: str, cands: list[dict], ctx: dict, t: dict) -> dict:
     top = cands[0] if cands else None
     st = top["score"] if top else 0.0
     ss = cands[1]["score"] if len(cands) > 1 else 0.0
-    m = re.search(r"is\s*(\d+)", combined.lower())
-    exact = bool(m and top and m.group(1) in top["std"]["is_number"])
+    from .retriever import is_exact_is_match
+    exact = bool(top and is_exact_is_match(combined, top["std"]["is_number"]))
     # Clarification only when a real phrase/IS hit grounds the thread;
     # generic token overlap (no hits) falls through to journeys/glossary.
     strong = bool(top and st >= t["clarify_floor"] and (top["hits"] or st >= t["direct_score"]))

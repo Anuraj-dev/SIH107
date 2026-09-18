@@ -239,11 +239,16 @@ def test_catalogue_fallback_keeps_refusals(tmp_path, monkeypatch):
     assert g["refused"] and g["kind"] == "no_source"
     p = answer("My startup make plastic bottle. Which IS?")
     assert p["refused"] and p["kind"] == "coverage_gap"
-    # disabled -> curated behaviour preserved (no catalogue invention)
+    # catalogue flag is decoupled from the corpus switch (issue #4 P0-1):
+    # disabling RAG alone must NOT remove catalogue answers ...
     monkeypatch.setenv("BIS_RAG_ENABLED", "0")
     n = answer("Which standard covers galvanized iron widgets for fencing hardware?")
-    assert n["kind"] != "catalogue_answer"
-    assert n.get("needs_info") or n["refused"]
+    assert n["kind"] == "catalogue_answer" and not n["refused"]
+    # ... but disabling the catalogue flag restores the old refusal.
+    monkeypatch.setenv("BIS_CATALOGUE_ENABLED", "0")
+    m = answer("Which standard covers galvanized iron widgets for fencing hardware?")
+    assert m["kind"] != "catalogue_answer"
+    assert m.get("needs_info") or m["refused"]
 
 
 # --- adaptive guidance ------------------------------------------------------------
@@ -297,6 +302,54 @@ def test_extended_vocabulary_tokens():
     assert "helmet" in _tokens("helmat") and "steel" in _tokens("loha")
     assert "wire" in _tokens("तार") and "bulb" in _tokens("बल्ब")
     assert "cement" in _tokens("सीमेंट")
+
+
+# --- P0 regression tests (issue #4) ----------------------------------------------
+
+def test_slot_fills_use_token_boundaries(monkeypatch):
+    _hermetic(monkeypatch)
+    from bis_assistant.slots import fills_for
+    # "ro" must not fill via the "iron"/"error" substring (P0-3).
+    assert "plant_stage" not in fills_for("IS 13428", "ironing board error report")
+    assert fills_for("IS 13428", "treated ro water")["source"]["matched"] == "Treated water"
+    # multi-word options still fill (P0-3 preserves phrase support).
+    assert fills_for("IS 16102-1", "tubelight fitting for home")["lamp_kind"]["matched"]
+
+
+def test_is_reference_parsing(monkeypatch):
+    _hermetic(monkeypatch)
+    from bis_assistant.retriever import (
+        extract_is_refs, is_exact_is_match, is_number_base, score_standard)
+    assert extract_is_refs("Tell me about IS-10500 please") == ["IS-10500"]
+    assert is_number_base("IS 302-1") == "302"
+    assert is_exact_is_match("IS 10500 year and status?", "IS 10500") is True
+    assert is_exact_is_match("IS-10500 status?", "IS 10500") is True
+    assert is_exact_is_match("IS 10 pipes", "IS 10500") is False
+    assert is_exact_is_match("IS 302", "IS 302-1") is False
+    std10500 = {"is_number": "IS 10500", "year": "2012", "title_en": "Water",
+                "scope_en": "", "category_keywords": []}
+    sc, hits = score_standard("IS-10500 drinking water", std10500)
+    assert sc >= 20.0 and "IS 10500" in hits
+    sc2, hits2 = score_standard("IS 10 pipes", std10500)
+    assert sc2 < 20.0 and "IS 10500" not in hits2
+
+
+def test_exact_is_material_mismatch_is_coverage_gap(monkeypatch):
+    _hermetic(monkeypatch)
+    from bis_assistant.assistant import answer
+    r = answer("IS 17803 for plastic bottle")
+    assert r["refused"] and r["kind"] == "coverage_gap"
+    assert r["citations"]
+
+
+def test_topic_reset_on_strong_new_is(monkeypatch):
+    _hermetic(monkeypatch)
+    from bis_assistant.assistant import answer
+    r1 = answer("steel bottle")
+    assert r1.get("needs_info")
+    r2 = answer("OPC 53 grade cement for construction", None, r1["context"])
+    assert "IS 17803" not in r2["text"]
+    assert "IS 17803" not in " ".join(r2["citations"])
 
 
 # --- contract -----------------------------------------------------------------------

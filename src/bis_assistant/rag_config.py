@@ -112,11 +112,21 @@ def load_llm_config() -> dict:
 
 def load_guidance_config() -> dict:
     file_cfg = _cfg_section("guidance")
+    # Catalogue has its own flag, decoupled from the corpus (issue #4 P0-1).
+    # Legacy BIS_RAG_CATALOGUE / rag.catalogue still honored as fallback.
+    cat_file = _cfg_section("catalogue")
+    if "enabled" not in cat_file:
+        legacy = _cfg_section("rag").get("catalogue", True)
+        cat_file = {"enabled": legacy}
+    if "BIS_CATALOGUE_ENABLED" in os.environ:
+        catalogue_on = _bool_env("BIS_CATALOGUE_ENABLED", True)
+    else:  # legacy knob honored until removed
+        catalogue_on = _bool_env("BIS_RAG_CATALOGUE",
+                                 bool(cat_file.get("enabled", True)))
     return {
         "adaptive": _bool_env("BIS_GUIDANCE_ADAPTIVE",
                               bool(file_cfg.get("adaptive", True))),
-        "catalogue": _bool_env("BIS_RAG_CATALOGUE",
-                               bool(_cfg_section("rag").get("catalogue", True))),
+        "catalogue": catalogue_on,
     }
 
 

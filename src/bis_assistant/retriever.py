@@ -122,6 +122,50 @@ def assert_allowlisted(url: str) -> None:
         raise ValueError(f"Blocked non-allowlisted source: {url}")
 
 
+# Shared IS-reference parsing (issue #4 P0-4): one normalizer for the
+# metadata scorer, the grounding exact-match and the RAG boost, so
+# `IS-10500` hits, `IS 10` never prefix-matches `IS 10500`, and part
+# designations compare structurally instead of by substring.
+IS_REF_RE = re.compile(
+    r"IS\s*-?\s*\d+(?:\s*\([^)]*\))?\s*(?::\s*\d{4})?", re.IGNORECASE)
+
+
+def extract_is_refs(text: str) -> list[str]:
+    """Raw IS designations in text, e.g. ['IS 101 (Part 2/Sec 6):2026']."""
+    return [re.sub(r"\s+", " ", m.group(0).strip())
+            for m in IS_REF_RE.finditer(text or "")]
+
+
+def normalize_is_ref(ref: str) -> str:
+    """Canonical form: `IS 101(PART 2/SEC 6):2026`-style, hyphen-tolerant."""
+    s = (ref or "").upper().replace("–", "-").replace("—", "-")
+    s = re.sub(r"\s+", " ", s).strip()
+    s = re.sub(r"\s*([-():/])\s*", r"\1", s)
+    s = re.sub(r"^IS\s*-?\s*", "IS ", s)
+    return s
+
+
+def _strip_year(ref: str) -> str:
+    return re.sub(r":\d{4}$", "", ref)
+
+
+def is_number_base(ref: str) -> str:
+    """Base digits of a designation: 'IS 302-1'/'IS 302' -> '302'."""
+    m = re.search(r"IS\s*[A-Z/]*\s*(\d+)", (ref or "").upper())
+    return m.group(1) if m else ""
+
+
+def is_exact_is_match(query: str, std_is_number: str) -> bool:
+    """Full-designation equality (year-insensitive when the query omits it)."""
+    std_n = normalize_is_ref(std_is_number)
+    std_ny = _strip_year(std_n)
+    for ref in extract_is_refs(query):
+        n = normalize_is_ref(ref)
+        if n == std_n or _strip_year(n) == std_ny:
+            return True
+    return False
+
+
 def score_standard(query: str, std: dict) -> tuple[float, list[str]]:
     q = _tokens(query)
     hits: list[str] = []
@@ -136,11 +180,16 @@ def score_standard(query: str, std: dict) -> tuple[float, list[str]]:
         if kt and kt <= q:
             score += 5.0
             hits.append(kw)
-    # IS number exact match boosts strongly
-    m = re.search(r"is\s*(\d+)", query.lower())
-    if m and m.group(1) in std["is_number"]:
+    # IS number match: full designation boosts strongly (+hit); a bare base
+    # number equal to the standard's base only nudges (no hit, never exact).
+    if is_exact_is_match(query, std["is_number"]):
         score += 20.0
         hits.append(std["is_number"])
+    else:
+        q_bases = {is_number_base(r) for r in extract_is_refs(query)}
+        q_bases.discard("")
+        if q_bases and is_number_base(std["is_number"]) in q_bases:
+            score += 8.0
     return score, hits
 
 

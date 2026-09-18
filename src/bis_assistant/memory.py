@@ -60,19 +60,49 @@ def summarize_thread(history: list[str], max_chars: int = 280) -> str:
         return ""
 
 
+def _mem_limits() -> dict:
+    """Expansion caps from the ``memory:`` config section (issue #4 P0-6/P0-2)."""
+    try:
+        from .rag_config import _cfg_section
+        import os as _os
+        file_cfg = _cfg_section("memory")
+    except Exception:
+        file_cfg, _os = {}, __import__("os")
+
+    def _int(env: str, key: str, default: int) -> int:
+        try:
+            return int(_os.environ.get(env, file_cfg.get(key, default)))
+        except (ValueError, TypeError):
+            return default
+    return {
+        "turns": _int("BIS_MEMORY_EXPAND_TURNS", "expand_turns", 2),
+        "terms": _int("BIS_MEMORY_EXPAND_TERMS", "expand_terms", 6),
+        "chars": _int("BIS_MEMORY_EXPAND_CHARS", "expand_chars", 200),
+    }
+
+
 def expand_query(query: str, history: list[str] | None) -> str:
-    """Append salient history keywords missing from the query."""
+    """Append salient history keywords missing from the query.
+
+    Capped to the last ``turns`` turns, ``terms`` new terms and ``chars``
+    total added characters so long threads cannot pollute retrieval.
+    """
     q = (query or "").strip()
     if not history:
         return q
+    lim = _mem_limits()
     try:
         qtoks = set(_TOKEN_RE.findall(q.lower()))
         extra: list[str] = []
-        for h in history[-3:]:
-            for w in salient_terms(h, limit=6):
+        added = 0
+        for h in history[-max(1, lim["turns"]):]:
+            for w in salient_terms(h, limit=lim["terms"]):
                 if w not in qtoks and w not in extra:
+                    if added + len(w) + 1 > lim["chars"]:
+                        break
                     extra.append(w)
-                if len(extra) >= 6:
+                    added += len(w) + 1
+                if len(extra) >= lim["terms"]:
                     break
         return (q + " " + " ".join(extra)).strip() if extra else q
     except Exception:

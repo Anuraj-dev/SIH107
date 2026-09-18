@@ -11,7 +11,9 @@ except ImportError:  # stdlib-only fallback (MVP core)
 _DEFAULTS = {
     "retrieval": {"direct_score": 15.0, "direct_margin": 5.0, "clarify_floor": 6.0,
                   "weak_floor": 3.0, "max_rounds": 2, "max_questions_per_turn": 2,
-                  "scorer": "keyword", "kb_backend": "json"},
+                  "scorer": "keyword", "kb_backend": "json",
+                  "grounded_score": 10.0, "fusion_strong_score": 15.0},
+    "catalogue": {"enabled": True},
     "privacy": {"thread_ttl_days": 7, "retention_days": 90,
                 "consent_valid_days": 365, "erasure_sla_hours": 24},
     "api": {"port": 8000, "anon_per_hour": 30, "anon_burst_per_min": 5,
@@ -23,11 +25,13 @@ _DEFAULTS = {
                       "latency_p95_ms": 2000},
     "rag": {"enabled": False, "db_path": "kb/bis_rag.db", "top_k": 5,
             "semantic": True, "embedding_model": "", "weight_lexical": 1.0,
-            "weight_semantic": 0.3, "exact_boost": 50.0, "catalogue": True},
+            "weight_semantic": 0.3, "exact_boost": 50.0, "catalogue": True,
+            "min_overlap": 3, "min_lexical": 15.0, "catalogue_min_score": 8.0},
     "llm": {"provider": "openai-compatible", "model": "", "api_key": "",
             "base_url": "https://api.openai.com/v1",
             "temperature": 0.2, "max_tokens": 512, "timeout_s": 20.0, "retries": 1},
     "guidance": {"adaptive": True},
+    "memory": {"expand_turns": 2, "expand_terms": 6, "expand_chars": 200},
 }
 
 _TYPES = {"port": int, "retention_days": int, "thread_ttl_days": int,
@@ -40,7 +44,10 @@ _TYPES = {"port": int, "retention_days": int, "thread_ttl_days": int,
           "top_k": int, "max_tokens": int, "temperature": float, "timeout_s": float,
           "weight_lexical": float, "weight_semantic": float, "exact_boost": float,
           "enabled": bool, "semantic": bool, "live_crawl_enabled": bool,
-          "retries": int, "catalogue": bool, "adaptive": bool}
+          "retries": int, "catalogue": bool, "adaptive": bool,
+          "grounded_score": float, "fusion_strong_score": float,
+          "min_overlap": int, "min_lexical": float, "catalogue_min_score": float,
+          "expand_turns": int, "expand_terms": int, "expand_chars": int}
 
 
 def _deep_merge(base: dict, over: dict) -> dict:

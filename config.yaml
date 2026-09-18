@@ -1,5 +1,6 @@
 # BIS Assistant — single config source (env overrides: BIS_<SECTION>_<KEY>).
 # Threshold changes require re-running the eval gate (plan §4, §8).
+# Grounded/fusion floors moved here from hardcoded gates (issue #4 P0-2).
 retrieval:
   direct_score: 15.0
   direct_margin: 5.0
@@ -7,8 +8,13 @@ retrieval:
   weak_floor: 3.0
   max_rounds: 2
   max_questions_per_turn: 2
+  grounded_score: 10.0       # curated "has a candidate" floor (BIS_RETRIEVAL_GROUNDED_SCORE)
+  fusion_strong_score: 15.0  # metadata citations fused into corpus answers above this
   scorer: keyword        # keyword | bm25 (Phase 2)
   kb_backend: json       # json | sqlite (Phase 1)
+
+catalogue:
+  enabled: true          # BIS_CATALOGUE_ENABLED — 24k fallback, independent of rag.enabled
 
 privacy:
   thread_ttl_days: 7
@@ -43,7 +49,10 @@ rag:
   weight_lexical: 1.0
   weight_semantic: 0.3
   exact_boost: 50.0     # exact IS-number/designation boost
-  catalogue: true       # BIS_RAG_CATALOGUE — 24k catalogue fallback for novel products
+  catalogue: true       # legacy alias of catalogue.enabled (BIS_RAG_CATALOGUE)
+  min_overlap: 3        # BIS_RAG_MIN_OVERLAP — corpus relevance token floor
+  min_lexical: 15.0     # BIS_RAG_MIN_LEXICAL — corpus relevance lexical floor
+  catalogue_min_score: 8.0  # BIS_RAG_CATALOGUE_MIN_SCORE — pre-clarification bar
 
 llm:
   provider: openai-compatible  # BIS_LLM_PROVIDER — openai-compatible | gemini | ollama
@@ -54,6 +63,11 @@ llm:
   max_tokens: 512
   timeout_s: 20.0
   retries: 1            # BIS_LLM_RETRIES — extra attempts on transport failure
+
+memory:
+  expand_turns: 2       # BIS_MEMORY_EXPAND_TURNS — history turns feeding retrieval
+  expand_terms: 6       # BIS_MEMORY_EXPAND_TERMS — new terms carried over, max
+  expand_chars: 200     # BIS_MEMORY_EXPAND_CHARS — added-character budget
 
 guidance:
   adaptive: true        # BIS_GUIDANCE_ADAPTIVE — user-tailored certification next steps

@@ -225,6 +225,22 @@ SLOTS: dict[str, list[dict]] = {
 }
 
 
+def _word_hit(word: str, toks: set[str], low: str) -> bool:
+    """Token-boundary option matching (issue #4 P0-3).
+
+    Single tokens match the token set only — raw ``w in low`` substring let
+    ``iron`` fill ``ro`` (and ``from``/``error``-style collisions). Phrases
+    (spaces/hyphens) match with boundary guards so ``tubelight fitting``
+    still fills without ``fit``-style prefixes leaking in.
+    """
+    w = (word or "").lower()
+    if not w:
+        return False
+    if " " in w or "-" in w:
+        return re.search(r"(?<![a-z0-9])" + re.escape(w) + r"(?![a-z0-9])", low) is not None
+    return w in toks
+
+
 def fills_for(is_number: str, text: str) -> dict[str, dict]:
     """Return {slot_key: {label_en, label_hi, matched}} for filled slots."""
     toks = _tokens(text)
@@ -241,7 +257,7 @@ def fills_for(is_number: str, text: str) -> dict[str, dict]:
                 continue
         for opt in slot.get("options", []):
             words = [w.lower() for w in opt.get("words", [])]
-            if any(w in toks or w in low for w in words):
+            if any(_word_hit(w, toks, low) for w in words):
                 out[slot["key"]] = {"label_en": opt["label_en"], "label_hi": opt["label_hi"],
                                     "matched": opt["label_en"]}
                 break

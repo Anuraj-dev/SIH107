@@ -98,20 +98,33 @@ def _footer(hi: bool, with_disclaimer: bool = True) -> list[str]:
     return lines
 
 
+def _rag_thresholds() -> dict:
+    """Relevance gates, config-driven per issue #4 P0-2 (safe fallbacks)."""
+    try:
+        from .rag_config import load_rag_config
+        rcfg = load_rag_config()
+        return {"min_overlap": int(rcfg.get("min_overlap", 3)),
+                "min_lexical": float(rcfg.get("min_lexical", 15.0)),
+                "catalogue_min_score": float(rcfg.get("catalogue_min_score", 8.0))}
+    except Exception:
+        return {"min_overlap": 3, "min_lexical": 15.0, "catalogue_min_score": 8.0}
+
+
 def _rag_relevant(text: str, evidence: list) -> bool:
     """Gate: corpus evidence must topically match, not just share tokens.
 
-    Exact IS matches always count. Otherwise require >=3 content-token overlap
-    with the top chunk (or a strong lexical score with >=2 overlap), so vague
-    curated flows ("steel bottle") and chance co-occurrences ("steel"+"bottle"
-    in a prosthesis test-equipment table) keep their metadata behaviour while
-    true corpus topics ("thick-walled bushes", "formaldehyde ...") divert.
+    Exact IS matches always count. Otherwise require ``min_overlap``
+    content-token overlap with the top chunk (or a ``min_lexical`` score),
+    so vague curated flows ("steel bottle") and chance co-occurrences
+    keep their metadata behaviour while true corpus topics divert.
+    Thresholds live in ``config.yaml`` (`rag:`) — see issue #4 P0-2.
     """
     if not evidence:
         return False
     top = evidence[0]
     if top.get("exact_match"):
         return True
+    th = _rag_thresholds()
     import re as _re
     stop = {"what", "does", "the", "cover", "about", "which", "with", "from",
             "that", "this", "give", "summary", "scope", "standard", "indian",
@@ -128,10 +141,10 @@ def _rag_relevant(text: str, evidence: list) -> bool:
     chunk_digits = set(_re.findall(r"\d{3,5}", top.get("chunk_text") or ""))
     if digits and digits & chunk_digits and overlap >= 2:
         return True
-    if overlap >= 3:
+    if overlap >= th["min_overlap"]:
         return True
     try:
-        if float(top.get("lexical", 0.0)) >= 15.0 and overlap >= 2:
+        if float(top.get("lexical", 0.0)) >= th["min_lexical"] and overlap >= 2:
             return True
     except (TypeError, ValueError):
         pass
@@ -184,16 +197,22 @@ def _attach_rag_sources(resp: dict, evidence: list, query_text: str = "") -> dic
     return resp
 
 
-def _strongly_grounded(cands: list[dict]) -> bool:
+def _strongly_grounded(cands: list[dict], t: dict | None = None) -> bool:
     """Curated grounding robust to single generic-word collisions.
 
     A lone short keyword hit (e.g. query metal "iron" matching appliance
     keyword "iron") must not outrank a strong catalogue match, while phrase
     hits ("steel bottle"), multiple hits, or high scores keep priority.
+    The score floor is ``retrieval.grounded_score`` (issue #4 P0-2).
     """
+    floor = (t or {}).get("grounded_score", 10)
+    try:
+        floor = float(floor)
+    except (TypeError, ValueError):
+        floor = 10.0
     for c in (cands or [])[:2]:
         hits = c.get("hits") or []
-        if c.get("score", 0) >= 10 or len(hits) >= 2:
+        if c.get("score", 0) >= floor or len(hits) >= 2:
             return True
         if any(" " in h or len(h) > 6 for h in hits):
             return True
@@ -212,15 +231,21 @@ def _maybe_catalogue(query: str, retrieval_query: str, lang: str,
     try:
         from .rag_config import load_guidance_config, load_rag_config
         rcfg = load_rag_config()
-        if not (rcfg.get("enabled") and load_guidance_config()["catalogue"]):
+        # Catalogue fallback is independent of the corpus switch (issue #4
+        # P0-1): it only needs the catalogue DB table to exist.
+        if not load_guidance_config()["catalogue"]:
             return None
         from .catalogue_search import build_catalogue_answer, search_catalogue
         hits = search_catalogue(retrieval_query, db_path=rcfg.get("db_path"))
         relevant = [h for h in hits if h.get("relevant")]
         if not relevant:
             return None
+        try:
+            min_score = float(rcfg.get("catalogue_min_score", 8.0))
+        except (TypeError, ValueError):
+            min_score = 8.0
         if strong_only and not (
-                relevant[0].get("exact_match") or relevant[0].get("score", 0) >= 8.0):
+                relevant[0].get("exact_match") or relevant[0].get("score", 0) >= min_score):
             return None
         return build_catalogue_answer(query, lang, relevant)
     except Exception:
@@ -308,14 +333,17 @@ def answer(query: str, lang: str | None = None, context: dict | None = None) -> 
                          + "\n\n" + _DIVIDER + "\n" + BIS_CARE)
             return _tag(_attach_rag_sources(r, rag_evidence, query))
 
-    # 2. topic change: current query alone strongly names a different IS -> fresh thread
+    # 2. topic change: the current query alone strongly names an IS that
+    # differs from the thread's topic -> fresh thread. The old side needs no
+    # strength threshold: a weak opener (e.g. `steel bottle`) followed by a
+    # direct new topic (e.g. `OPC 53 cement`) must not fuse both standards
+    # into one answer (issue #4 P0-6).
     res_now = retrieve(query)
     top_now = res_now["candidates"][0] if res_now["candidates"] else None
     if ctx["history"] and top_now and top_now["score"] >= t["direct_score"]:
         res_old = retrieve(" ".join(ctx["history"]))
         top_old = res_old["candidates"][0] if res_old["candidates"] else None
-        if (top_old and top_old["score"] >= t["direct_score"]
-                and top_old["std"]["is_number"] != top_now["std"]["is_number"]):
+        if top_old is None or top_old["std"]["is_number"] != top_now["std"]["is_number"]:
             ctx = threadmod.reset_context(force=ctx["force"])
 
     combined = threadmod.combined_query(ctx["history"], query)
@@ -350,7 +378,7 @@ def answer(query: str, lang: str | None = None, context: dict | None = None) -> 
         # Curated clarification wins over weak corpus co-occurrence hits:
         # only divert vague queries to the corpus when metadata has no
         # grounded candidate of its own.
-        meta_grounded = any((c.get("hits") or c.get("score", 0) >= 10)
+        meta_grounded = any((c.get("hits") or c.get("score", 0) >= t.get("grounded_score", 10))
                             for c in cands[:2])
         if bypassed_fulltext or rag_exact or (
                 not direct and not journey_q and not meta_grounded):
@@ -365,7 +393,7 @@ def answer(query: str, lang: str | None = None, context: dict | None = None) -> 
             # (both retrieval tiers visible, corpus primary).
             try:
                 for c in cands[:2]:
-                    if c["hits"] or c["score"] >= 15.0:
+                    if c["hits"] or c["score"] >= t.get("fusion_strong_score", 15.0):
                         fc = format_citation(c["std"])
                         if fc not in r["citations"]:
                             r["citations"].append(fc)
@@ -375,7 +403,9 @@ def answer(query: str, lang: str | None = None, context: dict | None = None) -> 
 
     # Material contradiction (e.g. plastic bottle vs steel-flask IS): never recommend,
     # never interrogate about the wrong subtypes — state the coverage gap at once.
-    if top and (strong or weak) and not exact:
+    # This check intentionally ignores `exact`: naming an IS number the user typed
+    # does not license contradicting its own scope (issue #4 P0-5).
+    if top and (strong or weak or exact):
         mat = material_mismatch(top["std"]["is_number"], combined)
         if mat:
             return _checked(_tag(_coverage_gap(top["std"], mat, query, lang, hi)), res,
@@ -400,7 +430,7 @@ def answer(query: str, lang: str | None = None, context: dict | None = None) -> 
     # from the catalogue instead of asking irrelevant slot questions.
     # (Curated clarification still wins whenever it is grounded, and journey
     # queries never divert.)
-    if not _strongly_grounded(cands) and not (_has_lab_hint(ql) or any(
+    if not _strongly_grounded(cands, t) and not (_has_lab_hint(ql) or any(
             h in ql for h in HALLMARK_HINTS + SCHEME_HINTS + CLUB_HINTS)):
         cat = _maybe_catalogue(query, retrieval_query, lang, strong_only=True)
         if cat is not None:
