@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { checkHealth, sendChat } from "./api";
 import { Badge, RichText } from "./components";
-import type { Lang, Msg, ThreadCtx } from "./types";
+import type { Lang, Msg } from "./types";
+import type { ServerThread } from "./api";
 import "./styles.css";
 
 const SAMPLES: { label: string; q: string; lang: Lang }[] = [
@@ -24,7 +25,7 @@ export default function App() {
   const [busy, setBusy] = useState(false);
   const [healthy, setHealthy] = useState<boolean | null>(null);
   const [showRaw, setShowRaw] = useState(false);
-  const [thread, setThread] = useState<ThreadCtx | null>(null);
+  const [thread, setThread] = useState<ServerThread | null>(null);
   const [pendingQ, setPendingQ] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -41,22 +42,23 @@ export default function App() {
   }, [msgs]);
 
   const send = useCallback(
-    async (query: string, opts?: { ctx?: ThreadCtx | null; force?: boolean; fresh?: boolean }) => {
+    async (query: string, opts?: { force?: boolean; fresh?: boolean }) => {
       const q = query.trim();
       if (!q || busy) return;
       setBusy(true);
-      const useCtx = opts?.fresh ? null : (opts?.ctx !== undefined ? opts.ctx : thread);
+      const useThread = opts?.fresh ? null : thread;
       setPendingQ(q);
       const userMsg: Msg = { id: nextId++, role: "user", text: q };
       setMsgs((m) => [...m, userMsg]);
       setInput("");
       try {
-        const { resp, ms } = await sendChat(q, lang, useCtx, opts?.force ?? false);
+        const { resp, ms, thread: next } = await sendChat(q, lang, useThread, opts?.force ?? false);
         setMsgs((m) => [...m, { id: nextId++, role: "assistant", text: resp.text, resp, ms }]);
-        setThread(resp.context && resp.context.history.length > 0 ? resp.context : null);
+        setThread(resp.needs_info ? next : null);
       } catch (e) {
         const msg = e instanceof Error ? e.message : "request failed";
-        setMsgs((m) => [...m, { id: nextId++, role: "assistant", text: "", error: `Backend unreachable (${msg}). Is the API on :8000?` }]);
+        if (msg.startsWith("Thread expired")) setThread(null);
+        setMsgs((m) => [...m, { id: nextId++, role: "assistant", text: "", error: `${msg}. Is the API on :8000?` }]);
         setHealthy(false);
       } finally {
         setBusy(false);
@@ -95,7 +97,7 @@ export default function App() {
           </button>
         ))}
         <button className="chip new" disabled={busy} onClick={() => { newTopic(); }} title="Drop follow-up context">
-          + new topic{thread ? ` (${thread.rounds})` : ""}
+          + new topic{thread ? " (thread open)" : ""}
         </button>
       </section>
 
@@ -117,7 +119,7 @@ export default function App() {
                 <>
                   <div className="meta">
                     {m.resp!.needs_info
-                      ? <Badge tone="refuse">needs info · round {m.resp!.context.rounds}</Badge>
+                      ? <Badge tone="refuse">needs info · follow-up</Badge>
                       : m.resp!.refused
                         ? <Badge tone="refuse">refused · {m.resp!.kind}</Badge>
                         : <Badge tone="ok">answered · {m.resp!.kind}</Badge>}

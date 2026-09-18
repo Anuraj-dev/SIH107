@@ -1,4 +1,4 @@
-"""CLI demo: python -m bis_assistant.cli [--lang en|hi]"""
+"""CLI demo: python -m bis_assistant.cli [--lang en|hi] [--server URL]"""
 from __future__ import annotations
 import sys
 from .assistant import answer
@@ -7,14 +7,33 @@ from .i18n_privacy import ConsentStore, redact
 store = ConsentStore()
 
 
+def _remote_ask(base: str, q: str, thread_id, token):
+    import json
+    import urllib.request
+    payload = {"query": q}
+    if thread_id:
+        payload["thread_id"] = thread_id
+    req = urllib.request.Request(base.rstrip("/") + "/chat",
+                                 data=json.dumps(payload).encode(),
+                                 headers={"Content-Type": "application/json",
+                                          **({"X-Owner-Token": token} if token else {})})
+    with urllib.request.urlopen(req, timeout=30) as r:
+        return json.loads(r.read())
+
+
 def main():
     lang = None
+    server = None
     if "--lang" in sys.argv:
         lang = sys.argv[sys.argv.index("--lang") + 1]
-    print("BIS Assistant (MVP) — type 'quit' to exit, 'new' for a new topic, 'assume' to answer with assumptions.")
+    if "--server" in sys.argv:
+        server = sys.argv[sys.argv.index("--server") + 1]
+    print("BIS Assistant (MVP)" + (f" via {server}" if server else "")
+          + " — type 'quit' to exit, 'new' for a new topic, 'assume' to answer with assumptions.")
     print("If your query lacks detail, I will ask follow-up questions until I have enough context.")
     uid = "demo-user"
     ctx: dict | None = None
+    thread_id, token = None, None
     while True:
         try:
             q = input("\nYou: ").strip()
@@ -24,6 +43,7 @@ def main():
             break
         if q.lower() in ("new", "new topic"):
             ctx = None
+            thread_id, token = None, None
             print("Assistant: fresh topic — ask away.")
             continue
         if q.lower().startswith("i consent"):
@@ -33,6 +53,18 @@ def main():
         if "delete my data" in q.lower() or "mera data" in q:
             store.delete(uid)
             print("Assistant: data deleted.")
+            continue
+        if server:
+            try:
+                r = _remote_ask(server, q, thread_id, token)
+            except Exception as e:
+                print(f"Assistant: [server error: {e}]")
+                continue
+            thread_id = r.get("thread_id")
+            token = r.get("owner_token", token)
+            print("\nAssistant:\n" + r["text"])
+            if r.get("needs_info"):
+                print("\n[answer the questions above, or start 'new' topic]")
             continue
         if q.lower() in ("assume", "answer anyway") and ctx:
             ctx = {**ctx, "force": True}
