@@ -181,7 +181,8 @@ async def _rid(request: Request, call_next):
     t0 = time.time()
     ip = request.client.host if request.client else "?"
     try:
-        _check_limit(ip, request.headers.get("X-API-Key"), request.url.path)
+        if request.url.path not in ("/health", "/metrics"):
+            _check_limit(ip, request.headers.get("X-API-Key"), request.url.path)
         resp = await call_next(request)
     except HTTPException as e:
         detail = e.detail if isinstance(e.detail, dict) else {"error": str(e.detail)}

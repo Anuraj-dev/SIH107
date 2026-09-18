@@ -41,6 +41,17 @@ def test_verifier_passes_good_answer():
     assert verifier.verify(r, retrieve("led lamp")["section_refs"]) == []
 
 
+def test_matlab_does_not_trigger_lab_journey():
+    r = answer("QCO ka matlab simple shabdon me samjhayen")
+    assert "lims.bis.gov.in" not in r["text"]
+
+
+def test_glossary_with_example_is_passes_verifier():
+    r = answer("What is an Indian Standard?")
+    assert r["kind"] == "glossary"
+    assert verifier.verify(r, retrieve("indian standard")["section_refs"]) == []
+
+
 def test_verifier_fault_injection_all_trips():
     bad = [
         {"text": "Your product is covered by IS 1234.", "citations": [], "refused": False},

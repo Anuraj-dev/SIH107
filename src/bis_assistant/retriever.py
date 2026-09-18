@@ -34,7 +34,8 @@ DEVNAGARI = {"पानी": "water", "पेय": "drinking", "पेयजल"
              "बिजली": "electrical", "खिलौना": "toy", "सरिया": "steel bar",
              "पंजीकरण": "registration", "जाँच": "testing", "जांच": "testing",
              "परीक्षण": "testing", "गेहना": "jewellery", "गेहने": "jewellery",
-             "बोतल": "bottle", "स्टील": "steel", "प्रयोगशाला": "lab", "हॉलमार्क": "hallmark"}
+             "बोतल": "bottle", "स्टील": "steel", "प्रयोगशाला": "lab", "हॉलमार्क": "hallmark",
+             "कांच": "glass", "शीशा": "glass", "काँच": "glass"}
 
 
 def _tokens(s: str) -> set[str]:
@@ -133,10 +134,10 @@ def retrieve(query: str, top_k: int = 3):
     cands = [{"score": sc, "std": s, "hits": h,
               "confidence": "high" if sc >= 20 else ("medium" if sc >= 6 else "low")}
              for sc, s, h in ranked[:top_k]]
-    # scheme match
+    # scheme match (skip punctuation-only name fragments like em-dashes)
     ql = query.lower()
     scheme_hits = [s for s in schemes if s["key"].lower() in ql or any(
-        w in ql for w in s["name_en"].lower().split()[:4])]
+        w in ql for w in s["name_en"].lower().split()[:4] if len(w) > 3 and w.isalnum())]
     # glossary match
     gloss_hits = [g for g in glossary if g["term"].lower().split()[0] in ql or g["term"].lower() in ql]
     return {"candidates": cands, "schemes": scheme_hits, "glossary": gloss_hits,
