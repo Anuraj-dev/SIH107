@@ -1,17 +1,24 @@
 import React, { useState } from "react";
 import type { Question } from "./types";
+import {
+  AlertTriangleIcon,
+  CheckIcon,
+  CopyIcon,
+  ExternalLinkIcon,
+  ThumbsDownIcon,
+  ThumbsUpIcon,
+} from "./icons";
 
 /** Inline markdown: **bold** + auto-linked https:// URLs. No deps, no HTML injection. */
 const URL_RE = /(https?:\/\/[^\s)<\]]+)/g;
 
-function renderInline(body: string, keyPrefix: string): React.ReactNode[] {
+export function renderInline(body: string, keyPrefix: string): React.ReactNode[] {
   const boldParts = body.split("**");
   const out: React.ReactNode[] = [];
   boldParts.forEach((chunk, bi) => {
     if (bi % 2 === 1) {
-      // Bold span — still linkify inside in case a URL was bolded.
       out.push(
-        <strong key={`${keyPrefix}-b${bi}`}>
+        <strong key={`${keyPrefix}-b${bi}`} className="font-semibold text-slate-900">
           {linkifyChunk(chunk, `${keyPrefix}-b${bi}`)}
         </strong>,
       );
@@ -30,17 +37,25 @@ function linkifyChunk(chunk: string, keyPrefix: string): React.ReactNode[] {
   let k = 0;
   while ((m = URL_RE.exec(chunk)) !== null) {
     let url = m[1];
-    // Don't swallow trailing punctuation into the link.
     const trail = url.match(/[.,;!?)\]]+$/);
     let suffix = "";
     if (trail) {
       suffix = trail[0];
       url = url.slice(0, -suffix.length);
     }
-    if (m.index > last) out.push(<React.Fragment key={`${keyPrefix}-${k++}`}>{chunk.slice(last, m.index)}</React.Fragment>);
+    if (m.index > last) {
+      out.push(<React.Fragment key={`${keyPrefix}-${k++}`}>{chunk.slice(last, m.index)}</React.Fragment>);
+    }
     out.push(
-      <a key={`${keyPrefix}-${k++}`} href={url} target="_blank" rel="noreferrer" className="rlink">
-        {url}
+      <a
+        key={`${keyPrefix}-${k++}`}
+        href={url}
+        target="_blank"
+        rel="noreferrer"
+        className="rlink inline-flex items-center gap-0.5"
+      >
+        <span>{url}</span>
+        <ExternalLinkIcon className="link-ext-icon" />
       </a>,
     );
     if (suffix) out.push(<React.Fragment key={`${keyPrefix}-${k++}`}>{suffix}</React.Fragment>);
@@ -57,11 +72,12 @@ const BOLD_LINE_RE = /^\*\*(.+?)\*\*\s*$/;
 const DIVIDER_RE = /^(---|\*\*\*|___)\s*$/;
 const QUOTE_RE = /^>\s?(.*)$/;
 
-/** Structured reply renderer: headings, numbered questions, nested bullets, notes, dividers, links. */
+/** Structured reply renderer: headings, numbered items, nested bullets, callouts, dividers, links. */
 export function RichText({ text }: { text: string | null | undefined }) {
   const lines = (text ?? "").split("\n");
   const nodes: React.ReactNode[] = [];
-  let prevGap = true; // collapse leading blank lines
+  let prevGap = true;
+
   lines.forEach((ln, i) => {
     const trimmed = ln.trim();
     if (trimmed === "") {
@@ -80,6 +96,7 @@ export function RichText({ text }: { text: string | null | undefined }) {
     const leading = ln.length - ln.trimStart().length;
     const lvl = Math.min(2, Math.floor(leading / 2));
     let m: RegExpMatchArray | null;
+
     if ((m = trimmed.match(HEADING_RE))) {
       nodes.push(<div key={i} className="line h">{renderInline(m[1], `h${i}`)}</div>);
       return;
@@ -95,8 +112,8 @@ export function RichText({ text }: { text: string | null | undefined }) {
     if ((m = trimmed.match(NUM_RE))) {
       nodes.push(
         <div key={i} className={`line num lvl-${lvl}`}>
-          <span className="n" aria-hidden="true">{m[1]}.</span>
-          <span>{renderInline(m[2], `n${i}`)}</span>
+          <span className="n" aria-hidden="true">{m[1]}</span>
+          <span className="num-body">{renderInline(m[2], `n${i}`)}</span>
         </div>,
       );
       return;
@@ -106,13 +123,11 @@ export function RichText({ text }: { text: string | null | undefined }) {
       nodes.push(
         <div key={i} className={`line bullet lvl-${lvl}${isWarn ? " warn" : ""}`}>
           <span className="dot" aria-hidden="true">•</span>
-          <span>{renderInline(m[1], `b${i}`)}</span>
+          <span className="bullet-body">{renderInline(m[1], `b${i}`)}</span>
         </div>,
       );
       return;
     }
-    // Section labels ("Candidate standards:", "Still to confirm:", "Terms:", ...)
-    // and callouts ("Note: ...", "Warning: ...") get their own emphasis.
     if (/^(note|warning)\s*:/i.test(trimmed)) {
       nodes.push(<div key={i} className="line note">{renderInline(trimmed, `c${i}`)}</div>);
       return;
@@ -123,29 +138,39 @@ export function RichText({ text }: { text: string | null | undefined }) {
     }
     nodes.push(<div key={i} className={`line lvl-${lvl}`}>{renderInline(ln.trim(), `p${i}`)}</div>);
   });
-  return <>{nodes}</>;
+
+  return <div className="prose-container">{nodes}</div>;
 }
 
-/** Server-provided `known[]` rendered as subtle "known so far" chips. */
+/** Server-provided `known[]` rendered as clean parameter chips. */
 export function KnownChips({ known }: { known: { slot: string; value: string }[] }) {
   if (!known || known.length === 0) return null;
   return (
-    <div className="known" aria-label="Known so far">
+    <div className="known" aria-label="Identified parameters">
+      <div className="known-title">Identified Parameters:</div>
       <ul className="known-list">
         {known.map((k) => (
-          <li key={k.slot} className="known-chip">{k.slot} = {k.value}</li>
+          <li key={k.slot} className="known-chip">
+            <span className="chip-k">{k.slot}</span>
+            <span className="chip-sep">:</span>
+            <span className="chip-v">{k.value}</span>
+          </li>
         ))}
       </ul>
     </div>
   );
 }
 
-/** Server-provided `assumptions[]` rendered as a compact notice. */
+/** Server-provided `assumptions[]` rendered as an official caution card. */
 export function AssumptionsBanner({ items }: { items: string[] }) {
   if (!items || items.length === 0) return null;
   return (
     <div className="assume" role="note" aria-label="Answer uses assumptions">
-      <strong>Answering with assumptions</strong> — please confirm these with BIS:
+      <div className="assume-header">
+        <AlertTriangleIcon className="assume-icon" />
+        <strong>Answer generated with assumed parameters</strong>
+      </div>
+      <p className="assume-sub">Please confirm these parameters with BIS or an approved lab:</p>
       <ul>
         {items.map((a, i) => (
           <li key={i}>{a}</li>
@@ -155,15 +180,20 @@ export function AssumptionsBanner({ items }: { items: string[] }) {
   );
 }
 
-/** Strict citations live here — one click away, always attached to the answer. */
+/** Strict citations live here — always attached to the answer. */
 export function Sources({ items }: { items: string[] | null | undefined }) {
   if (!items || items.length === 0) return null;
   return (
     <details className="sources">
-      <summary>Sources ({items.length})</summary>
+      <summary>
+        <span className="sources-summary-title">Official BIS Standards Citations</span>
+        <span className="sources-count">{items.length}</span>
+      </summary>
       <ul>
         {items.map((c, i) => (
-          <li key={i}>{renderInline(c, `src${i}`)}</li>
+          <li key={i} className="source-item">
+            <div className="source-content">{renderInline(c, `src${i}`)}</div>
+          </li>
         ))}
       </ul>
     </details>
@@ -182,27 +212,37 @@ export interface EvidenceItem {
   score: number;
 }
 
-/** RAG/catalogue evidence behind an answer (issue #4 P1-12). */
+/** RAG / Gazette / Manual evidence behind an answer. */
 export function EvidenceSources({ items }: { items: EvidenceItem[] | null | undefined }) {
   if (!items || items.length === 0) return null;
   return (
     <details className="sources evidence">
-      <summary>Evidence passages ({items.length})</summary>
+      <summary>
+        <span className="sources-summary-title">Full-Text Corpus Passages</span>
+        <span className="sources-count">{items.length}</span>
+      </summary>
       <ul>
         {items.map((e, i) => (
-          <li key={i}>
-            <strong>{e.standard_number || "BIS document"}</strong>
-            {e.title ? ` — ${e.title}` : ""}
-            {e.doc_type ? <span className="ev-meta"> [{e.doc_type}]</span> : null}
-            {e.heading ? <div className="ev-meta">Section: {e.heading}</div> : null}
-            {e.chunk_text ? <div className="ev-meta">“{e.chunk_text.slice(0, 280)}{e.chunk_text.length > 280 ? "…" : ""}”</div> : null}
+          <li key={i} className="ev-card">
+            <div className="ev-head">
+              <span className="ev-standard">{e.standard_number || "BIS Document"}</span>
+              {e.title && <span className="ev-title"> — {e.title}</span>}
+              {e.doc_type && <span className="ev-badge">{e.doc_type}</span>}
+              <span className="ev-score">Score: {typeof e.score === "number" ? e.score.toFixed(2) : e.score}</span>
+            </div>
+            {e.heading && <div className="ev-heading">Section: {e.heading}</div>}
+            {e.chunk_text && (
+              <blockquote className="ev-quote">
+                “{e.chunk_text.slice(0, 320)}{e.chunk_text.length > 320 ? "…" : ""}”
+              </blockquote>
+            )}
             {e.url && /^https?:\/\//i.test(e.url) ? (
-              <div>
-                <a href={e.url} target="_blank" rel="noreferrer">Source link</a>
-                <span className="ev-meta"> · score {e.score}</span>
+              <div className="ev-link">
+                <a href={e.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1">
+                  <span>View official BIS document</span>
+                  <ExternalLinkIcon className="link-ext-icon" />
+                </a>
               </div>
-            ) : e.url ? (
-              <div className="ev-meta">{e.url} · score {e.score}</div>
             ) : null}
           </li>
         ))}
@@ -212,11 +252,18 @@ export function EvidenceSources({ items }: { items: EvidenceItem[] | null | unde
 }
 
 /** Answer metadata badges: kind, language, intent, RAG mode, latency, refusal, PII. */
-export function MetaBadges({ resp, ms }: {
+export function MetaBadges({
+  resp,
+  ms,
+}: {
   resp: {
-    kind?: string; lang?: string; refused?: boolean;
-    intent?: string; intent_confidence?: string;
-    rag_mode?: string; rag_used_llm?: boolean;
+    kind?: string;
+    lang?: string;
+    refused?: boolean;
+    intent?: string;
+    intent_confidence?: string;
+    rag_mode?: string;
+    rag_used_llm?: boolean;
     pii?: Record<string, boolean>;
   };
   ms?: number;
@@ -224,38 +271,80 @@ export function MetaBadges({ resp, ms }: {
   const piiHits = Object.entries(resp.pii ?? {}).filter(([, v]) => v).map(([k]) => k);
   return (
     <div className="meta-row" aria-label="Answer metadata">
-      {resp.kind ? <span className="badge info">{resp.kind}</span> : null}
-      {resp.lang ? <span className="badge lang">{resp.lang.toUpperCase()}</span> : null}
+      {resp.kind ? <span className="badge info">{resp.kind.replace(/_/g, " ")}</span> : null}
+      {resp.lang ? (
+        <span className="badge lang">
+          {resp.lang === "hi" ? "हिंदी (HI)" : "ENGLISH (EN)"}
+        </span>
+      ) : null}
       {resp.intent ? (
-        <span className="badge info" title={`confidence ${resp.intent_confidence ?? "low"}`}>
+        <span className="badge info" title={`confidence: ${resp.intent_confidence ?? "low"}`}>
           intent: {resp.intent}
         </span>
       ) : null}
       {resp.rag_mode ? (
-        <span className="badge ok" title={resp.rag_used_llm ? "written by the configured LLM from retrieved passages" : "deterministic extractive answer"}>
+        <span
+          className="badge ok"
+          title={
+            resp.rag_used_llm
+              ? "Synthesized by configured LLM from retrieved gazette passages"
+              : "Deterministic extractive answer directly from indexed standard"
+          }
+        >
           {resp.rag_used_llm ? "LLM-grounded" : "extractive"}
         </span>
       ) : null}
-      {typeof ms === "number" ? <span className="badge info">{ms} ms</span> : null}
-      {resp.refused ? <span className="badge refuse">refused</span> : null}
+      {typeof ms === "number" ? <span className="badge speed">{ms} ms</span> : null}
+      {resp.refused ? <span className="badge refuse">Refusal / Scope Guard</span> : null}
       {piiHits.length > 0 ? (
-        <span className="badge pii">PII redacted: {piiHits.join(", ")}</span>
+        <span className="badge pii">DPDP Redacted: {piiHits.join(", ")}</span>
       ) : null}
     </div>
   );
 }
 
-/** Raw response JSON for debugging/verification (issue #4 P1-12). */
+/** Raw response JSON inspector with copy functionality. */
 export function RawJson({ data }: { data: unknown }) {
+  const [copied, setCopied] = useState(false);
+  const handleCopy = () => {
+    navigator.clipboard.writeText(JSON.stringify(data, null, 2));
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   return (
     <details className="rawjson">
-      <summary>Raw JSON</summary>
-      <pre>{JSON.stringify(data, null, 2)}</pre>
+      <summary>
+        <span className="rawjson-summary-title">Inspect Raw API Response</span>
+        <button
+          type="button"
+          className="rawjson-copy-btn"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            handleCopy();
+          }}
+          aria-label="Copy raw JSON payload"
+        >
+          {copied ? (
+            <>
+              <CheckIcon className="w-3 h-3 text-emerald-400" />
+              <span>Copied</span>
+            </>
+          ) : (
+            <>
+              <CopyIcon className="w-3 h-3" />
+              <span>Copy JSON</span>
+            </>
+          )}
+        </button>
+      </summary>
+      <pre className="rawjson-code">{JSON.stringify(data, null, 2)}</pre>
     </details>
   );
 }
 
-/** Clarifying questions as tappable pills (multi-turn grounding). */
+/** Clarifying questions as clean, interactive action cards. */
 export function QuestionPills({
   questions,
   disabled,
@@ -272,27 +361,36 @@ export function QuestionPills({
   if (!questions || questions.length === 0) return null;
   return (
     <div className="qs">
+      <div className="qs-header">
+        <span className="qs-label">Clarification Required</span>
+        <span className="qs-hint">Select an option to identify the exact standard:</span>
+      </div>
       {questions.map((q) => (
-        <div key={q.slot} className="q">
+        <div key={q.slot} className="q-card">
           <div className="qq">{q.text}</div>
           <div className="qopts">
             {q.options.map((o) => (
-              <button key={o.send} type="button" className="pill-btn" disabled={disabled}
-                onClick={() => onPick(o.send)}>
+              <button
+                key={o.send}
+                type="button"
+                className="pill-btn"
+                disabled={disabled}
+                onClick={() => onPick(o.send)}
+              >
                 {o.label}
               </button>
             ))}
-            {q.options.length === 0 && <span className="hint">Reply in your own words</span>}
+            {q.options.length === 0 && <span className="hint">Reply in your own words in the chat box</span>}
           </div>
         </div>
       ))}
       <div className="qacts">
-        <button type="button" className="link-btn" disabled={disabled} onClick={onAssume}>
+        <button type="button" className="btn-secondary-sm" disabled={disabled} onClick={onAssume}>
           Answer with assumptions
         </button>
-        <span aria-hidden="true">·</span>
-        <button type="button" className="link-btn" disabled={disabled} onClick={onNewTopic}>
-          New topic
+        <span className="qacts-sep" aria-hidden="true">·</span>
+        <button type="button" className="btn-secondary-sm" disabled={disabled} onClick={onNewTopic}>
+          Start new inquiry
         </button>
       </div>
     </div>
@@ -312,31 +410,25 @@ export function FeedbackButtons({
     <div className="fb" role="group" aria-label="Rate this answer">
       <button
         type="button"
-        className={`fb-btn${value === 1 ? " active" : ""}`}
+        className={`fb-btn${value === 1 ? " active-pos" : ""}`}
         aria-label="Helpful answer"
         aria-pressed={value === 1}
         disabled={disabled}
         onClick={() => onRate(1)}
+        title="Helpful compliance guidance"
       >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-          strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-          <path d="M7 10v12" />
-          <path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z" />
-        </svg>
+        <ThumbsUpIcon className="w-4 h-4" />
       </button>
       <button
         type="button"
-        className={`fb-btn${value === -1 ? " active" : ""}`}
+        className={`fb-btn${value === -1 ? " active-neg" : ""}`}
         aria-label="Unhelpful answer"
         aria-pressed={value === -1}
         disabled={disabled}
         onClick={() => onRate(-1)}
+        title="Unhelpful or inaccurate guidance"
       >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-          strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-          <path d="M17 14V2" />
-          <path d="M9 18.12 10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.76a2 2 0 0 0-1.79 1.11L12 22a3.13 3.13 0 0 1-3-3.88Z" />
-        </svg>
+        <ThumbsDownIcon className="w-4 h-4" />
       </button>
     </div>
   );
@@ -360,30 +452,39 @@ export function NoteInput({
         setNote("");
       }}
     >
-      <label className="sr-only" htmlFor={inputId}>Optional feedback note</label>
+      <label className="sr-only" htmlFor={inputId}>
+        Optional feedback note
+      </label>
       <input
         id={inputId}
         value={note}
         onChange={(e) => setNote(e.target.value)}
-        placeholder="Add a note (optional, no personal details)…"
+        placeholder="Add context for BIS evaluators (no personal data)…"
         maxLength={500}
       />
-      <button type="submit" className="link-btn" disabled={!note.trim()}>Send</button>
+      <button type="submit" className="btn-submit-note" disabled={!note.trim()}>
+        Submit Note
+      </button>
     </form>
   );
 }
 
-/** Animated dots shown while the assistant is answering. */
+/** Animated typing indicator when querying. */
 export function TypingDots() {
   return (
     <div className="msg bot">
-      <div className="avatar" aria-hidden="true">B</div>
-      <div className="dots" aria-hidden="true">
-        <span />
-        <span />
-        <span />
+      <div className="avatar" aria-hidden="true">
+        <span>BIS</span>
       </div>
-      <span className="sr-only">Assistant is typing</span>
+      <div className="content">
+        <div className="typing-indicator" aria-hidden="true">
+          <span className="dot" />
+          <span className="dot" />
+          <span className="dot" />
+          <span className="typing-label">Consulting BIS metadata & gazettes…</span>
+        </div>
+        <span className="sr-only">Assistant is retrieving standard metadata</span>
+      </div>
     </div>
   );
 }
