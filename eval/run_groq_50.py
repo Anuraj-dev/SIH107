@@ -1,7 +1,8 @@
-"""Run the fixed 50-question chatbot acceptance set.
+"""Run the fixed 50-question acceptance set against a configured model.
 
-The default pins the local deterministic baseline. Set BIS_EVAL_ALLOW_ENV=1
-for a live provider run. Only aggregate/check metadata is written to results.
+Export the BIS_LLM_* settings before running. BIS_EVAL_ALLOW_ENV=1 makes the
+expected-LLM check strict; it does not load credentials or enable a fallback.
+Only aggregate/check metadata is written to results.
 """
 from __future__ import annotations
 

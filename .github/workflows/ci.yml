@@ -18,8 +18,10 @@ jobs:
         run: PYTHONPATH=src python scripts/import_json_kb.py --db kb/bis.db
       - name: Unit tests
         run: python -m pytest tests/ -q
-      - name: Eval gate (v1, >=90%)
-        run: PYTHONPATH=src python eval/run_eval.py
+      # Live answer-quality evaluation requires an explicitly configured model.
+      # Keep CI credential-free and gate the LLM-only/offline contract here.
+      - name: LLM-only offline contract
+        run: PYTHONPATH=src python -m pytest tests/test_llm_only_contract.py -q
       - name: No secrets in repo
         run: |
           ! grep -rEn --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=.venv \
