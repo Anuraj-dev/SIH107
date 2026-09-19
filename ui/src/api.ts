@@ -6,6 +6,8 @@ export interface ServerThread {
   token: string;
 }
 
+const CHAT_TIMEOUT_MS = 120_000;
+
 /** Fixture KB diff used when the admin backend (GET /kb/diff) is not yet live (plan §5 stub). */
 export const FIXTURE_KB_DIFF: KbDiff = {
   diff_id: "diff-fixture-001",
@@ -72,7 +74,7 @@ export async function sendChat(
     method: "POST",
     headers,
     body: JSON.stringify(body),
-  })) as Partial<ChatResponse>;
+  }, CHAT_TIMEOUT_MS)) as Partial<ChatResponse>;
   const resp = normalizeChatResponse(raw, query);
   const next: ServerThread | null = resp.thread_id
     ? { id: resp.thread_id, token: resp.owner_token ?? thread?.token ?? "" }
@@ -92,9 +94,9 @@ export function normalizeChatResponse(raw: unknown, query = ""): ChatResponse {
   const lang = r.lang === "hi" ? "hi" : "en";
   if (typeof r.text !== "string" || typeof r.refused !== "boolean") {
     return {
-      text: "The API returned an unreadable payload. Is the backend running the matching version?",
-      refused: true,
-      kind: "bad_payload",
+      text: "The chatbot is unavailable because the server returned an invalid response. Please try again later.",
+      refused: false,
+      kind: "model_unavailable",
       lang,
       citations: [],
       pii: {},
@@ -103,6 +105,8 @@ export function normalizeChatResponse(raw: unknown, query = ""): ChatResponse {
       known: [],
       assumptions: [],
       context: { history: query ? [query] : [], rounds: 0 },
+      rag_used_llm: false,
+      model_available: false,
     };
   }
   return {
@@ -126,6 +130,7 @@ export function normalizeChatResponse(raw: unknown, query = ""): ChatResponse {
     rag_evidence: arr(r.rag_evidence ?? r.sources),
     rag_mode: typeof r.rag_mode === "string" ? r.rag_mode : undefined,
     rag_used_llm: r.rag_used_llm === true,
+    model_available: r.model_available === true,
     intent: typeof r.intent === "string" ? r.intent : undefined,
     intent_confidence: typeof r.intent_confidence === "string" ? r.intent_confidence : undefined,
     context_summary: typeof r.context_summary === "string" ? r.context_summary : undefined,
@@ -154,9 +159,9 @@ export const bisChat = {
     const { lang = "auto", thread = null, force = false, fresh = false } = opts;
     return sendChat(query, lang, fresh ? null : thread, force, fresh);
   },
-  /** Design 3 policy (mirrors App + chat.py): keep the thread while clarifying. */
+  /** Keep context across every model turn, not only clarification turns. */
   shouldKeepThread(resp: ChatResponse): boolean {
-    return resp.needs_info === true;
+    return true;
   },
   newTopic(): null {
     return null;

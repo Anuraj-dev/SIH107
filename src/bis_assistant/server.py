@@ -1,5 +1,5 @@
 """Production API (plan §5, Phase 3): FastAPI, server-side threads, owner tokens,
-rate limits, request IDs, redacted JSON logs, consent/erasure/export endpoints.
+request IDs, redacted JSON logs, consent/erasure/export endpoints.
 
 Legacy client-held `context` is accepted as a one-turn migration bridge only:
 the server immediately mints a thread_id that clients must use afterwards.
@@ -14,7 +14,6 @@ import secrets
 import sqlite3
 import sys
 import time
-from collections import deque
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Optional
@@ -46,8 +45,6 @@ CREATE TABLE IF NOT EXISTS messages(
   ms INTEGER DEFAULT 0, created_at TEXT);
 CREATE TABLE IF NOT EXISTS consents(
   user_ref TEXT PRIMARY KEY, purpose TEXT, granted_at TEXT, expires_at TEXT, revoked_at TEXT);
-CREATE TABLE IF NOT EXISTS users(
-  key_hash TEXT PRIMARY KEY, tier TEXT DEFAULT 'registered', created_at TEXT);
 CREATE TABLE IF NOT EXISTS profiles(
   user_ref TEXT PRIMARY KEY, fields_json TEXT DEFAULT '{}', updated_at TEXT);
 CREATE TABLE IF NOT EXISTS feedback(
@@ -77,11 +74,6 @@ log.addHandler(_handler)
 log.setLevel(logging.INFO)
 log.propagate = False
 
-# ---- rate limiting (in-process; single-instance pilot) ----
-_hits: dict[str, deque] = {}
-_registered: set[str] = set()
-
-
 def _admin_hashes() -> set[str]:
     import os
     return {_key_hash(k.strip()) for k in os.environ.get("BIS_ADMIN_API_KEYS", "").split(",") if k.strip()}
@@ -104,44 +96,6 @@ def _audit(conn: sqlite3.Connection, actor: str, action: str, target: str) -> No
 
 def _key_hash(raw: str) -> str:
     return hashlib.sha256(raw.encode()).hexdigest()
-
-
-def _is_registered(api_key: str) -> bool:
-    h = _key_hash(api_key)
-    if h in _registered:
-        return True
-    try:
-        conn = _db()
-        try:
-            row = conn.execute("SELECT 1 FROM users WHERE key_hash=?", (h,)).fetchone()
-        finally:
-            conn.close()
-        if row:
-            _registered.add(h)
-            return True
-    except Exception:
-        pass
-    return False
-
-
-def _touch_bucket(bucket: str, window: float, n: int) -> None:
-    now = time.time()
-    dq = _hits.setdefault(bucket, deque())
-    while dq and dq[0] <= now - window:
-        dq.popleft()
-    if len(dq) >= n:
-        raise HTTPException(status_code=429, detail={
-            "error": "rate_limited", "code": "rate_limited", "retryable": True})
-    dq.append(now)
-
-
-def _check_limit(ip: str, api_key: Optional[str], path: str) -> None:
-    if api_key and _is_registered(api_key):
-        _touch_bucket(f"reg:{api_key}", 3600, CFG["api"]["registered_per_hour"])
-        return
-    _touch_bucket(f"anon:{ip}", 3600, CFG["api"]["anon_per_hour"])
-    if path == "/chat":
-        _touch_bucket(f"burst:{ip}", 60, CFG["api"]["anon_burst_per_min"])
 
 
 def _db() -> sqlite3.Connection:
@@ -184,17 +138,14 @@ app = FastAPI(title="BIS Assistant API", version="0.4.0")
 app.add_middleware(CORSMiddleware, allow_origins=CFG["api"]["cors_allow_origins"],
                    allow_methods=["GET", "POST", "DELETE", "OPTIONS"],
                    allow_headers=["Content-Type", "X-Owner-Token", "X-User-Ref",
-                                  "X-API-Key", "X-Request-ID", "X-Admin-Key"])
+                                  "X-Request-ID", "X-Admin-Key"])
 
 
 @app.middleware("http")
 async def _rid(request: Request, call_next):
     rid = request.headers.get("X-Request-ID") or secrets.token_hex(8)
     t0 = time.time()
-    ip = request.client.host if request.client else "?"
     try:
-        if request.url.path not in ("/health", "/metrics"):
-            _check_limit(ip, request.headers.get("X-API-Key"), request.url.path)
         resp = await call_next(request)
     except HTTPException as e:
         detail = e.detail if isinstance(e.detail, dict) else {"error": str(e.detail)}
@@ -370,14 +321,19 @@ def chat(body: ChatIn, request: Request,
                       ms, _utcnow().isoformat()))
         conn.commit()
         resp["thread_id"] = tid
-        log.info("chat answered", extra={"ctx": {
+        log.info("chat response completed", extra={"ctx": {
             "kind": resp.get("kind"), "lang": resp.get("lang"),
             "needs_info": resp.get("needs_info"), "ms": ms,
+            "rag_mode": resp.get("rag_mode", ""),
+            "rag_used_llm": bool(resp.get("rag_used_llm", False)),
+            "source_count": len(resp.get("sources") or resp.get("rag_evidence") or []),
             "pii": [k for k, v in find_pii(q).items() if v],
             "q": redact(q)[:120]}})
         metrics_mod.incr("chat_total")
         metrics_mod.observe_latency_ms(ms)
-        if resp.get("refused"):
+        if resp.get("kind") == "model_unavailable":
+            metrics_mod.incr("model_unavailable_total")
+        elif resp.get("refused"):
             metrics_mod.incr("refused_total")
         else:
             metrics_mod.incr("answered_total")

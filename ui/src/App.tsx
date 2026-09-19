@@ -5,13 +5,16 @@ import AdminPanel from "./admin";
 import StandardsDirectory from "./StandardsDirectory";
 import SchemesView from "./SchemesView";
 import TelemetryView from "./TelemetryView";
+import AcceptancePanel from "./acceptance";
 import {
   AssumptionsBanner,
+  EvidenceSources,
   FeedbackButtons,
   KnownChips,
   MetaBadges,
   NoteInput,
   QuestionPills,
+  RawJson,
   RichText,
   Sources,
   TypingDots,
@@ -27,6 +30,7 @@ import {
   CatalogIcon,
   SchemesIcon,
   AuditIcon,
+  CheckIcon,
   DiffIcon,
   DownloadIcon,
   XIcon,
@@ -35,7 +39,7 @@ import type { Lang, Msg } from "./types";
 import type { ServerThread } from "./api";
 import "./styles.css";
 
-type ViewMode = "chat" | "directory" | "schemes" | "admin" | "telemetry";
+type ViewMode = "chat" | "directory" | "schemes" | "admin" | "telemetry" | "tests";
 
 const HERO_SUGGESTIONS = [
   {
@@ -79,6 +83,7 @@ export default function App() {
     if (hash === "schemes") return "schemes";
     if (hash === "admin") return "admin";
     if (hash === "telemetry" || hash === "audit") return "telemetry";
+    if (hash === "tests") return "tests";
     return "chat";
   });
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -107,6 +112,7 @@ export default function App() {
       else if (hash === "schemes") setView("schemes");
       else if (hash === "admin") setView("admin");
       else if (hash === "telemetry" || hash === "audit") setView("telemetry");
+      else if (hash === "tests") setView("tests");
       else setView("chat");
     };
     window.addEventListener("hashchange", handleHash);
@@ -120,6 +126,7 @@ export default function App() {
       schemes: "Certification Schemes — BIS Assistant",
       admin: "KB Diff Review — BIS Assistant",
       telemetry: "Audit & Telemetry — BIS Assistant",
+      tests: "Acceptance Test Set — BIS Assistant",
     };
     document.title = titles[view];
   }, [view]);
@@ -186,10 +193,13 @@ export default function App() {
         setThread(bisChat.shouldKeepThread(resp) ? next : null);
       } catch (e) {
         const msg = e instanceof Error ? e.message : "request failed";
-        if (msg.startsWith("Thread expired")) setThread(null);
+        const expired = msg.startsWith("Thread expired");
+        if (expired) setThread(null);
         const friendly = /HTTP 429/.test(msg)
           ? "Rate limited — please wait a minute and retry."
-          : `${msg}. Is the API running on :8000?`;
+          : expired
+          ? "This conversation has expired. Please start a new topic to continue."
+          : "The chatbot is offline or the server could not be reached. Please check your connection and try again.";
         setMsgs((m) => [...m, { id: nextId++, role: "assistant", text: "", error: friendly }]);
         setHealthy(false);
       } finally {
@@ -207,6 +217,14 @@ export default function App() {
     setSidebarOpen(false);
     inputRef.current?.focus();
   }, [navigateToView]);
+
+  const askTestCase = useCallback((item: { query: string }) => {
+    setMsgs([]);
+    setThread(null);
+    setPendingQ("");
+    setView("chat");
+    void send(item.query, { fresh: true });
+  }, [send]);
 
   const rate = useCallback(
     async (id: number, rating: 1 | -1, note?: string) => {
@@ -385,7 +403,6 @@ export default function App() {
             </div>
           </div>
         </div>
-
         <div className="sidebar-bottom-section">
           <button
             type="button"
@@ -395,6 +412,16 @@ export default function App() {
           >
             <CatalogIcon size={16} />
             <span>Standards Catalog</span>
+          </button>
+
+          <button
+            type="button"
+            className={`sidebar-nav-link${view === "tests" ? " active" : ""}`}
+            onClick={() => navigateToView("tests")}
+            aria-current={view === "tests" ? "page" : undefined}
+          >
+            <CheckIcon size={16} />
+            <span>Acceptance Test Set</span>
           </button>
 
           <button
@@ -517,6 +544,12 @@ export default function App() {
             />
           )}
 
+          {view === "tests" && (
+            <div className="directory-container">
+              <AcceptancePanel onAsk={askTestCase} disabled={busy} />
+            </div>
+          )}
+
           {view === "chat" && (
             <div className="chat-layout-wrap">
               {msgs.length === 0 ? (
@@ -617,6 +650,9 @@ export default function App() {
                               {m.resp?.citations && m.resp.citations.length > 0 && (
                                 <Sources items={m.resp.citations} />
                               )}
+
+                              <EvidenceSources items={m.resp?.sources ?? m.resp?.rag_evidence} />
+                              {m.resp && <RawJson data={m.resp} />}
 
                               <div className="message-footer-row">
                                 <MetaBadges resp={m.resp ?? {}} ms={m.ms} />

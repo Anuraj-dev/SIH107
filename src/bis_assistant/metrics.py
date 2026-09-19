@@ -56,6 +56,7 @@ def kb_staleness_days() -> int:
 
 
 SERIES = ["chat_total", "answered_total", "refused_total", "needs_info_total",
+          "model_unavailable_total",
           "feedback_total", "feedback_neg_total", "chat_5xx_total"]
 
 

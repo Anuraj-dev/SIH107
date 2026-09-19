@@ -265,6 +265,7 @@ export function MetaBadges({
     intent_confidence?: string;
     rag_mode?: string;
     rag_used_llm?: boolean;
+    model_available?: boolean;
     pii?: Record<string, boolean>;
   };
   ms?: number;
@@ -277,6 +278,14 @@ export function MetaBadges({
       {resp.rag_mode && (
         <span className="meta-subtle-tag">
           {resp.rag_used_llm ? "LLM Grounded" : "Extractive"}
+        </span>
+      )}
+      {typeof resp.model_available === "boolean" && (
+        <span
+          className={`meta-subtle-tag${resp.model_available ? "" : " warn"}`}
+          title={resp.rag_mode ?? "model status"}
+        >
+          {resp.model_available ? "LLM-generated" : "model unavailable"}
         </span>
       )}
       {typeof ms === "number" && (

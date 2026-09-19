@@ -1,26 +1,18 @@
-"""Common-case chat facade (Design 3): ``chat(query) -> Turn``.
-
-Primary flow (anonymous MSME user: vague query -> 1 follow-up -> IS
-candidates) is one call with strong defaults. Rare paths (export, consent,
-erasure, admin KB publish) live in their existing namespaces — this module
-does not absorb them.
+"""Chat facade over the single LLM-backed answer path.
 
 Thin wrapper over :func:`bis_assistant.assistant.answer` + :mod:`bis_assistant.threads`:
 
 - ``lang="auto"`` (default) defers to :func:`detect_lang`; resolved ``"en"/"hi"``
   is echoed back on every :class:`Turn`.
 - ``thread=None`` or ``new_topic=True`` starts a fresh topic (drops history).
-- ``force=True`` re-sends with assumptions (CLI ``assume`` / UI button).
-  Material mismatches (e.g. plastic vs ``IS 17803``) still refuse by
-  construction — force can never override a coverage gap.
+- The LLM receives recent user turns plus retrieved lab evidence. It decides
+  whether to answer or ask a context-specific clarification.
 - Server-bound handles (``id``/``token``/``expires_at``) are preserved
   across turns; local handles carry ``history``/``rounds`` opaquely.
   Callers must treat :class:`ThreadHandle` as opaque — never build
   ``{"history", "rounds", "force"}`` dicts by hand.
 
-Legacy ``answer(q, lang, context_dict)`` is unchanged and remains the
-white-box hook for tests/eval (``tests/test_assistant.py``,
-``eval/run_eval.py``). New code should prefer :func:`chat`.
+``answer(q, lang, context_dict)`` remains the shared backend interface.
 """
 from __future__ import annotations
 
@@ -110,6 +102,7 @@ class Turn:
     sources: tuple[dict, ...] = ()  # RAG corpus sources (title/number/link)
     rag_mode: str = ""
     rag_used_llm: bool = False
+    model_available: bool = False
     intent: str = "general"  # NLU intent (nlu.classify)
     intent_confidence: str = "low"
     context_summary: str = ""  # extractive thread summary (memory)
@@ -133,6 +126,7 @@ class Turn:
             "sources": [dict(s) for s in self.sources],
             "rag_mode": self.rag_mode,
             "rag_used_llm": bool(self.rag_used_llm),
+            "model_available": bool(self.model_available),
             "intent": self.intent,
             "intent_confidence": self.intent_confidence,
             "context_summary": self.context_summary,
@@ -181,14 +175,7 @@ def chat(
     force: bool = False,
     new_topic: bool = False,
 ) -> Turn:
-    """Common-case entry point: one query in, one :class:`Turn` out.
-
-    Examples:
-        t1 = chat("My startup makes water bottle. Which IS?")
-        assert t1.needs_info  # <=2 questions, never a guess
-        t2 = chat("stainless steel vacuum, 1 litre", thread=t1.thread)
-        assert "IS 17803" in t2.text
-    """
+    """Send one user turn through the model-backed answer path."""
     q = (query or "").strip()
     base: ThreadHandle | None = None if (new_topic or thread is None) else thread
     lang_arg = None if lang == "auto" else lang
@@ -223,6 +210,7 @@ def chat(
         sources=tuple(resp.get("sources", []) or resp.get("rag_evidence", []) or ()),
         rag_mode=str(resp.get("rag_mode", "")),
         rag_used_llm=bool(resp.get("rag_used_llm", False)),
+        model_available=bool(resp.get("model_available", False)),
         intent=str(resp.get("intent", "general")),
         intent_confidence=str(resp.get("intent_confidence", "low")),
         context_summary=str(resp.get("context_summary", "")),

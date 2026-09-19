@@ -13,9 +13,6 @@ retrieval:
   scorer: keyword        # keyword | bm25 (Phase 2)
   kb_backend: json       # json | sqlite (Phase 1)
 
-catalogue:
-  enabled: true          # BIS_CATALOGUE_ENABLED — 24k fallback, independent of rag.enabled
-
 privacy:
   thread_ttl_days: 7
   retention_days: 90
@@ -24,9 +21,6 @@ privacy:
 
 api:
   port: 8000
-  anon_per_hour: 30
-  anon_burst_per_min: 5
-  registered_per_hour: 300
   cors_allow_origins: ["http://127.0.0.1:5173", "http://localhost:5173"]
 
 ingest:
@@ -41,29 +35,25 @@ observability:
   latency_p95_ms: 2000
 
 rag:
-  enabled: false        # BIS_RAG_ENABLED=1 to serve corpus answers in /chat
+  enabled: true         # retrieve lab evidence for every configured model answer
   db_path: kb/bis_rag.db  # BIS_RAG_DB_PATH
   top_k: 5              # BIS_RAG_TOP_K
-  semantic: true        # BIS_RAG_SEMANTIC — semantic rerank channel
-  embedding_model: ""   # BIS_RAG_EMBEDDING_MODEL — optional sentence-transformers name
+  semantic: true        # BIS_RAG_SEMANTIC — use a built dense index when available
+  embedding_model: ""   # BIS_RAG_EMBEDDING_MODEL — sentence-transformers index model
+  reranker_model: ""    # BIS_RAG_RERANKER_MODEL — optional CrossEncoder reranker
   weight_lexical: 1.0
   weight_semantic: 0.3
   exact_boost: 50.0     # exact IS-number/designation boost
-  catalogue: true       # legacy alias of catalogue.enabled (BIS_RAG_CATALOGUE)
-  min_overlap: 3        # BIS_RAG_MIN_OVERLAP — corpus relevance token floor
-  min_lexical: 15.0     # BIS_RAG_MIN_LEXICAL — corpus relevance lexical floor
-  catalogue_min_score: 8.0  # BIS_RAG_CATALOGUE_MIN_SCORE — pre-clarification bar
 
 llm:
-  provider: openai-compatible  # BIS_LLM_PROVIDER — openai-compatible | gemini | ollama
-  model: ""             # BIS_LLM_MODEL, e.g. gpt-4o-mini / gemini-2.0-flash / llama3 (empty = extractive fallback)
-  api_key: ""           # BIS_LLM_API_KEY (never commit; env only; not needed for ollama)
-  base_url: https://api.openai.com/v1  # BIS_LLM_BASE_URL (ollama default http://localhost:11434)
+  provider: openai-compatible  # BIS_LLM_PROVIDER — openai-compatible | gemini | ollama | anthropic
+  model: ""             # BIS_LLM_MODEL; empty = model-unavailable response
+  api_key: ""           # BIS_LLM_API_KEY; keep real keys in the ignored .env
+  base_url: https://api.openai.com/v1  # local and provider-specific endpoints are supported
   temperature: 0.2
   max_tokens: 768         # 768 for Hindi: Devanagari is token-hungry (issue #4 P1-11)
   timeout_s: 10.0           # interactive budget vs latency_p95_ms (issue #4 P1-10)
-  retries: 0              # BIS_LLM_RETRIES — extra attempts; 0 keeps /chat inside budget
-  cache_ttl: 300          # BIS_LLM_CACHE_TTL — reuse identical grounded answers (s)
+  retries: 1              # BIS_LLM_RETRIES — one bounded retry for transient provider errors
 
 memory:
   expand_turns: 2       # BIS_MEMORY_EXPAND_TURNS — history turns feeding retrieval

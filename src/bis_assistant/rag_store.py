@@ -4,6 +4,7 @@ Tables:
   corpus_documents: one row per TXT file (raw text kept for traceability).
   corpus_chunks: retrieval-ready chunks with heading/offsets + denormalised
     standard_number/doc_type/source_url for FTS filtering and display.
+  corpus_embeddings: optional float32 dense vectors keyed by chunk/model.
   catalogue_standards: the ~24k BIS catalogue rows (dedupe by standardId;
     part/section designations stay distinct rows).
   corpus_chunks_fts: FTS5 index over chunk_text + standard_number + doc_type
@@ -50,6 +51,12 @@ CREATE TABLE IF NOT EXISTS corpus_chunks(
   source_url TEXT DEFAULT '',
   UNIQUE(doc_id, chunk_index)
 );
+CREATE TABLE IF NOT EXISTS corpus_embeddings(
+  chunk_id INTEGER NOT NULL REFERENCES corpus_chunks(id) ON DELETE CASCADE,
+  model_name TEXT NOT NULL,
+  vector BLOB NOT NULL,
+  PRIMARY KEY(chunk_id, model_name)
+);
 CREATE TABLE IF NOT EXISTS catalogue_standards(
   standard_id INTEGER PRIMARY KEY,
   standard_number TEXT NOT NULL,
@@ -62,6 +69,7 @@ CREATE TABLE IF NOT EXISTS catalogue_standards(
 );
 CREATE INDEX IF NOT EXISTS idx_chunks_doc ON corpus_chunks(doc_id);
 CREATE INDEX IF NOT EXISTS idx_chunks_stdnum ON corpus_chunks(standard_number);
+CREATE INDEX IF NOT EXISTS idx_embeddings_model ON corpus_embeddings(model_name);
 CREATE INDEX IF NOT EXISTS idx_docs_stdnum ON corpus_documents(standard_number);
 CREATE INDEX IF NOT EXISTS idx_catalogue_number ON catalogue_standards(standard_number);
 """
