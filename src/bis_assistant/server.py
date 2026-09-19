@@ -173,7 +173,7 @@ class ConsentIn(BaseModel):
     purpose: str = "personalise BIS licensing guidance"
 
 
-app = FastAPI(title="BIS Assistant API", version="0.3.0")
+app = FastAPI(title="BIS Assistant API", version="0.4.0")
 app.add_middleware(CORSMiddleware, allow_origins=CFG["api"]["cors_allow_origins"],
                    allow_methods=["GET", "POST", "DELETE", "OPTIONS"],
                    allow_headers=["Content-Type", "X-Owner-Token", "X-User-Ref",
