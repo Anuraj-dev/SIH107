@@ -184,12 +184,12 @@ export function AssumptionsBanner({ items }: { items: string[] }) {
 export function Sources({ items }: { items: string[] | null | undefined }) {
   if (!items || items.length === 0) return null;
   return (
-    <details className="sources">
-      <summary>
-        <span className="sources-summary-title">Official BIS Standards Citations</span>
-        <span className="sources-count">{items.length}</span>
+    <details className="sources-minimal">
+      <summary className="sources-summary">
+        <span className="sources-dot" />
+        <span className="sources-summary-title">{items.length} {items.length === 1 ? "official citation" : "official citations"}</span>
       </summary>
-      <ul>
+      <ul className="sources-list">
         {items.map((c, i) => (
           <li key={i} className="source-item">
             <div className="source-content">{renderInline(c, `src${i}`)}</div>
@@ -251,7 +251,7 @@ export function EvidenceSources({ items }: { items: EvidenceItem[] | null | unde
   );
 }
 
-/** Answer metadata badges: kind, language, intent, RAG mode, latency, refusal, PII. */
+/** Answer metadata badges: discreet, low-noise metadata indicators. */
 export function MetaBadges({
   resp,
   ms,
@@ -269,36 +269,24 @@ export function MetaBadges({
   ms?: number;
 }) {
   const piiHits = Object.entries(resp.pii ?? {}).filter(([, v]) => v).map(([k]) => k);
+  if (!resp.rag_mode && !ms && !resp.refused && piiHits.length === 0) return null;
+
   return (
-    <div className="meta-row" aria-label="Answer metadata">
-      {resp.kind ? <span className="badge info">{resp.kind.replace(/_/g, " ")}</span> : null}
-      {resp.lang ? (
-        <span className="badge lang">
-          {resp.lang === "hi" ? "हिंदी (HI)" : "ENGLISH (EN)"}
+    <div className="meta-subtle-row" aria-label="Answer metadata">
+      {resp.rag_mode && (
+        <span className="meta-subtle-tag">
+          {resp.rag_used_llm ? "LLM Grounded" : "Extractive"}
         </span>
-      ) : null}
-      {resp.intent ? (
-        <span className="badge info" title={`confidence: ${resp.intent_confidence ?? "low"}`}>
-          intent: {resp.intent}
-        </span>
-      ) : null}
-      {resp.rag_mode ? (
-        <span
-          className="badge ok"
-          title={
-            resp.rag_used_llm
-              ? "Synthesized by configured LLM from retrieved gazette passages"
-              : "Deterministic extractive answer directly from indexed standard"
-          }
-        >
-          {resp.rag_used_llm ? "LLM-grounded" : "extractive"}
-        </span>
-      ) : null}
-      {typeof ms === "number" ? <span className="badge speed">{ms} ms</span> : null}
-      {resp.refused ? <span className="badge refuse">Refusal / Scope Guard</span> : null}
-      {piiHits.length > 0 ? (
-        <span className="badge pii">DPDP Redacted: {piiHits.join(", ")}</span>
-      ) : null}
+      )}
+      {typeof ms === "number" && (
+        <span className="meta-subtle-tag">{ms}ms</span>
+      )}
+      {resp.refused && (
+        <span className="meta-subtle-tag warn">Guardrail</span>
+      )}
+      {piiHits.length > 0 && (
+        <span className="meta-subtle-tag pii">DPDP Protected</span>
+      )}
     </div>
   );
 }

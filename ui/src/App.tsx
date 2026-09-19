@@ -7,28 +7,29 @@ import SchemesView from "./SchemesView";
 import TelemetryView from "./TelemetryView";
 import {
   AssumptionsBanner,
-  EvidenceSources,
   FeedbackButtons,
   KnownChips,
   MetaBadges,
   NoteInput,
   QuestionPills,
-  RawJson,
   RichText,
   Sources,
   TypingDots,
 } from "./components";
 import {
-  BisLogoIcon,
-  ChatIcon,
-  CatalogIcon,
-  SchemesIcon,
-  DiffIcon,
-  AuditIcon,
-  DownloadIcon,
+  ManakEmblemIcon,
+  SidebarToggleIcon,
+  ArrowUpRightIcon,
+  SunIcon,
+  MicIcon,
+  CameraIcon,
   PlusIcon,
   ArrowUpIcon,
-  MenuIcon,
+  CatalogIcon,
+  SchemesIcon,
+  AuditIcon,
+  DiffIcon,
+  DownloadIcon,
   XIcon,
 } from "./icons";
 import type { Lang, Msg } from "./types";
@@ -37,43 +38,29 @@ import "./styles.css";
 
 type ViewMode = "chat" | "directory" | "schemes" | "admin" | "telemetry";
 
-const SUGGESTIONS: { label: string; sub: string; q: string; category: string }[] = [
+const HERO_SUGGESTIONS = [
   {
-    label: "Steel Bottle → IS 17803",
-    sub: "Vacuum insulated flask & QCO requirements",
-    q: "My startup makes vacuum insulated stainless steel water bottle. Which IS applies?",
-    category: "Consumer Goods",
+    label: "What's the standard for packaged drinking water?",
+    q: "What is the standard for packaged drinking water (IS 10500 / IS 14543)?",
   },
   {
-    label: "LED Lamps + CRS Registration",
-    sub: "Electronics safety & Scheme-II",
-    q: "I manufacture LED bulbs. Which standard and is CRS registration needed?",
-    category: "Electronics",
+    label: "How to apply for ISI Mark certification",
+    q: "What is the step-by-step procedure to obtain an ISI mark licence under Scheme-I?",
   },
   {
-    label: "Gold Jewellery HUID Verification",
-    sub: "Hallmarking & BIS Care consumer app",
-    q: "How to verify gold jewellery HUID on BIS Care app?",
-    category: "Hallmarking",
+    label: "Which electronics require mandatory CRS?",
+    q: "Which electronic and IT goods require mandatory CRS registration under Scheme-II?",
   },
   {
-    label: "नल का पानी (IS 10500)",
-    sub: "पीने के पानी का मानक व रासायनिक सीमाएं",
-    q: "नल के पानी का मानक कौन सा है?",
-    category: "Water & Food",
+    label: "Steel bar & TMT rebar testing guidelines",
+    q: "What standard covers high strength deformed steel bars and wires (IS 1786)?",
   },
-  {
-    label: "Domestic PVC Cables (IS 694)",
-    sub: "Building wiring up to 1100V",
-    q: "What standard covers flexible PVC domestic building wire up to 1100V?",
-    category: "Electrical",
-  },
-  {
-    label: "Plugs & Sockets (IS 1293)",
-    sub: "6A and 16A domestic configurations",
-    q: "Do domestic 6A and 16A socket outlets require mandatory BIS ISI marking?",
-    category: "Electrical",
-  },
+];
+
+const LANG_PILLS: { id: Lang; label: string }[] = [
+  { id: "en", label: "English" },
+  { id: "hi", label: "हिंदी" },
+  { id: "auto", label: "Auto (Any Language)" },
 ];
 
 let nextId = 1;
@@ -95,10 +82,12 @@ export default function App() {
     if (hash === "telemetry" || hash === "audit") return "telemetry";
     return "chat";
   });
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
   const [toast, setToast] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
-  const taRef = useRef<HTMLTextAreaElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const toastTimer = useRef<number | null>(null);
 
   const navigateToView = useCallback((nextView: ViewMode) => {
@@ -142,18 +131,10 @@ export default function App() {
   }, [ping]);
 
   useEffect(() => {
-    if (view === "chat") {
+    if (view === "chat" && msgs.length > 0) {
       bottomRef.current?.scrollIntoView({ behavior: "smooth" });
     }
   }, [msgs, busy, view]);
-
-  // Auto-grow the composer.
-  useEffect(() => {
-    const el = taRef.current;
-    if (!el) return;
-    el.style.height = "auto";
-    el.style.height = Math.min(el.scrollHeight, 160) + "px";
-  }, [input]);
 
   const send = useCallback(
     async (query: string, opts?: { force?: boolean; fresh?: boolean }) => {
@@ -198,6 +179,7 @@ export default function App() {
     navigateToView("chat");
     setMsgs([]);
     setSidebarOpen(false);
+    inputRef.current?.focus();
   }, [navigateToView]);
 
   const rate = useCallback(
@@ -213,13 +195,12 @@ export default function App() {
       setMsgs((m) => m.map((x) => (x.id === id ? { ...x, feedback: rating } : x)));
       const res = await sendFeedback(tid, rating, ownerToken, note);
       if (!res.ok) showToast(`Feedback failed: ${res.error ?? "request failed"}.`);
-      else if (res.fixture) showToast("Feedback recorded locally (backend stub mode).");
-      else showToast("Thank you — feedback submitted for BIS quality evaluation.");
+      else if (res.fixture) showToast("Feedback recorded locally.");
+      else showToast("Thank you — feedback submitted for quality evaluation.");
     },
     [msgs, thread, showToast],
   );
 
-  /** Download the current thread as redacted JSON, else the local transcript. */
   const exportThread = useCallback(async () => {
     const stamp = new Date().toISOString().replace(/[:.]/g, "-");
     const save = (name: string, payload: unknown) => {
@@ -234,7 +215,6 @@ export default function App() {
       URL.revokeObjectURL(url);
     };
 
-    // Export server thread if active handle exists, or find most recent assistant message with token
     const lastMsgWithToken = msgs
       .slice()
       .reverse()
@@ -252,7 +232,7 @@ export default function App() {
         showToast("Conversation exported as redacted JSON.");
         return;
       } catch {
-        // fall through to local transcript
+        // fallback to local transcript
       }
     }
     save(`bis-thread-local-${stamp}.json`, {
@@ -267,11 +247,7 @@ export default function App() {
         citations: m.resp?.citations ?? [],
       })),
     });
-    showToast(
-      targetThread
-        ? "Server export unavailable — saved local redacted transcript."
-        : "Saved local redacted transcript.",
-    );
+    showToast("Saved local redacted transcript.");
   }, [msgs, thread, showToast]);
 
   const handleSelectDirectoryQuery = (queryText: string) => {
@@ -287,11 +263,7 @@ export default function App() {
       .find((m) => m.resp?.thread_id)?.resp?.thread_id;
 
   return (
-    <div className="dashboard-layout">
-      <a className="skip" href="#chat-log">
-        Skip to conversation
-      </a>
-
+    <div className={`app-container${darkMode ? " dark-theme" : ""}`}>
       {/* Mobile Backdrop */}
       {sidebarOpen && (
         <div
@@ -301,187 +273,189 @@ export default function App() {
         />
       )}
 
-      {/* Navigation Sidebar */}
-      <aside className={`dashboard-sidebar${sidebarOpen ? " open" : ""}`}>
-        <div className="sidebar-brand">
-          <div className="brand-logo-wrap">
-            <BisLogoIcon className="w-8 h-8 text-indigo-700" />
-          </div>
-          <div className="brand-text">
-            <h1 className="brand-title">BIS Assistant</h1>
-            <p className="brand-org">Bureau of Indian Standards</p>
-          </div>
-          <button
-            type="button"
-            className="mobile-close-btn"
-            onClick={() => setSidebarOpen(false)}
-            aria-label="Close navigation menu"
-          >
-            <XIcon className="w-5 h-5" />
-          </button>
-        </div>
-
-        <nav className="sidebar-nav" aria-label="Main Navigation">
-          <div className="nav-group-label">WORKSPACE</div>
-
-          <button
-            type="button"
-            className={`nav-item${view === "chat" ? " active" : ""}`}
-            onClick={() => navigateToView("chat")}
-          >
-            <ChatIcon className="nav-icon" size={17} />
-            <span className="nav-label">Standards Assistant</span>
-            {msgs.length > 0 && <span className="nav-count">{msgs.length}</span>}
-          </button>
-
-          <button
-            type="button"
-            className={`nav-item${view === "directory" ? " active" : ""}`}
-            onClick={() => navigateToView("directory")}
-          >
-            <CatalogIcon className="nav-icon" size={17} />
-            <span className="nav-label">Standards Catalog</span>
-          </button>
-
-          <button
-            type="button"
-            className={`nav-item${view === "schemes" ? " active" : ""}`}
-            onClick={() => navigateToView("schemes")}
-          >
-            <SchemesIcon className="nav-icon" size={17} />
-            <span className="nav-label">Certification Schemes</span>
-          </button>
-
-          <div className="nav-group-label mt-4">MANAGEMENT & AUDIT</div>
-
-          <button
-            type="button"
-            className={`nav-item${view === "admin" ? " active" : ""}`}
-            onClick={() => navigateToView("admin")}
-          >
-            <DiffIcon className="nav-icon" size={17} />
-            <span className="nav-label">KB Diff & Review</span>
-          </button>
-
-          <button
-            type="button"
-            className={`nav-item${view === "telemetry" ? " active" : ""}`}
-            onClick={() => navigateToView("telemetry")}
-          >
-            <AuditIcon className="nav-icon" size={17} />
-            <span className="nav-label">Audit & Telemetry</span>
-          </button>
-        </nav>
-
-        {/* Sidebar Footer */}
-        <div className="sidebar-footer">
-          <div className="thread-status-card">
-            <div className="thread-status-top">
-              <span
-                className={`status-dot ${
-                  healthy === null ? "unknown" : healthy ? "ok" : "down"
-                }`}
-                aria-hidden="true"
-              />
-              <span className="thread-status-title">
-                {healthy === null
-                  ? "Checking API…"
-                  : healthy
-                  ? "API Synchronized"
-                  : "API Offline"}
-              </span>
+      {/* Clean Minimal Sidebar */}
+      <aside
+        className={`clean-sidebar${sidebarOpen ? " open" : ""}${
+          sidebarCollapsed ? " collapsed" : ""
+        }`}
+      >
+        <div className="sidebar-top-section">
+          <div className="sidebar-brand-row">
+            <div className="brand-icon-wrap">
+              <ManakEmblemIcon size={26} />
             </div>
-            <div className="thread-id-text">
-              {activeSessionId ? `Session: #${activeSessionId.slice(0, 8)}` : "Ready for new inquiry"}
-            </div>
+            <span className="brand-name-text">मानक AI</span>
+            {sidebarOpen && (
+              <button
+                type="button"
+                className="mobile-close-btn"
+                onClick={() => setSidebarOpen(false)}
+                aria-label="Close navigation"
+              >
+                <XIcon size={18} />
+              </button>
+            )}
           </div>
 
           <button
             type="button"
-            className="btn-new-chat-side"
+            className="btn-clean-new-chat"
             onClick={newTopic}
             title="Start new conversation"
           >
-            <PlusIcon className="w-4 h-4" size={16} />
-            <span>New Consultation</span>
+            <PlusIcon size={15} />
+            <span>New chat</span>
           </button>
+
+          <div className="history-section">
+            <div className="history-label">HISTORY</div>
+            <div className="history-list">
+              {msgs.length > 0 ? (
+                <button
+                  type="button"
+                  className="history-item active"
+                  onClick={() => navigateToView("chat")}
+                >
+                  <span className="history-item-text">
+                    {msgs[0]?.text || "Current conversation"}
+                  </span>
+                </button>
+              ) : null}
+              <button
+                type="button"
+                className="history-item"
+                onClick={() => {
+                  navigateToView("chat");
+                  send("What is the standard for packaged drinking water?", { fresh: true });
+                }}
+              >
+                <span className="history-item-text">Drinking water (IS 10500)</span>
+              </button>
+              <button
+                type="button"
+                className="history-item"
+                onClick={() => {
+                  navigateToView("chat");
+                  send("What is the step-by-step procedure to obtain an ISI mark licence?", { fresh: true });
+                }}
+              >
+                <span className="history-item-text">ISI Mark Certification</span>
+              </button>
+              <button
+                type="button"
+                className="history-item"
+                onClick={() => {
+                  navigateToView("chat");
+                  send("Which electronic and IT goods require mandatory CRS registration under Scheme-II?", { fresh: true });
+                }}
+              >
+                <span className="history-item-text">Electronics CRS Scheme</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div className="sidebar-bottom-section">
+          <button
+            type="button"
+            className={`sidebar-nav-link${view === "directory" ? " active" : ""}`}
+            onClick={() => navigateToView("directory")}
+          >
+            <CatalogIcon size={16} />
+            <span>Standards Catalog</span>
+          </button>
+
+          <button
+            type="button"
+            className={`sidebar-nav-link${view === "schemes" ? " active" : ""}`}
+            onClick={() => navigateToView("schemes")}
+          >
+            <SchemesIcon size={16} />
+            <span>Certification Schemes</span>
+          </button>
+
+          <button
+            type="button"
+            className={`sidebar-nav-link${view === "telemetry" ? " active" : ""}`}
+            onClick={() => navigateToView("telemetry")}
+          >
+            <AuditIcon size={16} />
+            <span>Audit & Telemetry</span>
+          </button>
+
+          <button
+            type="button"
+            className={`sidebar-nav-link${view === "admin" ? " active" : ""}`}
+            onClick={() => navigateToView("admin")}
+          >
+            <DiffIcon size={16} />
+            <span>KB Diff Review</span>
+          </button>
+
+          <div className="sidebar-user-card">
+            <div className="user-avatar-pill">K</div>
+            <div className="user-text-wrap">
+              <span className="user-title">Kumar Vaibhav</span>
+            </div>
+            <button
+              type="button"
+              className="user-action-btn"
+              onClick={exportThread}
+              title="Export thread as JSON"
+              aria-label="Export conversation"
+            >
+              <DownloadIcon size={14} />
+            </button>
+          </div>
         </div>
       </aside>
 
-      {/* Main App Canvas */}
-      <div className="main-canvas">
-        {/* Top Header */}
-        <header className="dashboard-topbar">
-          <div className="topbar-left">
+      {/* Main Canvas */}
+      <div className="clean-main-canvas">
+        {/* Top Floating / Minimal Bar */}
+        <header className="clean-topbar">
+          <div className="topbar-left-zone">
             <button
               type="button"
-              className="mobile-menu-toggle"
-              onClick={() => setSidebarOpen(true)}
-              aria-label="Open navigation sidebar"
+              className="btn-topbar-icon"
+              onClick={() => {
+                if (window.innerWidth <= 840) {
+                  setSidebarOpen(!sidebarOpen);
+                } else {
+                  setSidebarCollapsed(!sidebarCollapsed);
+                }
+              }}
+              aria-label="Toggle navigation drawer"
+              title="Toggle sidebar"
             >
-              <MenuIcon className="w-5 h-5" size={20} />
+              <SidebarToggleIcon size={20} />
             </button>
-            <div className="view-indicator">
-              <span className="view-crumb">Portal</span>
-              <span className="view-crumb-sep">/</span>
-              <span className="view-tag">
-                {view === "chat"
-                  ? "Standards Assistant"
-                  : view === "directory"
-                  ? "Standards Catalog & Directory"
-                  : view === "schemes"
-                  ? "BIS Certification Schemes"
-                  : view === "admin"
-                  ? "Knowledge Base Diff Review"
-                  : "System Audit & Telemetry"}
-              </span>
-            </div>
+            {view !== "chat" && (
+              <button
+                type="button"
+                className="btn-back-chat"
+                onClick={() => navigateToView("chat")}
+              >
+                ← Back to Assistant
+              </button>
+            )}
           </div>
 
-          <div className="topbar-right">
-            {/* Language Selector */}
-            <div className="lang-selector-group">
-              <label className="sr-only" htmlFor="lang-sel">
-                Answer language
-              </label>
-              <select
-                id="lang-sel"
-                className="lang-select"
-                value={lang}
-                onChange={(e) => setLang(e.target.value as Lang)}
-                title="Answer language: Auto-detect, English, or Hindi"
-              >
-                <option value="auto">🌐 Auto-Detect</option>
-                <option value="en">🇬🇧 English (EN)</option>
-                <option value="hi">🇮🇳 हिंदी (Hindi)</option>
-              </select>
-            </div>
-
+          <div className="topbar-right-zone">
             <button
               type="button"
-              className="topbar-btn"
-              onClick={exportThread}
-              title="Export conversation as redacted JSON"
-              aria-label="Export conversation as redacted JSON"
+              className="btn-topbar-icon"
+              onClick={() => setDarkMode(!darkMode)}
+              aria-label="Toggle theme"
+              title="Toggle light / dark mode"
             >
-              <DownloadIcon className="w-4 h-4" size={16} />
-              <span className="btn-text-hide-mobile">Export JSON</span>
-            </button>
-
-            <button
-              type="button"
-              className="topbar-btn-primary"
-              onClick={newTopic}
-              title="Start fresh topic"
-            >
-              <PlusIcon className="w-4 h-4" size={16} />
-              <span className="btn-text-hide-mobile">New Chat</span>
+              <SunIcon size={20} />
             </button>
           </div>
         </header>
 
-        {/* Content Body */}
-        <main className="dashboard-body">
+        {/* Dynamic Body Content */}
+        <main className="clean-body-content">
           {view === "directory" && (
             <StandardsDirectory onSelectQuery={handleSelectDirectoryQuery} />
           )}
@@ -491,14 +465,7 @@ export default function App() {
           )}
 
           {view === "admin" && (
-            <div className="admin-view-wrap">
-              <button
-                type="button"
-                className="btn-back-link"
-                onClick={() => navigateToView("chat")}
-              >
-                ← Return to Standards Assistant
-              </button>
+            <div className="admin-clean-wrap">
               <AdminPanel />
             </div>
           )}
@@ -514,111 +481,92 @@ export default function App() {
           )}
 
           {view === "chat" && (
-            <div className="chat-interface">
-              <div
-                className="chat-stream"
-                id="chat-log"
-                role="log"
-                aria-live="polite"
-                aria-label="Conversation"
-                tabIndex={-1}
-              >
-                {msgs.length === 0 ? (
-                  <div className="hero-dashboard">
-                    <div className="hero-seal-badge">
-                      <BisLogoIcon className="w-10 h-10 text-indigo-700" />
-                    </div>
-                    <h2 className="hero-title">Bureau of Indian Standards Assistant</h2>
-                    <p className="hero-tagline">
-                      मानक पथप्रदर्शक · National Standards & Conformity Assessment Intelligence
-                    </p>
-                    <p className="hero-desc">
-                      Grounded strictly in verified Indian Standards, Gazette notifications, Quality Control Orders (QCOs), and product manuals.
-                    </p>
-
-                    {/* Prompts Cards */}
-                    <div className="suggestions-grid">
-                      {SUGGESTIONS.map((s) => (
-                        <button
-                          key={s.label}
-                          type="button"
-                          className="suggestion-card"
-                          disabled={busy}
-                          onClick={() => send(s.q, { fresh: true })}
-                        >
-                          <div className="card-cat-tag">{s.category}</div>
-                          <div className="card-title-txt">{s.label}</div>
-                          <div className="card-desc-txt">{s.sub}</div>
-                        </button>
-                      ))}
-                    </div>
-
-                    {/* Trust banner */}
-                    <div className="trust-strip">
-                      <div className="trust-item">
-                        <span className="trust-dot" />
-                        <span>24,000+ Verified Standards</span>
-                      </div>
-                      <div className="trust-item">
-                        <span className="trust-dot" />
-                        <span>Allowlisted Retrieval Only</span>
-                      </div>
-                      <div className="trust-item">
-                        <span className="trust-dot" />
-                        <span>DPDP Act 2023 Compliant</span>
-                      </div>
-                      <div className="trust-item">
-                        <span className="trust-dot" />
-                        <span>Bilingual EN + हिंदी</span>
-                      </div>
-                    </div>
+            <div className="chat-layout-wrap">
+              {msgs.length === 0 ? (
+                /* Hero Empty State - Exact inspiration from reference */
+                <div className="hero-center-container">
+                  <div className="hero-emblem-wrap">
+                    <ManakEmblemIcon size={46} />
                   </div>
-                ) : (
-                  msgs.map((m) =>
+                  <h1 className="hero-headline">
+                    Namaste, I'm <span className="hero-bold-name">मानक AI</span>
+                  </h1>
+                  <p className="hero-subline">
+                    Ask me about Indian Standards, ISI mark or CRS schemes, or try one of these:
+                  </p>
+
+                  <div className="hero-cards-grid">
+                    {HERO_SUGGESTIONS.map((s) => (
+                      <button
+                        key={s.q}
+                        type="button"
+                        className="hero-suggestion-card"
+                        disabled={busy}
+                        onClick={() => send(s.q, { fresh: true })}
+                      >
+                        <span className="hero-suggestion-label">{s.label}</span>
+                        <ArrowUpRightIcon className="hero-suggestion-icon" size={16} />
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="hero-lang-row">
+                    {LANG_PILLS.map((p) => (
+                      <button
+                        key={p.id}
+                        type="button"
+                        className={`hero-lang-pill${
+                          lang === p.id || (lang === "auto" && p.id === "auto") ? " active" : ""
+                        }`}
+                        onClick={() => setLang(p.id)}
+                      >
+                        {p.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                /* Active Conversation Stream */
+                <div className="chat-messages-container">
+                  {msgs.map((m) =>
                     m.role === "user" ? (
-                      <div key={m.id} className="msg user">
-                        <div className="bubble-u">
+                      <div key={m.id} className="user-message-row">
+                        <div className="user-bubble">
                           <RichText text={m.text} />
                         </div>
                       </div>
                     ) : (
-                      <div key={m.id} className="msg bot">
-                        <div className="avatar" aria-hidden="true">
-                          <span>BIS</span>
+                      <div key={m.id} className="assistant-message-row">
+                        <div className="assistant-avatar">
+                          <ManakEmblemIcon size={24} />
                         </div>
-                        <div
-                          className="content"
-                          lang={m.resp?.lang === "hi" ? "hi" : undefined}
-                        >
+                        <div className="assistant-content">
                           {m.error ? (
-                            <div className="error-card">
-                              <RichText text={m.error} />
+                            <div className="clean-error-card">
+                              <p className="error-text">{m.error}</p>
                               <button
                                 type="button"
-                                className="btn-retry"
+                                className="btn-clean-retry"
                                 onClick={() => send(pendingQ)}
                               >
-                                Retry Request
+                                Retry
                               </button>
                             </div>
-                          ) : !m.resp ? (
-                            <div className="error-card">
-                              <RichText text="Empty answer payload received — please retry." />
-                            </div>
                           ) : (
-                            <div className="answer-card">
-                              <MetaBadges resp={m.resp} ms={m.ms} />
-                              <div className="answer-body">
+                            <div className="clean-answer-container">
+                              <div className="answer-prose">
                                 <RichText text={m.text} />
                               </div>
 
-                              {m.resp.assumptions.length > 0 && (
+                              {m.resp?.assumptions && m.resp.assumptions.length > 0 && (
                                 <AssumptionsBanner items={m.resp.assumptions} />
                               )}
 
-                              <KnownChips known={m.resp.known} />
+                              {m.resp?.known && m.resp.known.length > 0 && (
+                                <KnownChips known={m.resp.known} />
+                              )}
 
-                              {m.resp.needs_info && (
+                              {m.resp?.needs_info && (
                                 <QuestionPills
                                   questions={m.resp.questions}
                                   disabled={busy}
@@ -628,27 +576,17 @@ export default function App() {
                                 />
                               )}
 
-                              {m.resp.citations.length > 0 && (
+                              {m.resp?.citations && m.resp.citations.length > 0 && (
                                 <Sources items={m.resp.citations} />
                               )}
 
-                              <EvidenceSources
-                                items={m.resp.sources ?? m.resp.rag_evidence}
-                              />
-
-                              <RawJson data={m.resp} />
-
-                              <div className="feedback-ribbon">
+                              <div className="message-footer-row">
+                                <MetaBadges resp={m.resp ?? {}} ms={m.ms} />
                                 <FeedbackButtons
                                   value={m.feedback}
                                   disabled={busy}
                                   onRate={(r) => rate(m.id, r)}
                                 />
-                                {m.feedback != null && (
-                                  <span className="feedback-ack">
-                                    Response recorded for evaluation.
-                                  </span>
-                                )}
                               </div>
 
                               {m.feedback != null && (
@@ -662,58 +600,61 @@ export default function App() {
                         </div>
                       </div>
                     ),
-                  )
-                )}
+                  )}
 
-                {busy && <TypingDots />}
-                <div ref={bottomRef} />
-              </div>
+                  {busy && <TypingDots />}
+                  <div ref={bottomRef} />
+                </div>
+              )}
 
-              {/* Composer Box */}
-              <div className="composer-container">
+              {/* Floating Bottom Capsule Composer */}
+              <div className="floating-composer-container">
                 <form
-                  className="composer-card"
+                  className="floating-capsule"
                   onSubmit={(e) => {
                     e.preventDefault();
                     send(input);
                   }}
                 >
-                  <label className="sr-only" htmlFor="chat-input">
-                    Type a product or BIS question
-                  </label>
-                  <textarea
-                    id="chat-input"
-                    ref={taRef}
-                    rows={1}
+                  <button
+                    type="button"
+                    className="capsule-icon-btn"
+                    title="Browse Standards Catalog"
+                    onClick={() => navigateToView("directory")}
+                    aria-label="Browse Standards Catalog"
+                  >
+                    <CameraIcon size={18} />
+                  </button>
+
+                  <input
+                    ref={inputRef}
+                    type="text"
+                    className="capsule-input-field"
                     value={input}
-                    lang={lang === "hi" ? "hi" : undefined}
                     onChange={(e) => setInput(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" && !e.shiftKey) {
-                        e.preventDefault();
-                        send(input);
-                      }
-                    }}
-                    placeholder="Ask about product compliance, IS codes (e.g. IS 10500), CRS, or hallmarking…"
+                    placeholder="Ask anything about Indian Standards, ISI mark, CRS..."
                     autoComplete="off"
-                    style={{ overflowY: input.split("\n").length > 3 ? "auto" : "hidden" }}
                   />
+
+                  <button
+                    type="button"
+                    className="capsule-icon-btn"
+                    title="Voice input"
+                    onClick={() => showToast("Voice input will be available in future releases.")}
+                    aria-label="Voice input"
+                  >
+                    <MicIcon size={18} />
+                  </button>
+
                   <button
                     type="submit"
-                    className="btn-composer-send"
+                    className={`capsule-send-circle${input.trim() && !busy ? " active" : ""}`}
                     disabled={busy || !input.trim()}
                     aria-label="Send query"
                   >
-                    <ArrowUpIcon className="w-5 h-5" size={18} />
+                    <ArrowUpIcon size={16} />
                   </button>
                 </form>
-
-                <div className="composer-hints">
-                  <span className="key-hint">Press <strong>↵ Enter</strong> to send · <strong>Shift + ↵</strong> for newline</span>
-                  <span className="disclaimer-text">
-                    Official informational guidance · Verify with licensed BIS lab or official Gazette before commercial production.
-                  </span>
-                </div>
               </div>
             </div>
           )}
