@@ -9,12 +9,12 @@ export default function SchemesView({ onSelectQuery }: SchemesViewProps) {
   return (
     <div className="schemes-container">
       <div className="directory-header">
-        <div className="flex items-center gap-3 mb-2">
+        <div className="view-header">
           <div className="admin-icon-box">
-            <SchemesIcon className="w-5 h-5 text-indigo-600" />
+            <SchemesIcon size={20} />
           </div>
           <div>
-            <h2 className="directory-title">BIS Certification & Conformity Assessment Schemes</h2>
+            <h2 className="directory-title">BIS Certification &amp; Conformity Assessment Schemes</h2>
             <p className="directory-subtitle">
               Official conformity assessment frameworks administered under the Bureau of Indian Standards Act, 2016.
             </p>
@@ -56,7 +56,7 @@ export default function SchemesView({ onSelectQuery }: SchemesViewProps) {
                 className="btn-query-assistant"
                 onClick={() => onSelectQuery(scheme.sample_query)}
               >
-                <ChatIcon className="w-3.5 h-3.5" />
+                <ChatIcon size={14} />
                 <span>Ask Process Guidance</span>
               </button>
               <a
@@ -66,7 +66,8 @@ export default function SchemesView({ onSelectQuery }: SchemesViewProps) {
                 className="btn-bis-portal"
               >
                 <span>Apply on Portal</span>
-                <ExternalLinkIcon className="w-3 h-3" />
+                <span className="sr-only"> (opens in new tab)</span>
+                <ExternalLinkIcon size={12} />
               </a>
             </div>
           </div>

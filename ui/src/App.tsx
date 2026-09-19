@@ -22,7 +22,6 @@ import {
   ArrowUpRightIcon,
   SunIcon,
   MicIcon,
-  CameraIcon,
   PlusIcon,
   ArrowUpIcon,
   CatalogIcon,
@@ -114,6 +113,29 @@ export default function App() {
     return () => window.removeEventListener("hashchange", handleHash);
   }, []);
 
+  useEffect(() => {
+    const titles: Record<ViewMode, string> = {
+      chat: "मानक AI — BIS Standards Assistant",
+      directory: "Standards Directory — BIS Assistant",
+      schemes: "Certification Schemes — BIS Assistant",
+      admin: "KB Diff Review — BIS Assistant",
+      telemetry: "Audit & Telemetry — BIS Assistant",
+    };
+    document.title = titles[view];
+  }, [view]);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSidebarOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  useEffect(() => () => {
+    if (toastTimer.current) window.clearTimeout(toastTimer.current);
+  }, []);
+
   const showToast = useCallback((t: string) => {
     setToast(t);
     if (toastTimer.current) window.clearTimeout(toastTimer.current);
@@ -132,7 +154,11 @@ export default function App() {
 
   useEffect(() => {
     if (view === "chat" && msgs.length > 0) {
-      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+      const reduceMotion =
+        typeof window !== "undefined" &&
+        typeof window.matchMedia === "function" &&
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      bottomRef.current?.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" });
     }
   }, [msgs, busy, view]);
 
@@ -214,7 +240,6 @@ export default function App() {
       a.remove();
       URL.revokeObjectURL(url);
     };
-
     const lastMsgWithToken = msgs
       .slice()
       .reverse()
@@ -231,8 +256,9 @@ export default function App() {
         save(`bis-thread-${targetThread.id}-${stamp}.json`, { ...data, redacted: true, source: "server" });
         showToast("Conversation exported as redacted JSON.");
         return;
-      } catch {
-        // fallback to local transcript
+      } catch (e) {
+        console.warn("Server export failed, saving local transcript.", e);
+        showToast("Server export failed — saved local redacted transcript.");
       }
     }
     save(`bis-thread-local-${stamp}.json`, {
@@ -252,7 +278,7 @@ export default function App() {
 
   const handleSelectDirectoryQuery = (queryText: string) => {
     navigateToView("chat");
-    send(queryText, { fresh: true });
+    void send(queryText, { fresh: true });
   };
 
   const activeSessionId =
@@ -264,6 +290,9 @@ export default function App() {
 
   return (
     <div className={`app-container${darkMode ? " dark-theme" : ""}`}>
+      <a className="skip-link" href="#chat-log">
+        Skip to conversation
+      </a>
       {/* Mobile Backdrop */}
       {sidebarOpen && (
         <div
@@ -278,6 +307,8 @@ export default function App() {
         className={`clean-sidebar${sidebarOpen ? " open" : ""}${
           sidebarCollapsed ? " collapsed" : ""
         }`}
+        aria-label="Primary"
+        aria-hidden={sidebarCollapsed && !sidebarOpen}
       >
         <div className="sidebar-top-section">
           <div className="sidebar-brand-row">
@@ -326,7 +357,7 @@ export default function App() {
                 className="history-item"
                 onClick={() => {
                   navigateToView("chat");
-                  send("What is the standard for packaged drinking water?", { fresh: true });
+                  void send("What is the standard for packaged drinking water?", { fresh: true });
                 }}
               >
                 <span className="history-item-text">Drinking water (IS 10500)</span>
@@ -336,7 +367,7 @@ export default function App() {
                 className="history-item"
                 onClick={() => {
                   navigateToView("chat");
-                  send("What is the step-by-step procedure to obtain an ISI mark licence?", { fresh: true });
+                  void send("What is the step-by-step procedure to obtain an ISI mark licence?", { fresh: true });
                 }}
               >
                 <span className="history-item-text">ISI Mark Certification</span>
@@ -346,7 +377,7 @@ export default function App() {
                 className="history-item"
                 onClick={() => {
                   navigateToView("chat");
-                  send("Which electronic and IT goods require mandatory CRS registration under Scheme-II?", { fresh: true });
+                  void send("Which electronic and IT goods require mandatory CRS registration under Scheme-II?", { fresh: true });
                 }}
               >
                 <span className="history-item-text">Electronics CRS Scheme</span>
@@ -360,6 +391,7 @@ export default function App() {
             type="button"
             className={`sidebar-nav-link${view === "directory" ? " active" : ""}`}
             onClick={() => navigateToView("directory")}
+            aria-current={view === "directory" ? "page" : undefined}
           >
             <CatalogIcon size={16} />
             <span>Standards Catalog</span>
@@ -369,6 +401,7 @@ export default function App() {
             type="button"
             className={`sidebar-nav-link${view === "schemes" ? " active" : ""}`}
             onClick={() => navigateToView("schemes")}
+            aria-current={view === "schemes" ? "page" : undefined}
           >
             <SchemesIcon size={16} />
             <span>Certification Schemes</span>
@@ -378,6 +411,7 @@ export default function App() {
             type="button"
             className={`sidebar-nav-link${view === "telemetry" ? " active" : ""}`}
             onClick={() => navigateToView("telemetry")}
+            aria-current={view === "telemetry" ? "page" : undefined}
           >
             <AuditIcon size={16} />
             <span>Audit & Telemetry</span>
@@ -387,6 +421,7 @@ export default function App() {
             type="button"
             className={`sidebar-nav-link${view === "admin" ? " active" : ""}`}
             onClick={() => navigateToView("admin")}
+            aria-current={view === "admin" ? "page" : undefined}
           >
             <DiffIcon size={16} />
             <span>KB Diff Review</span>
@@ -426,6 +461,7 @@ export default function App() {
                 }
               }}
               aria-label="Toggle navigation drawer"
+              aria-expanded={sidebarOpen || !sidebarCollapsed}
               title="Toggle sidebar"
             >
               <SidebarToggleIcon size={20} />
@@ -447,6 +483,7 @@ export default function App() {
               className="btn-topbar-icon"
               onClick={() => setDarkMode(!darkMode)}
               aria-label="Toggle theme"
+              aria-pressed={darkMode}
               title="Toggle light / dark mode"
             >
               <SunIcon size={20} />
@@ -455,7 +492,7 @@ export default function App() {
         </header>
 
         {/* Dynamic Body Content */}
-        <main className="clean-body-content">
+        <main className="clean-body-content" id="chat-log" role="log" aria-live="polite" aria-label="Conversation">
           {view === "directory" && (
             <StandardsDirectory onSelectQuery={handleSelectDirectoryQuery} />
           )}
@@ -502,7 +539,7 @@ export default function App() {
                         type="button"
                         className="hero-suggestion-card"
                         disabled={busy}
-                        onClick={() => send(s.q, { fresh: true })}
+                        onClick={() => void send(s.q, { fresh: true })}
                       >
                         <span className="hero-suggestion-label">{s.label}</span>
                         <ArrowUpRightIcon className="hero-suggestion-icon" size={16} />
@@ -510,7 +547,7 @@ export default function App() {
                     ))}
                   </div>
 
-                  <div className="hero-lang-row">
+                  <div className="hero-lang-row" role="group" aria-label="Response language">
                     {LANG_PILLS.map((p) => (
                       <button
                         key={p.id}
@@ -519,6 +556,7 @@ export default function App() {
                           lang === p.id || (lang === "auto" && p.id === "auto") ? " active" : ""
                         }`}
                         onClick={() => setLang(p.id)}
+                        aria-pressed={lang === p.id}
                       >
                         {p.label}
                       </button>
@@ -542,12 +580,12 @@ export default function App() {
                         </div>
                         <div className="assistant-content">
                           {m.error ? (
-                            <div className="clean-error-card">
+                            <div className="clean-error-card" role="alert">
                               <p className="error-text">{m.error}</p>
                               <button
                                 type="button"
                                 className="btn-clean-retry"
-                                onClick={() => send(pendingQ)}
+                                onClick={() => void send(pendingQ)}
                               >
                                 Retry
                               </button>
@@ -570,8 +608,8 @@ export default function App() {
                                 <QuestionPills
                                   questions={m.resp.questions}
                                   disabled={busy}
-                                  onPick={(answer) => send(answer)}
-                                  onAssume={() => send(pendingQ, { force: true })}
+                                  onPick={(answer) => void send(answer)}
+                                  onAssume={() => void send(pendingQ, { force: true })}
                                   onNewTopic={newTopic}
                                 />
                               )}
@@ -613,7 +651,7 @@ export default function App() {
                   className="floating-capsule"
                   onSubmit={(e) => {
                     e.preventDefault();
-                    send(input);
+                    void send(input);
                   }}
                 >
                   <button
@@ -623,10 +661,14 @@ export default function App() {
                     onClick={() => navigateToView("directory")}
                     aria-label="Browse Standards Catalog"
                   >
-                    <CameraIcon size={18} />
+                    <CatalogIcon size={18} />
                   </button>
 
+                  <label className="sr-only" htmlFor="composer-input">
+                    Ask about Indian Standards
+                  </label>
                   <input
+                    id="composer-input"
                     ref={inputRef}
                     type="text"
                     className="capsule-input-field"

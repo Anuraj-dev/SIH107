@@ -18,7 +18,7 @@ export function renderInline(body: string, keyPrefix: string): React.ReactNode[]
   boldParts.forEach((chunk, bi) => {
     if (bi % 2 === 1) {
       out.push(
-        <strong key={`${keyPrefix}-b${bi}`} className="font-semibold text-slate-900">
+        <strong key={`${keyPrefix}-b${bi}`}>
           {linkifyChunk(chunk, `${keyPrefix}-b${bi}`)}
         </strong>,
       );
@@ -52,7 +52,7 @@ function linkifyChunk(chunk: string, keyPrefix: string): React.ReactNode[] {
         href={url}
         target="_blank"
         rel="noreferrer"
-        className="rlink inline-flex items-center gap-0.5"
+        className="rlink"
       >
         <span>{url}</span>
         <ExternalLinkIcon className="link-ext-icon" />
@@ -146,7 +146,7 @@ export function RichText({ text }: { text: string | null | undefined }) {
 export function KnownChips({ known }: { known: { slot: string; value: string }[] }) {
   if (!known || known.length === 0) return null;
   return (
-    <div className="known" aria-label="Identified parameters">
+    <div className="known" role="group" aria-label="Identified parameters">
       <div className="known-title">Identified Parameters:</div>
       <ul className="known-list">
         {known.map((k) => (
@@ -238,8 +238,9 @@ export function EvidenceSources({ items }: { items: EvidenceItem[] | null | unde
             )}
             {e.url && /^https?:\/\//i.test(e.url) ? (
               <div className="ev-link">
-                <a href={e.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1">
+                <a href={e.url} target="_blank" rel="noreferrer">
                   <span>View official BIS document</span>
+                  <span className="sr-only"> (opens in new tab)</span>
                   <ExternalLinkIcon className="link-ext-icon" />
                 </a>
               </div>
@@ -272,7 +273,7 @@ export function MetaBadges({
   if (!resp.rag_mode && !ms && !resp.refused && piiHits.length === 0) return null;
 
   return (
-    <div className="meta-subtle-row" aria-label="Answer metadata">
+    <div className="meta-subtle-row" role="group" aria-label="Answer metadata">
       {resp.rag_mode && (
         <span className="meta-subtle-tag">
           {resp.rag_used_llm ? "LLM Grounded" : "Extractive"}
@@ -294,10 +295,29 @@ export function MetaBadges({
 /** Raw response JSON inspector with copy functionality. */
 export function RawJson({ data }: { data: unknown }) {
   const [copied, setCopied] = useState(false);
-  const handleCopy = () => {
-    navigator.clipboard.writeText(JSON.stringify(data, null, 2));
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const timer = React.useRef<number | null>(null);
+  React.useEffect(() => () => {
+    if (timer.current) window.clearTimeout(timer.current);
+  }, []);
+  const handleCopy = async () => {
+    try {
+      const text = JSON.stringify(data, null, 2);
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        ta.remove();
+      }
+      setCopied(true);
+      if (timer.current) window.clearTimeout(timer.current);
+      timer.current = window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setCopied(false);
+    }
   };
 
   return (
@@ -316,12 +336,12 @@ export function RawJson({ data }: { data: unknown }) {
         >
           {copied ? (
             <>
-              <CheckIcon className="w-3 h-3 text-emerald-400" />
+              <CheckIcon size={12} />
               <span>Copied</span>
             </>
           ) : (
             <>
-              <CopyIcon className="w-3 h-3" />
+              <CopyIcon size={12} />
               <span>Copy JSON</span>
             </>
           )}
@@ -342,9 +362,9 @@ export function QuestionPills({
 }: {
   questions: Question[];
   disabled?: boolean;
-  onPick: (send: string) => void;
-  onAssume: () => void;
-  onNewTopic: () => void;
+  onPick: (answer: string) => void | Promise<void>;
+  onAssume: () => void | Promise<void>;
+  onNewTopic: () => void | Promise<void>;
 }) {
   if (!questions || questions.length === 0) return null;
   return (
@@ -405,7 +425,7 @@ export function FeedbackButtons({
         onClick={() => onRate(1)}
         title="Helpful compliance guidance"
       >
-        <ThumbsUpIcon className="w-4 h-4" />
+        <ThumbsUpIcon size={16} />
       </button>
       <button
         type="button"
@@ -416,7 +436,7 @@ export function FeedbackButtons({
         onClick={() => onRate(-1)}
         title="Unhelpful or inaccurate guidance"
       >
-        <ThumbsDownIcon className="w-4 h-4" />
+        <ThumbsDownIcon size={16} />
       </button>
     </div>
   );
@@ -427,7 +447,7 @@ export function NoteInput({
   onSubmit,
 }: {
   id: string;
-  onSubmit: (note: string) => void;
+  onSubmit: (note: string) => void | Promise<void>;
 }) {
   const [note, setNote] = useState("");
   const inputId = `fb-note-${id}`;
@@ -460,16 +480,16 @@ export function NoteInput({
 /** Animated typing indicator when querying. */
 export function TypingDots() {
   return (
-    <div className="msg bot">
-      <div className="avatar" aria-hidden="true">
+    <div className="assistant-message-row">
+      <div className="assistant-avatar" aria-hidden="true">
         <span>BIS</span>
       </div>
-      <div className="content">
+      <div className="assistant-content">
         <div className="typing-indicator" aria-hidden="true">
           <span className="dot" />
           <span className="dot" />
           <span className="dot" />
-          <span className="typing-label">Consulting BIS metadata & gazettes…</span>
+          <span className="typing-label">Consulting BIS metadata &amp; gazettes…</span>
         </div>
         <span className="sr-only">Assistant is retrieving standard metadata</span>
       </div>

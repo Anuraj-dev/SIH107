@@ -40,9 +40,9 @@ export default function StandardsDirectory({ onSelectQuery }: StandardsDirectory
   return (
     <div className="directory-container">
       <div className="directory-header">
-        <div className="flex items-center gap-3 mb-2">
+        <div className="view-header">
           <div className="admin-icon-box">
-            <CatalogIcon className="w-5 h-5 text-indigo-600" />
+            <CatalogIcon size={20} />
           </div>
           <div>
             <h2 className="directory-title">Indian Standards Directory</h2>
@@ -57,7 +57,9 @@ export default function StandardsDirectory({ onSelectQuery }: StandardsDirectory
       <div className="directory-controls">
         <div className="search-box">
           <SearchIcon className="search-box-icon" />
+          <label className="sr-only" htmlFor="standards-search">Search standards</label>
           <input
+            id="standards-search"
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -76,13 +78,12 @@ export default function StandardsDirectory({ onSelectQuery }: StandardsDirectory
           )}
         </div>
 
-        <div className="category-chips" role="tablist" aria-label="Filter standards by sector">
+        <div className="category-chips" role="group" aria-label="Filter standards by sector">
           {categories.map((cat) => (
             <button
               key={cat}
               type="button"
-              role="tab"
-              aria-selected={category === cat}
+              aria-pressed={category === cat}
               className={`cat-chip${category === cat ? " active" : ""}`}
               onClick={() => setCategory(cat)}
             >
@@ -128,7 +129,7 @@ export default function StandardsDirectory({ onSelectQuery }: StandardsDirectory
                   onClick={() => onSelectQuery(s.sample_query)}
                   title={`Ask Assistant about ${s.is_number}`}
                 >
-                  <ChatIcon className="w-3.5 h-3.5" />
+                  <ChatIcon size={14} />
                   <span>Ask Assistant</span>
                 </button>
                 <a
@@ -139,7 +140,8 @@ export default function StandardsDirectory({ onSelectQuery }: StandardsDirectory
                   title="View on Know Your Standard portal"
                 >
                   <span>BIS Portal</span>
-                  <ExternalLinkIcon className="w-3 h-3" />
+                  <span className="sr-only"> (opens in new tab)</span>
+                  <ExternalLinkIcon size={12} />
                 </a>
               </div>
             </div>

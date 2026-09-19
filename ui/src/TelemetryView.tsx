@@ -19,12 +19,12 @@ export default function TelemetryView({
   return (
     <div className="telemetry-container">
       <div className="directory-header">
-        <div className="flex items-center gap-3 mb-2">
+        <div className="view-header">
           <div className="admin-icon-box">
-            <AuditIcon className="w-5 h-5 text-indigo-600" />
+            <AuditIcon size={20} />
           </div>
           <div>
-            <h2 className="directory-title">System Audit, Security & DPDP Compliance</h2>
+            <h2 className="directory-title">System Audit, Security &amp; DPDP Compliance</h2>
             <p className="directory-subtitle">
               Live observability, privacy protections, and citation guardrails per Digital Personal Data Protection (DPDP) Act 2023.
             </p>
@@ -42,15 +42,17 @@ export default function TelemetryView({
               className="refresh-mini-btn"
               onClick={onRefreshHealth}
               title="Re-check health"
+              aria-label="Re-check backend health"
             >
-              <RefreshIcon className="w-3.5 h-3.5" />
+              <RefreshIcon size={14} />
             </button>
           </div>
-          <div className="telemetry-status-row">
+          <div className="telemetry-status-row" role="status">
             <span
               className={`status-dot-large ${
                 healthy === null ? "unknown" : healthy ? "ok" : "down"
               }`}
+              aria-hidden="true"
             />
             <span className="telemetry-val">
               {healthy === null
@@ -66,8 +68,8 @@ export default function TelemetryView({
         </div>
 
         <div className="telemetry-card">
-          <span className="telemetry-label">Session State & Continuity</span>
-          <div className="telemetry-val-text font-mono">
+          <span className="telemetry-label">Session State &amp; Continuity</span>
+          <div className="telemetry-val-text font-mono" title={thread ? `Thread ${thread.id}` : undefined}>
             {thread ? `Thread #${thread.id.slice(0, 12)}…` : "Stateless / Single-Turn Active"}
           </div>
           <p className="telemetry-desc">
@@ -79,7 +81,7 @@ export default function TelemetryView({
           <span className="telemetry-label">DPDP Act 2023 Guard</span>
           <div className="telemetry-badge-row">
             <span className="badge-shield">
-              <CheckIcon className="w-3 h-3 text-emerald-600" />
+              <CheckIcon size={12} />
               <span>PII Minimisation Enforced</span>
             </span>
           </div>
@@ -91,11 +93,11 @@ export default function TelemetryView({
 
       {/* Compliance Architecture Breakdown */}
       <div className="compliance-section">
-        <h3 className="section-title">Citation & Grounding Invariants</h3>
+        <h3 className="section-title">Citation &amp; Grounding Invariants</h3>
         <div className="compliance-list">
           <div className="compliance-item">
             <div className="check-circle">
-              <CheckIcon className="w-3.5 h-3.5 text-emerald-600" />
+              <CheckIcon size={14} />
             </div>
             <div>
               <div className="compliance-title">Strict Allowlist Grounding</div>
@@ -107,7 +109,7 @@ export default function TelemetryView({
 
           <div className="compliance-item">
             <div className="check-circle">
-              <CheckIcon className="w-3.5 h-3.5 text-emerald-600" />
+              <CheckIcon size={14} />
             </div>
             <div>
               <div className="compliance-title">Transparent Citation Specification</div>
@@ -119,7 +121,7 @@ export default function TelemetryView({
 
           <div className="compliance-item">
             <div className="check-circle">
-              <CheckIcon className="w-3.5 h-3.5 text-emerald-600" />
+              <CheckIcon size={14} />
             </div>
             <div>
               <div className="compliance-title">Two-Person Authorization for Knowledge Base Updates</div>
@@ -134,13 +136,13 @@ export default function TelemetryView({
       {/* Export Action Card */}
       <div className="export-action-card">
         <div>
-          <h4 className="font-semibold text-slate-900 mb-1">Export Redacted Audit Transcript</h4>
-          <p className="text-xs text-slate-600">
+          <h4 className="scheme-name-en">Export Redacted Audit Transcript</h4>
+          <p className="telemetry-desc">
             Download JSON session transcript with all PII scrubbed for offline compliance records.
           </p>
         </div>
         <button type="button" className="btn-primary-export" onClick={onExport}>
-          <DownloadIcon className="w-4 h-4" />
+          <DownloadIcon size={16} />
           <span>Export Redacted JSON</span>
         </button>
       </div>

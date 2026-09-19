@@ -69,7 +69,7 @@ export default function AdminPanel() {
         <div className="admin-header">
           <div className="admin-title-group">
             <div className="admin-icon-box">
-              <DiffIcon className="w-5 h-5 text-indigo-600" />
+              <DiffIcon size={20} />
             </div>
             <div>
               <h2 id="admin-h" className="admin-title">
@@ -83,8 +83,8 @@ export default function AdminPanel() {
         </div>
 
         <div className="admin-security-note">
-          <AlertTriangleIcon className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
-          <div className="text-xs text-amber-900 leading-relaxed">
+          <AlertTriangleIcon size={16} />
+          <div className="telemetry-desc">
             <strong>Dual-Key Protocol Required for Live Publishing:</strong> Reviewing pending diffs requires
             an active administrative key (<code>GET /kb/diff</code>). Publishing approval or rejection to the live
             knowledge base requires two distinct administrative keys (Publisher + Approver).
@@ -100,7 +100,7 @@ export default function AdminPanel() {
         >
           <div className="form-group">
             <label htmlFor="admin-token" className="form-label">
-              Publisher Key <span className="text-red-500">*</span>
+              Publisher Key <span aria-hidden="true">*</span>
             </label>
             <input
               id="admin-token"
@@ -159,7 +159,7 @@ export default function AdminPanel() {
       <div className="admin-header flex-between">
         <div className="admin-title-group">
           <div className="admin-icon-box">
-            <DiffIcon className="w-5 h-5 text-indigo-600" />
+            <DiffIcon size={20} />
           </div>
           <div>
             <h2 id="admin-h" className="admin-title">
@@ -196,15 +196,15 @@ export default function AdminPanel() {
           <div className="stat-lbl">Pending Changes</div>
         </div>
         <div className="stat-card">
-          <div className="stat-num text-emerald-600">{addedCount}</div>
+          <div className="stat-num">{addedCount}</div>
           <div className="stat-lbl">New Standards</div>
         </div>
         <div className="stat-card">
-          <div className="stat-num text-blue-600">{changedCount}</div>
+          <div className="stat-num">{changedCount}</div>
           <div className="stat-lbl">Modified Specifications</div>
         </div>
         <div className="stat-card">
-          <div className="stat-num text-amber-600">{warnCount}</div>
+          <div className="stat-num">{warnCount}</div>
           <div className="stat-lbl">Withdrawn / Missing</div>
         </div>
       </div>
@@ -233,9 +233,9 @@ export default function AdminPanel() {
               return (
                 <tr key={c.id} className={isWarningRow ? "row-warn" : ""}>
                   <td>
-                    <div className="font-mono font-semibold text-slate-900">{c.is_number}</div>
+                    <div className="font-mono"><strong>{c.is_number}</strong></div>
                     {c.snapshot_id != null && (
-                      <div className="text-xs text-slate-500">Snapshot #{c.snapshot_id}</div>
+                      <div className="text-xs">Snapshot #{c.snapshot_id}</div>
                     )}
                   </td>
                   <td>
@@ -259,7 +259,7 @@ export default function AdminPanel() {
                         <span className="new-st">{c.new_status ?? "—"}</span>
                       </div>
                     ) : (
-                      <span className="text-xs text-slate-600">{c.details ?? "—"}</span>
+                      <span className="text-xs">{c.details ?? "—"}</span>
                     )}
                   </td>
                   <td>
@@ -268,23 +268,23 @@ export default function AdminPanel() {
                         href={c.source_url}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center gap-1 text-xs text-indigo-700 hover:underline"
                       >
                         <span>BIS Portal Source</span>
-                        <ExternalLinkIcon className="w-3 h-3" />
+                        <span className="sr-only"> (opens in new tab)</span>
+                        <ExternalLinkIcon size={12} />
                       </a>
                     ) : (
-                      <span className="text-xs text-slate-500">{c.details ?? "No external URL"}</span>
+                      <span className="text-xs">{c.details ?? "No external URL"}</span>
                     )}
                     {c.last_checked && (
-                      <div className="text-xs text-slate-400 mt-0.5">Verified: {c.last_checked}</div>
+                      <div className="text-xs">Verified: {c.last_checked}</div>
                     )}
                   </td>
                   <td>
                     {decisions[c.id] ? (
                       <div className="decided-badge">
-                        <CheckIcon className="w-3.5 h-3.5 text-emerald-600" />
-                        <span className="font-semibold text-xs text-emerald-800 capitalize">
+                        <CheckIcon size={14} />
+                        <span className="capitalize">
                           {decisions[c.id]}ed
                         </span>
                       </div>
