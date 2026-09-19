@@ -6,10 +6,13 @@ the server immediately mints a thread_id that clients must use afterwards.
 """
 from __future__ import annotations
 import hashlib
+import hmac
 import json
 import logging
+import re
 import secrets
 import sqlite3
+import sys
 import time
 from collections import deque
 from datetime import datetime, timedelta, timezone
@@ -85,10 +88,12 @@ def _admin_hashes() -> set[str]:
 
 
 def _require_admin(key: Optional[str]) -> str:
-    if not key or _key_hash(key) not in _admin_hashes() or not _admin_hashes():
+    hashes = _admin_hashes()
+    got = _key_hash(key) if key else ""
+    if not key or not hashes or not any(hmac.compare_digest(got, h) for h in hashes):
         raise HTTPException(status_code=403, detail={
             "error": "admin key required", "code": "forbidden", "retryable": False})
-    return _key_hash(key)[:16]
+    return got[:16]
 
 
 def _audit(conn: sqlite3.Connection, actor: str, action: str, target: str) -> None:
@@ -119,15 +124,8 @@ def _is_registered(api_key: str) -> bool:
     return False
 
 
-def _check_limit(ip: str, api_key: Optional[str], path: str) -> None:
+def _touch_bucket(bucket: str, window: float, n: int) -> None:
     now = time.time()
-    if api_key and _is_registered(api_key):
-        bucket, window, n = f"reg:{api_key}", 3600, CFG["api"]["registered_per_hour"]
-    else:
-        if path == "/chat":
-            bucket, window, n = f"burst:{ip}", 60, CFG["api"]["anon_burst_per_min"]
-        else:
-            bucket, window, n = f"anon:{ip}", 3600, CFG["api"]["anon_per_hour"]
     dq = _hits.setdefault(bucket, deque())
     while dq and dq[0] <= now - window:
         dq.popleft()
@@ -135,6 +133,15 @@ def _check_limit(ip: str, api_key: Optional[str], path: str) -> None:
         raise HTTPException(status_code=429, detail={
             "error": "rate_limited", "code": "rate_limited", "retryable": True})
     dq.append(now)
+
+
+def _check_limit(ip: str, api_key: Optional[str], path: str) -> None:
+    if api_key and _is_registered(api_key):
+        _touch_bucket(f"reg:{api_key}", 3600, CFG["api"]["registered_per_hour"])
+        return
+    _touch_bucket(f"anon:{ip}", 3600, CFG["api"]["anon_per_hour"])
+    if path == "/chat":
+        _touch_bucket(f"burst:{ip}", 60, CFG["api"]["anon_burst_per_min"])
 
 
 def _db() -> sqlite3.Connection:
@@ -177,7 +184,7 @@ app = FastAPI(title="BIS Assistant API", version="0.4.0")
 app.add_middleware(CORSMiddleware, allow_origins=CFG["api"]["cors_allow_origins"],
                    allow_methods=["GET", "POST", "DELETE", "OPTIONS"],
                    allow_headers=["Content-Type", "X-Owner-Token", "X-User-Ref",
-                                  "X-API-Key", "X-Request-ID"])
+                                  "X-API-Key", "X-Request-ID", "X-Admin-Key"])
 
 
 @app.middleware("http")
@@ -218,7 +225,9 @@ def _get_thread(conn: sqlite3.Connection, tid: str) -> sqlite3.Row:
 
 
 def _check_owner(row: sqlite3.Row, token: Optional[str]) -> None:
-    if not token or _key_hash(token) != (row["owner_token_hash"] or ""):
+    stored = row["owner_token_hash"] or ""
+    got = _key_hash(token) if token else ""
+    if not token or not stored or not hmac.compare_digest(got, stored):
         raise HTTPException(status_code=403, detail={
             "error": "owner token required", "code": "forbidden", "retryable": False})
 
@@ -308,6 +317,26 @@ def chat(body: ChatIn, request: Request,
         if not q:
             raise HTTPException(status_code=400, detail={
                 "error": "empty query", "code": "bad_request", "retryable": False})
+        if _wants_erasure(q):
+            if not tid:
+                raise HTTPException(status_code=400, detail={
+                    "error": "owner token + thread required to erase",
+                    "code": "bad_request", "retryable": False})
+            row = conn.execute("SELECT * FROM threads WHERE id=?", (tid,)).fetchone()
+            if row is None:
+                raise HTTPException(status_code=410, detail={
+                    "error": "unknown thread; start a new topic", "code": "thread_gone",
+                    "retryable": False})
+            _check_owner(row, x_owner_token)
+            out = _erase_thread(conn, tid)
+            _audit(conn, "user:" + _key_hash(x_owner_token or tid)[:16], "erasure", "chat")
+            return {"text": "Stored messages for this thread were erased.",
+                    "refused": False, "kind": "erasure", "lang": "en",
+                    "citations": [], "pii": find_pii(q), "needs_info": False,
+                    "questions": [], "known": [], "assumptions": [],
+                    "context": {"history": [], "rounds": 0},
+                    "erased_threads": out["erased_threads"],
+                    "thread_id": tid}
         lang = body.lang if body.lang in ("en", "hi") else None
         t0 = time.time()
         resp = answer(q, lang, {"history": history, "rounds": rounds, "force": body.force})
@@ -376,53 +405,77 @@ def consent(body: ConsentIn):
         conn.close()
 
 
-def _erase_user(conn: sqlite3.Connection, user_ref: str) -> dict:
-    tids = [r["id"] for r in conn.execute(
-        "SELECT id FROM threads WHERE user_ref=?", (user_ref,)).fetchall()]
-    for tid in tids:
-        conn.execute("DELETE FROM messages WHERE thread_id=?", (tid,))
-    conn.execute("DELETE FROM threads WHERE user_ref=?", (user_ref,))
-    conn.execute("DELETE FROM feedback WHERE user_ref=?" + (
-        " OR thread_id IN (%s)" % ",".join("?" * len(tids)) if tids else ""),
-        [user_ref, *tids])
-    conn.execute("DELETE FROM profiles WHERE user_ref=?", (user_ref,))
-    conn.execute("DELETE FROM consents WHERE user_ref=?", (user_ref,))
+# Chat-side erase: real intent only — not substring "mera data" (data sheet, etc.).
+_ERASE_INTENT = re.compile(
+    r"(?:delete|erase|remove|wipe)\s+my\s+data|"
+    r"mera\s+data\s+(?:mitao|mita\s*do|hatao|hatayen|hata\s*do|delete|erase)|"
+    r"(?:mitao|hatao|hatayen)\s+mera\s+data",
+    re.I,
+)
+
+
+def _wants_erasure(query: str) -> bool:
+    ql = re.sub(r"\s+", " ", (query or "").strip().lower())
+    return bool(_ERASE_INTENT.search(ql))
+
+
+def _erase_thread(conn: sqlite3.Connection, tid: str) -> dict:
+    """Capability is the owner token of one thread — never fan out on user_ref."""
+    conn.execute("DELETE FROM messages WHERE thread_id=?", (tid,))
+    conn.execute("DELETE FROM feedback WHERE thread_id=?", (tid,))
+    conn.execute("DELETE FROM threads WHERE id=?", (tid,))
     conn.commit()
-    return {"erased_threads": len(tids)}
+    return {"erased_threads": 1}
+
+
+def _principal_from_owner(conn: sqlite3.Connection, token: Optional[str],
+                          x_user_ref: Optional[str]) -> tuple[str, sqlite3.Row]:
+    """Owner token is the capability for that thread only; X-User-Ref must match if sent."""
+    if not token:
+        raise HTTPException(status_code=403, detail={
+            "error": "owner token required", "code": "forbidden", "retryable": False})
+    row = conn.execute("SELECT * FROM threads WHERE owner_token_hash=?",
+                       (_key_hash(token),)).fetchone()
+    if row is None:
+        raise HTTPException(status_code=403, detail={
+            "error": "owner token required", "code": "forbidden", "retryable": False})
+    principal = row["user_ref"] or ""
+    if x_user_ref and x_user_ref != principal:
+        raise HTTPException(status_code=403, detail={
+            "error": "owner token does not match user", "code": "forbidden",
+            "retryable": False})
+    return principal, row
 
 
 @app.delete("/me")
-def erase_me(x_user_ref: Optional[str] = Header(default=None)):
-    if not x_user_ref:
-        raise HTTPException(status_code=400, detail={
-            "error": "X-User-Ref required", "code": "bad_request", "retryable": False})
+def erase_me(x_user_ref: Optional[str] = Header(default=None),
+             x_owner_token: Optional[str] = Header(default=None)):
     conn = _db()
     try:
-        out = _erase_user(conn, x_user_ref)
-        _audit(conn, "user:" + _key_hash(x_user_ref)[:16], "erasure", "self")
+        principal, row = _principal_from_owner(conn, x_owner_token, x_user_ref)
+        out = _erase_thread(conn, row["id"])
+        actor = principal or row["id"]
+        _audit(conn, "user:" + _key_hash(actor)[:16], "erasure", "self")
         log.info("erasure", extra={"ctx": {"erased_threads": out["erased_threads"]}})
-        return {"user_ref": x_user_ref, **out, "sla_hours": CFG["privacy"]["erasure_sla_hours"]}
+        return {"user_ref": principal, **out, "sla_hours": CFG["privacy"]["erasure_sla_hours"]}
     finally:
         conn.close()
 
 
 @app.get("/me/export")
-def export_me(x_user_ref: Optional[str] = Header(default=None)):
-    if not x_user_ref:
-        raise HTTPException(status_code=400, detail={
-            "error": "X-User-Ref required", "code": "bad_request", "retryable": False})
+def export_me(x_user_ref: Optional[str] = Header(default=None),
+              x_owner_token: Optional[str] = Header(default=None)):
     conn = _db()
     try:
-        threads = [dict(r) for r in conn.execute(
-            "SELECT * FROM threads WHERE user_ref=?", (x_user_ref,)).fetchall()]
+        principal, row = _principal_from_owner(conn, x_owner_token, x_user_ref)
+        threads = [dict(row)]
+        cons = []
         for t in threads:
             t.pop("owner_token_hash", None)
             t["messages"] = [dict(m) for m in conn.execute(
                 "SELECT role, text_redacted, citations_json, kind, ms, created_at"
                 " FROM messages WHERE thread_id=? ORDER BY id", (t["id"],)).fetchall()]
-        cons = [dict(r) for r in conn.execute(
-            "SELECT * FROM consents WHERE user_ref=?", (x_user_ref,)).fetchall()]
-        return {"user_ref": x_user_ref, "threads": threads, "consents": cons}
+        return {"user_ref": principal, "threads": threads, "consents": cons}
     finally:
         conn.close()
 
@@ -487,6 +540,9 @@ def kb_publish(body: PublishIn):
             "retryable": False})
     kb = os.environ.get("BIS_KB_PATH", str(Path(__file__).resolve().parents[2] / "kb" / "bis.db"))
     from . import kb_store
+    root = str(Path(__file__).resolve().parents[2])
+    if root not in sys.path:
+        sys.path.insert(0, root)
     from ingest import review as reviewmod
     kconn = kb_store.connect(kb)
     try:
@@ -494,6 +550,10 @@ def kb_publish(body: PublishIn):
             reviewmod.cmd_approve(kconn, body.diff_id, by=f"admin:{pub}")
         else:
             reviewmod.cmd_reject(kconn, body.diff_id)
+    except reviewmod.ReviewError as e:
+        code = {404: "not_found", 400: "bad_request"}.get(e.http_status, "conflict")
+        raise HTTPException(status_code=e.http_status, detail={
+            "error": str(e), "code": code, "retryable": False}) from e
     finally:
         kconn.close()
     conn = _db()

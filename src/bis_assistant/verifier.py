@@ -12,7 +12,8 @@ import re
 
 log = logging.getLogger("bis.verifier")
 
-IS_RE = re.compile(r"IS\s*(\d+(?:-\d+)?)", re.IGNORECASE)
+# Case-sensitive IS so English "is 1 litre" is not Indian Standard 1.
+IS_RE = re.compile(r"(?<![A-Za-z])IS\s*(\d+(?:-\d+)?)")
 CLAUSE_RE = re.compile(r"clause\s*\d", re.IGNORECASE)
 
 VIOLATION_COUNT = {"n": 0}  # surfaced via /metrics in Phase 6
@@ -21,9 +22,7 @@ VIOLATION_COUNT = {"n": 0}  # surfaced via /metrics in Phase 6
 def _cited_numbers(citations: list[str]) -> set[str]:
     out = set()
     for c in citations:
-        m = IS_RE.search(c)
-        if m:
-            out.add(m.group(1))
+        out.update(IS_RE.findall(c or ""))
     return out
 
 

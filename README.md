@@ -10,11 +10,13 @@ stay authoritative; breadth rows carry `qco_status=unknown`, no clause refs.
 
 ## Run backend (stdlib only, Python ≥3.10)
 ```
+pip install -r requirements-dev.txt
 PYTHONPATH=src python -m bis_assistant.cli
-PYTHONPATH=src python -m bis_assistant.api   # POST /chat on :8000
-PYTHONPATH=src python -m unittest discover -s tests -v
+PYTHONPATH=src python -m bis_assistant.api   # POST /chat on :8000 (thread_id + X-Owner-Token)
+PYTHONPATH=src python -m pytest tests/ -q
 PYTHONPATH=src python eval/run_eval.py        # gate: >=90%
 ```
+Stdlib-only subset (no pytest): `PYTHONPATH=src python -m unittest tests.test_assistant -v`.
 
 ## Run browser UI (TypeScript + React, in `ui/`)
 ```

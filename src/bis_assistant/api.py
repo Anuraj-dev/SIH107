@@ -1,15 +1,24 @@
-"""Stdlib-only HTTP API: POST /chat {query, lang?, force?, new_topic?} | GET /health. Run: python -m bis_assistant.api
+"""Stdlib-only HTTP API: POST /chat {query, lang?, force?, new_topic?, thread_id?} | GET /health.
 
-Legacy client-held ``context`` dict is accepted as a one-turn migration
-bridge only (use ``thread_id`` via the FastAPI server for real threads;
-see chat.py ThreadHandle). New clients: ``{query, lang?, force?, new_topic?}``.
+Run: python -m bis_assistant.api
+
+Honors the UI contract: mint/honor ``thread_id``, persist history, require
+``X-Owner-Token`` on follow-ups. Legacy client-held ``context`` is accepted
+as a one-turn migration bridge when no ``thread_id`` is sent.
 """
 from __future__ import annotations
+import hmac
 import json
+import secrets
 from http.server import BaseHTTPRequestHandler, HTTPServer
+
 from .assistant import answer
+from .i18n_privacy import redact
+from . import threads as threadmod
 
 PORT = 8000
+MAX_BODY = 16 * 1024  # 16 KiB
+_THREADS: dict[str, dict] = {}
 
 
 class H(BaseHTTPRequestHandler):
@@ -20,7 +29,8 @@ class H(BaseHTTPRequestHandler):
         self.send_header("Content-Length", str(len(body)))
         self.send_header("Access-Control-Allow-Origin", "*")
         self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        self.send_header("Access-Control-Allow-Headers",
+                         "Content-Type, X-Owner-Token")
         self.end_headers()
         self.wfile.write(body)
 
@@ -35,20 +45,64 @@ class H(BaseHTTPRequestHandler):
     def do_POST(self):
         if self.path != "/chat":
             return self._json({"error": "use POST /chat"}, 404)
-        n = int(self.headers.get("Content-Length", 0))
+        raw_len = self.headers.get("Content-Length", "0")
+        try:
+            n = int(raw_len)
+        except (TypeError, ValueError):
+            return self._json({"error": "invalid Content-Length"}, 400)
+        if n < 0:
+            return self._json({"error": "invalid Content-Length"}, 400)
+        if n > MAX_BODY:
+            leftover = n
+            while leftover > 0:
+                chunk = self.rfile.read(min(leftover, MAX_BODY))
+                if not chunk:
+                    break
+                leftover -= len(chunk)
+            return self._json({"error": "payload too large"}, 400)
         try:
             payload = json.loads(self.rfile.read(n) or b"{}")
         except Exception:
             return self._json({"error": "invalid JSON"}, 400)
+        if not isinstance(payload, dict):
+            return self._json({"error": "invalid JSON"}, 400)
         q = (payload.get("query") or "").strip()
         if not q:
             return self._json({"error": "empty query"}, 400)
-        ctx = payload.get("context")
-        if not isinstance(ctx, dict) or payload.get("new_topic"):
-            ctx = None
-        if payload.get("force"):
-            ctx = {**(ctx or {}), "force": True}
-        return self._json(answer(q, payload.get("lang"), ctx))
+        if len(q) > 4000:
+            return self._json({"error": "query too long"}, 400)
+        owner = self.headers.get("X-Owner-Token") or ""
+        tid = None if payload.get("new_topic") else payload.get("thread_id")
+        history, rounds = [], 0
+        if tid:
+            rec = _THREADS.get(str(tid))
+            if rec is None:
+                return self._json({"error": "unknown thread; start a new topic",
+                                   "code": "thread_gone"}, 410)
+            if not hmac.compare_digest(rec["token"], owner):
+                return self._json({"error": "owner token required",
+                                   "code": "forbidden"}, 403)
+            history, rounds = list(rec["history"]), int(rec["rounds"])
+        elif isinstance(payload.get("context"), dict) and not payload.get("new_topic"):
+            ctx_in = threadmod.normalize_context(payload["context"])
+            history, rounds = ctx_in["history"], ctx_in["rounds"]
+        ctx = {"history": history, "rounds": rounds,
+               "force": bool(payload.get("force"))}
+        resp = answer(q, payload.get("lang"), ctx)
+        new_history = threadmod.push_history(history, redact(q)[:2000])
+        new_rounds = threadmod.rounds_from(resp.get("context"), default=rounds)
+        if tid is None:
+            tid = secrets.token_hex(8)
+            token = secrets.token_urlsafe(32)
+            _THREADS[tid] = {"history": new_history, "rounds": new_rounds,
+                             "token": token}
+            resp["owner_token"] = token
+        else:
+            rec = _THREADS[str(tid)]
+            rec["history"] = new_history
+            rec["rounds"] = new_rounds
+        resp["thread_id"] = tid
+        return self._json(resp)
 
     def log_message(self, *a):
         pass

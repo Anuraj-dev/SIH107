@@ -23,7 +23,7 @@ import time
 import urllib.parse
 import urllib.request
 
-from . import assert_allowlisted, assert_crawlable
+from . import allowlisted_opener, assert_allowlisted, assert_crawlable
 
 DG_MAIN = ("https://www.services.bis.gov.in/php/BIS_2.0/"
            "dgdashboard/Published_Standards")
@@ -331,8 +331,8 @@ class DGCrawler:
         self.delay_s = delay_s
         self.timeout_s = timeout_s
         jar: http.cookiejar.CookieJar = http.cookiejar.CookieJar()
-        self._opener = urllib.request.build_opener(
-            urllib.request.HTTPCookieProcessor(jar))
+        self._opener = allowlisted_opener(
+            urllib.request.HTTPCookieProcessor(jar), crawl=True)
         self._last = 0.0
 
     def refresh_session(self) -> None:

@@ -14,8 +14,10 @@ import re
 import sqlite3
 from pathlib import Path
 
+from .allowlist import KYS_PORTAL, safe_public_url
+
 _TOKEN_RE = re.compile(r"[a-z0-9]+", re.IGNORECASE)
-_PORTAL = "https://www.bis.gov.in/know-your-standard"
+_PORTAL = KYS_PORTAL
 
 _STOP = frozenset("""
 what does the cover about which with from that this give summary scope standard
@@ -160,7 +162,7 @@ def format_catalogue_citation(h: dict) -> str:
     num = h.get("standard_number") or "BIS catalogue entry"
     title = h.get("title") or ""
     pub = h.get("published_on") or "date unknown"
-    url = h.get("source_url") or _PORTAL
+    url = safe_public_url(h.get("source_url"), _PORTAL)
     return (f"{num} — {title} [catalogue, published {pub}] — Source: {url}")
 
 
@@ -174,7 +176,7 @@ def build_catalogue_answer(query: str, lang: str, hits: list[dict]) -> dict:
     sources = [{
         "standard_number": h.get("standard_number", ""),
         "title": h.get("title", ""),
-        "url": h.get("source_url", ""),
+        "url": safe_public_url(h.get("source_url"), _PORTAL),
         "doc_type": "catalogue",
         "heading": h.get("type_name", ""),
         "chunk_text": "",
@@ -192,8 +194,9 @@ def build_catalogue_answer(query: str, lang: str, hits: list[dict]) -> dict:
     for h in hits:
         dept = f" — {h['department']}" if h.get("department") else ""
         lines.append(f"- **{h['standard_number']}** — {h['title']}{dept}")
-        if h.get("source_url") and h["source_url"] != _PORTAL:
-            lines.append(f"  Source: {h['source_url']}")
+        src = safe_public_url(h.get("source_url"), _PORTAL)
+        if src and src != _PORTAL:
+            lines.append(f"  Source: {src}")
     lines += ["",
               (f"Catalogue rows carry titles only — verify scope, year and status "
                f"on Know-Your-Standard before manufacture or sale: {_PORTAL}"

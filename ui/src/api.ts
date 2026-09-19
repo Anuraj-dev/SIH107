@@ -214,9 +214,11 @@ export async function sendFeedback(
       body: JSON.stringify({ thread_id: threadId, rating, note: note ?? "" }),
     });
     if (j && j.ok === true) return { ok: true };
-    return { ok: true, fixture: true };
+    return { ok: false, error: "feedback was not accepted" };
   } catch (e) {
-    return { ok: false, error: e instanceof Error ? e.message : "request failed" };
+    const msg = e instanceof Error ? e.message : "request failed";
+    if (/HTTP 404/.test(msg)) return { ok: true, fixture: true };
+    return { ok: false, error: msg };
   }
 }
 
@@ -255,22 +257,15 @@ function normaliseLiveDiff(j: { pending: LiveDiffRow[]; reviewed_by?: string }):
   };
 }
 
-/** Admin diff-review: live GET /kb/diff (x-admin-key) when available, else the bundled fixture. */
+/** Admin diff-review: live GET /kb/diff (x-admin-key). 403/network is failure, never a fixture unlock. */
 export async function fetchKbDiff(adminKey: string): Promise<{ diff: KbDiff; fixture: boolean }> {
-  try {
-    const j = (await req("/api/kb/diff", {
-      headers: adminKey ? { "x-admin-key": adminKey } : {},
-    })) as KbDiff & { pending?: LiveDiffRow[]; reviewed_by?: string };
-    if (Array.isArray(j.pending)) {
-      return { diff: normaliseLiveDiff(j as { pending: LiveDiffRow[]; reviewed_by?: string }), fixture: false };
-    }
-    if (j && typeof j.diff_id === "string" && Array.isArray(j.changes)) {
-      return { diff: j, fixture: false };
-    }
-    return { diff: FIXTURE_KB_DIFF, fixture: true };
-  } catch {
-    return { diff: FIXTURE_KB_DIFF, fixture: true };
+  const j = (await req("/api/kb/diff", {
+    headers: adminKey ? { "x-admin-key": adminKey } : {},
+  })) as KbDiff & { pending?: LiveDiffRow[]; reviewed_by?: string };
+  if (Array.isArray(j.pending)) {
+    return { diff: normaliseLiveDiff(j as { pending: LiveDiffRow[]; reviewed_by?: string }), fixture: false };
   }
+  throw new Error("KB diff is not a live pending payload");
 }
 
 /**

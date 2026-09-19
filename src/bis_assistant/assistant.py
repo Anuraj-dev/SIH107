@@ -377,17 +377,18 @@ def _answer_inner(query: str, lang: str | None = None, context: dict | None = No
 
         # 1. never-infer gate (current query)
         kind = check_never_infer(query)
+        fulltext_waived = False
         if kind:
-            # Corpus-backed full-text use supersedes the metadata-only refusal
-            # for full_text/clause_verbatim when evidence exists (task spec).
+            # Corpus-backed full-text may divert to extractive corpus answers
+            # when evidence exists; keep the kind so that path always runs.
             if kind in ("full_text", "clause_verbatim") and rag_evidence \
                     and _rag_relevant(query, rag_evidence):
-                kind = None
+                fulltext_waived = True
             else:
                 r = _base(lang, refused=True, kind=kind, pii=find_pii(query))
                 r["text"] = ((REFUSAL_HI if hi else REFUSAL_EN)[kind]
                              + "\n\n" + _DIVIDER + "\n" + BIS_CARE)
-                return _tag(_attach_rag_sources(r, rag_evidence, query))
+                return _tag(r)
 
         # 2. topic change: the current query alone strongly names an IS that
         # differs from the thread's topic -> fresh thread. The old side needs no
@@ -430,7 +431,7 @@ def _answer_inner(query: str, lang: str | None = None, context: dict | None = No
             rag_exact = any(e.get("exact_match") for e in rag_evidence)
             journey_q = (_has_lab_hint(ql)
                          or any(h in ql for h in HALLMARK_HINTS + SCHEME_HINTS + CLUB_HINTS))
-            bypassed_fulltext = kind in ("full_text", "clause_verbatim")
+            bypassed_fulltext = fulltext_waived
             # Curated clarification wins over weak corpus co-occurrence hits:
             # only divert vague queries to the corpus when metadata has no
             # grounded candidate of its own.
@@ -444,7 +445,8 @@ def _answer_inner(query: str, lang: str | None = None, context: dict | None = No
                     llm_cfg = load_llm_config()
                 except Exception:
                     llm_cfg = {}
-                r = build_rag_answer(query, lang, rag_evidence, llm_cfg)
+                r = build_rag_answer(query, lang, rag_evidence, llm_cfg,
+                                     extractive_only=bypassed_fulltext)
                 # Fuse: keep strong metadata citations alongside corpus sources
                 # (both retrieval tiers visible, corpus primary).
                 try:
@@ -456,6 +458,12 @@ def _answer_inner(query: str, lang: str | None = None, context: dict | None = No
                 except Exception:
                     pass
                 return _checked(_tag(r), res, rag_evidence)
+
+        if fulltext_waived:
+            r = _base(lang, refused=True, kind=kind, pii=find_pii(query))
+            r["text"] = ((REFUSAL_HI if hi else REFUSAL_EN)[kind]
+                         + "\n\n" + _DIVIDER + "\n" + BIS_CARE)
+            return _tag(r)
 
         # Material contradiction (e.g. plastic bottle vs steel-flask IS): never recommend,
         # never interrogate about the wrong subtypes — state the coverage gap at once.
@@ -582,43 +590,54 @@ def _coverage_gap(std: dict, material: str, query: str, lang: str, hi: bool) -> 
     return r
 
 
+def _gate_fail(resp: dict, kind: str = "verifier_fail") -> dict:
+    if kind in REFUSAL_EN:
+        hi = resp.get("lang") == "hi"
+        text = ((REFUSAL_HI if hi else REFUSAL_EN)[kind]
+                + "\n\n" + _DIVIDER + "\n" + BIS_CARE)
+    else:
+        text = ("I can't stand behind that answer — a citation check failed. "
+                "Please rephrase or check Know-Your-Standard directly."
+                "\n\n" + _DIVIDER + "\n" + BIS_CARE)
+    safe = _base(resp.get("lang", "en"), refused=True, kind=kind,
+                 pii=resp.get("pii", {}), context={"history": [], "rounds": 0})
+    safe["text"] = text
+    return safe
+
+
 def _checked(resp: dict, res: dict, rag_evidence: list | None = None) -> dict:
-    """Enforce the citation verifier on every outbound answer (plan §4 stage 3)."""
+    """Enforce never-infer + citation verifier on every outbound answer."""
     from .verifier import verify, section_map
-    # Corpus/catalogue answers quote BIS rows that may list several IS
-    # numbers; the strict "every mentioned IS must be cited" metadata rule
-    # would trip on quoted rows. For these kinds we require grounded
-    # citations (non-empty, primary evidence IS cited) instead of exact cover.
-    if resp.get("kind") in ("corpus_answer", "catalogue_answer"):
-        cits = resp.get("citations", [])
-        if not cits:
-            safe = _base(resp.get("lang", "en"), refused=True, kind="verifier_fail",
-                         pii=resp.get("pii", {}), context={"history": [], "rounds": 0})
-            safe["text"] = ("I can't stand behind that answer — a citation check failed. "
-                            "Please rephrase or check Know-Your-Standard directly."
-                            "\n\n" + _DIVIDER + "\n" + BIS_CARE)
-            return safe
-        return resp
+    body = (resp.get("text") or "").split(_DIVIDER, 1)[0]
+    nk = check_never_infer(body)
+    # Extractive corpus answers may quote paid-adjacent passages; full-text
+    # never-infer on the query is already waived. Still refuse cert/licence
+    # claims in generated or quoted text.
+    if nk and not (resp.get("kind") in ("corpus_answer", "catalogue_answer")
+                   and nk in ("full_text", "clause_verbatim")):
+        return _gate_fail(resp, nk)
     try:
         stds = [c["std"] for c in res.get("candidates", [])]
         refs = section_map(stds)
-        # Corpus evidence counts as sourced section refs (clause mentions in
-        # retrieved passages are traceable to indexed chunks, not invented).
+        extra_cits = list(resp.get("citations") or [])
         for e in (rag_evidence or []):
-            import re as _re
-            m = _re.search(r"(\d+)", e.get("standard_number", "") or "")
-            if m:
-                refs.setdefault(m.group(1), "corpus")
-        viols = verify(resp, refs)
+            num = str(e.get("standard_number") or "")
+            if num:
+                extra_cits.append(num)
+        # Extractive `> quotes` are sourced passages, not assistant claims.
+        # LLM/prose lines are still verified against cited standard numbers only.
+        probe_body = "\n".join(
+            ln for ln in body.splitlines() if not ln.lstrip().startswith(">"))
+        probe = dict(resp)
+        probe["text"] = probe_body
+        probe["citations"] = extra_cits
+        viols = verify(probe, refs)
     except Exception:
-        viols = []
+        viols = ["verifier_error"]
+    if resp.get("kind") in ("corpus_answer", "catalogue_answer") and not resp.get("citations"):
+        viols = list(viols) + ["IS claims with zero citations"]
     if viols:
-        safe = _base(resp.get("lang", "en"), refused=True, kind="verifier_fail",
-                     pii=resp.get("pii", {}), context={"history": [], "rounds": 0})
-        safe["text"] = ("I can't stand behind that answer — a citation check failed. "
-                        "Please rephrase or check Know-Your-Standard directly."
-                        "\n\n" + _DIVIDER + "\n" + BIS_CARE)
-        return safe
+        return _gate_fail(resp, "verifier_fail")
     return resp
 
 
@@ -663,7 +682,8 @@ def _final(query: str, combined: str, res: dict, lang: str, hi: bool,
             citations.append(f"{s['key']} — {s['source_url']}")
         lines.append("")
 
-    grounded = [c for c in cands if c["hits"] or c["score"] >= 10]
+    gfloor = t.get("grounded_score", 10)
+    grounded = [c for c in cands if c["hits"] or c["score"] >= gfloor]
     forced = bool(ctx.get("force") or ctx.get("rounds", 0) >= t["max_rounds"])
     if forced and not grounded:
         # "Answer with assumptions" must answer, not refuse: admit weak candidates
@@ -685,7 +705,7 @@ def _final(query: str, combined: str, res: dict, lang: str, hi: bool,
         lines.append(STRINGS["candidates_hi"] if hi else STRINGS["candidates_en"])
         for c in cands[:3]:
             s = c["std"]
-            if not (c["hits"] or c["score"] >= 10 or (forced and c in grounded)):
+            if not (c["hits"] or c["score"] >= gfloor or (forced and c in grounded)):
                 continue
             if material_mismatch(s["is_number"], combined):
                 continue  # never present a materially contradicted standard

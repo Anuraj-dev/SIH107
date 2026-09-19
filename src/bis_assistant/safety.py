@@ -9,15 +9,37 @@ DISCLAIMER_HI = ("Keval jankari hetu — BIS nirnay nahin. Utpadan/bikri se pehl
 
 BIS_CARE = "https://www.bis.gov.in | BIS Care app | Verify HUID / licences on manakonline.in"
 
-# User asks for something we must never provide
+# User asks for something we must never provide (EN + HI + Hinglish).
 NEVER_PATTERNS = [
     (r"is (my|this) product (certified|compliant|approved)", "cert_claim"),
-    (r"(guarantee|assure).*(licen[cs]e|approval|certificate)", "licence_guarantee"),
+    (r"\bis (?:my|this|the) .{0,50}?\b(certified|compliant|approved)\b", "cert_claim"),
+    (r"(confirm|declare|certify).{0,60}(certified|compliant|approved)", "cert_claim"),
+    (r"(product|bottle|flask|bulb|उत्पाद|प्रोडक्ट).{0,40}\bis (certified|compliant|approved)\b",
+     "cert_claim"),
+    (r"(product|bottle|flask|bulb).{0,40}\bbis[\s-]*(certified|compliant|approved)\b",
+     "cert_claim"),
+    (r"(tell me if|let me know if).{0,80}\b(certified|compliant|approved|approval)\b",
+     "cert_claim"),
+    (r"does (this|it|my|the) .{0,40}have .{0,25}\b(bis )?(approval|licen[cs]e|certificate|certified)\b",
+     "cert_claim"),
+    (r"(मेरा|मेरी|यह|ये).{0,30}(उत्पाद|प्रोडक्ट|product).{0,40}"
+     r"(certified|compliant|approved|प्रमाणित|सर्टिफाइड)", "cert_claim"),
+    (r"क्या.{0,60}(certified|compliant|approved|प्रमाणित|सर्टिफाइड)", "cert_claim"),
+    (r"\bkya\b.{0,60}(certified|compliant|approved|pramanit|sertified)", "cert_claim"),
+    (r"(उत्पाद|प्रोडक्ट).{0,40}(certified|compliant|approved|प्रमाणित)", "cert_claim"),
+    (r"will (my|this|the) .{0,50}?\b(licen[cs]e|approval|certified|approved)\b",
+     "licence_guarantee"),
+    (r"(guarantee|assure|vada|वादा|गारंटी).{0,50}"
+     r"(licen[cs]e|approval|certificate|लाइसेंस)", "licence_guarantee"),
+    (r"(licen[cs]e|लाइसेंस).{0,50}(guarantee|assure|vada|वादा|गारंटी)", "licence_guarantee"),
+    (r"licen[cs]e ki guarantee", "licence_guarantee"),
     (r"give (me )?(the )?(full|complete|verbatim|exact) (text|clause|wording)", "full_text"),
     (r"(full|complete|entire|verbatim)\W+(?:\w+\W+){0,3}(texts?|clauses?|wording|standard)",
      "full_text"),
+    (r"(पूर्ण|पूरा|पूरी).{0,30}(पाठ|मानक|text|clause|wording)", "full_text"),
     (r"(wording|text|quote).{0,25}clause\s*\d", "clause_verbatim"),
     (r"clause\s*\d+(\.\d+)*\s*(says|text|wording|quote)", "clause_verbatim"),
+    (r"(पूरा|पूर्ण).{0,20}clause", "clause_verbatim"),
     (r"(predict|tell).*(test result|lab result|will (pass|fail))", "lab_result"),
     (r"(invent|make up|fabricate|conjure).*(standard|is number|clause)", "full_text"),
     (r"(legally|legally binding|binding legal|sue|liabilit)", "legal_binding"),
@@ -26,7 +48,7 @@ NEVER_PATTERNS = [
 
 
 def check_never_infer(query: str) -> str | None:
-    q = query.lower()
+    q = re.sub(r"\s+", " ", (query or "").lower())
     for pat, kind in NEVER_PATTERNS:
         if re.search(pat, q):
             return kind

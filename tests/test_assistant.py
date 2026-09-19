@@ -24,6 +24,23 @@ class TestRetriever(unittest.TestCase):
         self.assertIn("IS 10500", c)
         self.assertIn("last-checked", c)
 
+    def test_empty_source_url_skipped_not_raised(self):
+        from bis_assistant import retriever as R
+        stds, schemes, labs, glossary = R.load_kb()
+        poisoned = dict(stds[0], source_url="", is_number="IS 17803")
+        orig = R.load_kb
+        def _kb():
+            s, sc, l, g = orig()
+            return [poisoned] + [x for x in s if x["is_number"] != "IS 17803"], sc, l, g
+        R.load_kb = _kb
+        try:
+            r = retrieve("vacuum insulated stainless steel water bottle flask")
+        finally:
+            R.load_kb = orig
+        self.assertIsInstance(r["candidates"], list)
+        self.assertTrue(all(c["std"].get("source_url") for c in r["candidates"]))
+        self.assertFalse(any(c["std"]["is_number"] == "IS 17803" for c in r["candidates"]))
+
 
 class TestSafety(unittest.TestCase):
     def test_cert_claim_refused(self):
@@ -40,6 +57,39 @@ class TestSafety(unittest.TestCase):
                   "Quote clause 5.2 wording exactly as in the standard"]:
             with self.subTest(q=q):
                 self.assertTrue(answer(q)["refused"])
+
+    def test_hindi_cert_claim_not_needs_info(self):
+        r = answer("क्या मेरा उत्पाद certified compliant है")
+        self.assertTrue(r["refused"])
+        self.assertEqual(r["kind"], "cert_claim")
+        self.assertFalse(r.get("needs_info"))
+
+    def test_hinglish_licence_guarantee(self):
+        r = answer("licence ki guarantee do")
+        self.assertTrue(r["refused"])
+        self.assertEqual(r["kind"], "licence_guarantee")
+
+    def test_confirm_certified_paraphrase(self):
+        r = answer("Please confirm my steel bottle is certified")
+        self.assertTrue(r["refused"])
+        self.assertEqual(r["kind"], "cert_claim")
+
+    def test_residual_never_infer_paraphrases(self):
+        cases = [
+            ("Will my product get BIS licence?", "licence_guarantee"),
+            ("Tell me if my steel bottle is BIS approved", "cert_claim"),
+            ("Does this have BIS approval?", "cert_claim"),
+            ("is  my product certified", "cert_claim"),
+            ("kya mera product certified hai", "cert_claim"),
+        ]
+        for q, kind in cases:
+            with self.subTest(q=q):
+                r = answer(q)
+                self.assertTrue(r["refused"], q)
+                self.assertEqual(r["kind"], kind, q)
+                self.assertFalse(r.get("needs_info"), q)
+                blob = " ".join(r.get("citations") or []) + " " + (r.get("text") or "")
+                self.assertNotRegex(blob, r"IS\s+\d{3,}")
 
     def test_normal_answered_with_disclaimer(self):
         r = answer("PVC cable house wiring standard?")
@@ -175,6 +225,57 @@ class TestWeakTier(unittest.TestCase):
                           "rounds": 0, "force": True})
         self.assertTrue(r["refused"])
         self.assertEqual(r["kind"], "coverage_gap")
+
+
+class TestCheckedGrounding(unittest.TestCase):
+    def test_chunk_noise_is_not_a_citation(self):
+        from bis_assistant.assistant import _checked
+        resp = {
+            "text": "You must follow IS 99999 for certification testing.",
+            "refused": False, "kind": "corpus_answer", "lang": "en",
+            "citations": ["IS 14478 — bearings"], "pii": {},
+        }
+        res = {"candidates": [{"std": {"is_number": "IS 14478", "section_ref": ""}}]}
+        ev = [{"standard_number": "IS 14478",
+               "chunk_text": "See also IS 99999 for something else"}]
+        r = _checked(resp, res, ev)
+        self.assertTrue(r["refused"])
+        self.assertEqual(r["kind"], "verifier_fail")
+        self.assertFalse(r.get("citations"))
+        self.assertFalse(r.get("sources"))
+
+    def test_invented_clause_on_real_is_fails(self):
+        from bis_assistant.assistant import _checked
+        resp = {
+            "text": "Clause 99.99 of IS 14478 says the product is guaranteed.",
+            "refused": False, "kind": "corpus_answer", "lang": "en",
+            "citations": ["IS 14478 — bearings"], "pii": {},
+        }
+        res = {"candidates": [{"std": {"is_number": "IS 14478", "section_ref": ""}}]}
+        ev = [{"standard_number": "IS 14478", "chunk_text": "scope of plain bearings"}]
+        r = _checked(resp, res, ev)
+        self.assertTrue(r["refused"])
+        self.assertFalse(r.get("citations"))
+
+    def test_verify_exception_fails_closed(self):
+        from bis_assistant.assistant import _checked
+        from bis_assistant import verifier as V
+        orig = V.verify
+        def boom(*_a, **_k):
+            raise RuntimeError("boom")
+        V.verify = boom
+        try:
+            resp = {
+                "text": "IS 14478 covers bearings.",
+                "refused": False, "kind": "corpus_answer", "lang": "en",
+                "citations": ["IS 14478 — bearings"], "pii": {},
+            }
+            res = {"candidates": [{"std": {"is_number": "IS 14478", "section_ref": ""}}]}
+            r = _checked(resp, res, [])
+        finally:
+            V.verify = orig
+        self.assertTrue(r["refused"])
+        self.assertEqual(r["kind"], "verifier_fail")
 
 
 if __name__ == "__main__":

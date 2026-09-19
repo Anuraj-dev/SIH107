@@ -1,12 +1,15 @@
 """Allowlisted retrieval over local BIS metadata only. No external scraping."""
 from __future__ import annotations
 import json
+import logging
 import os
 import re
 from pathlib import Path
 
+from .allowlist import ALLOWED_HOSTS, assert_allowlisted  # noqa: F401
+
 DATA_DIR = Path(__file__).resolve().parents[2] / "data"
-ALLOWED_HOSTS = ("bis.gov.in", "crsbis.in", "manakonline.in", "lims.bis.gov.in", "standardsbis.bsbedge.com")
+log = logging.getLogger("bis.retriever")
 
 def _backend() -> str:
     import os
@@ -116,12 +119,6 @@ def load_kb():
     return stds, schemes, labs, glossary
 
 
-def assert_allowlisted(url: str) -> None:
-    host = re.sub(r"^https?://", "", url).split("/")[0].lower()
-    if not any(h in host for h in ALLOWED_HOSTS):
-        raise ValueError(f"Blocked non-allowlisted source: {url}")
-
-
 # Shared IS-reference parsing (issue #4 P0-4): one normalizer for the
 # metadata scorer, the grounding exact-match and the RAG boost, so
 # `IS-10500` hits, `IS 10` never prefix-matches `IS 10500`, and part
@@ -224,8 +221,12 @@ def retrieve(query: str, top_k: int = 3):
         else:
             sc, hits = score_standard(query, s)
         if sc > 0:
-            for u in (s["source_url"],):
-                assert_allowlisted(u)
+            try:
+                assert_allowlisted(s.get("source_url") or "")
+            except ValueError:
+                log.warning("skipping KB row with bad source_url is_number=%s",
+                            s.get("is_number", ""))
+                continue
             ranked.append((sc, s, hits))
     ranked.sort(key=lambda x: -x[0])
     cands = [{"score": sc, "std": s, "hits": h,

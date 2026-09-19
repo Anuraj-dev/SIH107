@@ -26,8 +26,10 @@ def fetch(url: str, timeout_s: int = 20) -> str:
     if not load_config()["ingest"]["live_crawl_enabled"]:
         raise RuntimeError("live crawl disabled (config ingest.live_crawl_enabled=false)")
     import urllib.request
+    from . import allowlisted_opener
     req = urllib.request.Request(url, headers={"User-Agent": "BIS-Assistant-KBbot/1.0"})
-    with urllib.request.urlopen(req, timeout=timeout_s) as r:  # noqa: S310 (allowlisted)
+    opener = allowlisted_opener()
+    with opener.open(req, timeout=timeout_s) as r:  # noqa: S310 (allowlisted + redirect hops)
         return r.read().decode("utf-8", "replace")
 
 

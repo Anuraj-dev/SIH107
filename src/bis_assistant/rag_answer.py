@@ -8,11 +8,12 @@ Always attaches `sources` (title/standard number/link) for payload + UI.
 """
 from __future__ import annotations
 
+from .allowlist import KYS_PORTAL, safe_public_url
 from .i18n_privacy import find_pii
 from .rag_llm import extractive_answer, generate_grounded_answer, is_configured
 from .safety import BIS_CARE, DISCLAIMER_EN, DISCLAIMER_HI
 
-_PORTAL = "https://www.bis.gov.in/know-your-standard"
+_PORTAL = KYS_PORTAL
 
 # Bounded in-process TTL cache for grounded LLM text (issue #4 P1-10):
 # identical (provider, model, lang, query, evidence) within the TTL reuses
@@ -59,7 +60,7 @@ def format_rag_citation(e: dict) -> str:
     num = e.get("standard_number") or "BIS document"
     title = e.get("title") or ""
     dtype = e.get("doc_type") or "corpus"
-    url = e.get("source_url") or _PORTAL
+    url = safe_public_url(e.get("source_url"), _PORTAL)
     base = f"{num} — {title} [{dtype}] — Source: {url}" if title else f"{num} [{dtype}] — Source: {url}"
     return base
 
@@ -70,7 +71,7 @@ def build_sources(evidence: list[dict]) -> list[dict]:
         out.append({
             "standard_number": e.get("standard_number", ""),
             "title": e.get("title", ""),
-            "url": e.get("source_url", ""),
+            "url": safe_public_url(e.get("source_url"), _PORTAL),
             "doc_type": e.get("doc_type", ""),
             "heading": e.get("heading", ""),
             "chunk_text": (e.get("chunk_text") or "")[:1200],
@@ -82,7 +83,8 @@ def build_sources(evidence: list[dict]) -> list[dict]:
 
 
 def build_rag_answer(query: str, lang: str, evidence: list[dict],
-                     llm_cfg: dict | None = None) -> dict:
+                     llm_cfg: dict | None = None,
+                     extractive_only: bool = False) -> dict:
     hi = lang == "hi"
     if llm_cfg is None:
         from .rag_config import load_llm_config
@@ -96,7 +98,7 @@ def build_rag_answer(query: str, lang: str, evidence: list[dict],
     except (TypeError, ValueError):
         cache_ttl = 300
     cache_key = None
-    if evidence and is_configured(llm_cfg):
+    if evidence and not extractive_only and is_configured(llm_cfg):
         cache_key = _llm_cache_key(query, lang, evidence, llm_cfg)
         text = _llm_cache_get(cache_key, cache_ttl)
         used_llm = text is not None

@@ -9,6 +9,7 @@ import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { isHttpUrl, redactPii } from "../src/redact.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "fixtures");
 const files = readdirSync(root).filter((f) => f.endsWith(".json"));
@@ -170,5 +171,15 @@ describe("ui contract fixtures", () => {
     assert.ok(["approve", "reject"].includes(j.publish_request_example.decision));
     assert.equal(j.publish_response.ok, true);
     assert.equal(j.publish_response.diff_id, d.diff_id);
+  });
+
+  it("local transcript redact matches server PII rules", () => {
+    const raw = "call me 9876543210 mail a@b.com aadhaar 1234 5678 9012";
+    const out = redactPii(raw);
+    assert.match(out, /REDACTED/);
+    assert.doesNotMatch(out, /9876543210/);
+    assert.doesNotMatch(out, /a@b\.com/);
+    assert.ok(isHttpUrl("https://www.bis.gov.in/x"));
+    assert.equal(isHttpUrl("javascript:alert(1)"), false);
   });
 });

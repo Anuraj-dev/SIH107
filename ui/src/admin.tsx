@@ -3,8 +3,8 @@ import { fetchKbDiff, publishKbDiff } from "./api";
 import type { KbDiff } from "./types";
 
 /**
- * Admin diff-review screen (plan §5): gated behind a token input,
- * fixture-driven table with approve/reject per diff hitting fixture endpoints.
+ * Admin diff-review screen (plan §5): gated behind a live admin key,
+ * pending diffs from GET /kb/diff, publish via POST /kb/publish.
  */
 export default function AdminPanel() {
   const [publisherKey, setPublisherKey] = useState("");
@@ -25,12 +25,23 @@ export default function AdminPanel() {
     setStatus("");
     try {
       const { diff: d, fixture: f } = await fetchKbDiff(publisherKey.trim());
+      if (f) {
+        setUnlocked(false);
+        setDiff(null);
+        setStatus("Live pending diff required — fixture unlock is disabled.");
+        return;
+      }
       setDiff(d);
-      setFixture(f);
+      setFixture(false);
       setUnlocked(true);
-      setStatus(f ? "Showing fixture diff (live GET /kb/diff not available)." : "Loaded live diff.");
-    } catch {
-      setStatus("Could not load the KB diff.");
+      setStatus("Loaded live diff.");
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "";
+      setUnlocked(false);
+      setDiff(null);
+      setStatus(/HTTP 403/.test(msg)
+        ? "Admin key rejected (403)."
+        : `Could not load the KB diff${msg ? `: ${msg}` : "."}`);
     } finally {
       setLoading(false);
     }
@@ -57,8 +68,7 @@ export default function AdminPanel() {
         <h2 id="admin-h">Admin — KB diff review</h2>
         <p className="hint">
           Reviewer-gated. Publishing needs two distinct approvers (plan §6): enter both keys for a
-          live <code>POST /kb/publish</code>, or just the publisher key for a fixture review until
-          the admin backend is reachable. Diff list loads via <code>GET /kb/diff</code> (x-admin-key).
+          live <code>POST /kb/publish</code>. Diff list loads via <code>GET /kb/diff</code> (x-admin-key).
         </p>
         <form
           onSubmit={(e) => {
