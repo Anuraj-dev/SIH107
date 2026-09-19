@@ -28,3 +28,5 @@ kb/breadth_raw/
 logs/
 
 eval/results/
+.vercel
+.env*
