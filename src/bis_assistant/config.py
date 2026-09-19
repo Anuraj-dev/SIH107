@@ -13,7 +13,6 @@ _DEFAULTS = {
                   "weak_floor": 3.0, "max_rounds": 2, "max_questions_per_turn": 2,
                   "scorer": "keyword", "kb_backend": "json",
                   "grounded_score": 10.0, "fusion_strong_score": 15.0},
-    "catalogue": {"enabled": True},
     "privacy": {"thread_ttl_days": 7, "retention_days": 90,
                 "consent_valid_days": 365, "erasure_sla_hours": 24},
     "api": {"port": 8000, "anon_per_hour": 30, "anon_burst_per_min": 5,
@@ -23,13 +22,13 @@ _DEFAULTS = {
                "refresh_days": 7, "staleness_alert_days": 14},
     "observability": {"trace_sample_rate": 0.05, "trace_retention_days": 14,
                       "latency_p95_ms": 2000},
-    "rag": {"enabled": False, "db_path": "kb/bis_rag.db", "top_k": 5,
-            "semantic": True, "embedding_model": "", "weight_lexical": 1.0,
-            "weight_semantic": 0.3, "exact_boost": 50.0, "catalogue": True,
-            "min_overlap": 3, "min_lexical": 15.0, "catalogue_min_score": 8.0},
+    "rag": {"enabled": True, "db_path": "kb/bis_rag.db", "top_k": 5,
+            "semantic": True, "embedding_model": "", "reranker_model": "",
+            "weight_lexical": 1.0,
+            "weight_semantic": 0.3, "exact_boost": 50.0},
     "llm": {"provider": "openai-compatible", "model": "", "api_key": "",
             "base_url": "https://api.openai.com/v1",
-            "temperature": 0.2, "max_tokens": 768, "timeout_s": 10.0, "retries": 0},
+            "temperature": 0.2, "max_tokens": 768, "timeout_s": 10.0, "retries": 1},
     "guidance": {"adaptive": True},
     "memory": {"expand_turns": 2, "expand_terms": 6, "expand_chars": 200},
 }
@@ -44,14 +43,13 @@ _TYPES = {"port": int, "retention_days": int, "thread_ttl_days": int,
           "top_k": int, "max_tokens": int, "temperature": float, "timeout_s": float,
           "weight_lexical": float, "weight_semantic": float, "exact_boost": float,
           "enabled": bool, "semantic": bool, "live_crawl_enabled": bool,
-          "retries": int, "cache_ttl": int, "catalogue": bool, "adaptive": bool,
+          "retries": int, "adaptive": bool,
           "grounded_score": float, "fusion_strong_score": float,
-          "min_overlap": int, "min_lexical": float, "catalogue_min_score": float,
           "expand_turns": int, "expand_terms": int, "expand_chars": int}
 
 
-# File-content cache keyed by (path, mtime) (issue #4 P1-10): answers read
-# config 3-5x per turn, but YAML re-parsing on every read is pure overhead.
+# File-content cache keyed by (path, mtime) (issue #4 P1-10): retrieval and
+# provider configuration may both read the shared file during one chat turn.
 # Only file content is cached — BIS_* env overrides are applied live on
 # every load(), so monkeypatched env in tests keeps working.
 _FILE_CACHE: dict = {}

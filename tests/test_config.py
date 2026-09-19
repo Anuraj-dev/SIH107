@@ -19,17 +19,12 @@ def test_env_override(monkeypatch):
     assert cfg["api"]["anon_per_hour"] == 60
 
 
-def test_load_rag_config_min_gates(monkeypatch):
-    monkeypatch.setenv("BIS_RAG_MIN_OVERLAP", "9")
-    monkeypatch.setenv("BIS_RAG_MIN_LEXICAL", "21.5")
-    monkeypatch.setenv("BIS_RAG_CATALOGUE_MIN_SCORE", "12.5")
+def test_load_rag_config_defaults_to_corpus_retrieval(monkeypatch):
+    monkeypatch.setenv("BIS_RAG_ENABLED", "1")
+    monkeypatch.setenv("BIS_RAG_TOP_K", "7")
     from bis_assistant.rag_config import load_rag_config
-    from bis_assistant.assistant import _rag_thresholds
+
     cfg = load_rag_config()
-    assert cfg["min_overlap"] == 9
-    assert cfg["min_lexical"] == 21.5
-    assert cfg["catalogue_min_score"] == 12.5
-    th = _rag_thresholds()
-    assert th["min_overlap"] == 9
-    assert th["min_lexical"] == 21.5
-    assert th["catalogue_min_score"] == 12.5
+    assert cfg["enabled"] is True
+    assert cfg["top_k"] == 7
+    assert "catalogue_min_score" not in cfg

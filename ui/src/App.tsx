@@ -9,7 +9,6 @@ import {
   KnownChips,
   MetaBadges,
   NoteInput,
-  QuestionPills,
   RawJson,
   RichText,
   Sources,
@@ -105,10 +104,11 @@ export default function App() {
         setThread(bisChat.shouldKeepThread(resp) ? next : null);
       } catch (e) {
         const msg = e instanceof Error ? e.message : "request failed";
-        if (msg.startsWith("Thread expired")) setThread(null);
-        const friendly = /HTTP 429/.test(msg)
-          ? "Rate limited — please wait a minute and retry."
-          : `${msg}. Is the API running?`;
+        const expired = msg.startsWith("Thread expired");
+        if (expired) setThread(null);
+        const friendly = expired
+          ? "This conversation has expired. Please start a new topic to continue."
+          : "The chatbot is offline or the server could not be reached. Please check your connection and try again.";
         setMsgs((m) => [...m, { id: nextId++, role: "assistant", text: "", error: friendly }]);
         setHealthy(false);
       } finally {
@@ -288,15 +288,6 @@ export default function App() {
                           <RichText text={m.text} />
                           {m.resp.assumptions.length > 0 && <AssumptionsBanner items={m.resp.assumptions} />}
                           <KnownChips known={m.resp.known} />
-                          {m.resp.needs_info && (
-                            <QuestionPills
-                              questions={m.resp.questions}
-                              disabled={busy}
-                              onPick={(answer) => send(answer)}
-                              onAssume={() => send(pendingQ, { force: true })}
-                              onNewTopic={newTopic}
-                            />
-                          )}
                           {m.resp.citations.length > 0 && <Sources items={m.resp.citations} />}
                           <EvidenceSources items={m.resp.sources ?? m.resp.rag_evidence} />
                           <RawJson data={m.resp} />

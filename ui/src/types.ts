@@ -47,10 +47,11 @@ export interface ChatResponse {
   rag_evidence?: RagSource[];
   rag_mode?: string;
   rag_used_llm?: boolean;
+  model_available?: boolean;
   /** NLU intent for this turn (nlu.classify). */
   intent?: string;
   intent_confidence?: string;
-  /** Extractive thread summary used for history-aware retrieval. */
+  /** Reserved for compatibility; recent user turns are sent to the model. */
   context_summary?: string;
   guidance_adaptive?: boolean;
 }

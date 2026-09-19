@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import type { Question } from "./types";
 
 /** Inline markdown: **bold** + auto-linked https:// URLs. No deps, no HTML injection. */
 const URL_RE = /(https?:\/\/[^\s)<\]]+)/g;
@@ -217,6 +216,7 @@ export function MetaBadges({ resp, ms }: {
     kind?: string; lang?: string; refused?: boolean;
     intent?: string; intent_confidence?: string;
     rag_mode?: string; rag_used_llm?: boolean;
+    model_available?: boolean;
     pii?: Record<string, boolean>;
   };
   ms?: number;
@@ -231,9 +231,9 @@ export function MetaBadges({ resp, ms }: {
           intent: {resp.intent}
         </span>
       ) : null}
-      {resp.rag_mode ? (
-        <span className="badge ok" title={resp.rag_used_llm ? "written by the configured LLM from retrieved passages" : "deterministic extractive answer"}>
-          {resp.rag_used_llm ? "LLM-grounded" : "extractive"}
+      {typeof resp.model_available === "boolean" ? (
+        <span className={`badge ${resp.model_available ? "ok" : "refuse"}`} title={resp.rag_mode}>
+          {resp.model_available ? "LLM-generated" : "model unavailable"}
         </span>
       ) : null}
       {typeof ms === "number" ? <span className="badge info">{ms} ms</span> : null}
@@ -252,50 +252,6 @@ export function RawJson({ data }: { data: unknown }) {
       <summary>Raw JSON</summary>
       <pre>{JSON.stringify(data, null, 2)}</pre>
     </details>
-  );
-}
-
-/** Clarifying questions as tappable pills (multi-turn grounding). */
-export function QuestionPills({
-  questions,
-  disabled,
-  onPick,
-  onAssume,
-  onNewTopic,
-}: {
-  questions: Question[];
-  disabled?: boolean;
-  onPick: (send: string) => void;
-  onAssume: () => void;
-  onNewTopic: () => void;
-}) {
-  if (!questions || questions.length === 0) return null;
-  return (
-    <div className="qs">
-      {questions.map((q) => (
-        <div key={q.slot} className="q">
-          <div className="qq">{q.text}</div>
-          <div className="qopts">
-            {q.options.map((o) => (
-              <button key={o.send} type="button" className="pill-btn" disabled={disabled}
-                onClick={() => onPick(o.send)}>
-                {o.label}
-              </button>
-            ))}
-            {q.options.length === 0 && <span className="hint">Reply in your own words</span>}
-          </div>
-        </div>
-      ))}
-      <div className="qacts">
-        <button type="button" className="link-btn" disabled={disabled} onClick={onAssume}>
-          Answer with assumptions
-        </button>
-        <span aria-hidden="true">·</span>
-        <button type="button" className="link-btn" disabled={disabled} onClick={onNewTopic}>
-          New topic
-        </button>
-      </div>
-    </div>
   );
 }
 

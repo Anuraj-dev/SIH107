@@ -29,9 +29,8 @@ def main():
         lang = sys.argv[sys.argv.index("--lang") + 1]
     if "--server" in sys.argv:
         server = sys.argv[sys.argv.index("--server") + 1]
-    print("BIS Assistant (MVP)" + (f" via {server}" if server else "")
-          + " — type 'quit' to exit, 'new' for a new topic, 'assume' to answer with assumptions.")
-    print("If your query lacks detail, I will ask follow-up questions until I have enough context.")
+    print("BIS Assistant" + (f" via {server}" if server else "")
+          + " — type 'quit' to exit or 'new' for a new topic.")
     uid = "demo-user"
     handle: ThreadHandle | None = None
     thread_id, token = None, None
@@ -64,27 +63,10 @@ def main():
             thread_id = r.get("thread_id")
             token = r.get("owner_token", token)
             print("\nAssistant:\n" + r["text"])
-            if r.get("needs_info"):
-                print("\n[answer the questions above, or start 'new' topic]")
-            continue
-        if q.lower() in ("assume", "answer anyway") and handle:
-            last_q = handle.history[-1] if handle.history else ""
-            if not last_q:
-                print("Assistant: nothing to assume on yet — ask a question first.")
-                continue
-            r = chat_turn(last_q, lang or "auto", thread=handle, force=True)
-            handle = r.thread
-            print("\nAssistant:\n" + r.text)
-            if r.needs_info:
-                print("\n[answer the questions above, or type 'assume' / 'new']")
-            if any(r.pii.values()):
-                print("\n[privacy: PII detected in query — logged redacted only]")
             continue
         r = chat_turn(q, lang or "auto", thread=handle)
         handle = r.thread
         print("\nAssistant:\n" + r.text)
-        if r.needs_info:
-            print("\n[answer the questions above, or type 'assume' / 'new']")
         if any(r.pii.values()):
             print("\n[privacy: PII detected in query — logged redacted only: " + redact(q)[:80] + "]")
 
