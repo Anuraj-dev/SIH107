@@ -31,7 +31,7 @@ export default function AcceptancePanel({ onAsk, disabled }: {
   }), [difficulty, category, search]);
 
   return (
-    <main className="wrap acceptance" aria-labelledby="acceptance-title">
+    <section className="wrap acceptance" aria-labelledby="acceptance-title">
       <div className="acceptance-head">
         <div>
           <p className="eyebrow">FIXED ACCEPTANCE SET · V3</p>
@@ -106,6 +106,6 @@ export default function AcceptancePanel({ onAsk, disabled }: {
         ))}
         {visible.length === 0 && <p className="case-empty">No matching questions. Try another topic or search.</p>}
       </section>
-    </main>
+    </section>
   );
 }
