@@ -21,6 +21,7 @@ from __future__ import annotations
 import json
 import urllib.request
 
+from .allowlist import safe_public_url
 from .rag_config import load_llm_config
 
 
@@ -181,10 +182,13 @@ def extractive_answer(query: str, evidence: list[dict], lang: str = "en") -> str
         lines.append(f"- **{e.get('standard_number','')}** — {title}")
         if e.get("heading"):
             lines.append(f"  Section: {e['heading']}")
-        snippet = " ".join((e.get("chunk_text") or "").split())[:600]
+        raw = " ".join((e.get("chunk_text") or "").split())
+        snippet = raw[:600]
+        if len(raw) > 600:
+            snippet = snippet.rsplit(" ", 1)[0]
         lines.append(f"  > {snippet}")
         if e.get("source_url"):
-            lines.append(f"  Source: {e['source_url']}")
+            lines.append(f"  Source: {safe_public_url(e.get('source_url'))}")
         lines.append("")
     lines.append("Match the IS number/year against the BIS catalogue before relying on this; "
                  "verify status on Know-Your-Standard." if not hi else

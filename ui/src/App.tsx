@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { bisChat, checkHealth, fetchThreadExport, sendFeedback } from "./api";
+import { redactPii } from "./redact.mjs";
 import AdminPanel from "./admin";
 import {
   AssumptionsBanner,
@@ -171,13 +172,13 @@ export default function App() {
       exported_at: new Date().toISOString(),
       messages: msgs.map((m) => ({
         role: m.role,
-        text: m.text,
+        text: redactPii(m.text),
         kind: m.resp?.kind ?? (m.error ? "error" : "user"),
         lang: m.resp?.lang ?? null,
         citations: m.resp?.citations ?? [],
       })),
     });
-    showToast(thread ? "Server export unavailable — saved the local transcript." : "Saved the local transcript.");
+    showToast(thread ? "Server export unavailable — saved the local transcript (redacted)." : "Saved the local transcript (redacted).");
   }, [msgs, thread, showToast]);
 
   return (

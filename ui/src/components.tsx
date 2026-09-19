@@ -196,11 +196,13 @@ export function EvidenceSources({ items }: { items: EvidenceItem[] | null | unde
             {e.doc_type ? <span className="ev-meta"> [{e.doc_type}]</span> : null}
             {e.heading ? <div className="ev-meta">Section: {e.heading}</div> : null}
             {e.chunk_text ? <div className="ev-meta">“{e.chunk_text.slice(0, 280)}{e.chunk_text.length > 280 ? "…" : ""}”</div> : null}
-            {e.url ? (
+            {e.url && /^https?:\/\//i.test(e.url) ? (
               <div>
                 <a href={e.url} target="_blank" rel="noreferrer">Source link</a>
                 <span className="ev-meta"> · score {e.score}</span>
               </div>
+            ) : e.url ? (
+              <div className="ev-meta">{e.url} · score {e.score}</div>
             ) : null}
           </li>
         ))}

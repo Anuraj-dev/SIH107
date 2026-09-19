@@ -188,7 +188,8 @@ def test_review_approve_all_needs_two_humans(tmp_path):
     try:
         snap = kb_store.new_snapshot(conn, "test", "x")
         snapmod.diff_against_kb(conn, snap, [{"is_number": "IS 9999",
-            "year": "2020", "title_en": "Some Widget", "status": "Active"}])
+            "year": "2020", "title_en": "Some Widget", "status": "Active",
+            "source_url": "https://www.bis.gov.in/know-your-standard/"}])
         with pytest.raises(SystemExit):
             reviewmod.cmd_approve_all(conn, "solo", "solo", "added")
         n = reviewmod.cmd_approve_all(conn, "alice", "bob", "added")
@@ -197,5 +198,72 @@ def test_review_approve_all_needs_two_humans(tmp_path):
                            " WHERE is_number='IS 9999' ORDER BY version DESC"
                            " LIMIT 1").fetchone()
         assert cur["title_en"] == "Some Widget"
+    finally:
+        conn.close()
+
+
+def test_approve_missing_diff_is_review_error(tmp_path):
+    db = tmp_path / "kb.db"
+    _import_to(db)
+    conn = kb_store.connect(db)
+    try:
+        with pytest.raises(reviewmod.ReviewError) as ei:
+            reviewmod.cmd_approve(conn, 99999, "alice")
+        assert ei.value.http_status == 404
+        assert not isinstance(ei.value, SystemExit)
+    finally:
+        conn.close()
+
+
+def test_approve_empty_source_url_rejected(tmp_path):
+    db = tmp_path / "kb.db"
+    _import_to(db)
+    conn = kb_store.connect(db)
+    try:
+        snap = kb_store.new_snapshot(conn, "test", "x")
+        snapmod.diff_against_kb(conn, snap, [{"is_number": "IS 8888",
+            "year": "2020", "title_en": "No URL", "status": "Active"}])
+        did = conn.execute("SELECT id FROM pending_diffs WHERE is_number='IS 8888'"
+                           ).fetchone()["id"]
+        with pytest.raises(reviewmod.ReviewError) as ei:
+            reviewmod.cmd_approve(conn, did, "alice")
+        assert ei.value.http_status == 400
+    finally:
+        conn.close()
+
+
+def test_reject_missing_diff_is_review_error(tmp_path):
+    db = tmp_path / "kb.db"
+    _import_to(db)
+    conn = kb_store.connect(db)
+    try:
+        with pytest.raises(reviewmod.ReviewError) as ei:
+            reviewmod.cmd_reject(conn, 99999)
+        assert ei.value.http_status == 404
+    finally:
+        conn.close()
+
+
+def test_approve_changed_requires_stored_source_url(tmp_path):
+    db = tmp_path / "kb.db"
+    _import_to(db)
+    conn = kb_store.connect(db)
+    try:
+        snap = kb_store.new_snapshot(conn, "test", "x")
+        conn.execute(
+            "INSERT INTO pending_diffs(snapshot_id, change_type, is_number, details_json, status)"
+            " VALUES (?,?,?,?,?)",
+            (snap, "changed", "IS 694", json.dumps({
+                "title_en": "PVC insulated cables",
+                "source_url": "",
+                "detail_url": "https://www.bis.gov.in/know-your-standard/",
+            }), "pending"))
+        conn.commit()
+        did = conn.execute(
+            "SELECT id FROM pending_diffs WHERE is_number='IS 694' AND change_type='changed'"
+            " ORDER BY id DESC").fetchone()["id"]
+        with pytest.raises(reviewmod.ReviewError) as ei:
+            reviewmod.cmd_approve(conn, did, "alice")
+        assert ei.value.http_status == 400
     finally:
         conn.close()

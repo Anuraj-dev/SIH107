@@ -74,6 +74,13 @@ def load_rag_config() -> dict:
             "BIS_RAG_WEIGHT_SEMANTIC", float(file_cfg.get("weight_semantic", 0.3))),
         "exact_boost": _float_env(
             "BIS_RAG_EXACT_BOOST", float(file_cfg.get("exact_boost", 50.0))),
+        "min_overlap": _int_env(
+            "BIS_RAG_MIN_OVERLAP", int(file_cfg.get("min_overlap", 3))),
+        "min_lexical": _float_env(
+            "BIS_RAG_MIN_LEXICAL", float(file_cfg.get("min_lexical", 15.0))),
+        "catalogue_min_score": _float_env(
+            "BIS_RAG_CATALOGUE_MIN_SCORE",
+            float(file_cfg.get("catalogue_min_score", 8.0))),
     }
 
 
