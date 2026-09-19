@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { bisChat, checkHealth, fetchThreadExport, sendFeedback } from "./api";
 import { redactPii } from "./redact.mjs";
 import AdminPanel from "./admin";
+import AcceptancePanel from "./acceptance";
 import {
   AssumptionsBanner,
   EvidenceSources,
@@ -51,7 +52,7 @@ export default function App() {
   const [healthy, setHealthy] = useState<boolean | null>(null);
   const [thread, setThread] = useState<ServerThread | null>(null);
   const [pendingQ, setPendingQ] = useState("");
-  const [view, setView] = useState<"chat" | "admin">("chat");
+  const [view, setView] = useState<"chat" | "admin" | "tests">("chat");
   const [toast, setToast] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
   const taRef = useRef<HTMLTextAreaElement>(null);
@@ -124,6 +125,14 @@ export default function App() {
     setView("chat");
     setMsgs([]);
   }, []);
+
+  const askTestCase = useCallback((item: { query: string }) => {
+    setMsgs([]);
+    setThread(null);
+    setPendingQ("");
+    setView("chat");
+    void send(item.query, { fresh: true });
+  }, [send]);
 
   const rate = useCallback(
     async (id: number, rating: 1 | -1, note?: string) => {
@@ -213,6 +222,11 @@ export default function App() {
             <option value="en">EN</option>
             <option value="hi">हिंदी</option>
           </select>
+          <button type="button" className={`btn bench-launch${view === "tests" ? " active" : ""}`}
+            onClick={() => setView(view === "tests" ? "chat" : "tests")}
+            aria-pressed={view === "tests"}>
+            Test set <span>50</span>
+          </button>
           <button type="button" className="btn" onClick={newTopic}>+ New chat</button>
           <button
             type="button" className="icon-btn" onClick={exportThread}
@@ -244,6 +258,8 @@ export default function App() {
           <button type="button" className="link-btn back" onClick={() => setView("chat")}>← Back to chat</button>
           <AdminPanel />
         </main>
+      ) : view === "tests" ? (
+        <AcceptancePanel onAsk={askTestCase} disabled={busy} />
       ) : (
         <>
           <main className="thread wrap" id="chat-log" role="log" aria-live="polite" aria-label="Conversation" tabIndex={-1}>

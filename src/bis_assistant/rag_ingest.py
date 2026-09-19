@@ -135,8 +135,9 @@ def map_txt_to_metadata(txt_rel: str, index: dict) -> dict:
 
 
 def import_corpus(corpus_dir: str | Path, db_path: str | Path,
-                  batch_commit: bool = True) -> dict:
-    """Full import: catalogue + documents + chunks + FTS. Returns stats.
+                  batch_commit: bool = True,
+                  embedding_model: str = "") -> dict:
+    """Import catalogue, documents, chunks and FTS; optionally build dense vectors.
 
     ``batch_commit`` commits every 50 documents so a 359-doc import never
     holds one giant transaction; at the end the FTS indexes are optimized
@@ -146,11 +147,10 @@ def import_corpus(corpus_dir: str | Path, db_path: str | Path,
     files_dir = corpus_dir / "Files"
     index = build_manifest_index(corpus_dir)
     conn = connect_rag(db_path)
-    stats = {"documents": 0, "chunks": 0, "catalogue": 0,
+    stats = {"documents": 0, "chunks": 0, "catalogue": 0, "embedded_chunks": 0,
              "matched": 0, "unmatched": 0, "skipped_empty": 0}
     try:
         # 1. Catalogue (dedupe by standardId; keep part/section rows distinct)
-        snap_rows = 0
         cat_rows = []
         for r in index["standards"]:
             sid = r.get("standardId")
@@ -238,6 +238,13 @@ def import_corpus(corpus_dir: str | Path, db_path: str | Path,
         except Exception:
             pass
         conn.commit()
+        # Re-import replaces chunk ids. Drop old vectors so a partial or stale
+        # dense index can never be fused with current text.
+        conn.execute("DELETE FROM corpus_embeddings")
+        conn.commit()
+        if embedding_model:
+            from .rag_embeddings import index_corpus_embeddings
+            stats["embedded_chunks"] = index_corpus_embeddings(conn, embedding_model)
         try:
             conn.execute("VACUUM")
         except Exception:

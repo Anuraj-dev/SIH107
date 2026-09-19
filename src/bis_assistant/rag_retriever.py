@@ -1,7 +1,6 @@
-"""Hybrid retrieval over corpus_chunks: exact IS boost + FTS5/BM25 + semantic.
+"""Hybrid retrieval: exact IS boost, FTS5/BM25, optional dense search and reranking.
 
-Fuse lexical, semantic and metadata rankings; return evidence chunks with
-source metadata for answer generation and UI display.
+Fuse lexical and dense ranks; return source-bearing evidence for generation.
 """
 from __future__ import annotations
 
@@ -12,10 +11,6 @@ from pathlib import Path
 
 from . import rag_embeddings as emb
 
-IS_RE = re.compile(r"IS\s*(\d+(?:\s*[-/]\s*\d+)?)", re.IGNORECASE)
-IS_FULL_RE = re.compile(
-    r"IS\s*(\d+)\s*(?:\(\s*Part\s*([^):/]+?)?\s*(?:/\s*Sec(?:tion|\.)?\s*([^):]+?))?\s*\:?)?"
-    r"\s*:?\s*(\d{4})?", re.IGNORECASE)
 _TOKEN_RE = re.compile(r"[a-z0-9]+", re.IGNORECASE)
 _FTS_RESERVED = re.compile(r"[\":*^()]")
 
@@ -31,11 +26,6 @@ def extract_is_numbers(query: str) -> list[str]:
             r"IS\s*-?\s*\d+(?:\s*\([^)]*\))?\s*(?::\s*\d{4})?", query, re.IGNORECASE):
         out.append(re.sub(r"\s+", " ", m.group(0).strip()))
     return out
-
-
-def _digits(s: str) -> str:
-    m = re.search(r"\d+", s or "")
-    return m.group(0) if m else ""
 
 
 def _parse_is_parts(ref: str) -> tuple[str, str, str]:
@@ -106,8 +96,13 @@ def _fts_query(query: str) -> str:
     toks = [t for t in _TOKEN_RE.findall(query.lower()) if len(t) > 1]
     # keep IS digits glued: 'IS 101' -> 'IS101' token variant too
     extra = []
-    for m in IS_RE.finditer(query):
-        extra.append("IS" + re.sub(r"\D", "", m.group(0)))
+    for m in extract_is_numbers(query):
+        extra.append("IS" + re.sub(r"\D", "", m))
+    # FTS tokenizes punctuation in corpus designations (`IS 14543 : 2016`)
+    # into separate words. Search the standard number as an exact phrase so
+    # common terms such as `packing` cannot bury the requested designation.
+    exact_numbers = [re.search(r"\d+", ref).group(0) for ref in extract_is_numbers(query)]
+    exact_clause = " OR ".join(f'"{n}"' for n in exact_numbers if n)
     toks = toks + extra
     # de-dup, cap length, quote phrases safely
     seen, out = set(), []
@@ -118,7 +113,9 @@ def _fts_query(query: str) -> str:
             out.append(f'"{t}"')
         if len(out) >= 12:
             break
-    return " OR ".join(out) if out else '""'
+    ordinary = " OR ".join(out)
+    return f"({ordinary}) OR ({exact_clause})" if exact_clause and ordinary else (
+        exact_clause or ordinary or '""')
 
 
 def _token_overlap_score(query: str, text: str) -> float:
@@ -143,7 +140,7 @@ def search_rag(query: str, top_k: int = 5,
     from .rag_config import load_rag_config
     cfg = load_rag_config()
     db_path = str(db_path or cfg["db_path"])
-    top_k = int(top_k or cfg["top_k"])
+    top_k = max(1, int(top_k or cfg["top_k"]))
     if not os.path.exists(db_path):
         return []
     q = (query or "").strip()
@@ -151,7 +148,7 @@ def search_rag(query: str, top_k: int = 5,
         return []
     q_is = extract_is_numbers(q)
     fts_q = _fts_query(q)
-    over_fetch = max(top_k * 6, 20)
+    candidate_limit = max(top_k * 6, 20)
 
     own_conn = _conn is None
     if _conn is not None:
@@ -172,7 +169,7 @@ def search_rag(query: str, top_k: int = 5,
             return []
         if not n:
             return []
-        rows: list[dict] = []
+        lexical_rows: list[dict] = []
         used_fts = False
         try:
             cur = conn.execute(
@@ -181,14 +178,45 @@ def search_rag(query: str, top_k: int = 5,
                 " c.doc_type, c.source_url, bm25(corpus_chunks_fts) AS rank"
                 " FROM corpus_chunks_fts JOIN corpus_chunks c ON c.id = corpus_chunks_fts.rowid"
                 " WHERE corpus_chunks_fts MATCH ? ORDER BY rank LIMIT ?",
-                (fts_q, over_fetch))
+                (fts_q, candidate_limit))
             for r in cur.fetchall():
-                rows.append(dict(r))
+                lexical_rows.append(dict(r))
             used_fts = True
         except Exception:
-            rows = []
-        if not rows:
-            # LIKE fallback (no FTS5 or no MATCH hits): token-OR scan, capped.
+            pass
+
+        model_name = embedding_model or cfg.get("embedding_model", "")
+        dense_hits = (emb.dense_search(db_path, q, model_name, candidate_limit)
+                      if semantic and model_name else [])
+        if semantic and model_name and not dense_hits and lexical_rows:
+            model = emb.get_model(model_name)
+            if model is not None:
+                try:
+                    query_vector = model.encode([q], normalize_embeddings=True)[0]
+                    texts = [row.get("chunk_text", "")[:2000] for row in lexical_rows]
+                    vectors = model.encode(texts, normalize_embeddings=True)
+                    dense_hits = sorted(
+                        [(int(row["id"]), emb.cosine(query_vector, vector))
+                         for row, vector in zip(lexical_rows, vectors, strict=True)],
+                        key=lambda item: -item[1],
+                    )
+                except Exception:
+                    dense_hits = []
+        dense_scores = dict(dense_hits)
+        dense_ranks = {chunk_id: rank for rank, (chunk_id, _) in enumerate(dense_hits, 1)}
+        rows_by_id = {int(row["id"]): row for row in lexical_rows}
+        missing_ids = [chunk_id for chunk_id, _ in dense_hits if chunk_id not in rows_by_id]
+        if missing_ids:
+            placeholders = ",".join("?" for _ in missing_ids)
+            for row in conn.execute(
+                    f"SELECT * FROM corpus_chunks WHERE id IN ({placeholders})", missing_ids):
+                item = dict(row)
+                item["rank"] = 0.0
+                rows_by_id[int(item["id"])] = item
+
+        if not rows_by_id:
+            # FTS5 can be missing or have no lexical hit. Keep a small LIKE
+            # fallback for minimal SQLite builds and empty dense indexes.
             toks = [t for t in _TOKEN_RE.findall(q.lower()) if len(t) > 2][:8]
             if not toks:
                 return []
@@ -197,40 +225,31 @@ def search_rag(query: str, top_k: int = 5,
             try:
                 cur = conn.execute(
                     f"SELECT c.*, 0.0 AS rank FROM corpus_chunks c WHERE {where} LIMIT ?",
-                    (*params, over_fetch))
-                for r in cur.fetchall():
-                    rows.append(dict(r))
+                    (*params, candidate_limit))
+                lexical_rows = [dict(row) for row in cur.fetchall()]
+                rows_by_id.update({int(row["id"]): row for row in lexical_rows})
+                used_fts = False
             except Exception:
                 return []
-        # Enrich with document metadata
+
+        lexical_scores = {}
+        for row in lexical_rows:
+            try:
+                value = -float(row.get("rank", 0.0) or 0.0) if used_fts else 0.0
+            except (TypeError, ValueError):
+                value = 0.0
+            if not used_fts:
+                value = _token_overlap_score(q, row.get("chunk_text", "")) * 10.0
+            lexical_scores[int(row["id"])] = value
+        lexical_ranks = {
+            chunk_id: rank for rank, (chunk_id, _) in enumerate(
+                sorted(lexical_scores.items(), key=lambda item: -item[1]), 1)
+        }
+
+        # Enrich the union of lexical and dense candidates with source metadata.
         doc_cache: dict = {}
         scored: list[dict] = []
-        # Semantic vectors, resolved once (issue #4 P1-9): a real ST model is
-        # batch-encoded (1 query + 1 batch call); otherwise hashed vectors
-        # give a pure-cosine lexical-similarity channel (P1-8), documented
-        # in rag_embeddings — set BIS_RAG_EMBEDDING_MODEL for true semantics.
-        model_name = embedding_model or cfg.get("embedding_model", "")
-        st_model = emb.get_model(model_name) if semantic and model_name else None
-        qvec = None
-        if semantic:
-            try:
-                if st_model is not None:
-                    qvec = [float(x) for x in
-                            st_model.encode([q], normalize_embeddings=True)[0]]
-                else:
-                    _, qvec = emb.embed_query(q, "")
-            except Exception:
-                qvec = None
-        doc_vecs = None
-        if semantic and st_model is not None and rows:
-            try:
-                mat = st_model.encode(
-                    [(r.get("chunk_text", "")[:2000]) for r in rows],
-                    normalize_embeddings=True)
-                doc_vecs = [[float(x) for x in row] for row in mat]
-            except Exception:
-                doc_vecs = None
-        for pos, r in enumerate(rows):
+        for chunk_id, r in rows_by_id.items():
             doc_id = r.get("doc_id")
             if doc_id not in doc_cache:
                 try:
@@ -243,29 +262,15 @@ def search_rag(query: str, top_k: int = 5,
             std_num = r.get("standard_number") or d.get("standard_number", "")
             # Tiered IS boost (P1-7): full designation > base+part > base.
             boost, is_exact = _is_boost(std_num, q_is, exact_boost)
-            # Lexical: convert FTS rank (negative, closer to 0 = better) to positive
-            rank = r.get("rank", 0.0) or 0.0
-            try:
-                lex = -float(rank)
-            except (TypeError, ValueError):
-                lex = 0.0
-            if not used_fts:
-                lex = _token_overlap_score(q, r.get("chunk_text", "")) * 10.0
-            # Semantic channel: pure cosine (P1-8) — no overlap blending, so
-            # the weight means what it says next to the lexical variance.
-            sem = 0.0
-            if semantic and qvec is not None:
-                try:
-                    if doc_vecs is not None:
-                        sem = emb.cosine(qvec, doc_vecs[pos])
-                    else:
-                        sem = emb.cosine(qvec, emb.hash_embed(
-                            r.get("chunk_text", "")[:2000]))
-                except Exception:
-                    sem = 0.0
+            lex = lexical_scores.get(chunk_id, 0.0)
+            sem = dense_scores.get(chunk_id, 0.0)
             fused = lexical_weight * lex + boost + semantic_weight * sem * 10.0
+            rrf = (lexical_weight / (60 + lexical_ranks[chunk_id])
+                   if chunk_id in lexical_ranks else 0.0)
+            rrf += (semantic_weight / (60 + dense_ranks[chunk_id])
+                    if chunk_id in dense_ranks else 0.0)
             scored.append({
-                "chunk_id": r.get("id"),
+                "chunk_id": chunk_id,
                 "doc_id": doc_id,
                 "chunk_index": r.get("chunk_index", 0),
                 "chunk_text": r.get("chunk_text", ""),
@@ -283,15 +288,27 @@ def search_rag(query: str, top_k: int = 5,
                 "score": fused,
                 "lexical": lex,
                 "semantic": sem,
+                "rrf_score": rrf,
                 "exact_boost": boost,
                 "exact_match": is_exact,
             })
-        scored.sort(key=lambda x: -x["score"])
-        # Prefer exact matches first regardless of fusion noise
-        exact = [s for s in scored if s["exact_match"]]
-        rest = [s for s in scored if not s["exact_match"]]
-        ordered = (exact + rest)[:top_k] if exact else scored[:top_k]
-        return ordered
+        ordered = sorted(scored, key=lambda item: (
+            not item["exact_match"], -item["rrf_score"], -item["score"]))
+
+        rerank_model = cfg.get("reranker_model", "")
+        pool = ordered[:candidate_limit]
+        rerank_scores = emb.rerank_scores(
+            q, [item["chunk_text"][:2000] for item in pool], rerank_model)
+        if rerank_scores is not None:
+            for item, score in zip(pool, rerank_scores, strict=True):
+                item["rerank_score"] = score
+            ordered = sorted(ordered, key=lambda item: (
+                not item["exact_match"],
+                -item.get("rerank_score", -1.0),
+                -item["rrf_score"],
+                -item["score"],
+            ))
+        return ordered[:top_k]
     finally:
         if own_conn:
             try:

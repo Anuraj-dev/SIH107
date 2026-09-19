@@ -12,7 +12,6 @@ import bis_assistant.server as srv
 @pytest.fixture()
 def client(tmp_path, monkeypatch):
     monkeypatch.setattr(srv, "DB_PATH", tmp_path / "ops.db")
-    srv._hits.clear()
     from bis_assistant import assistant
     monkeypatch.setattr(assistant, "load_llm_config", lambda: {
         "provider": "openai-compatible", "model": "", "api_key": "",
@@ -175,25 +174,6 @@ def test_delete_my_data_erases_only_this_thread(client):
                       headers={"X-Owner-Token": b["owner_token"]}).status_code == 410
     assert client.get(f"/threads/{a['thread_id']}",
                       headers={"X-Owner-Token": a["owner_token"]}).status_code == 200
-
-
-def test_rate_limit_hourly_anon_chat(client, monkeypatch):
-    monkeypatch.setitem(srv.CFG["api"], "anon_burst_per_min", 1000)
-    monkeypatch.setitem(srv.CFG["api"], "anon_per_hour", 3)
-    srv._hits.clear()
-    for _ in range(3):
-        assert client.post("/chat", json={"query": "hi"}).status_code == 200
-    r = client.post("/chat", json={"query": "hi"})
-    assert r.status_code == 429
-    assert r.json()["code"] == "rate_limited"
-
-
-def test_rate_limit_burst(client):
-    for _ in range(5):
-        assert client.post("/chat", json={"query": "hi"}).status_code == 200
-    r = client.post("/chat", json={"query": "hi"})
-    assert r.status_code == 429
-    assert r.json()["code"] == "rate_limited" and r.json()["retryable"] is True
 
 
 def test_machine_readable_404(client):

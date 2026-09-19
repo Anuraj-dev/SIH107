@@ -1,10 +1,8 @@
-"""Translation helper: LLM-powered when configured, else explicit fallback.
+"""Standalone translation helper; chat answer generation does not use it.
 
-EN↔HI keyword dictionaries (see ``retriever.HINGLISH``/``DEVANAGARI``) cover
-the common BIS vocabulary offline. For anything beyond that,
 ``translate_text`` uses the configured LLM provider (OpenAI-compatible,
-Gemini or local Ollama) as a translation API and returns None when no LLM
-is available, so callers always fall back to the dictionaries.
+Gemini or local Ollama) and returns None when no LLM is available. It is not
+called by the chat endpoint and never supplies a substitute chat answer.
 """
 from __future__ import annotations
 

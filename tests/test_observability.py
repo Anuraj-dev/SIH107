@@ -22,7 +22,6 @@ REQUIRED_SERIES = ["bis_chat_total", "bis_answered_total", "bis_refused_total",
 @pytest.fixture()
 def client(tmp_path, monkeypatch):
     monkeypatch.setattr(srv, "DB_PATH", tmp_path / "ops.db")
-    srv._hits.clear()
     metrics_mod.reset()
     with TestClient(srv.app) as c:
         yield c

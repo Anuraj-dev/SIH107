@@ -2,14 +2,11 @@
 
 Replaces scattered substring checks with one scored classifier whose intents
 mirror the assistant's behavioural branches, so routing stays identical while
-becoming observable (payload ``intent``) and reusable (guidance composer,
-catalogue fallback). Channels:
+becoming observable (payload ``intent``) and reusable for offline analysis.
+The active chat route does not use NLU to select canned answers. Channels:
 
 - lexical: weighted keyword/phrase hits per intent (phrases weigh more);
-- structural: exact IS-number presence, question words, translation cues;
-- semantic (optional): token-overlap against intent prototype vectors when
-  ``BIS_RAG_SEMANTIC``-style semantic mode is on — implemented with the same
-  hashed-vector helper as retrieval, no new dependencies.
+- structural: exact IS-number presence, question words, translation cues.
 
 Intents: disallowed | hallmarking | lab_suggestion | certification_guidance |
 process_explanation | recommend_standard | standard_info | consumer_query |

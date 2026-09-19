@@ -40,9 +40,11 @@ NEVER_PATTERNS = [
     (r"(wording|text|quote).{0,25}clause\s*\d", "clause_verbatim"),
     (r"clause\s*\d+(\.\d+)*\s*(says|text|wording|quote)", "clause_verbatim"),
     (r"(पूरा|पूर्ण).{0,20}clause", "clause_verbatim"),
+    (r"\b(?:invent|make up|fabricate|conjure)\b.{0,80}\b(?:standard\s+)?clause\b",
+     "fabricated_clause"),
     (r"(predict|tell).*(test result|lab result|will (pass|fail))", "lab_result"),
     (r"(invent|make up|fabricate|conjure).*(standard|is number|clause)", "full_text"),
-    (r"(legally|legally binding|binding legal|sue|liabilit)", "legal_binding"),
+    (r"\b(?:legally(?:\s+binding)?|binding\s+legal|sue|liabilit\w*)\b", "legal_binding"),
     (r"(how long|timeline).*(guarantee|exactly|promise)", "timeline_guarantee"),
 ]
 
@@ -60,6 +62,7 @@ REFUSAL_EN = {
     "licence_guarantee": "I can't guarantee licence approval or timelines. I can explain the process, fee and testing steps from BIS pages.",
     "full_text": "I can't reproduce full paid standard text (copyright). I can share number/title/scope from Know-Your-Standard and link to the BIS e-sale.",
     "clause_verbatim": "I can't quote clause wording beyond what the authorised BIS page shows. See the citation link for the official text.",
+    "fabricated_clause": "I can't invent a BIS clause or present made-up requirements as official. I can help find the relevant standard and cite its BIS source.",
     "lab_result": "I can't predict or invent lab results/accreditation. Confirm IS-wise scope on LIMS before sending samples.",
     "legal_binding": "I can't give binding legal advice. Confirm QCO/compulsion status with BIS or legal counsel.",
     "timeline_guarantee": "I can't promise exact timelines. I can share the standard process stages.",
@@ -70,6 +73,7 @@ REFUSAL_HI = {
     "licence_guarantee": "Licence swikriti/samay ki guarantee nahin de sakta. Prakriya aur parikshan samjha sakta hun.",
     "full_text": "Poora paid manak text nahin de sakta (copyright). Number/title/scope aur BIS e-sale link de sakta hun.",
     "clause_verbatim": "Adhikrit BIS page se bahar clause shabd nahin de sakta. Aadhikarik path ke liye citation link dekhen.",
+    "fabricated_clause": "Main BIS clause gadh nahin sakta ya banaye gaye niyamon ko aadhikarik nahin bata sakta. Main sambandhit manak aur BIS srot dhoondhne mein madad kar sakta hun.",
     "lab_result": "Lab parinam ka anumaan nahin laga sakta. LIMS par scope pusht karen.",
     "legal_binding": "Badhyakari kanuni salah nahin de sakta. BIS/vakeel se pusht karen.",
     "timeline_guarantee": "Nishchit samay-seema ka vada nahin kar sakta. Prakriya ke charan bata sakta hun.",

@@ -15,8 +15,7 @@ _DEFAULTS = {
                   "grounded_score": 10.0, "fusion_strong_score": 15.0},
     "privacy": {"thread_ttl_days": 7, "retention_days": 90,
                 "consent_valid_days": 365, "erasure_sla_hours": 24},
-    "api": {"port": 8000, "anon_per_hour": 30, "anon_burst_per_min": 5,
-            "registered_per_hour": 300,
+    "api": {"port": 8000,
             "cors_allow_origins": ["http://127.0.0.1:5173", "http://localhost:5173"]},
     "ingest": {"crawl_delay_s": 2.0, "live_crawl_enabled": False,
                "refresh_days": 7, "staleness_alert_days": 14},
@@ -35,7 +34,6 @@ _DEFAULTS = {
 
 _TYPES = {"port": int, "retention_days": int, "thread_ttl_days": int,
           "consent_valid_days": int, "erasure_sla_hours": int,
-          "anon_per_hour": int, "anon_burst_per_min": int, "registered_per_hour": int,
           "refresh_days": int, "staleness_alert_days": int, "trace_retention_days": int,
           "latency_p95_ms": int, "direct_score": float, "direct_margin": float,
           "clarify_floor": float, "weak_floor": float, "max_rounds": int, "max_questions_per_turn": int,

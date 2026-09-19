@@ -1,113 +1,168 @@
-"""Optional vector/semantic embeddings for RAG fusion.
+"""Optional local embedding and cross-encoder models for corpus retrieval.
 
-Default channel (no installs): hashed token vectors give a *lexical
-similarity* cosine — cheap and dependency-free, but honest about what it
-is: it reranks by token overlap, not meaning. For true semantic vectors,
-set ``BIS_RAG_EMBEDDING_MODEL`` to a sentence-transformers model; the
-retriever then batch-encodes (one query + one batch call per search).
+The SQLite/FTS path stays dependency-free. Configuring a model enables dense
+candidate search or reranking; both models load lazily and fail back to FTS.
 """
 from __future__ import annotations
 
-import hashlib
+import logging
 import math
-import re
+import os
+import sqlite3
 from functools import lru_cache
+from pathlib import Path
 
-_DIM = 256
-_tok_re = re.compile(r"[a-z0-9]+", re.IGNORECASE)
-
-
-def _tokens(s: str) -> list[str]:
-    return _tok_re.findall(s.lower())
-
-
-def hash_embed(text: str, dim: int = _DIM) -> list[float]:
-    vec = [0.0] * dim
-    for t in _tokens(text):
-        h = int(hashlib.md5(t.encode()).hexdigest(), 16) % dim
-        vec[h] += 1.0
-    n = math.sqrt(sum(v * v for v in vec)) or 1.0
-    return [v / n for v in vec]
-
-
-def cosine(a: list[float], b: list[float]) -> float:
-    return sum(x * y for x, y in zip(a, b))
-
-
-def _st_model(name: str):
-    try:
-        from sentence_transformers import SentenceTransformer  # type: ignore
-        return SentenceTransformer(name)
-    except Exception:
-        return None
+log = logging.getLogger("bis.rag")
 
 
 @lru_cache(maxsize=2)
-def _cached_st(name: str):
-    return _st_model(name)
+def _embedding_model(name: str):
+    try:
+        from sentence_transformers import SentenceTransformer
+        return SentenceTransformer(name)
+    except Exception as exc:
+        log.warning("dense retrieval model unavailable; using lexical search",
+                    extra={"ctx": {"model": name, "reason": type(exc).__name__}})
+        return None
 
 
 def get_model(name: str):
-    """Resolve a sentence-transformers model or None (cached, never raises)."""
-    if not name:
-        return None
-    try:
-        return _cached_st(name)
-    except Exception:
-        return None
+    """Load a sentence-transformers model once, on first use."""
+    return _embedding_model(name) if name else None
 
 
-def embed_query(query: str, model_name: str = ""):
-    if model_name:
-        m = _cached_st(model_name)
-        if m is not None:
-            try:
-                v = m.encode([query], normalize_embeddings=True)[0]
-                return ("st", [float(x) for x in v])
-            except Exception:
-                pass
-    return ("hash", hash_embed(query))
+def cosine(left, right) -> float:
+    return float(sum(float(a) * float(b) for a, b in zip(left, right)))
 
 
-def embed_texts(texts: list[str], model_name: str = ""):
-    if model_name:
-        m = _cached_st(model_name)
-        if m is not None:
-            try:
-                mat = m.encode(texts, normalize_embeddings=True)
-                return [("st", [float(x) for x in row]) for row in mat]
-            except Exception:
-                pass
-    return [("hash", hash_embed(t)) for t in texts]
-
-
-def semantic_score(query: str, doc: str, model_name: str = "",
+def semantic_score(query: str, document: str, model_name: str = "",
                    _qvec=None) -> float:
-    """Cosine similarity in [0,1]. A passed ``_qvec`` is reused so callers
-    never re-encode the query per chunk (issue #4 P1-9)."""
-    if model_name:
-        m = get_model(model_name)
-        if m is not None:
-            try:
-                qv = _qvec
-                if qv is None or (isinstance(qv, tuple)):
-                    qv = [float(x) for x in
-                          m.encode([query], normalize_embeddings=True)[0]]
-                else:
-                    qv = [float(x) for x in qv]
-                dv = [float(x) for x in
-                      m.encode([doc], normalize_embeddings=True)[0]]
-                return float(sum(a * b for a, b in zip(qv, dv)))
-            except Exception:
-                pass
-    qv = _qvec if _qvec is not None and not isinstance(_qvec, tuple) \
-        else None
-    if qv is None:
-        try:
-            qv = hash_embed(query)
-        except Exception:
-            return 0.0
+    """Cosine score for one passage; callers may reuse an encoded query."""
+    model = get_model(model_name)
+    if model is None:
+        return 0.0
     try:
-        return cosine([float(x) for x in qv], hash_embed(doc))
+        query_vector = _qvec
+        if query_vector is None:
+            query_vector = model.encode([query], normalize_embeddings=True)[0]
+        doc_vector = model.encode([document], normalize_embeddings=True)[0]
+        return cosine(query_vector, doc_vector)
     except Exception:
         return 0.0
+
+
+@lru_cache(maxsize=2)
+def _cross_encoder(name: str):
+    try:
+        from sentence_transformers import CrossEncoder
+        return CrossEncoder(name)
+    except Exception as exc:
+        log.warning("cross-encoder unavailable; keeping hybrid retrieval order",
+                    extra={"ctx": {"model": name, "reason": type(exc).__name__}})
+        return None
+
+
+def _probability(score: float) -> float:
+    if not math.isfinite(score):
+        return 0.0
+    if 0.0 <= score <= 1.0:
+        return score
+    return 1.0 / (1.0 + math.exp(-max(-60.0, min(60.0, score))))
+
+
+def rerank_scores(query: str, texts: list[str], model_name: str) -> list[float] | None:
+    """Return cross-encoder relevance scores, or None when unavailable."""
+    model = _cross_encoder(model_name) if model_name else None
+    if model is None or not texts:
+        return None
+    try:
+        scores = model.predict([(query, text) for text in texts], show_progress_bar=False)
+        return [_probability(float(score)) for score in scores]
+    except Exception as exc:
+        log.warning("cross-encoder scoring failed; keeping hybrid retrieval order",
+                    extra={"ctx": {"model": model_name, "reason": type(exc).__name__}})
+        return None
+
+
+def index_corpus_embeddings(conn: sqlite3.Connection, model_name: str,
+                            batch_size: int = 32) -> int:
+    """Build or replace the persisted dense index for one embedding model."""
+    model = get_model(model_name)
+    if model is None:
+        raise RuntimeError(
+            f"Could not load embedding model {model_name!r}; install sentence-transformers "
+            "and make the model available before indexing."
+        )
+
+    import numpy as np
+
+    rows = conn.execute(
+        "SELECT id, chunk_text FROM corpus_chunks ORDER BY id").fetchall()
+    conn.execute("DELETE FROM corpus_embeddings WHERE model_name=?", (model_name,))
+    for start in range(0, len(rows), batch_size):
+        batch = rows[start:start + batch_size]
+        vectors = model.encode(
+            [row[1] for row in batch],
+            batch_size=batch_size,
+            normalize_embeddings=True,
+            convert_to_numpy=True,
+            show_progress_bar=False,
+        )
+        conn.executemany(
+            "INSERT INTO corpus_embeddings(chunk_id, model_name, vector) VALUES (?,?,?)",
+            [(row[0], model_name, np.asarray(vector, dtype="<f4").tobytes())
+             for row, vector in zip(batch, vectors, strict=True)],
+        )
+    conn.commit()
+    return len(rows)
+
+
+@lru_cache(maxsize=2)
+def _dense_index(db_path: str, model_name: str, db_mtime_ns: int):
+    """Cache the persisted float32 matrix until the corpus database changes."""
+    import numpy as np
+
+    conn = sqlite3.connect(db_path)
+    try:
+        rows = conn.execute(
+            "SELECT chunk_id, vector FROM corpus_embeddings "
+            "WHERE model_name=? ORDER BY chunk_id", (model_name,)
+        ).fetchall()
+    except sqlite3.OperationalError:
+        return (), np.empty((0, 0), dtype=np.float32)
+    finally:
+        conn.close()
+    if not rows:
+        return (), np.empty((0, 0), dtype=np.float32)
+    ids = tuple(int(row[0]) for row in rows)
+    matrix = np.stack([np.frombuffer(row[1], dtype="<f4") for row in rows])
+    return ids, matrix
+
+
+def dense_search(db_path: str | Path, query: str, model_name: str,
+                 limit: int) -> list[tuple[int, float]]:
+    """Search the offline dense index and return (chunk id, cosine score)."""
+    if not query.strip():
+        return []
+    try:
+        import numpy as np
+
+        path = str(Path(db_path).resolve())
+        ids, matrix = _dense_index(path, model_name, os.stat(path).st_mtime_ns)
+        if not ids:
+            return []
+        model = get_model(model_name)
+        if model is None:
+            return []
+        query_vector = model.encode(
+            [query], normalize_embeddings=True, convert_to_numpy=True,
+            show_progress_bar=False,
+        )[0]
+        scores = matrix @ query_vector
+        count = min(max(1, limit), len(ids))
+        positions = np.argsort(scores)[-count:][::-1]
+        return [(ids[int(i)], float(scores[i])) for i in positions]
+    except Exception as exc:
+        log.warning("dense search failed; using lexical search",
+                    extra={"ctx": {"model": model_name, "reason": type(exc).__name__}})
+        return []

@@ -13,10 +13,8 @@ def test_defaults():
 
 def test_env_override(monkeypatch):
     monkeypatch.setenv("BIS_RETRIEVAL_DIRECT_SCORE", "12.5")
-    monkeypatch.setenv("BIS_API_ANON_PER_HOUR", "60")
     cfg = load("/nonexistent.yaml")
     assert cfg["retrieval"]["direct_score"] == 12.5
-    assert cfg["api"]["anon_per_hour"] == 60
 
 
 def test_load_rag_config_defaults_to_corpus_retrieval(monkeypatch):
