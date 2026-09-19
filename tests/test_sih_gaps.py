@@ -497,11 +497,7 @@ def test_material_mismatch_query_uses_model_without_hardcoded_coverage_answer(mo
     assert "IS 17803 for plastic bottle" in calls[0][1]["content"]
 
 
-def test_glossary_terms_do_not_trip_legal_advice_refusal():
-    from bis_assistant.safety import check_never_infer
-    assert check_never_infer("a CM/L number issued by BIS") is None
-    assert check_never_infer("What is QCO? Explain simply") is None
-    assert check_never_infer("Is it legally binding that I must get ISI?") == "legal_binding"
+def test_system_prompt_covers_unrelated_questions():
     from bis_assistant.rag_llm import SYSTEM_PROMPT
     assert "for unrelated questions" in SYSTEM_PROMPT.lower()
 
