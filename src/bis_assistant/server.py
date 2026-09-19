@@ -370,14 +370,19 @@ def chat(body: ChatIn, request: Request,
                       ms, _utcnow().isoformat()))
         conn.commit()
         resp["thread_id"] = tid
-        log.info("chat answered", extra={"ctx": {
+        log.info("chat response completed", extra={"ctx": {
             "kind": resp.get("kind"), "lang": resp.get("lang"),
             "needs_info": resp.get("needs_info"), "ms": ms,
+            "rag_mode": resp.get("rag_mode", ""),
+            "rag_used_llm": bool(resp.get("rag_used_llm", False)),
+            "source_count": len(resp.get("sources") or resp.get("rag_evidence") or []),
             "pii": [k for k, v in find_pii(q).items() if v],
             "q": redact(q)[:120]}})
         metrics_mod.incr("chat_total")
         metrics_mod.observe_latency_ms(ms)
-        if resp.get("refused"):
+        if resp.get("kind") == "model_unavailable":
+            metrics_mod.incr("model_unavailable_total")
+        elif resp.get("refused"):
             metrics_mod.incr("refused_total")
         else:
             metrics_mod.incr("answered_total")

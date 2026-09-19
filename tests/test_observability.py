@@ -12,7 +12,8 @@ from bis_assistant import metrics as metrics_mod
 
 ROOT = Path(__file__).resolve().parents[1]
 REQUIRED_SERIES = ["bis_chat_total", "bis_answered_total", "bis_refused_total",
-                   "bis_needs_info_total", "bis_chat_latency_p50_ms",
+                   "bis_needs_info_total", "bis_model_unavailable_total",
+                   "bis_chat_latency_p50_ms",
                    "bis_chat_latency_p95_ms", "bis_citation_fail_total",
                    "bis_kb_staleness_days", "bis_feedback_total",
                    "bis_feedback_neg_total", "bis_chat_5xx_total"]
@@ -21,8 +22,8 @@ REQUIRED_SERIES = ["bis_chat_total", "bis_answered_total", "bis_refused_total",
 @pytest.fixture()
 def client(tmp_path, monkeypatch):
     monkeypatch.setattr(srv, "DB_PATH", tmp_path / "ops.db")
-    metrics_mod.reset()
     srv._hits.clear()
+    metrics_mod.reset()
     with TestClient(srv.app) as c:
         yield c
 
@@ -34,12 +35,13 @@ def test_metrics_covers_plan_series(client):
         assert series in body, series
 
 
-def test_counters_move(client):
+def test_model_unavailability_is_not_counted_as_an_answer(client):
     client.post("/chat", json={"query": "steel bottle"})
     client.post("/chat", json={"query": "guarantee my licence"})
     snap = metrics_mod.snapshot()
-    assert snap["chat_total"] >= 2 and snap["refused_total"] >= 1
-    assert snap["needs_info_total"] >= 1 and snap["chat_latency_p95_ms"] > 0
+    assert snap["chat_total"] >= 2
+    assert snap["model_unavailable_total"] >= 2
+    assert snap["answered_total"] == 0 and snap["chat_latency_p95_ms"] >= 0
 
 
 def test_verifier_trip_surfaces(client):

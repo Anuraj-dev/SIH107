@@ -57,17 +57,15 @@ def test_safe_public_url_rewrites():
     assert "bis.gov.in" in safe_public_url("https://www.bis.gov.in/x")
 
 
-def test_extractive_answer_sanitizes_source_url():
-    from bis_assistant.rag_llm import extractive_answer
-    text = extractive_answer("q", [{
-        "standard_number": "IS 1", "title": "t", "chunk_text": "hello",
-        "source_url": "https://evil.example/phish",
-    }])
-    assert "evil.example" not in text
-    assert "javascript:" not in extractive_answer("q", [{
-        "standard_number": "IS 1", "title": "t", "chunk_text": "hello",
-        "source_url": "javascript:alert(1)",
-    }])
+def test_generated_answer_sources_sanitize_untrusted_urls():
+    from bis_assistant.rag_answer import build_sources, format_rag_citation
+
+    evidence = [{"standard_number": "IS 1", "title": "t",
+                 "chunk_text": "hello", "source_url": "https://evil.example/phish"}]
+    source = build_sources(evidence)[0]
+    citation = format_rag_citation(evidence[0])
+    assert source["url"].startswith("https://www.bis.gov.in")
+    assert "evil.example" not in citation
 
 
 def test_redirect_hop_rechecks_allowlist():

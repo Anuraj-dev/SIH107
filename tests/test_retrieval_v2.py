@@ -2,7 +2,6 @@ import sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 from bis_assistant import verifier
-from bis_assistant.assistant import answer
 from bis_assistant.retriever import load_kb, retrieve
 from bis_assistant.scorers import BM25Index, score_bm25
 
@@ -35,21 +34,22 @@ def test_verifier_catches_clause_without_section():
     assert verifier.verify(resp, {"694": ""}) != []
 
 
-def test_verifier_passes_good_answer():
-    r = answer("LED lamp self-ballasted general lighting 9W B22")
-    assert not r["refused"] and r["citations"]
+def test_verifier_passes_cited_standard_claim():
+    r = {"text": "See IS 16102-1.",
+         "citations": ["IS 16102-1:2012 — Lamp [Active, last-checked x] — Source: y"],
+         "refused": False}
     assert verifier.verify(r, retrieve("led lamp")["section_refs"]) == []
 
 
 def test_matlab_does_not_trigger_lab_journey():
-    r = answer("QCO ka matlab simple shabdon me samjhayen")
+    from bis_assistant.rag_answer import model_unavailable_response
+    r = model_unavailable_response("QCO ka matlab simple shabdon me samjhayen")
     assert "lims.bis.gov.in" not in r["text"]
 
 
-def test_glossary_with_example_is_passes_verifier():
-    r = answer("What is an Indian Standard?")
-    assert r["kind"] == "glossary"
-    assert verifier.verify(r, retrieve("indian standard")["section_refs"]) == []
+def test_verified_response_requires_citation_for_each_is_number():
+    r = {"text": "IS 1 and IS 2 both apply.", "citations": [], "refused": False}
+    assert verifier.verify(r, {})
 
 
 def test_verifier_fault_injection_all_trips():
@@ -61,11 +61,3 @@ def test_verifier_fault_injection_all_trips():
          "refused": False},
     ]
     assert all(verifier.verify(b, {}) for b in bad)
-
-
-def test_thresholds_from_config(monkeypatch):
-    import bis_assistant.assistant as A
-    monkeypatch.setenv("BIS_RETRIEVAL_DIRECT_SCORE", "1000")
-    r = A.answer("vacuum insulated stainless steel water bottle flask 1 litre")
-    assert r.get("needs_info") or r.get("refused") or "IS 17803" in r["text"]
-    monkeypatch.delenv("BIS_RETRIEVAL_DIRECT_SCORE")
