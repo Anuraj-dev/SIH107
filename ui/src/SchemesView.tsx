@@ -54,11 +54,7 @@ export default function SchemesView({ onSelectQuery }: SchemesViewProps) {
               <button
                 type="button"
                 className="btn-query-assistant"
-                onClick={() =>
-                  onSelectQuery(
-                    `What is the step-by-step application procedure and testing requirements for ${scheme.key} certification?`,
-                  )
-                }
+                onClick={() => onSelectQuery(scheme.sample_query)}
               >
                 <ChatIcon className="w-3.5 h-3.5" />
                 <span>Ask Process Guidance</span>

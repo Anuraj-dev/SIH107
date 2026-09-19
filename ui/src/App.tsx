@@ -86,12 +86,44 @@ export default function App() {
   const [healthy, setHealthy] = useState<boolean | null>(null);
   const [thread, setThread] = useState<ServerThread | null>(null);
   const [pendingQ, setPendingQ] = useState("");
-  const [view, setView] = useState<ViewMode>("chat");
+  const [view, setView] = useState<ViewMode>(() => {
+    if (typeof window === "undefined") return "chat";
+    const hash = window.location.hash.replace(/^#\/?/, "").toLowerCase();
+    if (hash === "directory" || hash === "catalog") return "directory";
+    if (hash === "schemes") return "schemes";
+    if (hash === "admin") return "admin";
+    if (hash === "telemetry" || hash === "audit") return "telemetry";
+    return "chat";
+  });
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [toast, setToast] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
   const taRef = useRef<HTMLTextAreaElement>(null);
   const toastTimer = useRef<number | null>(null);
+
+  const navigateToView = useCallback((nextView: ViewMode) => {
+    setView(nextView);
+    setSidebarOpen(false);
+    if (typeof window !== "undefined") {
+      const targetHash = nextView === "chat" ? "" : `#${nextView}`;
+      if (window.location.hash !== targetHash && !(nextView === "chat" && !window.location.hash)) {
+        window.location.hash = targetHash;
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    const handleHash = () => {
+      const hash = window.location.hash.replace(/^#\/?/, "").toLowerCase();
+      if (hash === "directory" || hash === "catalog") setView("directory");
+      else if (hash === "schemes") setView("schemes");
+      else if (hash === "admin") setView("admin");
+      else if (hash === "telemetry" || hash === "audit") setView("telemetry");
+      else setView("chat");
+    };
+    window.addEventListener("hashchange", handleHash);
+    return () => window.removeEventListener("hashchange", handleHash);
+  }, []);
 
   const showToast = useCallback((t: string) => {
     setToast(t);
@@ -163,10 +195,10 @@ export default function App() {
   const newTopic = useCallback(() => {
     setThread(null);
     setPendingQ("");
-    setView("chat");
+    navigateToView("chat");
     setMsgs([]);
     setSidebarOpen(false);
-  }, []);
+  }, [navigateToView]);
 
   const rate = useCallback(
     async (id: number, rating: 1 | -1, note?: string) => {
@@ -201,10 +233,22 @@ export default function App() {
       a.remove();
       URL.revokeObjectURL(url);
     };
-    if (thread) {
+
+    // Export server thread if active handle exists, or find most recent assistant message with token
+    const lastMsgWithToken = msgs
+      .slice()
+      .reverse()
+      .find((m) => m.resp?.thread_id && m.resp?.owner_token);
+    const targetThread: ServerThread | null =
+      thread ||
+      (lastMsgWithToken?.resp?.thread_id && lastMsgWithToken?.resp?.owner_token
+        ? { id: lastMsgWithToken.resp.thread_id, token: lastMsgWithToken.resp.owner_token }
+        : null);
+
+    if (targetThread) {
       try {
-        const data = await fetchThreadExport(thread);
-        save(`bis-thread-${thread.id}-${stamp}.json`, { ...data, redacted: true, source: "server" });
+        const data = await fetchThreadExport(targetThread);
+        save(`bis-thread-${targetThread.id}-${stamp}.json`, { ...data, redacted: true, source: "server" });
         showToast("Conversation exported as redacted JSON.");
         return;
       } catch {
@@ -224,17 +268,23 @@ export default function App() {
       })),
     });
     showToast(
-      thread
+      targetThread
         ? "Server export unavailable — saved local redacted transcript."
         : "Saved local redacted transcript.",
     );
   }, [msgs, thread, showToast]);
 
   const handleSelectDirectoryQuery = (queryText: string) => {
-    setView("chat");
-    setSidebarOpen(false);
+    navigateToView("chat");
     send(queryText, { fresh: true });
   };
+
+  const activeSessionId =
+    thread?.id ||
+    msgs
+      .slice()
+      .reverse()
+      .find((m) => m.resp?.thread_id)?.resp?.thread_id;
 
   return (
     <div className="dashboard-layout">
@@ -277,12 +327,9 @@ export default function App() {
           <button
             type="button"
             className={`nav-item${view === "chat" ? " active" : ""}`}
-            onClick={() => {
-              setView("chat");
-              setSidebarOpen(false);
-            }}
+            onClick={() => navigateToView("chat")}
           >
-            <ChatIcon className="nav-icon" />
+            <ChatIcon className="nav-icon" size={17} />
             <span className="nav-label">Standards Assistant</span>
             {msgs.length > 0 && <span className="nav-count">{msgs.length}</span>}
           </button>
@@ -290,24 +337,18 @@ export default function App() {
           <button
             type="button"
             className={`nav-item${view === "directory" ? " active" : ""}`}
-            onClick={() => {
-              setView("directory");
-              setSidebarOpen(false);
-            }}
+            onClick={() => navigateToView("directory")}
           >
-            <CatalogIcon className="nav-icon" />
+            <CatalogIcon className="nav-icon" size={17} />
             <span className="nav-label">Standards Catalog</span>
           </button>
 
           <button
             type="button"
             className={`nav-item${view === "schemes" ? " active" : ""}`}
-            onClick={() => {
-              setView("schemes");
-              setSidebarOpen(false);
-            }}
+            onClick={() => navigateToView("schemes")}
           >
-            <SchemesIcon className="nav-icon" />
+            <SchemesIcon className="nav-icon" size={17} />
             <span className="nav-label">Certification Schemes</span>
           </button>
 
@@ -316,24 +357,18 @@ export default function App() {
           <button
             type="button"
             className={`nav-item${view === "admin" ? " active" : ""}`}
-            onClick={() => {
-              setView("admin");
-              setSidebarOpen(false);
-            }}
+            onClick={() => navigateToView("admin")}
           >
-            <DiffIcon className="nav-icon" />
+            <DiffIcon className="nav-icon" size={17} />
             <span className="nav-label">KB Diff & Review</span>
           </button>
 
           <button
             type="button"
             className={`nav-item${view === "telemetry" ? " active" : ""}`}
-            onClick={() => {
-              setView("telemetry");
-              setSidebarOpen(false);
-            }}
+            onClick={() => navigateToView("telemetry")}
           >
-            <AuditIcon className="nav-icon" />
+            <AuditIcon className="nav-icon" size={17} />
             <span className="nav-label">Audit & Telemetry</span>
           </button>
         </nav>
@@ -357,7 +392,7 @@ export default function App() {
               </span>
             </div>
             <div className="thread-id-text">
-              {thread ? `Session: #${thread.id.slice(0, 8)}` : "Ready for new inquiry"}
+              {activeSessionId ? `Session: #${activeSessionId.slice(0, 8)}` : "Ready for new inquiry"}
             </div>
           </div>
 
@@ -367,7 +402,7 @@ export default function App() {
             onClick={newTopic}
             title="Start new conversation"
           >
-            <PlusIcon className="w-4 h-4" />
+            <PlusIcon className="w-4 h-4" size={16} />
             <span>New Consultation</span>
           </button>
         </div>
@@ -384,9 +419,11 @@ export default function App() {
               onClick={() => setSidebarOpen(true)}
               aria-label="Open navigation sidebar"
             >
-              <MenuIcon className="w-5 h-5" />
+              <MenuIcon className="w-5 h-5" size={20} />
             </button>
             <div className="view-indicator">
+              <span className="view-crumb">Portal</span>
+              <span className="view-crumb-sep">/</span>
               <span className="view-tag">
                 {view === "chat"
                   ? "Standards Assistant"
@@ -427,7 +464,7 @@ export default function App() {
               title="Export conversation as redacted JSON"
               aria-label="Export conversation as redacted JSON"
             >
-              <DownloadIcon className="w-4 h-4" />
+              <DownloadIcon className="w-4 h-4" size={16} />
               <span className="btn-text-hide-mobile">Export JSON</span>
             </button>
 
@@ -437,8 +474,8 @@ export default function App() {
               onClick={newTopic}
               title="Start fresh topic"
             >
-              <PlusIcon className="w-4 h-4" />
-              <span>New Chat</span>
+              <PlusIcon className="w-4 h-4" size={16} />
+              <span className="btn-text-hide-mobile">New Chat</span>
             </button>
           </div>
         </header>
@@ -458,7 +495,7 @@ export default function App() {
               <button
                 type="button"
                 className="btn-back-link"
-                onClick={() => setView("chat")}
+                onClick={() => navigateToView("chat")}
               >
                 ← Return to Standards Assistant
               </button>
@@ -469,7 +506,7 @@ export default function App() {
           {view === "telemetry" && (
             <TelemetryView
               healthy={healthy}
-              thread={thread}
+              thread={thread || (activeSessionId ? { id: activeSessionId, token: "" } : null)}
               onRefreshHealth={ping}
               onExport={exportThread}
               turnCount={msgs.length}
@@ -659,6 +696,7 @@ export default function App() {
                     }}
                     placeholder="Ask about product compliance, IS codes (e.g. IS 10500), CRS, or hallmarking…"
                     autoComplete="off"
+                    style={{ overflowY: input.split("\n").length > 3 ? "auto" : "hidden" }}
                   />
                   <button
                     type="submit"
@@ -666,7 +704,7 @@ export default function App() {
                     disabled={busy || !input.trim()}
                     aria-label="Send query"
                   >
-                    <ArrowUpIcon className="w-5 h-5" />
+                    <ArrowUpIcon className="w-5 h-5" size={18} />
                   </button>
                 </form>
 

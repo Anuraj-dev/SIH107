@@ -17,17 +17,23 @@ export default function StandardsDirectory({ onSelectQuery }: StandardsDirectory
   }, []);
 
   const filtered = useMemo(() => {
-    const q = search.trim().toLowerCase();
+    const rawQ = search.trim().toLowerCase();
+    const normQ = rawQ.replace(/[^a-z0-9]/g, "");
+
     return CURATED_STANDARDS.filter((s) => {
       const matchCat = category === "All" || s.category === category;
-      const matchQuery =
-        !q ||
-        s.is_number.toLowerCase().includes(q) ||
-        s.title_en.toLowerCase().includes(q) ||
-        s.title_hi.toLowerCase().includes(q) ||
-        s.scope_en.toLowerCase().includes(q) ||
-        s.scheme.toLowerCase().includes(q);
-      return matchCat && matchQuery;
+      if (!rawQ) return matchCat;
+
+      const normIs = s.is_number.toLowerCase().replace(/[^a-z0-9]/g, "");
+      const matchIs = (normQ.length > 0 && normIs.includes(normQ)) || s.is_number.toLowerCase().includes(rawQ);
+      const matchText =
+        s.title_en.toLowerCase().includes(rawQ) ||
+        s.title_hi.toLowerCase().includes(rawQ) ||
+        s.scope_en.toLowerCase().includes(rawQ) ||
+        s.scheme.toLowerCase().includes(rawQ) ||
+        (s.keywords && s.keywords.some((k) => k.toLowerCase().includes(rawQ) || rawQ.includes(k.toLowerCase())));
+
+      return matchCat && (matchIs || matchText);
     });
   }, [search, category]);
 

@@ -9,6 +9,7 @@ export interface StandardItem {
   scope_en: string;
   source_url: string;
   sample_query: string;
+  keywords: string[];
 }
 
 export interface SchemeItem {
@@ -19,6 +20,7 @@ export interface SchemeItem {
   process_en: string[];
   source_url: string;
   apply_at: string;
+  sample_query: string;
 }
 
 export const CURATED_STANDARDS: StandardItem[] = [
@@ -33,6 +35,7 @@ export const CURATED_STANDARDS: StandardItem[] = [
     scope_en: "Specification for potable water quality — limits for colour, turbidity, pH, chemical and bacteriological parameters. Applies to piped municipal & household water.",
     source_url: "https://www.bis.gov.in/know-your-standard",
     sample_query: "What are the permissible limits and testing requirements under IS 10500:2012 for drinking water?",
+    keywords: ["drinking water", "tap water", "pani", "piped water", "water quality", "potable", "municipal supply"],
   },
   {
     is_number: "IS 14543",
@@ -45,6 +48,20 @@ export const CURATED_STANDARDS: StandardItem[] = [
     scope_en: "Packaged drinking water filled into hermetically sealed containers for sale — treatment, packaging, microbial safety, and mandatory labelling.",
     source_url: "https://www.bis.gov.in/know-your-standard",
     sample_query: "Is ISI mark compulsory for packaged drinking water manufacturing plant under IS 14543?",
+    keywords: ["packaged drinking water", "bottled water", "bisleri", "20 litre jar", "packaged water plant", "water bottle"],
+  },
+  {
+    is_number: "IS 13428",
+    year: "2005",
+    title_en: "Packaged Natural Mineral Water — Specification",
+    title_hi: "पैकेज्ड प्राकृतिक मिनरल जल — विशिष्टि",
+    status: "Active",
+    scheme: "ISI Mark (Scheme-I), Compulsory certification",
+    category: "Water & Food",
+    scope_en: "Packaged natural mineral water obtained directly from natural or drilled sources — source protection, microbial safety, mineral composition, and compulsory certification.",
+    source_url: "https://www.bis.gov.in/know-your-standard",
+    sample_query: "What are the compulsory BIS certification requirements for packaged natural mineral water under IS 13428?",
+    keywords: ["mineral water", "natural mineral water", "spring water", "bottled water", "natural spring"],
   },
   {
     is_number: "IS 17803",
@@ -57,6 +74,7 @@ export const CURATED_STANDARDS: StandardItem[] = [
     scope_en: "Vacuum insulated stainless-steel flasks and bottles for food contact — material composition (SS 304/316), thermal retention, drop test, and safety markings.",
     source_url: "https://www.bis.gov.in/know-your-standard",
     sample_query: "My startup makes vacuum insulated stainless steel water bottles. Which IS applies and is QCO mandatory?",
+    keywords: ["steel bottle", "flask", "vacuum flask", "insulated bottle", "water bottle steel", "thermosteel", "stainless steel"],
   },
   {
     is_number: "IS 16102-1",
@@ -69,6 +87,7 @@ export const CURATED_STANDARDS: StandardItem[] = [
     scope_en: "Self-ballasted LED lamps for general lighting up to 250V — safety, insulation, temperature rise, and CRS portal registration requirements.",
     source_url: "https://www.bis.gov.in/know-your-standard",
     sample_query: "I manufacture LED bulbs. Which standard applies and is CRS registration required?",
+    keywords: ["led", "led bulb", "led lamp", "tube light led", "lighting", "crs"],
   },
   {
     is_number: "IS 694",
@@ -81,6 +100,7 @@ export const CURATED_STANDARDS: StandardItem[] = [
     scope_en: "PVC insulated unsheathed and sheathed electric cables/cords for domestic and industrial power distribution up to 1100 V.",
     source_url: "https://www.bis.gov.in/know-your-standard",
     sample_query: "What standard covers flexible PVC domestic building wire up to 1100V?",
+    keywords: ["pvc cable", "wire", "house wiring", "flexible cable", "cable", "694", "electrical wire"],
   },
   {
     is_number: "IS 1293",
@@ -93,6 +113,7 @@ export const CURATED_STANDARDS: StandardItem[] = [
     scope_en: "Plugs and fixed/portable socket-outlets for AC circuits up to 250 V (6A and 16A configurations) — dimensional compliance, shuttering, and fire retardancy.",
     source_url: "https://www.bis.gov.in/know-your-standard",
     sample_query: "Do domestic 6A and 16A socket outlets require mandatory BIS ISI marking?",
+    keywords: ["plug", "socket", "switch socket", "5 amp", "6 amp", "16 amp", "plug top", "power plug"],
   },
   {
     is_number: "IS 302-1",
@@ -105,6 +126,7 @@ export const CURATED_STANDARDS: StandardItem[] = [
     scope_en: "General safety against electrical, thermal, and mechanical hazards for household appliances (electric irons, geysers, mixers, refrigerators).",
     source_url: "https://www.bis.gov.in/know-your-standard",
     sample_query: "What is the overarching safety standard for household electrical appliances under BIS?",
+    keywords: ["appliance safety", "mixer", "iron", "geyser", "microwave safety", "electric iron safety", "home appliances"],
   },
   {
     is_number: "IS 9873-1",
@@ -117,6 +139,7 @@ export const CURATED_STANDARDS: StandardItem[] = [
     scope_en: "Safety requirements for toys intended for children under 14 years — mechanical hazards, sharp edges, small parts choke tests, and physical construction.",
     source_url: "https://www.bis.gov.in/know-your-standard",
     sample_query: "What are the mandatory BIS certification requirements for toy manufacturing in India?",
+    keywords: ["toy", "toys", "khilona", "soft toy", "electronic toy", "children toy"],
   },
   {
     is_number: "IS 1786",
@@ -129,6 +152,7 @@ export const CURATED_STANDARDS: StandardItem[] = [
     scope_en: "Thermo-mechanically treated (TMT) deformed rebar (Fe 415, Fe 500, Fe 550) for reinforced cement concrete structures.",
     source_url: "https://www.bis.gov.in/know-your-standard",
     sample_query: "What is the Indian Standard for Fe 500D TMT reinforcement steel bars?",
+    keywords: ["tmt", "rebar", "steel bar", "saria", "1786", "reinforcement steel", "concrete steel"],
   },
   {
     is_number: "IS 269",
@@ -141,6 +165,20 @@ export const CURATED_STANDARDS: StandardItem[] = [
     scope_en: "Manufacture, chemical and physical requirements for 33, 43, and 53 grade Ordinary Portland Cement.",
     source_url: "https://www.bis.gov.in/know-your-standard",
     sample_query: "Which IS standard governs Ordinary Portland Cement 53 grade?",
+    keywords: ["cement", "opc", "ppc", "portland cement", "53 grade", "43 grade", "33 grade"],
+  },
+  {
+    is_number: "IS 4985",
+    year: "2021",
+    title_en: "Unplasticized PVC Pipes for Potable Water Supplies — Specification",
+    title_hi: "पेय जल आपूर्ति हेतु यूपीवीसी पाइप (UPVC Pipe)",
+    status: "Active",
+    scheme: "ISI Mark (Scheme-I)",
+    category: "Civil & Materials",
+    scope_en: "Unplasticized polyvinyl chloride (UPVC) pipes for potable water transportation and agricultural irrigation — pressure classes, dimensional tolerances, and hydrostatic tests.",
+    source_url: "https://www.bis.gov.in/know-your-standard",
+    sample_query: "Which Indian Standard specifies UPVC pipes for potable water distribution systems?",
+    keywords: ["pvc pipe", "upvc pipe", "water pipe", "agriculture pipe", "4985", "plumbing"],
   },
   {
     is_number: "IS 4151",
@@ -153,6 +191,7 @@ export const CURATED_STANDARDS: StandardItem[] = [
     scope_en: "Construction, impact absorption, chin strap retention, and optical visor clarity for two-wheeler motorcycle helmets.",
     source_url: "https://www.bis.gov.in/know-your-standard",
     sample_query: "Is ISI mark compulsory for two-wheeler motorcycle helmets under IS 4151?",
+    keywords: ["helmet", "bike helmet", "two wheeler helmet", "protective helmet", "motorcycle helmet"],
   },
   {
     is_number: "IS 2347",
@@ -165,6 +204,7 @@ export const CURATED_STANDARDS: StandardItem[] = [
     scope_en: "Domestic aluminium alloy and stainless steel pressure cookers — burst safety, fusible plug, operating pressure, and heat retention.",
     source_url: "https://www.bis.gov.in/know-your-standard",
     sample_query: "What standard specifies safety devices and operating pressure for domestic pressure cookers?",
+    keywords: ["pressure cooker", "cooker", "5 litre cooker", "kitchen appliance"],
   },
   {
     is_number: "IS 2553-1",
@@ -177,6 +217,7 @@ export const CURATED_STANDARDS: StandardItem[] = [
     scope_en: "Toughened and laminated safety glass for motor vehicle windscreens, side windows, and rear windows.",
     source_url: "https://www.bis.gov.in/know-your-standard",
     sample_query: "Which Indian Standard covers automotive toughened and laminated safety glass?",
+    keywords: ["safety glass", "toughened glass", "laminated glass", "automobile glass", "windshield"],
   },
   {
     is_number: "IS 0000-DEMO",
@@ -189,6 +230,7 @@ export const CURATED_STANDARDS: StandardItem[] = [
     scope_en: "Demonstration withdrawn standard entry to verify warning alerts for deprecated or superseded standards.",
     source_url: "https://www.bis.gov.in/know-your-standard",
     sample_query: "Can I manufacture products under withdrawn standard IS 0000-DEMO?",
+    keywords: ["withdrawn example", "old standard", "demo"],
   },
 ];
 
@@ -208,6 +250,7 @@ export const CERTIFICATION_SCHEMES: SchemeItem[] = [
     ],
     source_url: "https://www.bis.gov.in/product-certification/product-certification-overview/",
     apply_at: "https://www.manakonline.in/",
+    sample_query: "What is the procedure for ISI mark certification?",
   },
   {
     key: "CRS",
@@ -223,6 +266,7 @@ export const CERTIFICATION_SCHEMES: SchemeItem[] = [
     ],
     source_url: "https://www.crsbis.in/BIS/about-crs.do",
     apply_at: "https://www.crsbis.in/BIS/registration-page.do",
+    sample_query: "How does CRS registration scheme work?",
   },
   {
     key: "HALLMARK",
@@ -238,6 +282,7 @@ export const CERTIFICATION_SCHEMES: SchemeItem[] = [
     ],
     source_url: "https://www.bis.gov.in/hallmarking-overview/",
     apply_at: "https://www.bis.gov.in/hallmarking-overview/jewellers-registration-scheme/",
+    sample_query: "What is the gold hallmarking HUID scheme?",
   },
   {
     key: "FMCS",
@@ -253,5 +298,6 @@ export const CERTIFICATION_SCHEMES: SchemeItem[] = [
     ],
     source_url: "https://www.bis.gov.in/fmcs/fmcs-overview/",
     apply_at: "https://www.manakonline.in/FMCS/eBISLogin",
+    sample_query: "How to get FMCS licence for foreign manufacturers?",
   },
 ];
