@@ -35,18 +35,15 @@ def test_import_counts(tmp_path):
         conn.close()
 
 
-def test_sqlite_backend_matches_json(tmp_path, monkeypatch):
-    from bis_assistant.assistant import answer
+def test_sqlite_backend_loads_slot_data(tmp_path, monkeypatch):
     db = tmp_path / "kb.db"
     _import_to(db)
     monkeypatch.setenv("BIS_RETRIEVAL_KB_BACKEND", "sqlite")
     monkeypatch.setenv("BIS_KB_PATH", str(db))
     slotmod.use_db(str(db))
     try:
-        r = answer("vacuum insulated stainless steel water bottle, 1 litre")
-        assert "IS 17803" in r["text"] and r["citations"]
-        r2 = answer("LED lamp self-ballasted general lighting 9W B22")
-        assert "IS 16102-1" in r2["text"]
+        assert "IS 17803" in slotmod.active_slots()
+        assert "IS 16102-1" in slotmod.active_slots()
     finally:
         slotmod._DB_SLOTS = None
 

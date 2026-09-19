@@ -1,14 +1,8 @@
-"""Standard grounding decision: the single owner of ask-vs-answer inputs.
+"""Legacy retrieval-assessment helpers for offline evaluation utilities.
 
-Previously this decision was smeared over five modules: thresholds lived in
-``config.yaml`` + ``config.py`` + ``assistant._FALLBACK``, scoring in
-``retriever``/``scorers``, slot fills in ``slots``, and the ask-vs-answer
-branching in ``assistant.answer`` (which also reached into the private
-``slots._active``). This module owns the whole decision input — thresholds,
-overlap, slot-grounded fallback, and the strong/weak/exact/direct assessment —
-behind one interface. Callers pass retrieval candidates + turn context in and
-get a plain assessment dict out. No I/O except lazy config/KB reads with the
-same fallbacks as before.
+The active chat route does not use these thresholds to select deterministic
+answers or clarification questions. It sends retrieved corpus evidence to the
+configured model instead.
 """
 from __future__ import annotations
 

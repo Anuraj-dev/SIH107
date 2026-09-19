@@ -22,3 +22,9 @@ build/
 
 # Breadth crawl checkpoints (regenerable via scripts/breadth_crawl.py)
 kb/breadth_raw/
+
+# Local credentials and runtime logs
+.env
+logs/
+
+eval/results/

@@ -44,7 +44,7 @@ def main() -> None:
     p95 = lat[int(len(lat) * 0.95)]
     print(f"n={args.n} c={args.c} p50={p50:.0f}ms p95={p95:.0f}ms codes={codes}")
     ok = codes.get(200, 0) / args.n
-    print(f"2xx rate: {ok:.1%} (429s expected past burst caps)")
+    print(f"2xx rate: {ok:.1%}")
     if p95 > 2000:
         print("WARN: p95 above 2000ms SLO")
         sys.exit(1)

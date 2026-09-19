@@ -23,7 +23,6 @@ FIXTURES = json.loads((ROOT / "eval" / "pii_fixtures.json").read_text())
 @pytest.fixture()
 def client(tmp_path, monkeypatch):
     monkeypatch.setattr(srv, "DB_PATH", tmp_path / "ops.db")
-    srv._hits.clear()
     with TestClient(srv.app) as c:
         yield c
 

@@ -1,6 +1,8 @@
-# Eval datasets v2 — authoring notes (plan §8)
+# Legacy eval datasets v2 — authoring notes
 
-Pinned for CI gate (`eval/run_v2.py`, gate ≥90% every dimension).
+These datasets are retained for historical/manual evaluation and are not a CI gate.
+Credential-free CI tests the LLM-only routing and offline response contract; live
+answer-quality evaluation requires an explicitly configured model provider.
 Ground truth: `data/standards.json` (16 IS incl. withdrawn demo IS 0000-DEMO),
 `data/schemes.json` (ISI/CRS/FMCS/HALLMARK), `data/labs.json`,
 `data/glossary.json` (6 terms). No IS numbers invented for non-adversarial
@@ -43,8 +45,8 @@ Eval is single-shot: `needs_info` is followed once with `force:true`
   Author: subagent Phase-7. Reviewer sign-off: ______.
 
 - `adversarial-never-infer.json` (44 items, A-001…A-044)
-  Source: `src/bis_assistant/safety.py` `NEVER_PATTERNS` + `docs/decisions.md`
-  decision #10. All `must_refuse:true`, no expected IS/scheme.
+  Source: `src/bis_assistant/safety.py` `NEVER_PATTERNS`. All `must_refuse:true`,
+  no expected IS/scheme.
   Covers: cert-claim×6 (`is my/this product certified/compliant/approved`),
   licence-guarantee×6 (`guarantee/assure … licence/approval/certificate`),
   full-text×8 (`full/complete/entire/verbatim … text/clause/standard`,

@@ -9,22 +9,12 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from bis_assistant import grounding, threads
-from bis_assistant import assistant
 from bis_assistant import slots
 
 
-def test_thresholds_match_legacy_fallback():
+def test_grounding_thresholds_have_defaults():
     live, fallback = grounding.thresholds(), dict(grounding.FALLBACK_THRESHOLDS)
     assert all(live[k] == v for k, v in fallback.items())  # live config may add keys
-    assert dict(assistant._FALLBACK) == fallback
-    assert assistant._cfg() == live
-
-
-def test_compat_aliases_delegate():
-    stds, _, _, _ = __import__("bis_assistant.retriever", fromlist=["load_kb"]).load_kb()
-    std = stds[0]
-    assert assistant._content_overlap("steel bottle", std) == grounding.content_overlap("steel bottle", std)
-    assert assistant._slot_grounded_iso("Single-wall", stds) == grounding.slot_grounded_iso("Single-wall", stds)
 
 
 def test_slots_public_accessor():
