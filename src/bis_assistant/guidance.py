@@ -20,14 +20,14 @@ _ADAPTIVE_INTENTS = {"certification_guidance", "process_explanation"}
 
 _STAGE_ADVICE = {
     "new_licence": ("For a new licence: keep in-house test records ready before "
-                    "applying — factory inspection usually follows the application."),
+                    "applying, factory inspection usually follows the application."),
     "renewal": ("For a renewal: check that past test records and marking fee "
                 "payments are up to date before applying."),
-    "import": ("For imports: FMCS applies to foreign manufacturers — Indian "
+    "import": ("For imports: FMCS applies to foreign manufacturers. Indian "
                "importers should confirm the foreign unit holds a valid BIS licence."),
     "manufacture": ("For manufacturing: confirm the IS number and its QCO status "
-                    "first — production to a wrong or withdrawn number wastes a cycle."),
-    "export": ("For exports: BIS certification covers the Indian market — confirm "
+                    "first. Production to a wrong or withdrawn number wastes a cycle."),
+    "export": ("For exports: BIS certification covers the Indian market. Confirm "
                "the destination country's own requirements separately."),
 }
 
@@ -74,7 +74,7 @@ def adaptive_section(query: str, intent: str, entities: dict,
                 "description changes, re-check the IS mapping first.")
         if hi:
             line = (f"Note: neeche ke charan aapke vivaran ({prod}) par adharit "
-                    "hain — vivaran badle to IS mapping dobara dekhen.")
+                    "hain. Vivaran badle to IS mapping dobara dekhen.")
         line = _safe(line, allowed_is)
         if line:
             out.append("- " + line)
