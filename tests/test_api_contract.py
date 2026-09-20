@@ -23,8 +23,17 @@ def client(tmp_path, monkeypatch):
 
 def test_health(client):
     r = client.get("/health")
-    assert r.status_code == 200 and r.json() == {"ok": True}
+    assert r.status_code == 200
+    body = r.json()
+    assert body["ok"] is True
+    assert "speech" in body
     assert "X-Request-ID" in r.headers
+
+
+def test_transcribe_unavailable_without_model(client):
+    r = client.post("/transcribe", json={"audio_b64": "AAAABBBB", "mime": "audio/webm"})
+    assert r.status_code == 503
+    assert "unavailable" in str(r.json()).lower()
 
 
 def test_chat_mints_thread(client):

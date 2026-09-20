@@ -5,7 +5,13 @@ import logging
 
 from .allowlist import KYS_PORTAL, safe_public_url
 from .i18n_privacy import find_pii
-from .rag_llm import MAX_EVIDENCE_SOURCES, generate_grounded_answer, is_configured
+from .rag_llm import (
+    MAX_EVIDENCE_SOURCES,
+    generate_grounded_answer,
+    is_configured,
+    is_runtime_identity_query,
+    is_underspecified_standard_query,
+)
 
 log = logging.getLogger("bis.api")
 
@@ -15,7 +21,7 @@ def format_rag_citation(e: dict) -> str:
     title = e.get("title") or ""
     dtype = e.get("doc_type") or "lab"
     url = safe_public_url(e.get("source_url"), KYS_PORTAL)
-    base = f"{num} — {title} [{dtype}] — Source: {url}" if title else f"{num} [{dtype}] — Source: {url}"
+    base = f"{num}: {title} [{dtype}], Source: {url}" if title else f"{num} [{dtype}], Source: {url}"
     return base
 
 
@@ -72,6 +78,8 @@ def build_rag_answer(query: str, lang: str, evidence: list[dict],
     try:
         if not is_configured(llm_cfg):
             return model_unavailable_response(query, lang)
+        if is_runtime_identity_query(query) or is_underspecified_standard_query(query):
+            evidence = []
         text = generate_grounded_answer(
             query, evidence, lang, llm_cfg, history=history)
     except Exception:
@@ -81,14 +89,21 @@ def build_rag_answer(query: str, lang: str, evidence: list[dict],
     if not text or not text.strip():
         return model_unavailable_response(query, lang)
 
+    shown = evidence[:MAX_EVIDENCE_SOURCES]
+    low = text.lower()
+    if ("does not contain enough information" in low
+            or is_underspecified_standard_query(query)
+            or is_runtime_identity_query(query)):
+        shown = []
+
     return {
         "text": text.strip(),
         "refused": False,
         "kind": "llm_answer",
         "lang": lang,
-        "citations": [format_rag_citation(e) for e in evidence[:MAX_EVIDENCE_SOURCES]],
-        "sources": build_sources(evidence[:MAX_EVIDENCE_SOURCES]),
-        "rag_evidence": build_sources(evidence[:MAX_EVIDENCE_SOURCES]),
+        "citations": [format_rag_citation(e) for e in shown],
+        "sources": build_sources(shown),
+        "rag_evidence": build_sources(shown),
         "rag_mode": "llm",
         "rag_used_llm": True,
         "model_available": True,

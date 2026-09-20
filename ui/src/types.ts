@@ -137,7 +137,12 @@ export interface Msg {
   error?: string;
   ms?: number;
   system?: boolean;
-  /** per-answer feedback state (fixture-driven until POST /feedback ships) */
+  /** per-answer feedback state */
   feedback?: 1 | -1 | null;
-  feedbackNote?: string;
+  /** exact query that produced this message — powers per-message retry */
+  retryQ?: string;
+  /** true while a retry is re-running inside this message slot */
+  retrying?: boolean;
+  /** typewriter only for text that just arrived from the model */
+  streamIn?: boolean;
 }

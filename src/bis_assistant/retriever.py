@@ -244,5 +244,5 @@ def retrieve(query: str, top_k: int = 3):
 
 def format_citation(std: dict) -> str:
     assert_allowlisted(std["source_url"])
-    return (f'{std["is_number"]}:{std["year"]} — {std["title_en"]} '
-            f'[{std["status"]}, last-checked {std["last_checked"]}] — Source: {std["source_url"]}')
+    return (f'{std["is_number"]}:{std["year"]}, {std["title_en"]} '
+            f'[{std["status"]}, last-checked {std["last_checked"]}], Source: {std["source_url"]}')
