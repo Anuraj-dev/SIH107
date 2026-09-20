@@ -23,7 +23,10 @@ def client(tmp_path, monkeypatch):
 
 def test_health(client):
     r = client.get("/health")
-    assert r.status_code == 200 and r.json() == {"ok": True}
+    assert r.status_code == 200
+    body = r.json()
+    assert body["ok"] is True
+    assert "speech" in body
     assert "X-Request-ID" in r.headers
 
 

@@ -47,12 +47,12 @@ async function req(path: string, init?: RequestInit, timeoutMs = 15000) {
   }
 }
 
-export async function checkHealth(): Promise<boolean> {
+export async function checkHealth(): Promise<{ ok: boolean; speech: boolean }> {
   try {
     const j = await req("/api/health");
-    return j?.ok === true;
+    return { ok: j?.ok === true, speech: j?.speech === true };
   } catch {
-    return false;
+    return { ok: false, speech: false };
   }
 }
 

@@ -9,6 +9,7 @@ import hashlib
 import hmac
 import json
 import logging
+import os
 import re
 import secrets
 import sqlite3
@@ -196,7 +197,10 @@ def _check_owner(row: sqlite3.Row, token: Optional[str]) -> None:
 
 @app.get("/health")
 def health():
-    return {"ok": True}
+    from .rag_llm import is_configured, load_llm_config
+    cfg = load_llm_config()
+    speech = is_configured(cfg) or bool(os.environ.get("GROQ_API_KEY", "").strip())
+    return {"ok": True, "speech": speech}
 
 
 @app.get("/metrics")
