@@ -1,0 +1,112 @@
+/* ==========================================================================
+   Manak Mitra — Design Tokens (canonical home for all theme values)
+   primitives + semantic roles. styles.css consumes; never hard-codes.
+   ========================================================================== */
+
+:root {
+  /* Surface & Canvas */
+  --bg-canvas: #ffffff;
+  --bg-aura: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(209, 250, 229, 0.45) 0%, rgba(255, 255, 255, 0) 70%);
+  --bg-sidebar: #fcfcfd;
+  --surface-card: #ffffff;
+  --surface-hover: #f3f4f6;
+  --surface-active: #e5e7eb;
+  --user-bubble-bg: #f4f4f5;
+
+  /* Borders */
+  --border-subtle: #f1f2f4;
+  --border-default: #e5e7eb;
+  --border-hover: #d1d5db;
+  --border-focus: #9ca3af;
+
+  /* Typography */
+  --text-main: #111827;
+  --text-secondary: #374151;
+  --text-muted: #6b7280;
+  --text-dim: #9ca3af;
+
+  /* Accent — emerald (government trust) */
+  --accent-green: #059669;
+  --accent-green-light: #ecfdf5;
+  --accent-green-dark: #065f46;
+  --accent-green-border: #a7f3d0;
+
+  /* Signal — danger */
+  --danger: #dc2626;
+  --danger-text: #b91c1c;
+  --danger-bg: #fef2f2;
+  --danger-border: #fecaca;
+
+  /* Signal — warning */
+  --warn-text: #92400e;
+  --warn-bg: #fffbeb;
+  --warn-border: #fde68a;
+  --warn-accent: #d97706;
+
+  /* Keyboard focus — always the accent, never off-palette blue */
+  --focus-ring: var(--accent-green);
+
+  /* Radius scale */
+  --r-xs: 4px;
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --r-xl: 20px;
+  --r-pill: 9999px;
+
+  /* Motion — one easing, four durations */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-instant: 0.1s;
+  --dur-fast: 0.15s;
+  --dur-med: 0.25s;
+  --dur-slow: 0.5s;
+
+  /* Elevation */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-sm: 0 6px 20px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 12px 32px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.06);
+
+  /* Layout & type */
+  --sidebar-width: 250px;
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans Devanagari", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.dark-theme {
+  --bg-canvas: #09090b;
+  --bg-aura: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(16, 185, 129, 0.12) 0%, rgba(9, 9, 11, 0) 70%);
+  --bg-sidebar: #111114;
+  --surface-card: #18181b;
+  --surface-hover: #27272a;
+  --surface-active: #3f3f46;
+  --user-bubble-bg: #27272a;
+
+  --border-subtle: #1f1f23;
+  --border-default: #27272a;
+  --border-hover: #3f3f46;
+  --border-focus: #52525b;
+
+  --text-main: #f4f4f5;
+  --text-secondary: #d4d4d8;
+  --text-muted: #a1a1aa;
+  --text-dim: #71717a;
+
+  --accent-green: #10b981;
+  --accent-green-light: rgba(16, 185, 129, 0.12);
+  --accent-green-dark: #6ee7b7;
+  --accent-green-border: rgba(16, 185, 129, 0.25);
+
+  --danger: #f87171;
+  --danger-text: #fca5a5;
+  --danger-bg: rgba(239, 68, 68, 0.12);
+  --danger-border: rgba(239, 68, 68, 0.35);
+
+  --warn-text: #fbbf24;
+  --warn-bg: rgba(217, 119, 6, 0.12);
+  --warn-border: rgba(217, 119, 6, 0.35);
+  --warn-accent: #fbbf24;
+
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 6px 20px rgba(0, 0, 0, 0.45);
+  --shadow-md: 0 12px 32px rgba(0, 0, 0, 0.5), 0 2px 6px rgba(0, 0, 0, 0.4);
+}

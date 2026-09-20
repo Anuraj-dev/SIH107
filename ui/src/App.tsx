@@ -1,70 +1,173 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { bisChat, checkHealth, fetchThreadExport, sendFeedback } from "./api";
-import { redactPii } from "./redact.mjs";
-import AdminPanel from "./admin";
-import StandardsDirectory from "./StandardsDirectory";
-import SchemesView from "./SchemesView";
-import TelemetryView from "./TelemetryView";
-import AcceptancePanel from "./acceptance";
+import { bisChat, checkHealth, deleteThread, fetchTitle, sendFeedback, transcribeAudio } from "./api";
 import {
   AssumptionsBanner,
-  EvidenceSources,
+  CopyButton,
   FeedbackButtons,
   KnownChips,
-  MetaBadges,
-  NoteInput,
   QuestionPills,
   RawJson,
   RichText,
-  Sources,
-  TypingDots,
+  SkeletonAnswer,
+  SourceStrip,
+  TypewriterText,
+  cleanAnswerText,
 } from "./components";
 import {
-  ManakEmblemIcon,
-  SidebarToggleIcon,
-  ArrowUpRightIcon,
-  SunIcon,
-  MicIcon,
-  PlusIcon,
+  ArrowDownIcon,
   ArrowUpIcon,
-  CatalogIcon,
-  SchemesIcon,
-  AuditIcon,
   CheckIcon,
-  DiffIcon,
-  DownloadIcon,
+  ChevronDownIcon,
+  DevIcon,
+  GlobeIcon,
+  ManakEmblemIcon,
+  MicIcon,
+  MoonIcon,
+  NewChatIcon,
+  RetryIcon,
+  SidebarToggleIcon,
+  SunIcon,
   XIcon,
 } from "./icons";
 import type { Lang, Msg } from "./types";
 import type { ServerThread } from "./api";
+import "./tokens.css";
 import "./styles.css";
 
-type ViewMode = "chat" | "directory" | "schemes" | "admin" | "telemetry" | "tests";
+const APP_NAME = "Manak Mitra";
+const APP_TAGLINE = "BIS Standards Assistant";
+const DEV_FLAG_KEY = "manak-mitra-dev-mode";
+const HISTORY_KEY = "manak-mitra-history";
+const HISTORY_LIMIT = 20;
 
-const HERO_SUGGESTIONS = [
-  {
-    label: "What's the standard for packaged drinking water?",
-    q: "What is the standard for packaged drinking water (IS 10500 / IS 14543)?",
-  },
-  {
-    label: "How to apply for ISI Mark certification",
-    q: "What is the step-by-step procedure to obtain an ISI mark licence under Scheme-I?",
-  },
-  {
-    label: "Which electronics require mandatory CRS?",
-    q: "Which electronic and IT goods require mandatory CRS registration under Scheme-II?",
-  },
-  {
-    label: "Steel bar & TMT rebar testing guidelines",
-    q: "What standard covers high strength deformed steel bars and wires (IS 1786)?",
-  },
-];
-
-const LANG_PILLS: { id: Lang; label: string }[] = [
+const LANG_OPTIONS: { id: Lang; label: string }[] = [
+  { id: "auto", label: "Auto" },
   { id: "en", label: "English" },
   { id: "hi", label: "हिंदी" },
-  { id: "auto", label: "Auto (Any Language)" },
 ];
+
+interface HistoryEntry {
+  q: string;
+  /** short generated label; "" when nothing title-worthy yet */
+  title: string;
+  at: number;
+  /** topic generation that created the entry; retitles only apply within it */
+  topic: number;
+}
+
+/** Map a send failure to UI text. Expired threads are resumable on a fresh thread. */
+function friendlyError(msg: string): { text: string; expired: boolean } {
+  const expired = msg.startsWith("Thread expired");
+  const text = /HTTP 429/.test(msg)
+    ? "Rate limited. Please wait a minute and retry."
+    : expired
+      ? "This conversation has expired. Please start a new topic to continue."
+      : "The chatbot is offline or the server could not be reached. Please check your connection and try again.";
+  return { text, expired };
+}
+
+/** Turn a raw first query into a short sidebar title ("" = not title-worthy). */
+function makeTitle(q: string): string {
+  let s = (q ?? "").replace(/\s+/g, " ").trim().replace(/[!?.…,]+$/g, "").trim();
+  if (!s) return "";
+  const greeted = /^(hi|hello|hey|namaste)\b/i.test(s);
+  s = s.replace(/^(hi|hello|hey|namaste)\b[,. ]+/i, "").trim();
+  // "hello there, what is …" — drop the discourse filler, but never touch a
+  // real existential ("There is a problem with…").
+  if (greeted) s = s.replace(/^(there|here)\b[,. ]+/i, "").trim();
+  if (!s) return "";
+  if (/^(hi|hii+|hello|hey|namaste|namaskar|good\s?(morning|afternoon|evening))[!?.\s]*$/i.test(s)) return "";
+  if (/^(how are you|how r u|what'?s up|who are you|how is it going|are you (there|online))[!?.\s]*$/i.test(s)) return "";
+  if (/^[^aeiou\s]{9,}$/i.test(s)) return "";
+  s = s
+    .replace(/^(please\s+)?(can you|could you|would you|will you|kindly|please)\s+/i, "")
+    .trim();
+  // "explain in more detail, N words" is a follow-up style request, not a topic.
+  if (/more\s+details?/i.test(s)) {
+    const wc = s.match(/(\d+)\s*words?/i);
+    return wc ? `More detail, ${wc[1]} words` : "More detail";
+  }
+  s = s
+    .replace(/^(tell me|explain to me|explain|describe|answer|give me)(\s+in(\s+more)?\s+detail)?\s+/i, "")
+    .trim();
+  // Strip question scaffolding, but never the "IS" in "IS 10500".
+  if (!/^is\s*\d/i.test(s)) {
+    s = s.replace(/^(what(?:'s| is| are)?|which|how|why|when|where|is|are|do|does)\b\s+/i, "").trim();
+  }
+  if (!s || /^(that|this|it|there|here|yes|no|okay|ok|thanks|thank you)$/i.test(s)) return "";
+  s = s.charAt(0).toUpperCase() + s.slice(1);
+  if (s.length <= 44) return s;
+  const cut = s.slice(0, 44);
+  const sp = cut.lastIndexOf(" ");
+  return (sp > 20 ? cut.slice(0, sp) : cut).trimEnd() + "…";
+}
+
+function loadHistory(): HistoryEntry[] {
+  try {
+    const raw = window.localStorage.getItem(HISTORY_KEY);
+    if (!raw) return [];
+    const parsed: unknown = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+    return parsed
+      .filter(
+        (e): e is HistoryEntry =>
+          typeof e === "object" &&
+          e !== null &&
+          typeof (e as HistoryEntry).q === "string" &&
+          typeof (e as HistoryEntry).at === "number",
+      )
+      .map((e) => {
+        // Entries written before topic tags existed predate LLM titles too,
+        // so re-run the current heuristic over them exactly once per load.
+        const legacy = typeof e.topic !== "number" || e.topic === -1;
+        return {
+          q: e.q,
+          title: legacy || typeof e.title !== "string" ? makeTitle(e.q) : e.title,
+          at: e.at,
+          topic: legacy ? -1 : (e.topic as number),
+        };
+      })
+      .slice(0, HISTORY_LIMIT);
+  } catch {
+    return [];
+  }
+}
+
+function loadDevFlag(): boolean {
+  try {
+    return window.localStorage.getItem(DEV_FLAG_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+/** Minimal Web Speech API typing (no `any`). */
+interface SpeechRecognizer {
+  lang: string;
+  interimResults: boolean;
+  onresult: ((ev: SpeechResultEvent) => void) | null;
+  onerror: ((ev: SpeechErrorEvent) => void) | null;
+  onend: (() => void) | null;
+  start: () => void;
+  stop: () => void;
+}
+
+interface SpeechResultEvent {
+  results: ArrayLike<ArrayLike<{ transcript: string }>>;
+}
+
+interface SpeechErrorEvent {
+  error: string;
+}
+
+type SpeechRecognizerCtor = new () => SpeechRecognizer;
+
+declare global {
+  interface Window {
+    SpeechRecognition?: SpeechRecognizerCtor;
+    webkitSpeechRecognition?: SpeechRecognizerCtor;
+  }
+}
 
 let nextId = 1;
 
@@ -76,71 +179,78 @@ export default function App() {
   const [healthy, setHealthy] = useState<boolean | null>(null);
   const [thread, setThread] = useState<ServerThread | null>(null);
   const [pendingQ, setPendingQ] = useState("");
-  const [view, setView] = useState<ViewMode>(() => {
-    if (typeof window === "undefined") return "chat";
-    const hash = window.location.hash.replace(/^#\/?/, "").toLowerCase();
-    if (hash === "directory" || hash === "catalog") return "directory";
-    if (hash === "schemes") return "schemes";
-    if (hash === "admin") return "admin";
-    if (hash === "telemetry" || hash === "audit") return "telemetry";
-    if (hash === "tests") return "tests";
-    return "chat";
-  });
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const [toast, setToast] = useState("");
+  const [history, setHistory] = useState<HistoryEntry[]>(() =>
+    typeof window === "undefined" ? [] : loadHistory(),
+  );
+  const [historyOpen, setHistoryOpen] = useState(true);
+  const [devMode, setDevMode] = useState<boolean>(() =>
+    typeof window === "undefined" ? false : loadDevFlag(),
+  );
+  // Epoch-based so reloaded history entry tags (small ints) can never
+  // collide with this session's topic generations.
+  const [topicKey, setTopicKey] = useState(() => Date.now());
+  const [listening, setListening] = useState(false);
+  const [langOpen, setLangOpen] = useState(false);
+  const [showJump, setShowJump] = useState(false);
+  const langMenuRef = useRef<HTMLDivElement>(null);
+  const mainRef = useRef<HTMLElement>(null);
+  const heroBoxRef = useRef<HTMLTextAreaElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const toastTimer = useRef<number | null>(null);
+  const recognizerRef = useRef<SpeechRecognizer | null>(null);
+  const mediaRecRef = useRef<MediaRecorder | null>(null);
+  const mediaStreamRef = useRef<MediaStream | null>(null);
 
-  const navigateToView = useCallback((nextView: ViewMode) => {
-    setView(nextView);
-    setSidebarOpen(false);
-    if (typeof window !== "undefined") {
-      const targetHash = nextView === "chat" ? "" : `#${nextView}`;
-      if (window.location.hash !== targetHash && !(nextView === "chat" && !window.location.hash)) {
-        window.location.hash = targetHash;
-      }
-    }
+  const speechSupported =
+    typeof window !== "undefined" &&
+    typeof MediaRecorder === "function" &&
+    !!navigator.mediaDevices?.getUserMedia;
+
+  useEffect(() => {
+    document.title = `${APP_NAME} — ${APP_TAGLINE} | Bureau of Indian Standards`;
   }, []);
 
   useEffect(() => {
-    const handleHash = () => {
-      const hash = window.location.hash.replace(/^#\/?/, "").toLowerCase();
-      if (hash === "directory" || hash === "catalog") setView("directory");
-      else if (hash === "schemes") setView("schemes");
-      else if (hash === "admin") setView("admin");
-      else if (hash === "telemetry" || hash === "audit") setView("telemetry");
-      else if (hash === "tests") setView("tests");
-      else setView("chat");
-    };
-    window.addEventListener("hashchange", handleHash);
-    return () => window.removeEventListener("hashchange", handleHash);
-  }, []);
-
-  useEffect(() => {
-    const titles: Record<ViewMode, string> = {
-      chat: "मानक AI — BIS Standards Assistant",
-      directory: "Standards Directory — BIS Assistant",
-      schemes: "Certification Schemes — BIS Assistant",
-      admin: "KB Diff Review — BIS Assistant",
-      telemetry: "Audit & Telemetry — BIS Assistant",
-      tests: "Acceptance Test Set — BIS Assistant",
-    };
-    document.title = titles[view];
-  }, [view]);
+    document.documentElement.classList.toggle("dark-theme", darkMode);
+    return () => document.documentElement.classList.remove("dark-theme");
+  }, [darkMode]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setSidebarOpen(false);
+      if (e.key === "Escape") {
+        setSidebarOpen(false);
+        setLangOpen(false);
+        if (listening) {
+          recognizerRef.current?.stop();
+          mediaRecRef.current?.stop();
+        }
+      }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, []);
+  }, [listening]);
+
+  useEffect(() => {
+    if (!langOpen) return;
+    const onDown = (e: MouseEvent) => {
+      if (langMenuRef.current && !langMenuRef.current.contains(e.target as Node)) {
+        setLangOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", onDown);
+    return () => document.removeEventListener("mousedown", onDown);
+  }, [langOpen]);
 
   useEffect(() => () => {
     if (toastTimer.current) window.clearTimeout(toastTimer.current);
+    recognizerRef.current?.stop();
+    mediaRecRef.current?.stop();
+    mediaStreamRef.current?.getTracks().forEach((t) => t.stop());
   }, []);
 
   const showToast = useCallback((t: string) => {
@@ -149,8 +259,73 @@ export default function App() {
     toastTimer.current = window.setTimeout(() => setToast(""), 4000);
   }, []);
 
+  const toggleDevMode = useCallback(() => {
+    setDevMode((v) => {
+      const next = !v;
+      try {
+        window.localStorage.setItem(DEV_FLAG_KEY, next ? "1" : "0");
+      } catch {
+        /* private mode — session only */
+      }
+      return next;
+    });
+  }, []);
+
+  const persistHistory = useCallback((next: HistoryEntry[]) => {
+    const capped = next.slice(0, HISTORY_LIMIT);
+    try {
+      window.localStorage.setItem(HISTORY_KEY, JSON.stringify(capped));
+    } catch {
+      /* private mode — session only */
+    }
+    return capped;
+  }, []);
+
+  const rememberTopic = useCallback((q: string, fresh?: boolean, topic?: number) => {
+    const title = makeTitle(q);
+    setHistory((h) => {
+      let next: HistoryEntry[];
+      const idx = h.findIndex((e) => e.q === q);
+      if (idx >= 0) {
+        // Same question asked again: bump to top, fill in a title if it lacked one.
+        const cur = h[idx];
+        const upd = { ...cur, at: Date.now(), title: cur.title || title, topic: topic ?? cur.topic };
+        next = [upd, ...h.slice(0, idx), ...h.slice(idx + 1)];
+      } else if (!fresh && h.length > 0 && !h[0].title && title && h[0].topic === topic) {
+        // Topic opened with a greeting, real question arrived: retitle the head entry.
+        next = [{ q, title, at: Date.now(), topic: topic ?? -1 }, ...h.slice(1)];
+      } else {
+        next = [{ q, title, at: Date.now(), topic: topic ?? -1 }];
+        next.push(...h);
+      }
+      return persistHistory(next);
+    });
+  }, [persistHistory]);
+
+  useEffect(() => {
+    const el = mainRef.current;
+    if (!el) return;
+    const onScroll = () => {
+      setShowJump(el.scrollHeight - el.scrollTop - el.clientHeight > 300);
+    };
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => el.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    if (input === "" && heroBoxRef.current) heroBoxRef.current.style.height = "";
+  }, [input]);
+
   const ping = useCallback(async () => {
     setHealthy(await checkHealth());
+  }, []);
+
+  const jumpToBottom = useCallback(() => {
+    const reduceMotion =
+      typeof window !== "undefined" &&
+      typeof window.matchMedia === "function" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    bottomRef.current?.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" });
   }, []);
 
   useEffect(() => {
@@ -160,74 +335,148 @@ export default function App() {
   }, [ping]);
 
   useEffect(() => {
-    if (view === "chat" && msgs.length > 0) {
+    if (msgs.length > 0) {
       const reduceMotion =
         typeof window !== "undefined" &&
         typeof window.matchMedia === "function" &&
         window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       bottomRef.current?.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" });
     }
-  }, [msgs, busy, view]);
+  }, [msgs, busy]);
 
   const send = useCallback(
     async (query: string, opts?: { force?: boolean; fresh?: boolean }) => {
       const q = query.trim();
       if (!q || busy) return;
       setBusy(true);
-      const useThread = opts?.fresh ? bisChat.newTopic() : thread;
-      setPendingQ(q);
       const userMsg: Msg = { id: nextId++, role: "user", text: q };
       setMsgs((m) => [...m, userMsg]);
       setInput("");
+      setPendingQ(q);
+      // One attempt, optionally re-run once on a fresh server thread when the
+      // old one expired. The user bubble is appended once, above.
+      const attempt = async (fresh: boolean): Promise<void> => {
+        const useThread = fresh ? bisChat.newTopic() : thread;
+        try {
+          const { resp, thread: next } = await bisChat.send(q, {
+            lang,
+            thread: useThread,
+            force: opts?.force ?? false,
+            fresh,
+          });
+          setMsgs((m) => [
+            ...m,
+            { id: nextId++, role: "assistant", text: resp.text, resp, feedback: null, retryQ: q },
+          ]);
+          setThread(bisChat.shouldKeepThread(resp) ? next : null);
+          rememberTopic(q, fresh, topicKey);
+        } catch (e) {
+          const msg = e instanceof Error ? e.message : "request failed";
+          const { text: friendly, expired } = friendlyError(msg);
+          if (expired && !fresh) {
+            setThread(null);
+            return attempt(true);
+          }
+          if (expired) setThread(null);
+          setMsgs((m) => [...m, { id: nextId++, role: "assistant", text: "", error: friendly, retryQ: q }]);
+          setHealthy(false);
+        }
+      };
       try {
-        const { resp, ms, thread: next } = await bisChat.send(q, {
-          lang,
-          thread: useThread,
-          force: opts?.force ?? false,
-          fresh: opts?.fresh ?? false,
-        });
-        setMsgs((m) => [
-          ...m,
-          { id: nextId++, role: "assistant", text: resp.text, resp, ms, feedback: null },
-        ]);
-        setThread(bisChat.shouldKeepThread(resp) ? next : null);
-      } catch (e) {
-        const msg = e instanceof Error ? e.message : "request failed";
-        const expired = msg.startsWith("Thread expired");
-        if (expired) setThread(null);
-        const friendly = /HTTP 429/.test(msg)
-          ? "Rate limited — please wait a minute and retry."
-          : expired
-          ? "This conversation has expired. Please start a new topic to continue."
-          : "The chatbot is offline or the server could not be reached. Please check your connection and try again.";
-        setMsgs((m) => [...m, { id: nextId++, role: "assistant", text: "", error: friendly }]);
-        setHealthy(false);
+        await attempt(opts?.fresh ?? false);
       } finally {
         setBusy(false);
       }
     },
-    [busy, lang, thread],
+    [busy, lang, thread, topicKey, rememberTopic],
+  );
+
+  // Re-run a failed turn inside its own message slot: no duplicate question,
+  // shimmer while running, new answer (or error) swaps in place.
+  const retryMessage = useCallback(
+    async (id: number) => {
+      const target = msgs.find((m) => m.id === id);
+      const q = target?.retryQ?.trim();
+      if (!q || busy || target?.role !== "assistant") return;
+      setBusy(true);
+      setMsgs((m) => m.map((x) => (x.id === id ? { ...x, retrying: true } : x)));
+      const t0 = Date.now();
+      let outcome: Partial<Msg> | null = null;
+      try {
+        const { resp, thread: next } = await bisChat.send(q, { lang, thread });
+        setThread(bisChat.shouldKeepThread(resp) ? next : null);
+        outcome = { text: resp.text, resp, error: undefined, feedback: null, retryQ: q };
+        rememberTopic(q, false, topicKey);
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : "request failed";
+        const { text: friendly, expired } = friendlyError(msg);
+        if (expired) setThread(null);
+        outcome = { text: "", error: friendly, retryQ: q };
+        setHealthy(false);
+      }
+      // Let the shimmer paint at least briefly so the retry reads as intentional.
+      const wait = 600 - (Date.now() - t0);
+      if (wait > 0) await new Promise((r) => setTimeout(r, wait));
+      const final = outcome;
+      setMsgs((m) => m.map((x) => (x.id === id ? { ...x, ...final, retrying: false } : x)));
+      setBusy(false);
+    },
+    [msgs, busy, lang, thread, topicKey, rememberTopic],
   );
 
   const newTopic = useCallback(() => {
+    // A new chat is a clean break: drop the server thread (erased, not just
+    // hidden), clear messages, draft, and pending state.
+    if (thread) void deleteThread(thread);
     setThread(null);
     setPendingQ("");
-    navigateToView("chat");
     setMsgs([]);
+    setInput("");
+    setTopicKey((k) => k + 1);
     setSidebarOpen(false);
     inputRef.current?.focus();
-  }, [navigateToView]);
+  }, [thread]);
 
-  const askTestCase = useCallback((item: { query: string }) => {
-    setMsgs([]);
-    setThread(null);
-    setPendingQ("");
-    setView("chat");
-    void send(item.query, { fresh: true });
-  }, [send]);
+  const openHistoryTopic = useCallback(
+    (q: string) => {
+      if (thread) void deleteThread(thread);
+      setThread(null);
+      setPendingQ("");
+      setMsgs([]);
+      setInput("");
+      setTopicKey((k) => k + 1);
+      setSidebarOpen(false);
+      void send(q, { fresh: true });
+    },
+    [send, thread],
+  );
+
+  // Upgrade the instant heuristic title with an LLM one once the first
+  // grounded reply lands. Fires once per question; any failure keeps the heuristic.
+  const titleReqRef = useRef<Set<string>>(new Set());
+  useEffect(() => {
+    const last = [...msgs]
+      .reverse()
+      .find((m) => m.role === "assistant" && m.resp && !m.error);
+    if (!last?.resp || last.resp.kind === "model_unavailable" || !last.text) return;
+    const uq = [...msgs.slice(0, msgs.lastIndexOf(last))]
+      .reverse()
+      .find((m) => m.role === "user");
+    if (!uq || titleReqRef.current.has(uq.text)) return;
+    const entry = history.find((e) => e.q === uq.text);
+    if (!entry || (entry.title && entry.title !== makeTitle(entry.q))) return;
+    titleReqRef.current.add(uq.text);
+    const answerLang: Lang = last.resp.lang === "hi" || lang === "hi" ? "hi" : "en";
+    void fetchTitle(uq.text, last.text, answerLang).then((t) => {
+      if (!t) return;
+      setHistory((h) =>
+        persistHistory(h.map((e) => (e.q === uq.text ? { ...e, title: t } : e))),
+      );
+    });
+  }, [msgs, history, lang, persistHistory]);
 
   const rate = useCallback(
-    async (id: number, rating: 1 | -1, note?: string) => {
+    async (id: number, rating: 1 | -1) => {
       const target = msgs.find((m) => m.id === id);
       if (!target?.resp?.thread_id && !thread) {
         setMsgs((m) => m.map((x) => (x.id === id ? { ...x, feedback: rating } : x)));
@@ -237,81 +486,169 @@ export default function App() {
       const ownerToken =
         thread?.id === tid ? thread.token : target?.resp?.owner_token || thread?.token;
       setMsgs((m) => m.map((x) => (x.id === id ? { ...x, feedback: rating } : x)));
-      const res = await sendFeedback(tid, rating, ownerToken, note);
+      const res = await sendFeedback(tid, rating, ownerToken);
       if (!res.ok) showToast(`Feedback failed: ${res.error ?? "request failed"}.`);
       else if (res.fixture) showToast("Feedback recorded locally.");
-      else showToast("Thank you — feedback submitted for quality evaluation.");
+      else showToast("Thank you. Feedback submitted for quality evaluation.");
     },
     [msgs, thread, showToast],
   );
 
-  const exportThread = useCallback(async () => {
-    const stamp = new Date().toISOString().replace(/[:.]/g, "-");
-    const save = (name: string, payload: unknown) => {
-      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = name;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-    };
-    const lastMsgWithToken = msgs
-      .slice()
-      .reverse()
-      .find((m) => m.resp?.thread_id && m.resp?.owner_token);
-    const targetThread: ServerThread | null =
-      thread ||
-      (lastMsgWithToken?.resp?.thread_id && lastMsgWithToken?.resp?.owner_token
-        ? { id: lastMsgWithToken.resp.thread_id, token: lastMsgWithToken.resp.owner_token }
-        : null);
-
-    if (targetThread) {
-      try {
-        const data = await fetchThreadExport(targetThread);
-        save(`bis-thread-${targetThread.id}-${stamp}.json`, { ...data, redacted: true, source: "server" });
-        showToast("Conversation exported as redacted JSON.");
-        return;
-      } catch (e) {
-        console.warn("Server export failed, saving local transcript.", e);
-        showToast("Server export failed — saved local redacted transcript.");
-      }
+  const toggleListening = useCallback(() => {
+    if (listening) {
+      mediaRecRef.current?.stop();
+      return;
     }
-    save(`bis-thread-local-${stamp}.json`, {
-      redacted: true,
-      source: "local-transcript",
-      exported_at: new Date().toISOString(),
-      messages: msgs.map((m) => ({
-        role: m.role,
-        text: redactPii(m.text),
-        kind: m.resp?.kind ?? (m.error ? "error" : "user"),
-        lang: m.resp?.lang ?? null,
-        citations: m.resp?.citations ?? [],
-      })),
-    });
-    showToast("Saved local redacted transcript.");
-  }, [msgs, thread, showToast]);
+    if (!navigator.mediaDevices?.getUserMedia || typeof MediaRecorder !== "function") {
+      showToast("Voice input is not supported in this browser.");
+      return;
+    }
+    void (async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaStreamRef.current = stream;
+        const mime = MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
+          ? "audio/webm;codecs=opus"
+          : MediaRecorder.isTypeSupported("audio/webm")
+            ? "audio/webm"
+            : "";
+        const rec = mime ? new MediaRecorder(stream, { mimeType: mime }) : new MediaRecorder(stream);
+        const chunks: Blob[] = [];
+        rec.ondataavailable = (ev) => {
+          if (ev.data.size) chunks.push(ev.data);
+        };
+        rec.onerror = () => {
+          setListening(false);
+          stream.getTracks().forEach((t) => t.stop());
+          showToast("Voice input failed. Type instead.");
+        };
+        rec.onstop = () => {
+          setListening(false);
+          stream.getTracks().forEach((t) => t.stop());
+          mediaRecRef.current = null;
+          mediaStreamRef.current = null;
+          const blob = new Blob(chunks, { type: rec.mimeType || "audio/webm" });
+          if (blob.size < 400) {
+            showToast("Didn't catch that. Tap the mic and try again.");
+            return;
+          }
+          void transcribeAudio(blob)
+            .then((text) => {
+              if (text) setInput((prev) => (prev ? `${prev} ${text}` : text));
+              else showToast("Could not transcribe. Type instead.");
+            })
+            .catch(() => showToast("Speech service is offline. Type instead."));
+        };
+        mediaRecRef.current = rec;
+        rec.start();
+        setListening(true);
+      } catch (err) {
+        const name = err instanceof DOMException ? err.name : "";
+        if (name === "NotAllowedError") {
+          showToast("Microphone is blocked. Allow access in the address bar, then retry.");
+        } else if (name === "NotFoundError") {
+          showToast("No microphone found.");
+        } else {
+          showToast("Voice input could not start.");
+        }
+      }
+    })();
+  }, [listening, showToast]);
 
-  const handleSelectDirectoryQuery = (queryText: string) => {
-    navigateToView("chat");
-    void send(queryText, { fresh: true });
-  };
+  const currentFirst = msgs.length > 0 ? msgs[0].text : null;
+  const currentTitle = currentFirst ? makeTitle(currentFirst) || "New conversation" : null;
+  const pastTopics = history.filter((e) => e.q !== currentFirst).slice(0, 8);
+  const lastAssistantId = [...msgs].reverse().find((m) => m.role === "assistant" && !m.error)?.id;
 
-  const activeSessionId =
-    thread?.id ||
-    msgs
-      .slice()
-      .reverse()
-      .find((m) => m.resp?.thread_id)?.resp?.thread_id;
+  const renderComposer = (centered: boolean) => (
+    <div
+      className={
+        centered
+          ? "floating-composer-container composer-centered"
+          : "floating-composer-container"
+      }
+    >
+      <form
+        className="floating-capsule"
+        onSubmit={(e) => {
+          e.preventDefault();
+          void send(input);
+        }}
+      >
+        <label className="sr-only" htmlFor={centered ? "composer-input-hero" : "composer-input"}>
+          Ask about Indian Standards
+        </label>
+        {centered ? (
+          <textarea
+            id="composer-input-hero"
+            ref={heroBoxRef}
+            className="capsule-input-field composer-multiline"
+            value={input}
+            onChange={(e) => {
+              setInput(e.target.value);
+              const el = e.target;
+              el.style.height = "auto";
+              el.style.height = `${Math.min(el.scrollHeight, 170)}px`;
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                void send(input);
+              }
+            }}
+            placeholder="Ask anything about Indian Standards, ISI mark, CRS..."
+            autoComplete="off"
+            rows={4}
+          />
+        ) : (
+          <input
+            id="composer-input"
+            ref={inputRef}
+            type="text"
+            className="capsule-input-field"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Ask anything about Indian Standards, ISI mark, CRS..."
+            autoComplete="off"
+          />
+        )}
+
+        {speechSupported && (
+          <button
+            type="button"
+            className={`capsule-icon-btn${listening ? " listening" : ""}`}
+            title={listening ? "Stop listening" : "Voice input"}
+            onClick={toggleListening}
+            aria-label={listening ? "Stop voice input" : "Start voice input"}
+            aria-pressed={listening}
+          >
+            <MicIcon size={18} />
+          </button>
+        )}
+
+        <button
+          type="submit"
+          className={`capsule-send-circle${input.trim() && !busy ? " active" : ""}`}
+          disabled={busy || !input.trim()}
+          aria-label="Send query"
+        >
+          <ArrowUpIcon size={16} />
+        </button>
+      </form>
+      <p className="composer-disclaimer">
+        {APP_NAME} answers from official BIS sources. Verify critical compliance decisions
+        with BIS.
+      </p>
+    </div>
+  );
+
+  void healthy;
 
   return (
     <div className={`app-container${darkMode ? " dark-theme" : ""}`}>
       <a className="skip-link" href="#chat-log">
         Skip to conversation
       </a>
-      {/* Mobile Backdrop */}
       {sidebarOpen && (
         <div
           className="sidebar-backdrop"
@@ -320,7 +657,6 @@ export default function App() {
         />
       )}
 
-      {/* Clean Minimal Sidebar */}
       <aside
         className={`clean-sidebar${sidebarOpen ? " open" : ""}${
           sidebarCollapsed ? " collapsed" : ""
@@ -333,7 +669,7 @@ export default function App() {
             <div className="brand-icon-wrap">
               <ManakEmblemIcon size={26} />
             </div>
-            <span className="brand-name-text">मानक AI</span>
+            <span className="brand-name-text">{APP_NAME}</span>
             {sidebarOpen && (
               <button
                 type="button"
@@ -346,140 +682,66 @@ export default function App() {
             )}
           </div>
 
-          <button
-            type="button"
-            className="btn-clean-new-chat"
-            onClick={newTopic}
-            title="Start new conversation"
-          >
-            <PlusIcon size={15} />
+          <button type="button" className="btn-new-chat" onClick={newTopic} title="Start new conversation">
+            <NewChatIcon size={15} />
             <span>New chat</span>
           </button>
 
           <div className="history-section">
-            <div className="history-label">HISTORY</div>
-            <div className="history-list">
-              {msgs.length > 0 ? (
-                <button
-                  type="button"
-                  className="history-item active"
-                  onClick={() => navigateToView("chat")}
-                >
-                  <span className="history-item-text">
-                    {msgs[0]?.text || "Current conversation"}
-                  </span>
-                </button>
-              ) : null}
-              <button
-                type="button"
-                className="history-item"
-                onClick={() => {
-                  navigateToView("chat");
-                  void send("What is the standard for packaged drinking water?", { fresh: true });
-                }}
-              >
-                <span className="history-item-text">Drinking water (IS 10500)</span>
-              </button>
-              <button
-                type="button"
-                className="history-item"
-                onClick={() => {
-                  navigateToView("chat");
-                  void send("What is the step-by-step procedure to obtain an ISI mark licence?", { fresh: true });
-                }}
-              >
-                <span className="history-item-text">ISI Mark Certification</span>
-              </button>
-              <button
-                type="button"
-                className="history-item"
-                onClick={() => {
-                  navigateToView("chat");
-                  void send("Which electronic and IT goods require mandatory CRS registration under Scheme-II?", { fresh: true });
-                }}
-              >
-                <span className="history-item-text">Electronics CRS Scheme</span>
-              </button>
-            </div>
-          </div>
-        </div>
-        <div className="sidebar-bottom-section">
-          <button
-            type="button"
-            className={`sidebar-nav-link${view === "directory" ? " active" : ""}`}
-            onClick={() => navigateToView("directory")}
-            aria-current={view === "directory" ? "page" : undefined}
-          >
-            <CatalogIcon size={16} />
-            <span>Standards Catalog</span>
-          </button>
-
-          <button
-            type="button"
-            className={`sidebar-nav-link${view === "tests" ? " active" : ""}`}
-            onClick={() => navigateToView("tests")}
-            aria-current={view === "tests" ? "page" : undefined}
-          >
-            <CheckIcon size={16} />
-            <span>Acceptance Test Set</span>
-          </button>
-
-          <button
-            type="button"
-            className={`sidebar-nav-link${view === "schemes" ? " active" : ""}`}
-            onClick={() => navigateToView("schemes")}
-            aria-current={view === "schemes" ? "page" : undefined}
-          >
-            <SchemesIcon size={16} />
-            <span>Certification Schemes</span>
-          </button>
-
-          <button
-            type="button"
-            className={`sidebar-nav-link${view === "telemetry" ? " active" : ""}`}
-            onClick={() => navigateToView("telemetry")}
-            aria-current={view === "telemetry" ? "page" : undefined}
-          >
-            <AuditIcon size={16} />
-            <span>Audit & Telemetry</span>
-          </button>
-
-          <button
-            type="button"
-            className={`sidebar-nav-link${view === "admin" ? " active" : ""}`}
-            onClick={() => navigateToView("admin")}
-            aria-current={view === "admin" ? "page" : undefined}
-          >
-            <DiffIcon size={16} />
-            <span>KB Diff Review</span>
-          </button>
-
-          <div className="sidebar-user-card">
-            <div className="user-avatar-pill">K</div>
-            <div className="user-text-wrap">
-              <span className="user-title">Kumar Vaibhav</span>
-            </div>
             <button
               type="button"
-              className="user-action-btn"
-              onClick={exportThread}
-              title="Export thread as JSON"
-              aria-label="Export conversation"
+              className="history-toggle"
+              onClick={() => setHistoryOpen((v) => !v)}
+              aria-expanded={historyOpen}
+              aria-controls="history-list"
             >
-              <DownloadIcon size={14} />
+              <span className="history-label">History</span>
+              <ChevronDownIcon
+                size={14}
+                className={`history-chevron${historyOpen ? " open" : ""}`}
+              />
             </button>
+            {historyOpen && (
+              <div className="history-list" id="history-list">
+                {currentFirst && (
+                  <button
+                    type="button"
+                    className="history-item active"
+                    aria-current="true"
+                    title={currentFirst}
+                  >
+                    <span className="history-item-text">{currentTitle}</span>
+                  </button>
+                )}
+                {pastTopics.map((e) => (
+                  <button
+                    key={`${e.at}-${e.q}`}
+                    type="button"
+                    className="history-item"
+                    onClick={() => openHistoryTopic(e.q)}
+                    title={e.title || e.q}
+                  >
+                    <span className="history-item-text">{e.title || "New conversation"}</span>
+                  </button>
+                ))}
+                {!currentFirst && pastTopics.length === 0 && (
+                  <p className="history-empty">No conversations yet.</p>
+                )}
+              </div>
+            )}
           </div>
+        </div>
+        <div className="sidebar-foot">
+          <p className="sidebar-foot-text">Grounded in official BIS sources.</p>
         </div>
       </aside>
 
-      {/* Main Canvas */}
       <div className="clean-main-canvas">
-        {/* Top Floating / Minimal Bar */}
         <header className="clean-topbar">
           <div className="topbar-left-zone">
             <button
               type="button"
-              className="btn-topbar-icon"
+              className="icon-btn icon-btn-lg"
               onClick={() => {
                 if (window.innerWidth <= 840) {
                   setSidebarOpen(!sidebarOpen);
@@ -493,250 +755,216 @@ export default function App() {
             >
               <SidebarToggleIcon size={20} />
             </button>
-            {view !== "chat" && (
-              <button
-                type="button"
-                className="btn-back-chat"
-                onClick={() => navigateToView("chat")}
-              >
-                ← Back to Assistant
-              </button>
-            )}
+            <span className="topbar-title">
+              {APP_NAME} <span className="topbar-title-sub">· {APP_TAGLINE}</span>
+            </span>
           </div>
 
           <div className="topbar-right-zone">
+            <div className="lang-menu-wrap" ref={langMenuRef}>
+              <button
+                type="button"
+                className="lang-menu-btn"
+                onClick={() => setLangOpen((v) => !v)}
+                aria-haspopup="menu"
+                aria-expanded={langOpen}
+                aria-label="Response language"
+                title="Response language"
+              >
+                <GlobeIcon size={15} />
+                <span>{LANG_OPTIONS.find((o) => o.id === lang)?.label ?? "Auto"}</span>
+                <ChevronDownIcon
+                  size={13}
+                  className={`lang-chevron${langOpen ? " open" : ""}`}
+                />
+              </button>
+              {langOpen && (
+                <div className="lang-menu" role="menu" aria-label="Response language">
+                  {LANG_OPTIONS.map((o) => (
+                    <button
+                      key={o.id}
+                      type="button"
+                      role="menuitemradio"
+                      aria-checked={lang === o.id}
+                      className={`lang-menu-item${lang === o.id ? " active" : ""}`}
+                      onClick={() => {
+                        setLang(o.id);
+                        setLangOpen(false);
+                      }}
+                    >
+                      <span>{o.label}</span>
+                      {lang === o.id && <CheckIcon size={13} />}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
             <button
               type="button"
-              className="btn-topbar-icon"
+              className={`icon-btn icon-btn-lg${devMode ? " active" : ""}`}
+              onClick={toggleDevMode}
+              aria-label="Toggle developer details"
+              aria-pressed={devMode}
+              title={devMode ? "Hide raw API responses" : "Show raw API responses"}
+            >
+              <DevIcon size={18} />
+            </button>
+            <button
+              type="button"
+              className={`icon-btn icon-btn-lg${darkMode ? " toggled" : ""}`}
               onClick={() => setDarkMode(!darkMode)}
               aria-label="Toggle theme"
               aria-pressed={darkMode}
               title="Toggle light / dark mode"
             >
-              <SunIcon size={20} />
+              {darkMode ? <SunIcon size={20} /> : <MoonIcon size={20} />}
             </button>
           </div>
         </header>
 
-        {/* Dynamic Body Content */}
-        <main className="clean-body-content" id="chat-log" role="log" aria-live="polite" aria-label="Conversation">
-          {view === "directory" && (
-            <StandardsDirectory onSelectQuery={handleSelectDirectoryQuery} />
-          )}
-
-          {view === "schemes" && (
-            <SchemesView onSelectQuery={handleSelectDirectoryQuery} />
-          )}
-
-          {view === "admin" && (
-            <div className="admin-clean-wrap">
-              <AdminPanel />
-            </div>
-          )}
-
-          {view === "telemetry" && (
-            <TelemetryView
-              healthy={healthy}
-              thread={thread || (activeSessionId ? { id: activeSessionId, token: "" } : null)}
-              onRefreshHealth={ping}
-              onExport={exportThread}
-              turnCount={msgs.length}
-            />
-          )}
-
-          {view === "tests" && (
-            <div className="directory-container">
-              <AcceptancePanel onAsk={askTestCase} disabled={busy} />
-            </div>
-          )}
-
-          {view === "chat" && (
-            <div className="chat-layout-wrap">
-              {msgs.length === 0 ? (
-                /* Hero Empty State - Exact inspiration from reference */
-                <div className="hero-center-container">
-                  <div className="hero-emblem-wrap">
-                    <ManakEmblemIcon size={46} />
-                  </div>
-                  <h1 className="hero-headline">
-                    Namaste, I'm <span className="hero-bold-name">मानक AI</span>
-                  </h1>
-                  <p className="hero-subline">
-                    Ask me about Indian Standards, ISI mark or CRS schemes, or try one of these:
-                  </p>
-
-                  <div className="hero-cards-grid">
-                    {HERO_SUGGESTIONS.map((s) => (
-                      <button
-                        key={s.q}
-                        type="button"
-                        className="hero-suggestion-card"
-                        disabled={busy}
-                        onClick={() => void send(s.q, { fresh: true })}
-                      >
-                        <span className="hero-suggestion-label">{s.label}</span>
-                        <ArrowUpRightIcon className="hero-suggestion-icon" size={16} />
-                      </button>
-                    ))}
-                  </div>
-
-                  <div className="hero-lang-row" role="group" aria-label="Response language">
-                    {LANG_PILLS.map((p) => (
-                      <button
-                        key={p.id}
-                        type="button"
-                        className={`hero-lang-pill${
-                          lang === p.id || (lang === "auto" && p.id === "auto") ? " active" : ""
-                        }`}
-                        onClick={() => setLang(p.id)}
-                        aria-pressed={lang === p.id}
-                      >
-                        {p.label}
-                      </button>
-                    ))}
-                  </div>
+        <main
+          ref={mainRef}
+          className="clean-body-content"
+          id="chat-log"
+          role="log"
+          aria-live="polite"
+          aria-label="Conversation"
+        >
+          <div className="chat-layout-wrap" key={topicKey}>
+            {msgs.length === 0 ? (
+              <div className="hero-center-container view-enter">
+                <div className="hero-emblem-wrap">
+                  <ManakEmblemIcon size={46} />
                 </div>
-              ) : (
-                /* Active Conversation Stream */
-                <div className="chat-messages-container">
-                  {msgs.map((m) =>
-                    m.role === "user" ? (
-                      <div key={m.id} className="user-message-row">
+                <h1 className="hero-headline">
+                  Namaste, I&apos;m <span className="hero-bold-name">{APP_NAME}</span>
+                </h1>
+
+                {renderComposer(true)}
+              </div>
+            ) : (
+              <div className="chat-messages-container view-enter">
+                {msgs.map((m) =>
+                  m.role === "user" ? (
+                    <div key={m.id} className="user-message-row msg-enter">
+                      <div className="user-stack">
                         <div className="user-bubble">
                           <RichText text={m.text} />
                         </div>
-                      </div>
-                    ) : (
-                      <div key={m.id} className="assistant-message-row">
-                        <div className="assistant-avatar">
-                          <ManakEmblemIcon size={24} />
+                        <div className="user-actions-row">
+                          <CopyButton text={m.text} />
                         </div>
-                        <div className="assistant-content">
-                          {m.error ? (
-                            <div className="clean-error-card" role="alert">
-                              <p className="error-text">{m.error}</p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div key={m.id} className="assistant-message-row msg-enter">
+                      <div className="assistant-avatar">
+                        <ManakEmblemIcon size={24} />
+                      </div>
+                      <div className="assistant-content">
+                        {m.retrying ? (
+                          <div className="clean-answer-container">
+                            <div className="sk-lines" aria-hidden="true">
+                              <span className="sk-line sk-w90" />
+                              <span className="sk-line sk-w70" />
+                            </div>
+                            <span className="sr-only">Retrying your question</span>
+                          </div>
+                        ) : m.error ? (
+                          <div className="clean-error-card" role="alert">
+                            <p className="error-text">{m.error}</p>
                               <button
-                                type="button"
-                                className="btn-clean-retry"
-                                onClick={() => void send(pendingQ)}
-                              >
-                                Retry
-                              </button>
-                            </div>
-                          ) : (
-                            <div className="clean-answer-container">
-                              <div className="answer-prose">
-                                <RichText text={m.text} />
-                              </div>
-
-                              {m.resp?.assumptions && m.resp.assumptions.length > 0 && (
-                                <AssumptionsBanner items={m.resp.assumptions} />
-                              )}
-
-                              {m.resp?.known && m.resp.known.length > 0 && (
-                                <KnownChips known={m.resp.known} />
-                              )}
-
-                              {m.resp?.needs_info && (
-                                <QuestionPills
-                                  questions={m.resp.questions}
-                                  disabled={busy}
-                                  onPick={(answer) => void send(answer)}
-                                  onAssume={() => void send(pendingQ, { force: true })}
-                                  onNewTopic={newTopic}
-                                />
-                              )}
-
-                              {m.resp?.citations && m.resp.citations.length > 0 && (
-                                <Sources items={m.resp.citations} />
-                              )}
-
-                              <EvidenceSources items={m.resp?.sources ?? m.resp?.rag_evidence} />
-                              {m.resp && <RawJson data={m.resp} />}
-
-                              <div className="message-footer-row">
-                                <MetaBadges resp={m.resp ?? {}} ms={m.ms} />
-                                <FeedbackButtons
-                                  value={m.feedback}
-                                  disabled={busy}
-                                  onRate={(r) => rate(m.id, r)}
-                                />
-                              </div>
-
-                              {m.feedback != null && (
-                                <NoteInput
-                                  id={String(m.id)}
-                                  onSubmit={(note) => rate(m.id, m.feedback ?? 1, note)}
-                                />
+                              type="button"
+                              className="pill-btn pill-btn-solid"
+                              disabled={busy}
+                              onClick={() => void retryMessage(m.id)}
+                            >
+                              <RetryIcon size={14} />
+                              <span>Retry</span>
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="clean-answer-container">
+                            <div className="answer-prose">
+                              {m.id === lastAssistantId && m.resp?.kind !== "model_unavailable" ? (
+                                <TypewriterText key={`tw-${m.id}`} text={cleanAnswerText(m.text)} />
+                              ) : (
+                                <RichText text={cleanAnswerText(m.text)} />
                               )}
                             </div>
-                          )}
-                        </div>
+
+                            {m.resp?.assumptions && m.resp.assumptions.length > 0 && (
+                              <AssumptionsBanner items={m.resp.assumptions} />
+                            )}
+
+                            {m.resp?.known && m.resp.known.length > 0 && (
+                              <KnownChips known={m.resp.known} />
+                            )}
+
+                            {m.resp?.needs_info && (
+                              <QuestionPills
+                                questions={m.resp.questions}
+                                disabled={busy}
+                                onPick={(answer) => void send(answer)}
+                                onAssume={() => void send(pendingQ, { force: true })}
+                                onNewTopic={newTopic}
+                              />
+                            )}
+
+                            <SourceStrip
+                              sources={m.resp?.sources ?? m.resp?.rag_evidence}
+                              citations={m.resp?.citations}
+                            />
+                            {m.resp && <RawJson data={m.resp} enabled={devMode} />}
+
+                            <div className="message-footer-row">
+                              <div className="footer-left">
+                                <CopyButton text={cleanAnswerText(m.text)} />
+                                {m.resp?.kind === "model_unavailable" && m.retryQ && (
+                                  <button
+                                    type="button"
+                                    className="pill-btn pill-btn-sm"
+                                    disabled={busy}
+                                    onClick={() => void retryMessage(m.id)}
+                                    title="Resend this question"
+                                  >
+                                    <RetryIcon size={13} />
+                                    <span>Retry</span>
+                                  </button>
+                                )}
+                              </div>
+                              <FeedbackButtons
+                                value={m.feedback}
+                                disabled={busy}
+                                onRate={(r) => rate(m.id, r)}
+                              />
+                            </div>
+                          </div>
+                        )}
                       </div>
-                    ),
-                  )}
+                    </div>
+                  ),
+                )}
 
-                  {busy && <TypingDots />}
-                  <div ref={bottomRef} />
-                </div>
-              )}
-
-              {/* Floating Bottom Capsule Composer */}
-              <div className="floating-composer-container">
-                <form
-                  className="floating-capsule"
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    void send(input);
-                  }}
-                >
-                  <button
-                    type="button"
-                    className="capsule-icon-btn"
-                    title="Browse Standards Catalog"
-                    onClick={() => navigateToView("directory")}
-                    aria-label="Browse Standards Catalog"
-                  >
-                    <CatalogIcon size={18} />
-                  </button>
-
-                  <label className="sr-only" htmlFor="composer-input">
-                    Ask about Indian Standards
-                  </label>
-                  <input
-                    id="composer-input"
-                    ref={inputRef}
-                    type="text"
-                    className="capsule-input-field"
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    placeholder="Ask anything about Indian Standards, ISI mark, CRS..."
-                    autoComplete="off"
-                  />
-
-                  <button
-                    type="button"
-                    className="capsule-icon-btn"
-                    title="Voice input"
-                    onClick={() => showToast("Voice input will be available in future releases.")}
-                    aria-label="Voice input"
-                  >
-                    <MicIcon size={18} />
-                  </button>
-
-                  <button
-                    type="submit"
-                    className={`capsule-send-circle${input.trim() && !busy ? " active" : ""}`}
-                    disabled={busy || !input.trim()}
-                    aria-label="Send query"
-                  >
-                    <ArrowUpIcon size={16} />
-                  </button>
-                </form>
+                {busy && !msgs.some((m) => m.retrying) && <SkeletonAnswer />}
+                <div ref={bottomRef} />
               </div>
-            </div>
-          )}
+            )}
+
+            {msgs.length > 0 && renderComposer(false)}
+          </div>
         </main>
+        {showJump && msgs.length > 0 && (
+          <button
+            type="button"
+            className="jump-bottom"
+            onClick={jumpToBottom}
+            aria-label="Jump to latest messages"
+            title="Jump to latest"
+          >
+            <ArrowDownIcon size={16} />
+          </button>
+        )}
       </div>
 
       {toast && (

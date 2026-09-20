@@ -56,6 +56,27 @@ export async function checkHealth(): Promise<boolean> {
   }
 }
 
+export async function transcribeAudio(blob: Blob): Promise<string> {
+  const buf = await blob.arrayBuffer();
+  const bytes = new Uint8Array(buf);
+  let bin = "";
+  const step = 0x8000;
+  for (let i = 0; i < bytes.length; i += step) {
+    bin += String.fromCharCode(...bytes.subarray(i, i + step));
+  }
+  const audio_b64 = btoa(bin);
+  const j = (await req(
+    "/api/transcribe",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ audio_b64, mime: blob.type || "audio/webm" }),
+    },
+    45_000,
+  )) as { text?: string };
+  return typeof j?.text === "string" ? j.text.trim() : "";
+}
+
 export async function sendChat(
   query: string,
   lang: Lang,
@@ -224,6 +245,46 @@ export async function sendFeedback(
     const msg = e instanceof Error ? e.message : "request failed";
     if (/HTTP 404/.test(msg)) return { ok: true, fixture: true };
     return { ok: false, error: msg };
+  }
+}
+
+/** POST /title with the opening exchange; null on any failure (caller keeps heuristic). */
+export async function fetchTitle(
+  userText: string,
+  assistantText: string,
+  lang: Lang,
+): Promise<string | null> {
+  try {
+    const j = await req(
+      "/api/title",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user_text: userText.slice(0, 1000),
+          assistant_text: assistantText.slice(0, 1500),
+          lang: lang === "auto" ? "en" : lang,
+        }),
+      },
+      30000,
+    );
+    const t = typeof j?.title === "string" ? j.title.trim() : "";
+    return t || null;
+  } catch {
+    return null;
+  }
+}
+
+/** DELETE /threads/{id} with owner token; never throws (best-effort cleanup). */
+export async function deleteThread(thread: ServerThread): Promise<void> {
+  try {
+    await req(
+      `/api/threads/${encodeURIComponent(thread.id)}`,
+      { method: "DELETE", headers: { "X-Owner-Token": thread.token } },
+      8000,
+    );
+  } catch {
+    /* abandoned threads expire server-side via thread TTL */
   }
 }
 
