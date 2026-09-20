@@ -22,6 +22,8 @@ import {
   GlobeIcon,
   ManakEmblemIcon,
   MicIcon,
+  MicOffIcon,
+  SpinnerIcon,
   MoonIcon,
   NewChatIcon,
   RetryIcon,
@@ -224,6 +226,8 @@ export default function App() {
   // collide with this session's topic generations.
   const [topicKey, setTopicKey] = useState(() => Date.now());
   const [listening, setListening] = useState(false);
+  const [transcribing, setTranscribing] = useState(false);
+  const [voiceReady, setVoiceReady] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
   const [showJump, setShowJump] = useState(false);
   const langMenuRef = useRef<HTMLDivElement>(null);
@@ -347,7 +351,9 @@ export default function App() {
   }, [input]);
 
   const ping = useCallback(async () => {
-    setHealthy(await checkHealth());
+    const h = await checkHealth();
+    setHealthy(h.ok);
+    setVoiceReady(h.speech);
   }, []);
 
   const jumpToBottom = useCallback(() => {
@@ -569,12 +575,13 @@ export default function App() {
   );
 
   const toggleListening = useCallback(() => {
+    if (transcribing) return;
+    if (!voiceReady) return;
     if (listening) {
       mediaRecRef.current?.stop();
       return;
     }
     if (!navigator.mediaDevices?.getUserMedia || typeof MediaRecorder !== "function") {
-      showToast("Voice input is not supported in this browser.");
       return;
     }
     void (async () => {
@@ -593,8 +600,8 @@ export default function App() {
         };
         rec.onerror = () => {
           setListening(false);
+          setTranscribing(false);
           stream.getTracks().forEach((t) => t.stop());
-          showToast("Voice input failed. Type instead.");
         };
         rec.onstop = () => {
           setListening(false);
@@ -603,15 +610,20 @@ export default function App() {
           mediaStreamRef.current = null;
           const blob = new Blob(chunks, { type: rec.mimeType || "audio/webm" });
           if (blob.size < 400) {
+            setTranscribing(false);
             showToast("Didn't catch that. Tap the mic and try again.");
             return;
           }
+          setTranscribing(true);
           void transcribeAudio(blob)
             .then((text) => {
               if (text) setInput((prev) => (prev ? `${prev} ${text}` : text));
               else showToast("Could not transcribe. Type instead.");
             })
-            .catch(() => showToast("Speech service is offline. Type instead."));
+            .catch(() => {
+              setVoiceReady(false);
+            })
+            .finally(() => setTranscribing(false));
         };
         mediaRecRef.current = rec;
         rec.start();
@@ -622,12 +634,10 @@ export default function App() {
           showToast("Microphone is blocked. Allow access in the address bar, then retry.");
         } else if (name === "NotFoundError") {
           showToast("No microphone found.");
-        } else {
-          showToast("Voice input could not start.");
         }
       }
     })();
-  }, [listening, showToast]);
+  }, [listening, transcribing, voiceReady, showToast]);
 
   const currentFirst = msgs.length > 0 ? msgs[0].text : null;
   const currentTitle = currentFirst ? makeTitle(currentFirst) || "New conversation" : null;
@@ -690,13 +700,43 @@ export default function App() {
         {speechSupported && (
           <button
             type="button"
-            className={`capsule-icon-btn${listening ? " listening" : ""}`}
-            title={listening ? "Stop listening" : "Voice input"}
+            className={[
+              "capsule-icon-btn",
+              listening ? "listening" : "",
+              transcribing ? "transcribing" : "",
+              !voiceReady ? "muted" : "",
+            ]
+              .filter(Boolean)
+              .join(" ")}
+            title={
+              !voiceReady
+                ? "Voice is unavailable"
+                : transcribing
+                  ? "Transcribing"
+                  : listening
+                    ? "Stop listening"
+                    : "Voice input"
+            }
             onClick={toggleListening}
-            aria-label={listening ? "Stop voice input" : "Start voice input"}
+            disabled={!voiceReady || transcribing}
+            aria-label={
+              !voiceReady
+                ? "Voice is unavailable"
+                : transcribing
+                  ? "Transcribing"
+                  : listening
+                    ? "Stop voice input"
+                    : "Start voice input"
+            }
             aria-pressed={listening}
           >
-            <MicIcon size={18} />
+            {transcribing ? (
+              <SpinnerIcon className="mic-spin" size={18} />
+            ) : !voiceReady ? (
+              <MicOffIcon size={18} />
+            ) : (
+              <MicIcon size={18} />
+            )}
           </button>
         )}
 
@@ -736,13 +776,29 @@ export default function App() {
           sidebarCollapsed ? " collapsed" : ""
         }`}
         aria-label="Primary"
-        aria-hidden={sidebarCollapsed && !sidebarOpen}
       >
         <div className="sidebar-top-section">
           <div className="sidebar-brand-row">
-            <div className="brand-icon-wrap">
-              <ManakEmblemIcon size={26} />
-            </div>
+            <button
+              type="button"
+              className="sidebar-rail-toggle"
+              onClick={() => {
+                if (window.innerWidth <= 840) {
+                  setSidebarOpen(false);
+                } else {
+                  setSidebarCollapsed((v) => !v);
+                }
+              }}
+              aria-label={sidebarCollapsed ? "Open sidebar" : "Close sidebar"}
+              title={sidebarCollapsed ? "Open sidebar" : "Close sidebar"}
+            >
+              <span className="sidebar-rail-logo" aria-hidden="true">
+                <ManakEmblemIcon size={26} />
+              </span>
+              <span className="sidebar-rail-panel" aria-hidden="true">
+                <SidebarToggleIcon size={20} />
+              </span>
+            </button>
             <span className="brand-name-text">{APP_NAME}</span>
             {sidebarOpen && (
               <button
@@ -756,8 +812,14 @@ export default function App() {
             )}
           </div>
 
-          <button type="button" className="btn-new-chat" onClick={newTopic} title="Start new conversation">
-            <NewChatIcon size={15} />
+          <button
+            type="button"
+            className="btn-new-chat"
+            onClick={newTopic}
+            title="New chat"
+            aria-label="New chat"
+          >
+            <NewChatIcon size={sidebarCollapsed ? 18 : 15} />
             <span>New chat</span>
           </button>
 
@@ -815,17 +877,11 @@ export default function App() {
           <div className="topbar-left-zone">
             <button
               type="button"
-              className="icon-btn icon-btn-lg"
-              onClick={() => {
-                if (window.innerWidth <= 840) {
-                  setSidebarOpen(!sidebarOpen);
-                } else {
-                  setSidebarCollapsed(!sidebarCollapsed);
-                }
-              }}
-              aria-label="Toggle navigation drawer"
-              aria-expanded={sidebarOpen || !sidebarCollapsed}
-              title="Toggle sidebar"
+              className="icon-btn icon-btn-lg topbar-sidebar-toggle"
+              onClick={() => setSidebarOpen((v) => !v)}
+              aria-label="Open navigation"
+              aria-expanded={sidebarOpen}
+              title="Open sidebar"
             >
               <SidebarToggleIcon size={20} />
             </button>

@@ -9,7 +9,9 @@ import {
   ExternalLink as LucideExternalLink,
   FlaskConical as LucideFlask,
   Globe as LucideGlobe,
+  LoaderCircle as LucideLoader,
   Mic as LucideMic,
+  MicOff as LucideMicOff,
   Moon as LucideMoon,
   PanelLeft as LucidePanelLeft,
   Plus as LucidePlus,
@@ -70,6 +72,14 @@ export function MoonIcon({ className, size = 20 }: IconProps) {
 
 export function MicIcon({ className, size = 18 }: IconProps) {
   return <LucideMic {...base(className, size)} />;
+}
+
+export function MicOffIcon({ className, size = 18 }: IconProps) {
+  return <LucideMicOff {...base(className, size)} />;
+}
+
+export function SpinnerIcon({ className, size = 18 }: IconProps) {
+  return <LucideLoader {...base(className, size)} />;
 }
 
 export function DownloadIcon({ className, size = 16 }: IconProps) {

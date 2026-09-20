@@ -52,7 +52,7 @@
   --r-md: 12px;
   --r-lg: 16px;
   --r-xl: 20px;
-  --r-pill: 9999px;
+  --r-pill: var(--r-sm);
 
   /* Motion — one easing, four durations */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
@@ -68,6 +68,7 @@
 
   /* Layout & type */
   --sidebar-width: 250px;
+  --sidebar-rail: 56px;
   --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans Devanagari", sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
