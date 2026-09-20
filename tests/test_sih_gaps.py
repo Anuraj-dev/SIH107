@@ -502,6 +502,34 @@ def test_system_prompt_covers_unrelated_questions():
     assert "for unrelated questions" in SYSTEM_PROMPT.lower()
 
 
+def test_identity_query_skips_retrieved_evidence():
+    from bis_assistant.rag_llm import _prompt, is_runtime_identity_query
+    assert is_runtime_identity_query("can you help me with understand what bis stands for")
+    assert not is_runtime_identity_query("IS 17803 for plastic bottle")
+    _, user = _prompt(
+        "what does BIS stand for",
+        [{"standard_number": "IS 1050", "title": "Lime sulphur",
+          "doc_type": "std", "chunk_text": "unrelated"}],
+        "en",
+    )
+    assert "BIS is the Bureau of Indian Standards" in user
+    assert "IS 1050" not in user
+    assert "(No relevant BIS evidence was found for this query.)" in user
+
+
+def test_underspecified_standard_query_skips_evidence():
+    from bis_assistant.rag_llm import _prompt, is_underspecified_standard_query
+    assert is_underspecified_standard_query("what latest standard do we follow")
+    assert not is_underspecified_standard_query("IS 17803 for plastic bottle")
+    _, user = _prompt(
+        "what latest standard do we follow",
+        [{"standard_number": "IS 1050", "title": "Lime sulphur",
+          "doc_type": "std", "chunk_text": "unrelated"}],
+        "en",
+    )
+    assert "IS 1050" not in user
+
+
 def test_model_receives_recent_conversation_for_followups(monkeypatch):
     calls = _fake_model(monkeypatch)
     from bis_assistant.chat import chat

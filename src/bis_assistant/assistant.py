@@ -5,7 +5,11 @@ import logging
 
 from .i18n_privacy import detect_lang, redact
 from .rag_answer import build_rag_answer
-from .rag_llm import is_configured
+from .rag_llm import (
+    is_configured,
+    is_runtime_identity_query,
+    is_underspecified_standard_query,
+)
 from .rag_config import load_llm_config, load_rag_config
 from . import threads as threadmod
 
@@ -59,7 +63,8 @@ def answer(query: str, lang: str | None = None,
         configured = False
 
     evidence: list[dict] = []
-    if configured:
+    if configured and not is_runtime_identity_query(q) \
+            and not is_underspecified_standard_query(q):
         evidence, _ = _rag_lookup(q)
 
     response = build_rag_answer(
