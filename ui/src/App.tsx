@@ -29,7 +29,7 @@ import {
   SunIcon,
   XIcon,
 } from "./icons";
-import type { Lang, Msg } from "./types";
+import type { ChatResponse, Lang, Msg } from "./types";
 import type { ServerThread } from "./api";
 import "./tokens.css";
 import "./styles.css";
@@ -46,6 +46,13 @@ const LANG_OPTIONS: { id: Lang; label: string }[] = [
   { id: "hi", label: "हिंदी" },
 ];
 
+interface StoredMsg {
+  role: "user" | "assistant";
+  text: string;
+  resp?: ChatResponse;
+  error?: string;
+}
+
 interface HistoryEntry {
   q: string;
   /** short generated label; "" when nothing title-worthy yet */
@@ -53,6 +60,27 @@ interface HistoryEntry {
   at: number;
   /** topic generation that created the entry; retitles only apply within it */
   topic: number;
+  /** full thread so opening history does not regenerate or typewrite */
+  msgs?: StoredMsg[];
+}
+
+let nextId = 1;
+
+function snapshotMsgs(list: Msg[]): StoredMsg[] {
+  return list
+    .filter((m) => !m.retrying)
+    .map(({ role, text, resp, error }) => ({ role, text, resp, error }));
+}
+
+function hydrateMsgs(list: StoredMsg[]): Msg[] {
+  return list.map((m) => ({
+    id: nextId++,
+    role: m.role,
+    text: m.text,
+    resp: m.resp,
+    error: m.error,
+    streamIn: false,
+  }));
 }
 
 /** Map a send failure to UI text. Expired threads are resumable on a fresh thread. */
@@ -120,11 +148,15 @@ function loadHistory(): HistoryEntry[] {
         // Entries written before topic tags existed predate LLM titles too,
         // so re-run the current heuristic over them exactly once per load.
         const legacy = typeof e.topic !== "number" || e.topic === -1;
+        const msgs = Array.isArray((e as HistoryEntry).msgs)
+          ? (e as HistoryEntry).msgs
+          : undefined;
         return {
           q: e.q,
           title: legacy || typeof e.title !== "string" ? makeTitle(e.q) : e.title,
           at: e.at,
           topic: legacy ? -1 : (e.topic as number),
+          msgs,
         };
       })
       .slice(0, HISTORY_LIMIT);
@@ -169,8 +201,6 @@ declare global {
   }
 }
 
-let nextId = 1;
-
 export default function App() {
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
@@ -212,7 +242,7 @@ export default function App() {
     !!navigator.mediaDevices?.getUserMedia;
 
   useEffect(() => {
-    document.title = `${APP_NAME} — ${APP_TAGLINE} | Bureau of Indian Standards`;
+    document.title = `${APP_NAME} · ${APP_TAGLINE} | Bureau of Indian Standards`;
   }, []);
 
   useEffect(() => {
@@ -344,11 +374,37 @@ export default function App() {
     }
   }, [msgs, busy]);
 
+  const saveTranscript = useCallback(
+    (list: Msg[]) => {
+      const first = list.find((m) => m.role === "user");
+      if (!first) return;
+      const snap = snapshotMsgs(list);
+      setHistory((h) => {
+        const idx = h.findIndex((e) => e.q === first.text);
+        if (idx < 0) return h;
+        const cur = h[idx];
+        const prev = cur.msgs;
+        if (
+          prev &&
+          prev.length === snap.length &&
+          prev[prev.length - 1]?.text === snap[snap.length - 1]?.text
+        ) {
+          return h;
+        }
+        return persistHistory(
+          h.map((e, i) => (i === idx ? { ...cur, msgs: snap } : e)),
+        );
+      });
+    },
+    [persistHistory],
+  );
+
   const send = useCallback(
-    async (query: string, opts?: { force?: boolean; fresh?: boolean }) => {
+    async (query: string, opts?: { force?: boolean; fresh?: boolean; streamIn?: boolean }) => {
       const q = query.trim();
       if (!q || busy) return;
       setBusy(true);
+      const streamIn = opts?.streamIn !== false;
       const userMsg: Msg = { id: nextId++, role: "user", text: q };
       setMsgs((m) => [...m, userMsg]);
       setInput("");
@@ -366,10 +422,18 @@ export default function App() {
           });
           setMsgs((m) => [
             ...m,
-            { id: nextId++, role: "assistant", text: resp.text, resp, feedback: null, retryQ: q },
+            {
+              id: nextId++,
+              role: "assistant",
+              text: resp.text,
+              resp,
+              feedback: null,
+              retryQ: q,
+              streamIn,
+            },
           ]);
-          setThread(bisChat.shouldKeepThread(resp) ? next : null);
           rememberTopic(q, fresh, topicKey);
+          setThread(bisChat.shouldKeepThread(resp) ? next : null);
         } catch (e) {
           const msg = e instanceof Error ? e.message : "request failed";
           const { text: friendly, expired } = friendlyError(msg);
@@ -391,6 +455,11 @@ export default function App() {
     [busy, lang, thread, topicKey, rememberTopic],
   );
 
+  useEffect(() => {
+    if (busy || msgs.length === 0) return;
+    saveTranscript(msgs);
+  }, [msgs, busy, history, saveTranscript]);
+
   // Re-run a failed turn inside its own message slot: no duplicate question,
   // shimmer while running, new answer (or error) swaps in place.
   const retryMessage = useCallback(
@@ -405,7 +474,7 @@ export default function App() {
       try {
         const { resp, thread: next } = await bisChat.send(q, { lang, thread });
         setThread(bisChat.shouldKeepThread(resp) ? next : null);
-        outcome = { text: resp.text, resp, error: undefined, feedback: null, retryQ: q };
+        outcome = { text: resp.text, resp, error: undefined, feedback: null, retryQ: q, streamIn: true };
         rememberTopic(q, false, topicKey);
       } catch (e) {
         const msg = e instanceof Error ? e.message : "request failed";
@@ -439,16 +508,21 @@ export default function App() {
 
   const openHistoryTopic = useCallback(
     (q: string) => {
+      const entry = history.find((e) => e.q === q);
       if (thread) void deleteThread(thread);
       setThread(null);
       setPendingQ("");
-      setMsgs([]);
       setInput("");
       setTopicKey((k) => k + 1);
       setSidebarOpen(false);
-      void send(q, { fresh: true });
+      if (entry?.msgs && entry.msgs.length > 0) {
+        setMsgs(hydrateMsgs(entry.msgs));
+        return;
+      }
+      setMsgs([]);
+      void send(q, { fresh: true, streamIn: false });
     },
-    [send, thread],
+    [send, thread, history],
   );
 
   // Upgrade the instant heuristic title with an LLM one once the first
@@ -558,7 +632,7 @@ export default function App() {
   const currentFirst = msgs.length > 0 ? msgs[0].text : null;
   const currentTitle = currentFirst ? makeTitle(currentFirst) || "New conversation" : null;
   const pastTopics = history.filter((e) => e.q !== currentFirst).slice(0, 8);
-  const lastAssistantId = [...msgs].reverse().find((m) => m.role === "assistant" && !m.error)?.id;
+
 
   const renderComposer = (centered: boolean) => (
     <div
@@ -846,7 +920,7 @@ export default function App() {
               <div className="chat-messages-container view-enter">
                 {msgs.map((m) =>
                   m.role === "user" ? (
-                    <div key={m.id} className="user-message-row msg-enter">
+                    <div key={m.id} className={`user-message-row${m.streamIn ? " msg-enter" : ""}`}>
                       <div className="user-stack">
                         <div className="user-bubble">
                           <RichText text={m.text} />
@@ -857,7 +931,7 @@ export default function App() {
                       </div>
                     </div>
                   ) : (
-                    <div key={m.id} className="assistant-message-row msg-enter">
+                    <div key={m.id} className={`assistant-message-row${m.streamIn ? " msg-enter" : ""}`}>
                       <div className="assistant-avatar">
                         <ManakEmblemIcon size={24} />
                       </div>
@@ -886,7 +960,7 @@ export default function App() {
                         ) : (
                           <div className="clean-answer-container">
                             <div className="answer-prose">
-                              {m.id === lastAssistantId && m.resp?.kind !== "model_unavailable" ? (
+                              {m.streamIn && m.resp?.kind !== "model_unavailable" ? (
                                 <TypewriterText key={`tw-${m.id}`} text={cleanAnswerText(m.text)} />
                               ) : (
                                 <RichText text={cleanAnswerText(m.text)} />

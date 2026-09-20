@@ -143,4 +143,6 @@ export interface Msg {
   retryQ?: string;
   /** true while a retry is re-running inside this message slot */
   retrying?: boolean;
+  /** typewriter only for text that just arrived from the model */
+  streamIn?: boolean;
 }
