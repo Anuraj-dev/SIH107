@@ -27,6 +27,12 @@ def test_health(client):
     assert "X-Request-ID" in r.headers
 
 
+def test_transcribe_unavailable_without_model(client):
+    r = client.post("/transcribe", json={"audio_b64": "AAAABBBB", "mime": "audio/webm"})
+    assert r.status_code == 503
+    assert "unavailable" in str(r.json()).lower()
+
+
 def test_chat_mints_thread(client):
     r = client.post("/chat", json={"query": "steel bottle"})
     assert r.status_code == 200

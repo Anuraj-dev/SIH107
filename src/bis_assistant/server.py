@@ -129,6 +129,17 @@ class ThreadOut(BaseModel):
     expires_at: str
 
 
+class TranscribeIn(BaseModel):
+    audio_b64: str = Field(min_length=8, max_length=2_800_000)
+    mime: str = "audio/webm"
+
+
+class TitleIn(BaseModel):
+    user_text: str = Field(min_length=1, max_length=2000)
+    assistant_text: str = Field(default="", max_length=8000)
+    lang: Optional[str] = None
+
+
 class ConsentIn(BaseModel):
     user_ref: str = Field(min_length=1, max_length=128)
     purpose: str = "personalise BIS licensing guidance"
@@ -342,6 +353,51 @@ def chat(body: ChatIn, request: Request,
         return resp
     finally:
         conn.close()
+
+
+@app.post("/transcribe")
+def transcribe_clip(body: TranscribeIn):
+    """Speech-to-text for the composer mic. 503 when no model can decode."""
+    import base64 as _b64
+    from .rag_llm import transcribe_audio
+    mime = (body.mime or "audio/webm").split(";")[0].strip() or "audio/webm"
+    try:
+        data = _b64.b64decode(body.audio_b64, validate=False)
+    except Exception:
+        raise HTTPException(status_code=400, detail={
+            "error": "invalid audio", "code": "bad_request", "retryable": False})
+    if not data or len(data) > 2_000_000:
+        raise HTTPException(status_code=400, detail={
+            "error": "audio too large or empty", "code": "bad_request",
+            "retryable": False})
+    try:
+        text = transcribe_audio(data, mime)
+    except Exception:
+        log.exception("transcription failed")
+        text = None
+    if not text:
+        raise HTTPException(status_code=503, detail={
+            "error": "speech service unavailable", "code": "model_unavailable",
+            "retryable": True})
+    return {"text": text}
+
+
+@app.post("/title")
+def chat_title(body: TitleIn):
+    """LLM sidebar title for an opening exchange. 503 when unavailable.
+
+    Stateless and auth-free: takes the opening user/assistant texts only.
+    Clients keep their local heuristic title on any failure.
+    """
+    from . import titles as titlemod
+    lang = body.lang if body.lang in ("en", "hi") else "en"
+    title = titlemod.generate_title(body.user_text, body.assistant_text, lang)
+    if not title:
+        raise HTTPException(status_code=503, detail={
+            "error": "title model unavailable", "code": "model_unavailable",
+            "retryable": True})
+    log.info("title generated", extra={"ctx": {"title": title}})
+    return {"title": title}
 
 
 @app.post("/consent")
