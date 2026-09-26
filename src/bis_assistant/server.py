@@ -9,6 +9,7 @@ import hashlib
 import hmac
 import json
 import logging
+import math
 import os
 import re
 import secrets
@@ -74,6 +75,161 @@ log = logging.getLogger("bis.api")
 log.addHandler(_handler)
 log.setLevel(logging.INFO)
 log.propagate = False
+
+_RETRIEVAL_BRANCHES = {
+    "catalogue", "catalogue_fts", "catalogue_only", "document", "document_fts",
+    "document_only", "fts", "fts_catalogue", "fts_document", "hybrid", "lexical",
+    "semantic", "none", "no_results", "unavailable", "disabled",
+}
+_EVIDENCE_TYPES = {"document_chunk", "catalogue_record"}
+_REJECTION_REASONS = {
+    "below_min_score", "below_threshold", "candidate_cap", "duplicate",
+    "below_relevance_threshold", "catalogue_limit", "combined_top_k_limit",
+    "duplicate_chunk", "duplicate_evidence", "duplicate_source",
+    "insufficient_query_term_overlap", "low_relevance", "low_score",
+    "missing_query_terms", "no_lexical_match", "no_relevance_overlap",
+    "not_selected", "outside_top_k", "query_mismatch", "relevance_threshold",
+    "retrieval_disabled", "retrieval_error", "source_diversity",
+    "source_diversity_limit", "source_limit", "threshold", "top_k_limit",
+}
+_SOURCE_ID_RE = re.compile(
+    r"^(?:IS|ISO|IEC)\s*[A-Z0-9][A-Z0-9().:/_-]{0,50}"
+    r"(?:\s+\(Part\s+\d+\))?(?::\d{4})?$", re.I)
+
+
+def _bounded_int(value, *, minimum: int = 0, maximum: int = 1_000_000) -> int | None:
+    if isinstance(value, bool):
+        return None
+    try:
+        number = int(value)
+    except (TypeError, ValueError, OverflowError):
+        return None
+    return max(minimum, min(maximum, number))
+
+
+def _safe_identifier(value) -> str | None:
+    if not isinstance(value, str):
+        return None
+    value = " ".join(value.split())[:64]
+    return value if _SOURCE_ID_RE.fullmatch(value) else None
+
+
+def _safe_retrieval_diagnostics(raw) -> dict | None:
+    """Copy only bounded, non-content retrieval metadata into logs and responses."""
+    if not isinstance(raw, dict):
+        return None
+
+    raw_branch = raw.get("branch", raw.get("retrieval_branch"))
+    branch = raw_branch.lower() if isinstance(raw_branch, str) else ""
+    if branch not in _RETRIEVAL_BRANCHES:
+        branch = "other"
+
+    raw_results = raw.get("results", raw.get("result_details", raw.get("candidates", [])))
+    results = []
+    if isinstance(raw_results, list):
+        for item in raw_results[:20]:
+            if not isinstance(item, dict):
+                continue
+            evidence_type = item.get("evidence_type", item.get("type"))
+            if not isinstance(evidence_type, str) or evidence_type not in _EVIDENCE_TYPES:
+                evidence_type = "other"
+            result = {"evidence_type": evidence_type}
+
+            rank = _bounded_int(item.get("rank"), minimum=1, maximum=1000)
+            if rank is not None:
+                result["rank"] = rank
+            score = item.get("score")
+            if isinstance(score, (int, float)) and not isinstance(score, bool):
+                try:
+                    score = float(score)
+                    if math.isfinite(score):
+                        result["score"] = round(max(-1_000_000.0, min(1_000_000.0, score)), 6)
+                except (TypeError, ValueError, OverflowError):
+                    pass
+            source_id = _safe_identifier(item.get(
+                "source_id", item.get("source_identifier", item.get("standard_number"))))
+            if source_id:
+                result["source_id"] = source_id
+            if isinstance(item.get("selected"), bool):
+                result["selected"] = item["selected"]
+            reason = item.get("rejection_reason", item.get("rejection_reason_code"))
+            if isinstance(reason, str) and reason:
+                reason = reason.lower()
+                result["rejection_reason"] = (
+                    reason if reason in _REJECTION_REASONS else "other")
+            results.append(result)
+
+    selected_from_results = sum(r.get("selected") is True for r in results)
+    rejected_from_results = sum(r.get("selected") is False for r in results)
+    selected = _bounded_int(raw.get("selected_count"))
+    rejected = _bounded_int(raw.get("rejected_count"))
+    if selected is None:
+        selected = selected_from_results
+    if rejected is None:
+        rejected = rejected_from_results
+
+    reasons = {}
+    raw_reasons = raw.get("rejection_reasons")
+    if isinstance(raw_reasons, dict):
+        for reason, count in list(raw_reasons.items())[:20]:
+            if not isinstance(reason, str):
+                continue
+            reason = reason.lower()
+            code = reason if reason in _REJECTION_REASONS else "other"
+            amount = _bounded_int(count)
+            if amount:
+                reasons[code] = min(1_000_000, reasons.get(code, 0) + amount)
+    if not reasons:
+        for item in results:
+            reason = item.get("rejection_reason")
+            if reason:
+                reasons[reason] = reasons.get(reason, 0) + 1
+
+    retrieval_ms = None
+    for key in ("retrieval_ms", "elapsed_ms", "latency_ms"):
+        retrieval_ms = _bounded_int(raw.get(key), maximum=3_600_000)
+        if retrieval_ms is not None:
+            break
+
+    return {
+        "branch": branch,
+        "selected_count": selected,
+        "rejected_count": rejected,
+        "rejection_reasons": reasons,
+        "results": results,
+        **({"retrieval_ms": retrieval_ms} if retrieval_ms is not None else {}),
+    }
+
+
+def _record_retrieval_telemetry(diagnostics: dict, response: dict, latency_ms: int) -> None:
+    branch = diagnostics["branch"]
+    metrics_mod.incr("rag_retrieval_total")
+    metrics_mod.incr(f"rag_retrieval_branch_{branch}_total")
+    metrics_mod.incr("rag_retrieval_selected_total", diagnostics["selected_count"])
+    metrics_mod.incr("rag_retrieval_rejected_total", diagnostics["rejected_count"])
+    outcome = "model_unavailable" if response.get("kind") == "model_unavailable" else (
+        "refused" if response.get("refused") else
+        "needs_info" if response.get("needs_info") else "answered")
+    metrics_mod.incr(f"rag_retrieval_outcome_{outcome}_total")
+    for reason, count in diagnostics["rejection_reasons"].items():
+        metrics_mod.incr(f"rag_retrieval_rejected_reason_{reason}_total", count)
+    for result in diagnostics["results"]:
+        metrics_mod.incr(f"rag_retrieval_result_type_{result['evidence_type']}_total")
+        log.info("RAG retrieval result", extra={"ctx": {
+            "event": "rag_retrieval_result", "branch": branch,
+            "rank": result.get("rank"), "evidence_type": result["evidence_type"],
+            "score": result.get("score"), "source_id": result.get("source_id"),
+            "selected": result.get("selected"),
+            "rejection_reason": result.get("rejection_reason")}})
+    if "retrieval_ms" in diagnostics:
+        metrics_mod.observe_retrieval_latency_ms(diagnostics["retrieval_ms"])
+    log.info("RAG retrieval completed", extra={"ctx": {
+        "event": "rag_retrieval", "branch": branch,
+        "selected_count": diagnostics["selected_count"],
+        "rejected_count": diagnostics["rejected_count"],
+        "rejection_reasons": diagnostics["rejection_reasons"],
+        "retrieval_ms": diagnostics.get("retrieval_ms"),
+        "outcome": outcome, "latency_ms": latency_ms}})
 
 def _admin_hashes() -> set[str]:
     import os
@@ -307,6 +463,13 @@ def chat(body: ChatIn, request: Request,
         t0 = time.time()
         resp = answer(q, lang, {"history": history, "rounds": rounds, "force": body.force})
         ms = int((time.time() - t0) * 1000)
+        retrieval_diagnostics = _safe_retrieval_diagnostics(
+            resp.get("retrieval_diagnostics"))
+        if retrieval_diagnostics is None:
+            resp.pop("retrieval_diagnostics", None)
+        else:
+            # Never pass through arbitrary diagnostic keys or retrieved content.
+            resp["retrieval_diagnostics"] = retrieval_diagnostics
         new_history = threadmod.push_history(history, redact(q)[:2000])
         new_rounds = threadmod.rounds_from(resp.get("context"), default=rounds)
         if tid is None:  # mint server thread (bridge + fresh turns)
@@ -336,14 +499,18 @@ def chat(body: ChatIn, request: Request,
                       ms, _utcnow().isoformat()))
         conn.commit()
         resp["thread_id"] = tid
+        if retrieval_diagnostics is not None:
+            _record_retrieval_telemetry(retrieval_diagnostics, resp, ms)
         log.info("chat response completed", extra={"ctx": {
-            "kind": resp.get("kind"), "lang": resp.get("lang"),
-            "needs_info": resp.get("needs_info"), "ms": ms,
-            "rag_mode": resp.get("rag_mode", ""),
+            "kind": resp.get("kind") if resp.get("kind") in {
+                "llm_answer", "model_unavailable", "erasure", "refused"} else "other",
+            "lang": resp.get("lang") if resp.get("lang") in {"en", "hi"} else "other",
+            "needs_info": bool(resp.get("needs_info")), "ms": ms,
+            "rag_mode": resp.get("rag_mode") if resp.get("rag_mode") in {
+                "llm", "model unavailable", "rag", "none"} else "other",
             "rag_used_llm": bool(resp.get("rag_used_llm", False)),
             "source_count": len(resp.get("sources") or resp.get("rag_evidence") or []),
-            "pii": [k for k, v in find_pii(q).items() if v],
-            "q": redact(q)[:120]}})
+            "pii": [k for k, v in find_pii(q).items() if v]}})
         metrics_mod.incr("chat_total")
         metrics_mod.observe_latency_ms(ms)
         if resp.get("kind") == "model_unavailable":

@@ -16,18 +16,44 @@ _TOKEN_RE = re.compile(r"[a-z0-9]+", re.IGNORECASE)
 _PORTAL = KYS_PORTAL
 
 _STOP = frozenset("""
-what does the cover about which with from that this give summary scope standard
+what does the cover about which with from that this give summary scope standard standards
 indian tell please explain specification requirements requirement information info
 is are was were do does did done for on in of to a an the and or my i me we you
 your yours how when where who whom it its these those from by as at be been being
 have has had will would can could should suggest recommend suitable applicable
-for my product startup manufacturing manufacture makes make
+for my product startup manufacturing manufacture makes make want start starting
+company care
 """.split())
+
+_QUERY_EXPANSIONS = {
+    "bottle": ("bottles", "container", "containers", "flask"),
+    "plastic": ("plastics", "polymer", "polymers"),
+    "water": ("drinking", "packaged"),
+}
 
 
 def _qtoks(query: str) -> set[str]:
-    return {w for w in _TOKEN_RE.findall((query or "").lower())
+    return {_normalise_token(w) for w in _TOKEN_RE.findall((query or "").lower())
             if len(w) > 2 and w not in _STOP}
+
+
+def _normalise_token(word: str) -> str:
+    """Light plural normalisation shared by query and metadata matching."""
+    if word.endswith("ies") and len(word) > 4:
+        return word[:-3] + "y"
+    if word.endswith("s") and not word.endswith("ss") and len(word) > 3:
+        return word[:-1]
+    return word
+
+
+def _expanded_qtoks(query: str) -> tuple[set[str], dict[str, float]]:
+    primary = _qtoks(query)
+    weights = {token: 1.0 for token in primary}
+    for token in primary:
+        for expansion in _QUERY_EXPANSIONS.get(token, ()):
+            normalized = _normalise_token(expansion)
+            weights.setdefault(normalized, 0.55)
+    return primary, weights
 
 
 def _digits(s: str) -> str:
@@ -52,7 +78,9 @@ def _fts_table(conn: sqlite3.Connection) -> bool:
 
 
 def search_catalogue(query: str, db_path: str | Path | None = None,
-                     limit: int = 5, _conn: sqlite3.Connection | None = None) -> list[dict]:
+                     limit: int = 5, _conn: sqlite3.Connection | None = None,
+                     minimum_relevance: float = 0.25,
+                     diagnostics: dict | None = None) -> list[dict]:
     """Keyword scan of catalogue_standards. [] when DB/table missing.
 
     Each hit: {standard_id, standard_number, title, department, committee,
@@ -63,9 +91,15 @@ def search_catalogue(query: str, db_path: str | Path | None = None,
     q = (query or "").strip()
     if not q:
         return []
-    qt = _qtoks(q)
+    qt, weighted_qt = _expanded_qtoks(q)
     qdigits = {d for d in re.findall(r"\d{3,5}", q)}
     if not qt and not qdigits:
+        if diagnostics is not None:
+            diagnostics.update({
+                "branch": "catalogue_records", "candidate_count": 0,
+                "selected_count": 0, "rejected_count": 0,
+                "rejection_reasons": {}, "selected": [],
+            })
         return []
     own_conn = _conn is None
     if _conn is not None:
@@ -83,7 +117,7 @@ def search_catalogue(query: str, db_path: str | Path | None = None,
         # rows to a small set; Python scoring below keeps exact semantics.
         # Full scan remains the fallback when FTS is missing or silent.
         rows = None
-        match = _fts_match(qt, qdigits)
+        match = _fts_match(set(weighted_qt), qdigits)
         if match and _fts_table(conn):
             try:
                 # BM25 pre-rank keeps rare-term rows (the ones Python
@@ -115,22 +149,50 @@ def search_catalogue(query: str, db_path: str | Path | None = None,
         except Exception:
             pass
         scored: list[dict] = []
+        considered_count = 0
+        rejection_reasons: dict[str, int] = {}
         for r in rows:
+            considered_count += 1
             num = r["standard_number"] or ""
             name = r["standard_name"] or ""
             dept = (r["department"] or "") + " " + (r["committee"] or "")
-            name_toks = set(_TOKEN_RE.findall(name.lower()))
-            dept_toks = set(_TOKEN_RE.findall(dept.lower()))
-            num_toks = set(_TOKEN_RE.findall(num.lower()))
+            name_toks = {_normalise_token(w) for w in _TOKEN_RE.findall(name.lower())}
+            dept_toks = {_normalise_token(w) for w in _TOKEN_RE.findall(dept.lower())}
+            num_toks = {_normalise_token(w) for w in _TOKEN_RE.findall(num.lower())}
             overlap_name = len(qt & name_toks)
-            overlap = len(qt & (name_toks | dept_toks | num_toks))
-            score = 2.0 * overlap_name + 0.5 * len(qt & dept_toks)
             exact = bool(qdigits and _digits(num) in qdigits)
+            name_weight = sum(weighted_qt[t] for t in weighted_qt if t in name_toks)
+            dept_weight = sum(weighted_qt[t] for t in weighted_qt if t in dept_toks)
+            number_weight = sum(weighted_qt[t] for t in weighted_qt if t in num_toks)
+            primary_hits = len(qt & (name_toks | dept_toks | num_toks))
+            # A title match is strongest; department and designation overlap
+            # can support a hit but cannot make a broad single-token match
+            # look like a precise product match.
+            relevance = min(1.0, (name_weight + 0.25 * dept_weight
+                                  + 0.25 * number_weight) / max(1, len(qt)))
+            if exact:
+                relevance = 1.0
+            if relevance <= 0 and not exact:
+                rejection_reasons["no_relevance_overlap"] = (
+                    rejection_reasons.get("no_relevance_overlap", 0) + 1)
+                continue
+            score = 2.0 * name_weight + 0.5 * dept_weight + 0.25 * number_weight
             if exact:
                 score += 20.0
-            if score <= 0:
+            # A named product phrase receives a small ordering boost without
+            # relaxing the multi-term relevance gate.
+            normalized_query = " ".join(_TOKEN_RE.findall(q.lower()))
+            if ("water bottle" in normalized_query and
+                    ("bottle" in name_toks or "container" in name_toks) and
+                    "water" in name_toks):
+                score += 2.0
+            relevant = bool(exact or (
+                relevance >= max(0.0, float(minimum_relevance))
+                and primary_hits >= min(2, len(qt))))
+            if not relevant:
+                rejection_reasons["below_relevance_threshold"] = (
+                    rejection_reasons.get("below_relevance_threshold", 0) + 1)
                 continue
-            relevant = bool(exact or overlap_name >= 2 or overlap >= 3)
             scored.append({
                 "standard_id": r["standard_id"],
                 "standard_number": num,
@@ -141,11 +203,33 @@ def search_catalogue(query: str, db_path: str | Path | None = None,
                 "published_on": r["published_on"] or "",
                 "source_url": url_by_sid.get(r["standard_id"], _PORTAL),
                 "score": score,
+                "relevance": round(relevance, 6),
                 "exact_match": exact,
                 "relevant": relevant,
+                "evidence_type": "catalogue_record",
+                "metadata_only": True,
             })
-        scored.sort(key=lambda d: -d["score"])
-        return scored[:limit]
+        scored.sort(key=lambda d: (-d["relevance"], -d["score"],
+                                   d["standard_number"]))
+        selected = scored[:max(1, int(limit))]
+        if diagnostics is not None:
+            candidate_count = considered_count
+            if len(scored) > len(selected):
+                rejection_reasons["catalogue_limit"] = len(scored) - len(selected)
+            diagnostics.update({
+                "branch": "catalogue_records",
+                "candidate_count": candidate_count,
+                "selected_count": len(selected),
+                "rejected_count": candidate_count - len(selected),
+                "rejection_reasons": rejection_reasons,
+                "selected": [
+                    {"rank": rank, "score": round(item["relevance"], 6),
+                     "reason": "exact_designation" if item["exact_match"] else
+                     "relevance_threshold_passed"}
+                    for rank, item in enumerate(selected[:12], 1)
+                ],
+            })
+        return selected
     finally:
         if own_conn:
             try:

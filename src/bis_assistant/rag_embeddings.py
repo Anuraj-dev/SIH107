@@ -15,20 +15,24 @@ from pathlib import Path
 log = logging.getLogger("bis.rag")
 
 
-@lru_cache(maxsize=2)
-def _embedding_model(name: str):
+@lru_cache(maxsize=4)
+def _embedding_model(name: str, allow_download: bool = False):
     try:
         from sentence_transformers import SentenceTransformer
-        return SentenceTransformer(name)
+        # Chat retrieval is deliberately cache-only: selecting an embedding
+        # model in config must never trigger an implicit network download.
+        # Downloads are allowed only from the explicit corpus-indexing path.
+        return SentenceTransformer(name, local_files_only=not allow_download)
     except Exception as exc:
         log.warning("dense retrieval model unavailable; using lexical search",
-                    extra={"ctx": {"model": name, "reason": type(exc).__name__}})
+                    extra={"ctx": {"model": name, "reason": type(exc).__name__,
+                                   "local_only": not allow_download}})
         return None
 
 
-def get_model(name: str):
-    """Load a sentence-transformers model once, on first use."""
-    return _embedding_model(name) if name else None
+def get_model(name: str, *, allow_download: bool = False):
+    """Load a model once; callers must explicitly opt into downloading it."""
+    return _embedding_model(name, allow_download) if name else None
 
 
 def cosine(left, right) -> float:
@@ -55,7 +59,7 @@ def semantic_score(query: str, document: str, model_name: str = "",
 def _cross_encoder(name: str):
     try:
         from sentence_transformers import CrossEncoder
-        return CrossEncoder(name)
+        return CrossEncoder(name, local_files_only=True)
     except Exception as exc:
         log.warning("cross-encoder unavailable; keeping hybrid retrieval order",
                     extra={"ctx": {"model": name, "reason": type(exc).__name__}})
@@ -87,7 +91,9 @@ def rerank_scores(query: str, texts: list[str], model_name: str) -> list[float] 
 def index_corpus_embeddings(conn: sqlite3.Connection, model_name: str,
                             batch_size: int = 32) -> int:
     """Build or replace the persisted dense index for one embedding model."""
-    model = get_model(model_name)
+    if batch_size < 1:
+        raise ValueError("batch_size must be positive")
+    model = get_model(model_name, allow_download=True)
     if model is None:
         raise RuntimeError(
             f"Could not load embedding model {model_name!r}; install sentence-transformers "
@@ -114,6 +120,9 @@ def index_corpus_embeddings(conn: sqlite3.Connection, model_name: str,
              for row, vector in zip(batch, vectors, strict=True)],
         )
     conn.commit()
+    # A preceding cache-only lookup may have cached a miss. A later retrieval
+    # in this same process should now load the newly available model locally.
+    _embedding_model.cache_clear()
     return len(rows)
 
 
@@ -145,9 +154,24 @@ def dense_search(db_path: str | Path, query: str, model_name: str,
     if not query.strip():
         return []
     try:
+        path = str(Path(db_path).resolve())
+        conn = sqlite3.connect(path)
+        try:
+            try:
+                has_vectors = conn.execute(
+                    "SELECT 1 FROM corpus_embeddings WHERE model_name=? LIMIT 1",
+                    (model_name,),
+                ).fetchone() is not None
+            except sqlite3.OperationalError:
+                # Databases without the optional embedding table are lexical-only.
+                return []
+        finally:
+            conn.close()
+        if not has_vectors:
+            return []
+
         import numpy as np
 
-        path = str(Path(db_path).resolve())
         ids, matrix = _dense_index(path, model_name, os.stat(path).st_mtime_ns)
         if not ids:
             return []

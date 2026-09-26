@@ -13,6 +13,15 @@ from . import rag_embeddings as emb
 
 _TOKEN_RE = re.compile(r"[a-z0-9]+", re.IGNORECASE)
 _FTS_RESERVED = re.compile(r"[\":*^()]")
+_STOP = frozenset("""
+what does the cover about which with from that this give summary scope standard
+standards indian tell please explain specification requirements requirement
+information info is are was were do does did done for on in of to a an and or my
+i me we you your yours how when where who whom it its these those by as at be
+been being have has had will would can could should suggest recommend suitable
+applicable product startup manufacturing manufacture makes make want start
+starting company care
+""".split())
 
 
 def extract_is_numbers(query: str) -> list[str]:
@@ -93,7 +102,8 @@ def _normalize_is(s: str) -> str:
 
 
 def _fts_query(query: str) -> str:
-    toks = [t for t in _TOKEN_RE.findall(query.lower()) if len(t) > 1]
+    toks = [t for t in _TOKEN_RE.findall(query.lower())
+            if len(t) > 2 and _normalise_token(t) not in _STOP]
     # keep IS digits glued: 'IS 101' -> 'IS101' token variant too
     extra = []
     for m in extract_is_numbers(query):
@@ -119,11 +129,73 @@ def _fts_query(query: str) -> str:
 
 
 def _token_overlap_score(query: str, text: str) -> float:
-    q = set(t for t in _TOKEN_RE.findall(query.lower()) if len(t) > 2)
-    d = set(t for t in _TOKEN_RE.findall(text.lower()) if len(t) > 2)
+    q = _query_terms(query)
+    d = _normalised_terms(text)
     if not q or not d:
         return 0.0
     return len(q & d) / (len(q) ** 0.5)
+
+
+def _normalise_token(token: str) -> str:
+    if token.endswith("ies") and len(token) > 4:
+        return token[:-3] + "y"
+    if token.endswith("s") and not token.endswith("ss") and len(token) > 3:
+        return token[:-1]
+    return token
+
+
+def _query_terms(query: str) -> set[str]:
+    return {_normalise_token(token) for token in _TOKEN_RE.findall(query.lower())
+            if len(token) > 2 and token not in _STOP}
+
+
+def _normalised_terms(text: str) -> set[str]:
+    return {_normalise_token(token) for token in _TOKEN_RE.findall(text.lower())
+            if len(token) > 2}
+
+
+def _max_local_overlap(query_terms: set[str], text: str,
+                       window_size: int = 12) -> int:
+    """Return the strongest query-term support in a short body-text window."""
+    max_overlap = 0
+    for segment in re.split(r"(?<=[.!?;:])\s+|[\r\n]+", text or ""):
+        tokens = [_normalise_token(token) for token in _TOKEN_RE.findall(segment.lower())]
+        for start in range(max(1, len(tokens) - window_size + 1)):
+            window = set(tokens[start:start + window_size])
+            max_overlap = max(max_overlap, len(query_terms & window))
+    return max_overlap
+
+
+def _chunk_relevance(query_terms: set[str], row: dict,
+                     semantic_score: float = 0.0) -> tuple[float, bool]:
+    title_heading_hits = max((
+        len(query_terms & _normalised_terms(row.get(field, "")))
+        for field in ("title", "heading")
+    ), default=0)
+    local_body_hits = _max_local_overlap(query_terms, row.get("chunk_text", ""))
+    lexical_relevance = max(title_heading_hits, local_body_hits) / max(1, len(query_terms))
+    relevance = max(lexical_relevance, max(0.0, semantic_score))
+    strong_title_heading = bool(query_terms) and title_heading_hits >= min(2, len(query_terms))
+    tight_body_context = bool(query_terms) and local_body_hits >= min(3, len(query_terms))
+    return relevance, strong_title_heading or tight_body_context
+
+
+def _finish_diagnostics(diagnostics: dict | None, *, candidate_count: int,
+                        selected: list[dict], reasons: dict[str, int]) -> None:
+    if diagnostics is None:
+        return
+    diagnostics.update({
+        "branch": "document_chunks",
+        "candidate_count": candidate_count,
+        "selected_count": len(selected),
+        "rejected_count": max(0, candidate_count - len(selected)),
+        "rejection_reasons": reasons,
+        "selected": [
+            {"rank": rank, "score": round(float(item.get("relevance", 0.0)), 6),
+             "reason": item.get("selection_reason", "relevance_threshold_passed")}
+            for rank, item in enumerate(selected[:12], 1)
+        ],
+    })
 
 
 def search_rag(query: str, top_k: int = 5,
@@ -131,7 +203,9 @@ def search_rag(query: str, top_k: int = 5,
                lexical_weight: float = 1.0, semantic_weight: float = 0.3,
                exact_boost: float = 50.0, semantic: bool = True,
                embedding_model: str = "",
-               _conn: sqlite3.Connection | None = None) -> list[dict]:
+               _conn: sqlite3.Connection | None = None,
+               minimum_relevance: float = 0.25,
+               diagnostics: dict | None = None) -> list[dict]:
     """Hybrid search. Empty list when DB missing/empty (never raises).
 
     Pass ``_conn`` to reuse one connection per request (issue #4 P1-10);
@@ -141,14 +215,21 @@ def search_rag(query: str, top_k: int = 5,
     cfg = load_rag_config()
     db_path = str(db_path or cfg["db_path"])
     top_k = max(1, int(top_k or cfg["top_k"]))
+    minimum_relevance = max(0.0, float(minimum_relevance))
     if not os.path.exists(db_path):
+        _finish_diagnostics(diagnostics, candidate_count=0, selected=[], reasons={})
         return []
     q = (query or "").strip()
     if not q:
+        _finish_diagnostics(diagnostics, candidate_count=0, selected=[], reasons={})
+        return []
+    query_terms = _query_terms(q)
+    if not query_terms and not extract_is_numbers(q):
+        _finish_diagnostics(diagnostics, candidate_count=0, selected=[], reasons={})
         return []
     q_is = extract_is_numbers(q)
     fts_q = _fts_query(q)
-    candidate_limit = max(top_k * 6, 20)
+    candidate_limit = min(max(top_k * 20, 50), 300)
 
     own_conn = _conn is None
     if _conn is not None:
@@ -166,8 +247,10 @@ def search_rag(query: str, top_k: int = 5,
         try:
             n = conn.execute("SELECT COUNT(*) c FROM corpus_chunks").fetchone()["c"]
         except Exception:
+            _finish_diagnostics(diagnostics, candidate_count=0, selected=[], reasons={})
             return []
         if not n:
+            _finish_diagnostics(diagnostics, candidate_count=0, selected=[], reasons={})
             return []
         lexical_rows: list[dict] = []
         used_fts = False
@@ -217,8 +300,9 @@ def search_rag(query: str, top_k: int = 5,
         if not rows_by_id:
             # FTS5 can be missing or have no lexical hit. Keep a small LIKE
             # fallback for minimal SQLite builds and empty dense indexes.
-            toks = [t for t in _TOKEN_RE.findall(q.lower()) if len(t) > 2][:8]
+            toks = sorted(query_terms)[:8]
             if not toks:
+                _finish_diagnostics(diagnostics, candidate_count=0, selected=[], reasons={})
                 return []
             where = " OR ".join(["chunk_text LIKE ?"] * len(toks))
             params = [f"%{t}%" for t in toks]
@@ -230,6 +314,7 @@ def search_rag(query: str, top_k: int = 5,
                 rows_by_id.update({int(row["id"]): row for row in lexical_rows})
                 used_fts = False
             except Exception:
+                _finish_diagnostics(diagnostics, candidate_count=0, selected=[], reasons={})
                 return []
 
         lexical_scores = {}
@@ -288,6 +373,7 @@ def search_rag(query: str, top_k: int = 5,
                 "score": fused,
                 "lexical": lex,
                 "semantic": sem,
+                "relevance": 0.0,
                 "rrf_score": rrf,
                 "exact_boost": boost,
                 "exact_match": is_exact,
@@ -308,7 +394,50 @@ def search_rag(query: str, top_k: int = 5,
                 -item["rrf_score"],
                 -item["score"],
             ))
-        return ordered[:top_k]
+        reasons: dict[str, int] = {}
+        candidate_count = len(ordered)
+        relevant: list[dict] = []
+        for item in ordered:
+            relevance, enough_terms = _chunk_relevance(
+                query_terms, item, float(item.get("semantic", 0.0) or 0.0))
+            item["relevance"] = round(relevance, 6)
+            exact = bool(item.get("exact_match"))
+            if exact or (relevance >= minimum_relevance and enough_terms):
+                item["evidence_type"] = "document_chunk"
+                item["selection_reason"] = (
+                    "exact_designation" if exact else "relevance_threshold_passed")
+                relevant.append(item)
+            else:
+                reason = "below_relevance_threshold"
+                if relevance >= minimum_relevance and not enough_terms:
+                    reason = "insufficient_query_term_overlap"
+                reasons[reason] = reasons.get(reason, 0) + 1
+
+        # Remove duplicate chunk text and limit repeated passages from the
+        # same standard so one source cannot crowd out other relevant sources.
+        selected: list[dict] = []
+        seen_chunks: set[tuple] = set()
+        per_standard: dict[str, int] = {}
+        for item in relevant:
+            standard = item.get("standard_number") or f"doc:{item.get('doc_id')}"
+            norm_chunk = " ".join((item.get("chunk_text") or "").lower().split())
+            key = (standard, norm_chunk)
+            if key in seen_chunks:
+                reasons["duplicate_chunk"] = reasons.get("duplicate_chunk", 0) + 1
+                continue
+            if per_standard.get(standard, 0) >= 3:
+                reasons["source_diversity_limit"] = reasons.get(
+                    "source_diversity_limit", 0) + 1
+                continue
+            seen_chunks.add(key)
+            per_standard[standard] = per_standard.get(standard, 0) + 1
+            selected.append(item)
+        if len(selected) > top_k:
+            reasons["top_k_limit"] = reasons.get("top_k_limit", 0) + len(selected) - top_k
+            selected = selected[:top_k]
+        _finish_diagnostics(diagnostics, candidate_count=candidate_count,
+                            selected=selected, reasons=reasons)
+        return selected
     finally:
         if own_conn:
             try:

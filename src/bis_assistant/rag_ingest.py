@@ -15,6 +15,7 @@ Mapping rules:
 from __future__ import annotations
 
 import json
+import logging
 import os
 import re
 from pathlib import Path
@@ -23,6 +24,7 @@ from .chunking import chunk_text, clean_text, normalize_for_dedup
 from .rag_store import connect_rag, counts, has_fts, now
 
 IS_IN_TEXT_RE = re.compile(r"IS\s*\d[\d/\-()A-Za-z ]{0,40}:\d{4}")
+log = logging.getLogger("bis.rag")
 
 
 def load_ndjson(path: Path) -> list[dict]:
@@ -244,7 +246,16 @@ def import_corpus(corpus_dir: str | Path, db_path: str | Path,
         conn.commit()
         if embedding_model:
             from .rag_embeddings import index_corpus_embeddings
-            stats["embedded_chunks"] = index_corpus_embeddings(conn, embedding_model)
+            try:
+                stats["embedded_chunks"] = index_corpus_embeddings(conn, embedding_model)
+            except Exception as exc:
+                # Import remains usable through FTS/lexical retrieval if the
+                # optional model, runtime, or index build is unavailable.
+                conn.rollback()
+                stats["embedding_error"] = f"{type(exc).__name__}: {exc}"
+                log.warning("dense index build failed; corpus remains lexical-searchable",
+                            extra={"ctx": {"model": embedding_model,
+                                           "reason": type(exc).__name__}})
         try:
             conn.execute("VACUUM")
         except Exception:

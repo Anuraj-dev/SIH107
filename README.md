@@ -75,20 +75,35 @@ standard number, document type and heading. The default import does not download
 ML models. Reimport with the same `--embedding-model` value to rebuild dense
 vectors; a corpus reimport without that option clears the old vectors.
 
-To add dense retrieval, install `sentence-transformers` and build the index
-once. The first run downloads the selected model if it is not already local:
+Dense retrieval uses the optional `sentence-transformers` dependency and the
+configured English model `BAAI/bge-small-en-v1.5`. The application only loads
+models from the local Hugging Face cache; it never downloads a model during
+startup or chat retrieval. Without the optional package, cached model, or a
+matching dense index, chat continues with FTS/lexical retrieval.
+
+Install the optional dependency and explicitly build the index. This command
+may download the model if it is not already cached:
 
 ```
-python -m pip install sentence-transformers
+python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+python -m pip install 'sentence-transformers>=3.0'
 PYTHONPATH=src python scripts/import_rag_corpus.py \
   --corpus new_data/bis-rag-text-corpus-2026-09-18 \
   --db kb/bis_rag.db \
   --embedding-model BAAI/bge-small-en-v1.5
 ```
 
-Set the same `BIS_RAG_EMBEDDING_MODEL` and optionally
-`BIS_RAG_RERANKER_MODEL=BAAI/bge-reranker-base` when starting the API. Dense
-search uses the SQLite vector table; no separate vector service is required.
+The first command installs the CPU-only PyTorch wheel; run it before installing
+`sentence-transformers` so pip reuses that wheel.
+
+The command reports an embedding warning and leaves the imported corpus usable
+for lexical retrieval if optional model loading or vector generation fails.
+Set `BIS_RAG_EMBEDDING_MODEL` to the same model when starting the API (or keep
+the config default). If configuring `BIS_RAG_RERANKER_MODEL`, that model must
+also already be present in the local cache. Dense search uses the SQLite vector
+table; no separate vector service is required. See the
+[BGE-small English model card](https://huggingface.co/BAAI/bge-small-en-v1.5)
+for model details.
 
 ### 2. Environment variables
 
@@ -98,7 +113,7 @@ search uses the SQLite vector table; no separate vector service is required.
 | `BIS_RAG_DB_PATH` | `kb/bis_rag.db` | SQLite corpus index |
 | `BIS_RAG_TOP_K` | `5` | evidence chunks per query |
 | `BIS_RAG_SEMANTIC` | `1` | use dense search when the matching index exists |
-| `BIS_RAG_EMBEDDING_MODEL` | empty | model name used to build and query the dense index |
+| `BIS_RAG_EMBEDDING_MODEL` | `BAAI/bge-small-en-v1.5` | model name used to build and query the dense index; loaded cache-only at runtime |
 | `BIS_RAG_RERANKER_MODEL` | empty | optional CrossEncoder model for final reranking |
 | `BIS_LLM_PROVIDER` | `openai-compatible` | `ollama`, `openai-compatible`, `gemini`, or `anthropic` |
 | `BIS_LLM_MODEL` | empty | provider model id; empty makes the chatbot unavailable |

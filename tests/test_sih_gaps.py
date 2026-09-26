@@ -411,15 +411,29 @@ def _widget_db(tmp_path):
     return db
 
 
-def test_chat_never_uses_catalogue_records_as_an_answer_fallback(monkeypatch):
+def test_chat_uses_catalogue_records_only_as_typed_model_context(monkeypatch):
     _hermetic(monkeypatch)
-    from bis_assistant import catalogue_search
-    monkeypatch.setattr(catalogue_search, "search_catalogue",
-                        lambda *_a, **_kw: pytest.fail("catalogue answer path must not run"))
+    calls = _fake_model(monkeypatch, evidence=[{
+        "evidence_type": "catalogue_record",
+        "standard_number": "IS 99999:2026",
+        "title": "Galvanized iron widgets for fencing hardware",
+        "doc_type": "Product Specification",
+        "chunk_text": "",
+        "metadata_only": True,
+        "metadata_notice": "Catalogue metadata only; full standard text was not retrieved.",
+    }], answer_text=("The catalogue entry lists [IS 99999:2026] [Source 1] "
+                     "as the designation. This is metadata only; the full "
+                     "standard text was not retrieved."))
     from bis_assistant.assistant import answer
     response = answer("Which standard covers galvanized iron widgets for fencing hardware?")
-    assert response["kind"] == "model_unavailable"
-    assert not hasattr(catalogue_search, "build_catalogue_answer")
+    assert response["text"].startswith("The catalogue entry lists [IS 99999:2026]")
+    assert response["kind"] == "llm_answer" and len(calls) == 1
+    prompt = calls[0][1]["content"]
+    assert "IS 99999:2026" in prompt
+    assert "Galvanized iron widgets" in prompt
+    assert "The catalogue entry lists" not in prompt
+    assert not hasattr(__import__("bis_assistant.catalogue_search", fromlist=["x"]),
+                       "build_catalogue_answer")
 
 
 def test_certification_guidance_is_written_by_model_not_appended_from_templates(monkeypatch):

@@ -38,8 +38,10 @@ rag:
   enabled: true         # retrieve lab evidence for every configured model answer
   db_path: kb/bis_rag.db  # BIS_RAG_DB_PATH
   top_k: 5              # BIS_RAG_TOP_K
+  minimum_relevance: 0.25  # BIS_RAG_MINIMUM_RELEVANCE; normalized relevance floor [0,1]
+  catalogue_top_k: 5       # BIS_RAG_CATALOGUE_TOP_K; maximum catalogue candidates [1,100]
   semantic: true        # BIS_RAG_SEMANTIC — use a built dense index when available
-  embedding_model: ""   # BIS_RAG_EMBEDDING_MODEL — sentence-transformers index model
+  embedding_model: BAAI/bge-small-en-v1.5  # English dense retrieval; install/index explicitly
   reranker_model: ""    # BIS_RAG_RERANKER_MODEL — optional CrossEncoder reranker
   weight_lexical: 1.0
   weight_semantic: 0.3

@@ -10,6 +10,7 @@ from datetime import date
 _lock = threading.Lock()
 _counts: dict[str, int] = {}
 _lat: list[int] = []
+_rag_lat: list[int] = []
 
 
 def enabled() -> bool:
@@ -31,10 +32,19 @@ def observe_latency_ms(ms: int) -> None:
         del _lat[:-500]
 
 
+def observe_retrieval_latency_ms(ms: int) -> None:
+    if not enabled():
+        return
+    with _lock:
+        _rag_lat.append(ms)
+        del _rag_lat[:-500]
+
+
 def reset() -> None:  # tests only
     with _lock:
         _counts.clear()
         _lat.clear()
+        _rag_lat.clear()
 
 
 def _pct(xs: list[int], p: float) -> int:
@@ -57,18 +67,28 @@ def kb_staleness_days() -> int:
 
 SERIES = ["chat_total", "answered_total", "refused_total", "needs_info_total",
           "model_unavailable_total",
-          "feedback_total", "feedback_neg_total", "chat_5xx_total"]
+          "feedback_total", "feedback_neg_total", "chat_5xx_total",
+          "rag_retrieval_total", "rag_retrieval_selected_total",
+          "rag_retrieval_rejected_total", "rag_retrieval_outcome_answered_total",
+          "rag_retrieval_outcome_refused_total",
+          "rag_retrieval_outcome_needs_info_total",
+          "rag_retrieval_outcome_model_unavailable_total",
+          "rag_retrieval_result_type_document_chunk_total",
+          "rag_retrieval_result_type_catalogue_record_total"]
 
 
 def snapshot() -> dict:
     from . import verifier
     with _lock:
         lat = list(_lat)
+        rag_lat = list(_rag_lat)
         counts = {k: _counts.get(k, 0) for k in SERIES}
         counts.update({k: v for k, v in _counts.items() if k not in counts})
     out = dict(counts)
     out["chat_latency_p50_ms"] = _pct(lat, 0.5)
     out["chat_latency_p95_ms"] = _pct(lat, 0.95)
+    out["rag_retrieval_latency_p50_ms"] = _pct(rag_lat, 0.5)
+    out["rag_retrieval_latency_p95_ms"] = _pct(rag_lat, 0.95)
     out["citation_fail_total"] = verifier.VIOLATION_COUNT["n"]
     out["kb_staleness_days"] = kb_staleness_days()
     return out

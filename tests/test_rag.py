@@ -1,5 +1,6 @@
 """Full-text RAG tests: mapping, chunking, hybrid retrieval, /chat answers."""
 import os
+import re
 import sys
 from pathlib import Path
 
@@ -200,7 +201,23 @@ def _rag_env(monkeypatch, db):
         monkeypatch.delenv(v, raising=False)
 
 
-def _configure_fake_llm(monkeypatch):
+def _document_source_reply(messages):
+    prompt = messages[1]["content"]
+    designation = "IS 101 (Part 2/Sec 6):2026"
+    source = re.search(
+        r"\[Source (\d+)\]\n"
+        r"Evidence type: RETRIEVED DOCUMENT CHUNK[^\n]*\n"
+        r"Designation: " + re.escape(designation) + r"\n",
+        prompt,
+    )
+    assert source, f"matching document evidence for {designation} is missing"
+    return (
+        f"The model's grounded synthesis. [{designation}] "
+        f"[Source {source.group(1)}]"
+    )
+
+
+def _configure_fake_llm(monkeypatch, reply=None):
     from bis_assistant import assistant, rag_llm
 
     cfg = {"provider": "openai-compatible", "model": "test-model", "api_key": "k",
@@ -208,15 +225,22 @@ def _configure_fake_llm(monkeypatch):
            "max_tokens": 256, "timeout_s": 1.0, "retries": 0}
     calls = []
     monkeypatch.setattr(assistant, "load_llm_config", lambda: cfg)
-    monkeypatch.setattr(rag_llm, "chat_complete",
-                        lambda messages, _cfg=None: calls.append(messages)
-                        or "The model's grounded synthesis. [IS 101 (Part 2/Sec 6):2026] [Source 1]")
+    def fake_chat_complete(messages, _cfg=None):
+        calls.append(messages)
+        if callable(reply):
+            return reply(messages)
+        return reply or (
+            "The model's grounded synthesis. "
+            "[IS 101 (Part 2/Sec 6):2026] [Source 1]"
+        )
+
+    monkeypatch.setattr(rag_llm, "chat_complete", fake_chat_complete)
     return calls
 
 
 def test_corpus_answer_through_chat(mini_db, monkeypatch):
     _rag_env(monkeypatch, mini_db)
-    calls = _configure_fake_llm(monkeypatch)
+    calls = _configure_fake_llm(monkeypatch, _document_source_reply)
     from bis_assistant.chat import chat
     t = chat("What does IS 101 (Part 2/Sec 6):2026 cover? formaldehyde")
     assert t.kind == "llm_answer" and not t.refused
@@ -255,7 +279,7 @@ def test_llm_adapter_returns_none_when_unconfigured(monkeypatch):
 
 def test_chat_endpoint_serves_corpus(mini_db, monkeypatch, tmp_path):
     _rag_env(monkeypatch, mini_db)
-    calls = _configure_fake_llm(monkeypatch)
+    calls = _configure_fake_llm(monkeypatch, _document_source_reply)
     from fastapi.testclient import TestClient
     import bis_assistant.server as srv
     monkeypatch.setattr(srv, "DB_PATH", tmp_path / "ops.db")
@@ -311,9 +335,18 @@ def test_full_text_request_reaches_prompt_when_model_is_configured(mini_db, monk
 def test_certification_safety_rule_is_sent_to_model(mini_db, monkeypatch):
     _rag_env(monkeypatch, mini_db)
     calls = _configure_fake_llm(monkeypatch)
+    from bis_assistant import rag_llm
+    neutral_reply = (
+        "The supplied evidence supports a summary; it does not establish product approval."
+    )
+    monkeypatch.setattr(
+        rag_llm, "chat_complete",
+        lambda messages, _cfg=None: calls.append(messages) or neutral_reply,
+    )
     from bis_assistant.assistant import answer
     r = answer("What does IS 14478 cover? plain bearings")
     assert r["kind"] == "llm_answer"
+    assert r["text"] == neutral_reply
     assert "never claim that a user's product is approved" in calls[0][0]["content"].lower()
 
 

@@ -4,8 +4,11 @@ Switches:
   BIS_RAG_ENABLED=1|true|yes      enable lab retrieval in /chat (default on)
   BIS_RAG_DB_PATH=kb/bis_rag.db   SQLite corpus index
   BIS_RAG_TOP_K=5                 evidence chunks per query
+  BIS_RAG_MINIMUM_RELEVANCE=0.25  minimum normalized lexical relevance [0,1]
+  BIS_RAG_CATALOGUE_TOP_K=5       maximum catalogue candidates per query [1,100]
   BIS_RAG_SEMANTIC=1              enable dense retrieval (default on)
-  BIS_RAG_EMBEDDING_MODEL=""      model used when building/searching the dense index
+  BIS_RAG_EMBEDDING_MODEL=BAAI/bge-small-en-v1.5
+                                  model used when building/searching the dense index
   BIS_RAG_RERANKER_MODEL=""       optional sentence-transformers CrossEncoder
   BIS_LLM_MODEL=""                e.g. gpt-4o-mini / gemini-2.0-flash / llama3
   BIS_LLM_PROVIDER="openai-compatible"  openai-compatible | gemini | ollama | anthropic
@@ -18,11 +21,13 @@ Switches:
 """
 from __future__ import annotations
 
+import math
 import os
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_DB = str(REPO_ROOT / "kb" / "bis_rag.db")
+DEFAULT_EMBEDDING_MODEL = "BAAI/bge-small-en-v1.5"
 
 
 def _bool_env(name: str, default: bool = False) -> bool:
@@ -46,6 +51,28 @@ def _float_env(name: str, default: float) -> float:
         return default
 
 
+def _bounded_float(name: str, configured, default: float,
+                   minimum: float, maximum: float) -> float:
+    raw = os.environ.get(name, configured if configured is not None else default)
+    try:
+        value = float(raw)
+    except (TypeError, ValueError, OverflowError):
+        value = default
+    if not math.isfinite(value):
+        value = default
+    return min(max(value, minimum), maximum)
+
+
+def _bounded_int(name: str, configured, default: int,
+                 minimum: int, maximum: int) -> int:
+    raw = os.environ.get(name, configured if configured is not None else default)
+    try:
+        value = int(raw)
+    except (TypeError, ValueError, OverflowError):
+        value = default
+    return min(max(value, minimum), maximum)
+
+
 def _cfg_section(name: str) -> dict:
     try:
         from .config import load as load_config
@@ -62,9 +89,16 @@ def load_rag_config() -> dict:
         "enabled": _bool_env("BIS_RAG_ENABLED", bool(file_cfg.get("enabled", True))),
         "db_path": os.environ.get("BIS_RAG_DB_PATH", str(file_cfg.get("db_path", DEFAULT_DB))),
         "top_k": _int_env("BIS_RAG_TOP_K", int(file_cfg.get("top_k", 5))),
+        "minimum_relevance": _bounded_float(
+            "BIS_RAG_MINIMUM_RELEVANCE", file_cfg.get("minimum_relevance"),
+            0.25, 0.0, 1.0),
+        "catalogue_top_k": _bounded_int(
+            "BIS_RAG_CATALOGUE_TOP_K", file_cfg.get("catalogue_top_k"),
+            5, 1, 100),
         "semantic": _bool_env("BIS_RAG_SEMANTIC", bool(file_cfg.get("semantic", True))),
         "embedding_model": os.environ.get(
-            "BIS_RAG_EMBEDDING_MODEL", str(file_cfg.get("embedding_model", ""))),
+            "BIS_RAG_EMBEDDING_MODEL",
+            str(file_cfg.get("embedding_model") or DEFAULT_EMBEDDING_MODEL)),
         "reranker_model": os.environ.get(
             "BIS_RAG_RERANKER_MODEL", str(file_cfg.get("reranker_model", ""))),
         "weight_lexical": _float_env(
