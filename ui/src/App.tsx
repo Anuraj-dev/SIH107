@@ -283,6 +283,8 @@ export default function App() {
   // Bumped when the user leaves a chat; replies to an older generation are
   // dropped instead of landing in the chat that replaced it.
   const genRef = useRef(0);
+  // True while the view should follow the newest message (see scroll effects).
+  const stickRef = useRef(true);
   const busyRef = useRef(false);
   const markBusy = useCallback((v: boolean) => {
     busyRef.current = v;
@@ -413,11 +415,47 @@ export default function App() {
     const el = mainRef.current;
     if (!el) return;
     const onScroll = () => {
-      setShowJump(el.scrollHeight - el.scrollTop - el.clientHeight > 300);
+      const gap = el.scrollHeight - el.scrollTop - el.clientHeight;
+      setShowJump(gap > 300);
+      // Back at the bottom: resume following new text.
+      if (gap < 40) stickRef.current = true;
+    };
+    // Only the user's own upward scroll stops the follow; programmatic
+    // (smooth) scrolls must not, so this listens to input, not position.
+    const release = () => {
+      if (el.scrollHeight - el.scrollTop - el.clientHeight > 40) stickRef.current = false;
+    };
+    const onWheel = (e: WheelEvent) => {
+      if (e.deltaY < 0) stickRef.current = false;
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (["ArrowUp", "PageUp", "Home"].includes(e.key)) stickRef.current = false;
     };
     el.addEventListener("scroll", onScroll, { passive: true });
-    return () => el.removeEventListener("scroll", onScroll);
+    el.addEventListener("wheel", onWheel, { passive: true });
+    el.addEventListener("touchmove", release, { passive: true });
+    el.addEventListener("keydown", onKey);
+    return () => {
+      el.removeEventListener("scroll", onScroll);
+      el.removeEventListener("wheel", onWheel);
+      el.removeEventListener("touchmove", release);
+      el.removeEventListener("keydown", onKey);
+    };
   }, []);
+
+  // Keep the newest text in view while an answer types out and grows.
+  const hasMsgs = msgs.length > 0;
+  useEffect(() => {
+    const el = mainRef.current;
+    // The message list itself: its wrapper is viewport-height and never grows.
+    const content = el?.querySelector(".chat-messages-container");
+    if (!el || !content || !hasMsgs || typeof ResizeObserver !== "function") return;
+    const ro = new ResizeObserver(() => {
+      if (stickRef.current) el.scrollTop = el.scrollHeight;
+    });
+    ro.observe(content);
+    return () => ro.disconnect();
+  }, [topicKey, hasMsgs]);
 
   useEffect(() => {
     if (input === "" && heroBoxRef.current) heroBoxRef.current.style.height = "";
@@ -430,6 +468,7 @@ export default function App() {
   }, []);
 
   const jumpToBottom = useCallback(() => {
+    stickRef.current = true;
     const reduceMotion =
       typeof window !== "undefined" &&
       typeof window.matchMedia === "function" &&
@@ -483,6 +522,7 @@ export default function App() {
       const q = query.trim();
       if (!q || busyRef.current) return;
       markBusy(true);
+      stickRef.current = true;
       const gen = genRef.current;
       const streamIn = opts?.streamIn !== false;
       const userMsg: Msg = { id: nextId++, role: "user", text: q };
