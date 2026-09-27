@@ -28,6 +28,7 @@ import {
   TriangleAlert as LucideAlert,
   X as LucideX,
 } from "lucide-react";
+import brandMarkUrl from "./assets/bis-saarthi-mark.webp";
 
 interface IconProps {
   className?: string;
@@ -155,25 +156,18 @@ export function GlobeIcon({ className, size = 15 }: IconProps) {
   return <LucideGlobe {...base(className, size)} />;
 }
 
-/** Product brand mark (custom — the only non-library icon). */
-export function BrandEmblemIcon({ className = "", size = 32 }: IconProps) {
+/** BIS Saarthi brand mark: the leaves-and-sun symbol from the team's logo. */
+export function BrandEmblemIcon({ className, size = 32 }: IconProps) {
   return (
-    <svg
+    <img
       className={className}
+      src={brandMarkUrl}
       width={size}
       height={size}
-      viewBox="0 0 36 36"
-      fill="none"
+      alt=""
       aria-hidden="true"
-      style={{ flexShrink: 0 }}
-    >
-      <rect width="36" height="36" rx="9" fill="#065f46" />
-      <path
-        fillRule="evenodd"
-        d="M10.5 12h6.6c2.9 0 4.6 1.4 4.6 3.7 0 1.4-.7 2.5-1.9 3 1.7.5 2.8 1.8 2.8 3.6 0 2.4-1.9 3.7-4.8 3.7h-7.3V12zm3.4 2.8v2.8h2.9c1 0 1.6-.5 1.6-1.4s-.6-1.4-1.6-1.4h-2.9zm0 5.4v3h3.3c1.2 0 1.9-.6 1.9-1.5s-.7-1.5-1.9-1.5h-3.3z"
-        fill="#ffffff"
-      />
-      <circle cx="25.5" cy="11" r="2.6" fill="#6ee7b7" />
-    </svg>
+      draggable={false}
+      style={{ flexShrink: 0, display: "block" }}
+    />
   );
 }
