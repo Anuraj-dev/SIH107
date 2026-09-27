@@ -3,16 +3,21 @@ import {
   ArrowUp as LucideArrowUp,
   ArrowUpRight as LucideArrowUpRight,
   Check as LucideCheck,
+  Clock as LucideClock,
   ChevronDown as LucideChevronDown,
   Copy as LucideCopy,
   Download as LucideDownload,
   ExternalLink as LucideExternalLink,
   FlaskConical as LucideFlask,
   Globe as LucideGlobe,
+  Info as LucideInfo,
   LoaderCircle as LucideLoader,
   Mic as LucideMic,
   MicOff as LucideMicOff,
   Moon as LucideMoon,
+  EllipsisVertical as LucideMore,
+  PenLine as LucidePen,
+  Trash2 as LucideTrash,
   PanelLeft as LucidePanelLeft,
   Plus as LucidePlus,
   RotateCcw as LucideRetry,
@@ -124,6 +129,26 @@ export function RetryIcon({ className, size = 14 }: IconProps) {
 
 export function DevIcon({ className, size = 16 }: IconProps) {
   return <LucideFlask {...base(className, size)} />;
+}
+
+export function ClockIcon({ className, size = 16 }: IconProps) {
+  return <LucideClock {...base(className, size)} />;
+}
+
+export function InfoIcon({ className, size = 16 }: IconProps) {
+  return <LucideInfo {...base(className, size)} />;
+}
+
+export function MoreIcon({ className, size = 16 }: IconProps) {
+  return <LucideMore {...base(className, size)} />;
+}
+
+export function PenIcon({ className, size = 14 }: IconProps) {
+  return <LucidePen {...base(className, size)} />;
+}
+
+export function TrashIcon({ className, size = 14 }: IconProps) {
+  return <LucideTrash {...base(className, size)} />;
 }
 
 export function GlobeIcon({ className, size = 15 }: IconProps) {
