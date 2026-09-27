@@ -15,6 +15,9 @@ import {
   Mic as LucideMic,
   MicOff as LucideMicOff,
   Moon as LucideMoon,
+  EllipsisVertical as LucideMore,
+  PenLine as LucidePen,
+  Trash2 as LucideTrash,
   PanelLeft as LucidePanelLeft,
   Plus as LucidePlus,
   RotateCcw as LucideRetry,
@@ -134,6 +137,18 @@ export function ClockIcon({ className, size = 16 }: IconProps) {
 
 export function InfoIcon({ className, size = 16 }: IconProps) {
   return <LucideInfo {...base(className, size)} />;
+}
+
+export function MoreIcon({ className, size = 16 }: IconProps) {
+  return <LucideMore {...base(className, size)} />;
+}
+
+export function PenIcon({ className, size = 14 }: IconProps) {
+  return <LucidePen {...base(className, size)} />;
+}
+
+export function TrashIcon({ className, size = 14 }: IconProps) {
+  return <LucideTrash {...base(className, size)} />;
 }
 
 export function GlobeIcon({ className, size = 15 }: IconProps) {

@@ -8,6 +8,9 @@ import {
   ExternalLinkIcon,
   InfoIcon,
   ManakEmblemIcon,
+  MoreIcon,
+  PenIcon,
+  TrashIcon,
   XIcon,
   ThumbsDownIcon,
   ThumbsUpIcon,
@@ -727,6 +730,142 @@ export function SkeletonAnswer() {
           <span className="sk-line sk-w70" />
         </div>
       </div>
+    </div>
+  );
+}
+
+/**
+ * One sidebar chat: opens on click; the "⋯" menu renames it inline or
+ * deletes it (a second click confirms, so one slip never loses a chat).
+ */
+export function HistoryItem({
+  title,
+  fullTitle,
+  active = false,
+  onOpen,
+  onRename,
+  onDelete,
+}: {
+  title: string;
+  fullTitle: string;
+  active?: boolean;
+  onOpen?: () => void;
+  onRename: (title: string) => void;
+  onDelete: () => void;
+}) {
+  const [menu, setMenu] = useState(false);
+  const [confirming, setConfirming] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState(title);
+  const rowRef = useRef<HTMLDivElement>(null);
+  const moreRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!menu) return;
+    const close = () => {
+      setMenu(false);
+      setConfirming(false);
+    };
+    const onDown = (e: MouseEvent) => {
+      if (!rowRef.current?.contains(e.target as Node)) close();
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        close();
+        moreRef.current?.focus();
+      }
+    };
+    document.addEventListener("mousedown", onDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [menu]);
+
+  const finishRename = (save: boolean) => {
+    const next = draft.replace(/\s+/g, " ").trim().slice(0, 60);
+    if (save && next && next !== title) onRename(next);
+    setEditing(false);
+  };
+
+  return (
+    <div ref={rowRef} className={`history-row${active ? " active" : ""}${menu ? " menu-open" : ""}`}>
+      {editing ? (
+        <input
+          className="history-rename"
+          value={draft}
+          autoFocus
+          maxLength={60}
+          aria-label="Chat name"
+          onFocus={(e) => e.currentTarget.select()}
+          onChange={(e) => setDraft(e.target.value)}
+          onBlur={() => finishRename(true)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") finishRename(true);
+            if (e.key === "Escape") finishRename(false);
+          }}
+        />
+      ) : (
+        <button
+          type="button"
+          className={`history-item${active ? " active" : ""}`}
+          aria-current={active ? "true" : undefined}
+          onClick={onOpen}
+          title={fullTitle}
+        >
+          <span className="history-item-text">{title}</span>
+        </button>
+      )}
+      {!editing && (
+        <button
+          ref={moreRef}
+          type="button"
+          className="history-more"
+          aria-label={`Options for ${title}`}
+          aria-haspopup="menu"
+          aria-expanded={menu}
+          onClick={() => {
+            setMenu((v) => !v);
+            setConfirming(false);
+          }}
+        >
+          <MoreIcon size={16} />
+        </button>
+      )}
+      {menu && (
+        <div className="history-menu" role="menu" aria-label={`Options for ${title}`}>
+          <button
+            type="button"
+            role="menuitem"
+            className="history-menu-item"
+            onClick={() => {
+              setMenu(false);
+              setDraft(title);
+              setEditing(true);
+            }}
+          >
+            <PenIcon size={14} />
+            <span>Rename</span>
+          </button>
+          <button
+            type="button"
+            role="menuitem"
+            className={`history-menu-item danger${confirming ? " confirming" : ""}`}
+            onClick={() => {
+              if (!confirming) {
+                setConfirming(true);
+                return;
+              }
+              setMenu(false);
+              onDelete();
+            }}
+          >
+            <TrashIcon size={14} />
+            <span>{confirming ? "Click again to delete" : "Delete"}</span>
+          </button>
+        </div>
+      )}
     </div>
   );
 }

@@ -299,6 +299,126 @@ html {
   font-weight: 500;
 }
 
+/* Row = open button + "⋯" options button + its menu */
+.history-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.history-row .history-item {
+  flex: 1;
+  min-width: 0;
+  padding-right: 34px;
+}
+
+.history-more {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border: none;
+  border-radius: var(--r-sm);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out);
+}
+
+.history-row:hover .history-more,
+.history-row:focus-within .history-more,
+.history-row.active .history-more,
+.history-row.menu-open .history-more {
+  opacity: 1;
+}
+
+.history-more:hover,
+.history-row.menu-open .history-more {
+  background: var(--sidebar-active);
+  color: var(--text-main);
+}
+
+/* Touch screens have no hover: keep the button visible. */
+@media (hover: none) {
+  .history-more {
+    opacity: 1;
+  }
+}
+
+.history-menu {
+  position: absolute;
+  top: calc(100% + 2px);
+  right: 4px;
+  z-index: 60;
+  min-width: 172px;
+  padding: 4px;
+  background: var(--surface-card);
+  border: 1px solid var(--border-default);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-md);
+  animation: menu-in var(--dur-fast) var(--ease-out) both;
+}
+
+.history-menu-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 10px;
+  border: none;
+  border-radius: var(--r-sm);
+  background: transparent;
+  font: inherit;
+  font-size: 13px;
+  color: var(--text-secondary);
+  text-align: left;
+  cursor: pointer;
+}
+
+.history-menu-item:hover {
+  background: var(--surface-hover);
+  color: var(--text-main);
+}
+
+.history-menu-item.danger {
+  color: var(--danger-text);
+}
+
+.history-menu-item.danger:hover,
+.history-menu-item.danger.confirming {
+  background: var(--danger-bg);
+  color: var(--danger-text);
+}
+
+.history-menu-item.confirming {
+  font-weight: 600;
+}
+
+.history-rename {
+  flex: 1;
+  min-width: 0;
+  padding: 7px 9px;
+  border: 1px solid var(--accent-green-border);
+  border-radius: var(--r-sm);
+  background: var(--surface-card);
+  box-shadow: 0 0 0 3px var(--accent-green-light);
+  font: inherit;
+  font-size: 13.5px;
+  color: var(--text-main);
+  outline: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .history-menu {
+    animation: none;
+  }
+}
+
 .history-item-text {
   font-size: 13.5px;
   white-space: nowrap;

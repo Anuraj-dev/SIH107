@@ -4,6 +4,7 @@ import {
   AnswerBody,
   CopyButton,
   FeedbackButtons,
+  HistoryItem,
   RawJson,
   RichText,
   SkeletonAnswer,
@@ -85,6 +86,8 @@ interface HistoryEntry {
   topic: number;
   /** full thread so opening history does not regenerate or typewrite */
   msgs?: StoredMsg[];
+  /** user-chosen title; generated titles never replace it */
+  renamed?: boolean;
 }
 
 let nextId = 1;
@@ -183,10 +186,14 @@ function loadHistory(): HistoryEntry[] {
           : undefined;
         return {
           q: e.q,
-          title: legacy || typeof e.title !== "string" ? makeTitle(e.q) : e.title,
+          title:
+            (legacy && !(e as HistoryEntry).renamed) || typeof e.title !== "string"
+              ? makeTitle(e.q)
+              : e.title,
           at: e.at,
           topic: legacy ? -1 : (e.topic as number),
           msgs,
+          renamed: (e as HistoryEntry).renamed === true || undefined,
         };
       })
       .slice(0, HISTORY_LIMIT);
@@ -655,6 +662,25 @@ export default function App() {
     [send, thread, history, topicKey, persistHistory, markBusy],
   );
 
+  const renameTopic = useCallback(
+    (q: string, title: string) => {
+      setHistory((h) =>
+        persistHistory(h.map((e) => (e.q === q ? { ...e, title, renamed: true } : e))),
+      );
+    },
+    [persistHistory],
+  );
+
+  const deleteTopic = useCallback(
+    (q: string) => {
+      // Deleting the open chat also clears the screen and erases its server thread.
+      if (msgs.length > 0 && msgs[0].text === q) newTopic();
+      setHistory((h) => persistHistory(h.filter((e) => e.q !== q)));
+      showToast("Chat deleted.");
+    },
+    [msgs, newTopic, persistHistory, showToast],
+  );
+
   // Upgrade the instant heuristic title with an LLM one once the first
   // grounded reply lands. Fires once per question; any failure keeps the heuristic.
   const titleReqRef = useRef<Set<string>>(new Set());
@@ -668,13 +694,13 @@ export default function App() {
       .find((m) => m.role === "user");
     if (!uq || titleReqRef.current.has(uq.text)) return;
     const entry = history.find((e) => e.q === uq.text);
-    if (!entry || (entry.title && entry.title !== makeTitle(entry.q))) return;
+    if (!entry || entry.renamed || (entry.title && entry.title !== makeTitle(entry.q))) return;
     titleReqRef.current.add(uq.text);
     const answerLang: Lang = last.resp.lang === "hi" || lang === "hi" ? "hi" : "en";
     void fetchTitle(uq.text, last.text, answerLang).then((t) => {
       if (!t) return;
       setHistory((h) =>
-        persistHistory(h.map((e) => (e.q === uq.text ? { ...e, title: t } : e))),
+        persistHistory(h.map((e) => (e.q === uq.text && !e.renamed ? { ...e, title: t } : e))),
       );
     });
   }, [msgs, history, lang, persistHistory]);
@@ -764,8 +790,9 @@ export default function App() {
   }, [listening, transcribing, voiceReady, showToast]);
 
   const currentFirst = msgs.length > 0 ? msgs[0].text : null;
+  const currentEntry = currentFirst ? history.find((e) => e.q === currentFirst) : undefined;
   const currentTitle = currentFirst
-    ? history.find((e) => e.q === currentFirst)?.title || makeTitle(currentFirst) || "New conversation"
+    ? currentEntry?.title || makeTitle(currentFirst) || "New conversation"
     : null;
   const pastTopics = history.filter((e) => e.q !== currentFirst).slice(0, 8);
 
@@ -961,26 +988,35 @@ export default function App() {
             </button>
             {historyOpen && (
               <div className="history-list" id="history-list">
-                {currentFirst && (
-                  <button
-                    type="button"
-                    className="history-item active"
-                    aria-current="true"
-                    title={currentFirst}
-                  >
-                    <span className="history-item-text">{currentTitle}</span>
-                  </button>
-                )}
+                {currentFirst &&
+                  (currentEntry ? (
+                    <HistoryItem
+                      active
+                      title={currentTitle ?? ""}
+                      fullTitle={currentFirst}
+                      onRename={(t) => renameTopic(currentEntry.q, t)}
+                      onDelete={() => deleteTopic(currentEntry.q)}
+                    />
+                  ) : (
+                    // Not saved until the first reply lands; nothing to rename yet.
+                    <button
+                      type="button"
+                      className="history-item active"
+                      aria-current="true"
+                      title={currentFirst}
+                    >
+                      <span className="history-item-text">{currentTitle}</span>
+                    </button>
+                  ))}
                 {pastTopics.map((e) => (
-                  <button
+                  <HistoryItem
                     key={`${e.at}-${e.q}`}
-                    type="button"
-                    className="history-item"
-                    onClick={() => openHistoryTopic(e.q)}
-                    title={e.title || e.q}
-                  >
-                    <span className="history-item-text">{e.title || "New conversation"}</span>
-                  </button>
+                    title={e.title || "New conversation"}
+                    fullTitle={e.title || e.q}
+                    onOpen={() => openHistoryTopic(e.q)}
+                    onRename={(t) => renameTopic(e.q, t)}
+                    onDelete={() => deleteTopic(e.q)}
+                  />
                 ))}
                 {!currentFirst && pastTopics.length === 0 && (
                   <p className="history-empty">No conversations yet.</p>
