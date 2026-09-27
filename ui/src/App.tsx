@@ -35,11 +35,11 @@ import type { ServerThread } from "./api";
 import "./tokens.css";
 import "./styles.css";
 
-const APP_NAME = "BIS Saathi";
+const APP_NAME = "BIS Saarthi";
 const APP_TAGLINE = "BIS Standards Assistant";
-const DEV_FLAG_KEY = "bis-saathi-dev-mode";
-const HISTORY_KEY = "bis-saathi-history";
-const THEME_KEY = "bis-saathi-theme";
+const DEV_FLAG_KEY = "bis-saarthi-dev-mode";
+const HISTORY_KEY = "bis-saarthi-history";
+const THEME_KEY = "bis-saarthi-theme";
 const HISTORY_LIMIT = 20;
 
 /** Carry chats and settings over from the app's earlier name (Manak Mitra). */
@@ -47,7 +47,7 @@ function migrateStorageKeys(): void {
   try {
     const store = window.localStorage;
     for (const key of [DEV_FLAG_KEY, HISTORY_KEY, THEME_KEY]) {
-      const oldKey = key.replace("bis-saathi-", "manak-mitra-");
+      const oldKey = key.replace("bis-saarthi-", "manak-mitra-");
       const old = store.getItem(oldKey);
       if (old === null) continue;
       if (store.getItem(key) === null) store.setItem(key, old);

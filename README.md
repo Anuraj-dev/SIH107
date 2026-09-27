@@ -1,4 +1,4 @@
-# BIS Saathi: BIS Standards & Services Assistant
+# BIS Saarthi: BIS Standards & Services Assistant
 
 A conversational assistant for Indian Standards and BIS services (SIH problem
 statement 26107). Ask in English or Hindi; every factual answer cites the
